@@ -19,7 +19,7 @@
     </script>
 
     <head>
-        <title>BookSaw - Free Book Store HTML CSS Template</title>
+        <title>GAS STORE</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -118,7 +118,7 @@
 
                         <div class="col-md-2">
                             <div class="main-logo"><!<!-- change to index.jsp -->
-                                <a href="index.jsp"><img src="Test/images/main-logo.png" alt="logo"></a>
+                                <a href="index.jsp"><img src="Test/images/Gas_Store.png" alt="logo"></a>
                             </div>
 
                         </div>
@@ -192,7 +192,7 @@
                         <div class="main-slider pattern-overlay">
                             <div class="slider-item">
                                 <div class="banner-content">
-                                    <h2 class="banner-title">Life of the Wild</h2>
+                                    <h2 class="banner-title">GAS pays dividends of  5,700 billion</h2>
                                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu feugiat amet, libero
                                         ipsum enim pharetra hac. Urna commodo, lacus ut magna velit eleifend. Amet, quis
                                         urna, a eu.</p>
@@ -201,12 +201,12 @@
                                                 class="icon icon-ns-arrow-right"></i></a>
                                     </div>
                                 </div><!--banner-content-->
-                                <img src="Test/images/main-banner1.jpg" alt="banner" class="banner-image">
+                                <img src="Test/images/gas-new1.jpg" alt="banner" class="banner-image">
                             </div><!--slider-item-->
 
                             <div class="slider-item">
                                 <div class="banner-content">
-                                    <h2 class="banner-title">Birds gonna be Happy</h2>
+                                    <h2 class="banner-title">PV GAS plans to reduce profits by 45%</h2>
                                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu feugiat amet, libero
                                         ipsum enim pharetra hac. Urna commodo, lacus ut magna velit eleifend. Amet, quis
                                         urna, a eu.</p>
@@ -215,7 +215,7 @@
                                                 class="icon icon-ns-arrow-right"></i></a>
                                     </div>
                                 </div><!--banner-content-->
-                                <img src="Test/images/main-banner2.jpg" alt="banner" class="banner-image">
+                                <img src="Test/images/gas-new2.png" alt="banner" class="banner-image">
                             </div><!--slider-item-->
 
                         </div><!--slider-->
@@ -257,7 +257,7 @@
                             <div class="title">
                                 <span>Some quality items</span>
                             </div>
-                            <h2 class="section-title">Featured Books</h2>
+                            <h2 class="section-title">OUR PRODUCTS</h2>
                         </div>
 
                         <div class="product-list" data-aos="fade-up">
