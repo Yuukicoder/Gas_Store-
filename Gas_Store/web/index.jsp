@@ -16,8 +16,19 @@
             window.location.href = "logout";
 
         }
+        
     </script>
+    
+    <style>
+        .fix{
+            width:107px; 
+            height:80px;
+            margin-right:10px;
+            padding-left: 25px;
 
+        }
+    </style>
+    
     <head>
         <title>GAS STORE</title>
         <meta charset="utf-8">
@@ -39,7 +50,7 @@
         <link rel="stylesheet" type="text/css" href="Test/icomoon/icomoon.css">
         <link rel="stylesheet" type="text/css" href="Test/css/vendor.css">
         <link rel="stylesheet" type="text/css" href="Test/style.css">
-
+        
     </head>
 
     <body data-bs-spy="scroll" data-bs-target="#header" tabindex="0">
@@ -118,7 +129,7 @@
 
                         <div class="col-md-2">
                             <div class="main-logo"><!<!-- change to index.jsp -->
-                                <a href="index.jsp"><img src="Test/images/Gas_Store.png" alt="logo"></a>
+                                <a href="index.jsp"><img src="Test/images/Gas_Store.png" alt="logo" class="fix"></a>
                             </div>
 
                         </div>
@@ -193,9 +204,9 @@
                             <div class="slider-item">
                                 <div class="banner-content">
                                     <h2 class="banner-title">GAS pays dividends of  5,700 billion</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu feugiat amet, libero
+<!--                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu feugiat amet, libero
                                         ipsum enim pharetra hac. Urna commodo, lacus ut magna velit eleifend. Amet, quis
-                                        urna, a eu.</p>
+                                        urna, a eu.</p>-->
                                     <div class="btn-wrap">
                                         <a href="#" class="btn btn-outline-accent btn-accent-arrow">Read More<i
                                                 class="icon icon-ns-arrow-right"></i></a>
@@ -207,9 +218,9 @@
                             <div class="slider-item">
                                 <div class="banner-content">
                                     <h2 class="banner-title">PV GAS plans to reduce profits by 45%</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu feugiat amet, libero
+<!--                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu feugiat amet, libero
                                         ipsum enim pharetra hac. Urna commodo, lacus ut magna velit eleifend. Amet, quis
-                                        urna, a eu.</p>
+                                        urna, a eu.</p>-->
                                     <div class="btn-wrap">
                                         <a href="#" class="btn btn-outline-accent btn-accent-arrow">Read More<i
                                                 class="icon icon-ns-arrow-right"></i></a>
@@ -230,7 +241,7 @@
 
         </section>
 
-        <section id="client-holder" data-aos="fade-up">
+<!--        <section id="client-holder" data-aos="fade-up">
             <div class="container">
                 <div class="row">
                     <div class="inner-content">
@@ -242,11 +253,11 @@
                                 <a href="#"><img src="Test/images/client-image4.png" alt="client"></a>
                                 <a href="#"><img src="Test/images/client-image5.png" alt="client"></a>
                             </div>
-                        </div><!--image-holder-->
+                        </div>image-holder
                     </div>
                 </div>
             </div>
-        </section>
+        </section>-->
 
         <section id="featured-books" class="py-5 my-5">
             <div class="container">
@@ -267,13 +278,13 @@
 
                                     <div class="product-item">
                                         <figure class="product-style">
-                                            <a href="detail?productId=${30}"><img src="Test/images/product-item1.jpg" alt="Books" class="product-item"></a
+                                            <a href="detail?productId=${30}"><img src="Test/images/df.jpg" alt="Books" class="product-item"></a
                                             <a href="addtocart?productId=${30}"><button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button></a>
                                         </figure>
                                         <figcaption>
-                                            <h3>Simple way of piece life</h3>
-                                            <span>Armor Ramsey</span>
+                                            <h3>12KG GAS</h3>
+                                            <span>Petro VietNam</span>
                                             <div class="item-price">$ 40.00</div>
                                         </figcaption>
                                     </div>
@@ -283,13 +294,13 @@
                                 <div class="col-md-3">
                                     <div class="product-item">
                                         <figure class="product-style">
-                                            <a href="detail?productId=${31}"><img src="Test/images/product-item2.jpg" alt="Books" class="product-item"></a>
+                                            <a href="detail?productId=${31}"><img src="Test/images/df_1.jpg" alt="Books" class="product-item"></a>
                                             <a href="addtocart?productId=${31}"><button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button></a>
                                         </figure>
                                         <figcaption>
-                                            <h3>Great travel at desert</h3>
-                                            <span>Sanchit Howdy</span>
+                                            <h3>45KG GAS</h3>
+                                            <span>Petro VietNam</span>
                                             <div class="item-price">$ 38.00</div>
                                         </figcaption>
                                     </div>
@@ -298,13 +309,13 @@
                                 <div class="col-md-3">
                                     <div class="product-item">
                                         <figure class="product-style">
-                                            <a href="detail?productId=${32}"> <img src="Test/images/product-item3.jpg" alt="Books" class="product-item"></a>
+                                            <a href="detail?productId=${32}"> <img src="Test/images/df_2.jpg" alt="Books" class="product-item"></a>
                                             <a href="addtocart?productId=${32}"><button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button></a>
                                         </figure>
                                         <figcaption>
-                                            <h3>The lady beauty Scarlett</h3>
-                                            <span>Arthur Doyle</span>
+                                            <h3>6KG GAS</h3>
+                                            <span>Petro VietNam</span>
                                             <div class="item-price">$ 45.00</div>
                                         </figcaption>
                                     </div>
@@ -313,13 +324,13 @@
                                 <div class="col-md-3">
                                     <div class="product-item">
                                         <figure class="product-style">
-                                            <a href="detail?productId=${33}"><img src="Test/images/product-item4.jpg" alt="Books" class="product-item"></a>
+                                            <a href="detail?productId=${33}"><img src="Test/images/df_3.jpg" alt="Books" class="product-item"></a>
                                             <a href="addtocart?productId=${33}"><button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button></a>
                                         </figure>
                                         <figcaption>
-                                            <h3>Once upon a time</h3>
-                                            <span>Klien Marry</span>
+                                            <h3>20KG GAS</h3>
+                                            <span>Petro VietNam</span>
                                             <div class="item-price">$ 35.00</div>
                                         </figcaption>
                                     </div>
@@ -356,19 +367,17 @@
 
                             <div class="col-md-6">
                                 <figure class="products-thumb">
-                                    <img src="Test/images/single-image.jpg" alt="book" class="single-image">
+                                    <img src="Test/images/df.jpg" alt="book" class="single-image">
                                 </figure>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="product-entry">
-                                    <h2 class="section-title divider">Best Selling Book</h2>
+                                    <h2 class="section-title divider">Best Selling</h2>
 
                                     <div class="products-content">
-                                        <div class="author-name">By Timbur Hood</div>
-                                        <h3 class="item-title">Birds gonna be happy</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu feugiat amet,
-                                            libero ipsum enim pharetra hac.</p>
+                                        <div class="author-name">Petro VietNam</div>
+                                        <h3 class="item-title">12KG GAS</h3>
                                         <div class="item-price">$ 45.00</div>
                                         <div class="btn-wrap">
                                             <a href="#" class="btn-accent-arrow">shop it now <i
@@ -397,16 +406,15 @@
                             <div class="title">
                                 <span>Some quality items</span>
                             </div>
-                            <h2 class="section-title">Popular Books</h2>
+                            <h2 class="section-title">Popular Products</h2>
                         </div>
 
                         <ul class="tabs">
-                            <li data-tab-target="#all-genre" class="active tab">All Genre</li>
-                            <li data-tab-target="#business" class="tab">Business</li>
-                            <li data-tab-target="#technology" class="tab">Technology</li>
-                            <li data-tab-target="#romantic" class="tab">Romantic</li>
-                            <li data-tab-target="#adventure" class="tab">Adventure</li>
-                            <li data-tab-target="#fictional" class="tab">Fictional</li>
+                            <li data-tab-target="#all-genre" class="active tab">All Products</li>
+                            <li data-tab-target="#business" class="tab">Binh ga</li>
+                            <li data-tab-target="#technology" class="tab">Bep ga</li>
+                            <li data-tab-target="#romantic" class="tab">Thiet bi</li>
+                            
                         </ul>
 
                         <div class="tab-content">
@@ -416,7 +424,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item1.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_3.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -431,7 +439,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item2.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_11.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -446,7 +454,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item3.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_4.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -461,7 +469,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item4.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_5.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -479,7 +487,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item5.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_6.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -494,7 +502,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item6.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_7.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -509,7 +517,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item7.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_8.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -524,7 +532,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item8.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_9.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -544,7 +552,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item2.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_3.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -559,7 +567,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item4.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_5.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -574,7 +582,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item6.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -589,7 +597,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item8.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_4.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -609,7 +617,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item1.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_10.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -624,7 +632,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item3.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_11.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -639,7 +647,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item5.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_12.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -654,7 +662,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item7.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_13.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -673,7 +681,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item1.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_14.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -688,7 +696,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item3.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_15.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -703,7 +711,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item5.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_16.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -718,7 +726,7 @@
                                     <div class="col-md-3">
                                         <div class="product-item">
                                             <figure class="product-style">
-                                                <img src="Test/images/tab-item7.jpg" alt="Books" class="product-item">
+                                                <img src="Test/images/df_16.jpg" alt="Books" class="product-item">
                                                 <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                     Cart</button>
                                             </figure>
@@ -808,7 +816,7 @@
             </div>
         </section>
 
-        <section id="quotation" class="align-center pb-5 mb-5">
+<!--        <section id="quotation" class="align-center pb-5 mb-5">
             <div class="inner-content">
                 <h2 class="section-title divider">Quote of the day</h2>
                 <blockquote data-aos="fade-up">
@@ -817,7 +825,7 @@
                     <div class="author-name">Dr. Seuss</div>
                 </blockquote>
             </div>
-        </section>
+        </section>-->
 
         <section id="special-offer" class="bookshelf pb-5 mb-5">
 
@@ -825,7 +833,7 @@
                 <div class="title">
                     <span>Grab your opportunity</span>
                 </div>
-                <h2 class="section-title">Books with offer</h2>
+                <h2 class="section-title">COMINGSOON</h2>
             </div>
 
             <div class="container">
@@ -835,7 +843,7 @@
                             <div class="grid product-grid">
                                 <div class="product-item">
                                     <figure class="product-style">
-                                        <img src="Test/images/product-item5.jpg" alt="Books" class="product-item">
+                                        <img src="Test/images/df_18.jpg" alt="Books" class="product-item">
                                         <a href="addtocart?productId=${34}"><button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                 Cart</button></a>
                                     </figure>
@@ -850,7 +858,7 @@
 
                                 <div class="product-item">
                                     <figure class="product-style">
-                                        <img src="Test/images/product-item6.jpg" alt="Books" class="product-item">
+                                        <img src="Test/images/df_19.jpg" alt="Books" class="product-item">
                                         <a href="addtocart?productId=${35}"><button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                 Cart</button></a>
                                     </figure>
@@ -865,7 +873,7 @@
 
                                 <div class="product-item">
                                     <figure class="product-style">
-                                        <img src="Test/images/product-item7.jpg" alt="Books" class="product-item">
+                                        <img src="Test/images/df_20.jpg" alt="Books" class="product-item">
                                         <a href="addtocart?productId=${36}"><button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to
                                                 Cart</button></a>
                                     </figure>
@@ -924,7 +932,7 @@
                             <div class="col-md-6">
 
                                 <div class="title-element">
-                                    <h2 class="section-title divider">Subscribe to our newsletter</h2>
+                                    <h2 class="section-title divider">INFORMATION</h2>
                                 </div>
 
                             </div>
@@ -960,7 +968,7 @@
                             <div class="title">
                                 <span>Read our articles</span>
                             </div>
-                            <h2 class="section-title">Latest Articles</h2>
+                            <h2 class="section-title">Suppliers</h2>
                         </div>
 
                         <div class="row">
@@ -1042,7 +1050,7 @@
                                         </a>
                                     </figure>
                                     <div class="post-item">
-                                        <div class="meta-date">Feb 27, 2021</div>
+                                        <div class="meta-date">May 9, 2024</div>
                                         <h3><a href="#">Reading books always makes the moments happy</a></h3>
 
                                         <div class="links-element">
@@ -1082,37 +1090,7 @@
             </div>
         </section>
 
-        <section id="download-app" class="leaf-pattern-overlay">
-            <div class="corner-pattern-overlay"></div>
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-8">
-                        <div class="row">
 
-                            <div class="col-md-5">
-                                <figure>
-                                    <img src="Test/images/device.png" alt="phone" class="single-image">
-                                </figure>
-                            </div>
-
-                            <div class="col-md-7">
-                                <div class="app-info">
-                                    <h2 class="section-title divider">Download our app now !</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sagittis sed ptibus
-                                        liberolectus nonet psryroin. Amet sed lorem posuere sit iaculis amet, ac urna.
-                                        Adipiscing fames semper erat ac in suspendisse iaculis.</p>
-                                    <div class="google-app">
-                                        <img src="Test/images/google-play.jpg" alt="google play">
-                                        <img src="Test/images/app-store.jpg" alt="app store">
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <footer id="footer">
             <div class="container">
@@ -1122,10 +1100,8 @@
 
                         <div class="footer-item">
                             <div class="company-brand">
-                                <img src="Test/images/main-logo.png" alt="logo" class="footer-logo">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sagittis sed ptibus liberolectus
-                                    nonet psryroin. Amet sed lorem posuere sit iaculis amet, ac urna. Adipiscing fames
-                                    semper erat ac in suspendisse iaculis.</p>
+                                <img src="Test/images/Gas_Store.png" alt="logo" class="footer-logo">
+                                
                             </div>
                         </div>
 
@@ -1234,45 +1210,7 @@
             </div>
         </footer>
 
-        <div id="footer-bottom">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <div class="copyright">
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <p>© 2022 All rights reserved. Free HTML Template by <a
-                                            href="https://www.templatesjungle.com/" target="_blank">TemplatesJungle</a></p>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="social-links align-right">
-                                        <ul>
-                                            <li>
-                                                <a href="#"><i class="icon icon-facebook"></i></a>
-                                            </li>
-                                            <li>
-                                                <a href="#"><i class="icon icon-twitter"></i></a>
-                                            </li>
-                                            <li>
-                                                <a href="#"><i class="icon icon-youtube-play"></i></a>
-                                            </li>
-                                            <li>
-                                                <a href="#"><i class="icon icon-behance-square"></i></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div><!--grid-->
-
-                    </div><!--footer-bottom-content-->
-                </div>
-            </div>
-        </div>
+        
         <!--Back to top button-->
         <button class="btn-floating btn-lg" id="btn-back-to-top">
             <i class="icon"><span class="icon-arrow-up2"></span></i>
