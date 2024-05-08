@@ -1,0 +1,40 @@
+
+
+/*bacl to top*/
+#btn-back-to-top {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    display: none;
+    color: Black;
+    border-radius: 10px;
+    background-color: gray-light;
+}
+
+#description-text {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    padding: 10px;
+    max-height: 200px; /* Chiều cao tối đa ban đầu */
+    overflow: hidden; /* Ẩn nội dung vượt quá */
+    transition: max-height 0.3s ease-in-out; /* Chuyển đổi mượt mà */
+}
+
+#description-container {
+    position: relative; /* Cần thiết để đặt vị trí nút */
+}
+
+.see-more-btn {
+
+    position: absolute;
+    bottom: 5px; /* Adjust position as needed */
+    right: 10px; /* Adjust position as needed */
+    padding: 5px 10px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#description-container:hover #see-more-btn,
+#description-text:focus + #see-more-btn {
+    display: block; /* Hiển thị nút khi di chuột qua hoặc focus */
+    background-color: #eee;
+}
