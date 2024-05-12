@@ -60,7 +60,7 @@
             <div class="top-content">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-6">
+<!--                        <div class="col-md-6">
                             <div class="social-links">
                                 <ul>
                                     <li>
@@ -76,8 +76,8 @@
                                         <a href="#"><i class="icon icon-behance-square"></i></a>
                                     </li>
                                 </ul>
-                            </div><!--social-links-->
-                        </div>
+                            </div>social-links
+                        </div>-->
                         <div class="col-md-6">
                             <div class="right-element"><!<!-- Name account -->
                                 <!<!-- Name account -->
@@ -97,9 +97,9 @@
                                         <i class="icon icon-user" aria-current="page"></i><span>Account ${sessionScope.acc.user}</span></a>                                    <a href="LoadOrderForUser" class="user-account for-buy">
                                     </c:if>
                                     <!<!-- Carts -->
-                                    <a href="carts" class="cart for-buy"><i class="fa-solid fa-cart-plus"></i><span> Cart:${sessionScope.carts.size()}</span></a>
+<!--                                    <a href="carts" class="cart for-buy"><i class="fa-solid fa-cart-plus"></i><span> Cart:${sessionScope.carts.size()}</span></a>-->
                                     <!-- Search bar -->
-                                    <div class="action-menu">
+<!--                                    <div class="action-menu">
                                         <div class="search-bar">
                                             <a href="#" class="search-button search-toggle" data-selector="#header-wrap">
                                                 <i class="icon icon-search"></i>
@@ -114,7 +114,7 @@
                                                     >
                                             </form>
                                         </div>
-                                    </div>
+                                    </div>-->
 
                             </div><!--top-right-->
                         </div>
