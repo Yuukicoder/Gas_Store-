@@ -62,7 +62,7 @@
   --bs-body-font-size: 1rem;
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
-  --bs-body-color: #212529;
+  --bs-body-color: #21                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            2529;
   --bs-body-bg: #fff;
 }
 
@@ -74,7 +74,7 @@
 
 
 .category_block li:hover {
-    background-color: #007bff;
+    background-color: #C1121F;
 }
 .category_block li:hover a {
     color: #ffffff;

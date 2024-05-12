@@ -20,7 +20,7 @@ Author     : Le Hong Quan
 
 <link rel="stylesheet" type="text/css" href="Test/css/normalize.css">
 <link rel="stylesheet" type="text/css" href="Test/icomoon/icomoon.css">
-<link rel="stylesheet" type="text/css" href="Test/css/vendor.css">
+<link rel="stylesheet" type="text/css" href="css/vendor.css">
 <link rel="stylesheet" type="text/css" href="Test/style.css">
 <script>
     function login() {
@@ -112,7 +112,7 @@ Author     : Le Hong Quan
 
                     </div>
 
-                    <div class="col-md-10">
+                    <div class="col-md-10" style="margin-top:2%;">
 
                         <nav id="navbar">
                             <div class="main-menu stellarnav">

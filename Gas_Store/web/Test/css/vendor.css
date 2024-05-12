@@ -1799,7 +1799,7 @@ body.chocolat-open>.chocolat-image-wrapper {
 .stellarnav,
 .stellarnav li {
     position: relative;
-    line-height: normal
+    line-height: normal;
 }
 
 .stellarnav {
@@ -1812,9 +1812,10 @@ body.chocolat-open>.chocolat-image-wrapper {
 }
 
 .stellarnav ul {
-    margin: 0;
+    
     padding: 0;
     text-align: right;
+    margin-top: 2%;
 }
 
 .stellarnav li {

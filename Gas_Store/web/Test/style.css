@@ -31,12 +31,12 @@ Version: 1.1
 
 /* Theme Colors */
 :root {
-  --accent-color: #C5A992;
-  --secondary-color: #C5A992;
-  --dark-color: #2f2f2f;
-  --light-color: #F3F2EC;
-  --body-text-color: #757575;
-  --light-text-color: #afafaf;
+  --accent-color: #669BBC;
+
+  --dark-color: #848080;
+  --light-color: #669BBC;
+  --body-text-color: #003049;
+  --light-text-color: #50798f;
   --dark-text-color: #2f2f2f;
 }
 
@@ -73,7 +73,7 @@ Version: 1.1
   --bs-black: #111;
   --bs-light: #F1F1F0;
   --bs-dark: #212529;
-  --bs-gray: #949494;
+  --bs-gray: #d2eaf7;
   --bs-gray-dark: #51565b;
 
   --bs-primary-rgb: 169, 128, 115;
@@ -2370,7 +2370,7 @@ footer#footer {
 
 .product-style img.product-item {
   position: relative;
-  background: #EFEEE8;
+  background-color: #EFEEE8;
   border: 1px solid #EAE8DF;
   padding: 15%;
   cursor: pointer;
@@ -2407,7 +2407,7 @@ footer#footer {
 .product-item figcaption>h3 {
   font-size: 1.4em;
   font-weight: 500;
-  color: #74642F;
+  color: #C1121F;
   margin: 0;
 }
 .product-item figcaption>p {
@@ -2415,7 +2415,7 @@ footer#footer {
 }
 
 .product-item .item-price {
-  color: #74642F;
+  color: #C1121F;
   font-size: 1.3em;
 }
 
