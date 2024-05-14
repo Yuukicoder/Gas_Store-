@@ -1,10 +1,17 @@
+<<<<<<< HEAD
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+=======
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+>>>>>>> main
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Gas Store</title>
+<<<<<<< HEAD
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +23,9 @@
               integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
         <link href="css/styleAdmin.css" rel="stylesheet" type="text/css"/>
+=======
+        <link href="./css/styleAdmin.css" rel="stylesheet" type="text/css"/>
+>>>>>>> main
         <link rel="icon" type="image/x-icon" href="https://th.bing.com/th/id/R.e15d750fe41eb99350f0c56e6b66b653?rik=QJI66s2o67Q7jw&pid=ImgRaw&r=0">
         <style>
             .action-btn {
@@ -54,6 +64,7 @@
                     <div class="left-column">
                         <table class="account">
                             <thead>
+<<<<<<< HEAD
                                 <tr>
                                     <th></th>
                                     <th>Username</th>
@@ -68,22 +79,45 @@
                             </thead>
                             <tbody>
                                 <!-- Data from JSP -->
+=======
+                            <th></th>
+                            <th>Username</th>
+                            <!--<th>Password</th>-->
+                            <th>First_name</th>
+                            <th>Last_name</th>
+                            <th>Email</th>
+                            <th>Phone_number</th>
+                            <th>Role_id</th>
+                            <th>Action</th>
+                            <th></th>
+                            </thead>
+                            <tbody>
+>>>>>>> main
                                 <c:forEach items="${requestScope.ldata}" var="o">
                                     <tr>                                    
                                         <td></td>
                                         <td>${o.userName}</td>
+<<<<<<< HEAD
 
+=======
+<!--                                        <td>${o.password}</td>-->
+>>>>>>> main
                                         <td>${o.firstName}</td>
                                         <td>${o.lastName}</td>
                                         <td>${o.email}</td>
                                         <td>${o.phone}</td>
                                         <td>${o.roleID}</td>
                                         <c:if test="${o.roleID!=0}" >
+<<<<<<< HEAD
                                             <td>
                                                 <a class="action-btn" href="admin?type=0&id=${o.customerID}">Update</a>
                                                 <a class="action-btn" href="admin?type=1&id=${o.customerID}">Remove</a>
                                             </td>
 
+=======
+                                            <td><a style="text-decoration: none" href="admin?type=0&id=${o.customerID}" >Update</a></td>
+                                            <td><a style="text-decoration: none" href="admin?type=1&id=${o.customerID}" >Remove</a></td>
+>>>>>>> main
                                         </c:if>
 
                                     </tr>
@@ -92,9 +126,18 @@
                         </table>
                     </div>
                     <div class="right-column">
+<<<<<<< HEAD
                         <p style="font-weight: 600;">Insert new Account</p>
                         <form action="admin" method="post">
                             <input type="hidden" value="${detailaccount.customerID}" name="account_id">
+=======
+                        <form action="admin" method="post">
+                            <input type="hidden" value="${detailaccount.customerID}" name="account_id">
+                            <!--                            <div class="row">  
+                                                            <div class="label">Id: </div>
+                                                            <div class="input"><input type="text" name="account_id" value="${detailaccount.customerID}"></div>
+                                                        </div>-->
+>>>>>>> main
                             <div class="row">  
                                 <div class="label">Username:</div>
                                 <div class="input"><input type="text" name="username" value="${detailaccount.userName}"></div>
@@ -105,11 +148,19 @@
                             </div>
                             <div class="row">
                                 <div class="label">First Name:</div>
+<<<<<<< HEAD
                                 <div class="input"><input type="text" name="first_name" value="${detailaccount.firstName}"></div>
                             </div>
                             <div class="row">
                                 <div class="label">Last Name:</div>
                                 <div class="input"><input type="text" name="last_name" value="${detailaccount.lastName}"></div>
+=======
+                                <div class="input"><input type="text" name="first_name"value="${detailaccount.firstName}"></div>
+                            </div>
+                            <div class="row">
+                                <div class="label">Last Name:</div>
+                                <div class="input"><input type="text" name="last_name"value="${detailaccount.lastName}"></div>
+>>>>>>> main
                             </div>
                             <div class="row">
                                 <div class="label">Email:</div>
