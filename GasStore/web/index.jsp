@@ -81,25 +81,24 @@
                         <div class="col-md-6">
                             <div class="right-element"><!<!-- Name account -->
                                 <!<!-- Name account -->
-                                <c:if test="${sessionScope.acc.isAdmin == 1}">
+                                
                                     <a href="managerAccount" class="user-account for-buy">
                                         <i class="icon icon-user" aria-current="page" "></i><span>Manager Account</span></a>
                                     <a href="managerCategory" class="user-account for-buy">
                                         <i class="icon icon-user" aria-current="page" ></i><span>Manager Category</span></a>
-                                        </c:if>
-                                        <c:if test="${sessionScope.acc.isSell == 1}">
+                                      
                                     <a href="manager" class="user-account for-buy">
                                         <i class="icon icon-user" aria-current="page" ></i><span>Manager Product</span></a>
-                                        </c:if>
+                                     
 
-                                <c:if test="${sessionScope.acc != null}">
+                             
                                     <a href="LoadOrderForUser" class="user-account for-buy">
                                         <i class="icon icon-user" aria-current="page"></i><span>Account ${sessionScope.acc.user}</span></a>                                    <a href="LoadOrderForUser" class="user-account for-buy">
-                                    </c:if>
-                                    <!<!-- Carts -->
-<!--                                    <a href="carts" class="cart for-buy"><i class="fa-solid fa-cart-plus"></i><span> Cart:${sessionScope.carts.size()}</span></a>-->
-                                    <!-- Search bar -->
-<!--                                    <div class="action-menu">
+                               
+                                    
+                                    <a href="carts" class="cart for-buy"><i class="fa-solid fa-cart-plus"></i><span> Cart:${sessionScope.carts.size()}</span></a>
+                                     Search bar 
+                                    <div class="action-menu">
                                         <div class="search-bar">
                                             <a href="#" class="search-button search-toggle" data-selector="#header-wrap">
                                                 <i class="icon icon-search"></i>
@@ -114,7 +113,7 @@
                                                     >
                                             </form>
                                         </div>
-                                    </div>-->
+                                    </div>
 
                             </div><!--top-right-->
                         </div>

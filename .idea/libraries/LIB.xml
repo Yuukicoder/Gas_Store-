@@ -1,0 +1,23 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/GasStore/lib/gson-2.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GasStore/lib/jakarta.activation-2.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GasStore/lib/httpclient-4.5.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GasStore/lib/mssql-jdbc-12.4.2.jre11.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GasStore/lib/httpcore-4.4.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GasStore/lib/jakarta.xml.bind-api-3.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GasStore/lib/jakarta.el-api-4.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GasStore/lib/jaxb-api-2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GasStore/lib/commons-logging-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GasStore/lib/lombok-1.18.24.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GasStore/lib/jakarta.servlet.jsp.jstl-api-2.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GasStore/lib/sqljdbc42.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GasStore/lib/jakarta.servlet.jsp.jstl-2.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GasStore/lib/jakarta.servlet-api-5.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GasStore/lib/fluent-hc-4.5.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
