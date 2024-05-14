@@ -224,28 +224,40 @@ GO
 	GO
 	ALTER TABLE [dbo].[Product]  WITH CHECK ADD  CONSTRAINT [FK_Product_Administrator] FOREIGN KEY([createdBy])
 	REFERENCES [dbo].[Administrator] ([administratorID])
+	GO 
+	ALTER TABLE [dbo].[Warranties]
+	ADD [customerID] int NULL;
+	GO
+	ALTER TABLE [dbo].[Warranties]  WITH CHECK ADD  CONSTRAINT [FK_Warranties_Customer] FOREIGN KEY([customerID])
+	REFERENCES [dbo].[Customer] ([customerID])
 
-GO
-ALTER TABLE [dbo].[Supplier]
-ADD [roleID] INT NULL;
-ALTER TABLE [dbo].[Supplier]
-ADD CONSTRAINT FK_Supplier_Roles
-FOREIGN KEY ([roleID]) REFERENCES [dbo].[Role]([roleID]);
+	GO
+	ALTER TABLE [dbo].[Supplier]
+	ADD [roleID] INT NULL;
+	ALTER TABLE [dbo].[Supplier]
+	ADD CONSTRAINT FK_Supplier_Roles
+	FOREIGN KEY ([roleID]) REFERENCES [dbo].[Role]([roleID]);
+	ALTER TABLE [dbo].[Supplier]
+	DROP CONSTRAINT FK_Supplier_Roles;
 
-GO
-ALTER TABLE Warranties
-ADD SupplierID INT NULL;
-ALTER TABLE Warranties
-ADD CONSTRAINT FK_Warranties_Supplier
-FOREIGN KEY (SupplierID) REFERENCES [dbo].[Supplier](supplierId);
+	GO
+	ALTER TABLE Warranties
+	ADD SupplierID INT NULL;
+	ALTER TABLE Warranties
+	ADD CONSTRAINT FK_Warranties_Supplier
+	FOREIGN KEY (SupplierID) REFERENCES [dbo].[Supplier](supplierId);
+	GO
+	ALTER TABLE Warranties
+	ADD BarCode nvarchar(max) NULL, ProofImg  nvarchar(max) NULL, Notes nvarchar(max) NULL
 
-GO
-ALTER TABLE [dbo].[Customer]
-ADD [roleID] INT NULL;
-ALTER TABLE [dbo].[Customer]
-ADD CONSTRAINT FK_Customer_Role
-FOREIGN KEY ([roleID]) REFERENCES [dbo].[Role]([roleID]);
+	GO
+	ALTER TABLE [dbo].[Customer]
+	ADD [roleID] INT NULL;
+	ALTER TABLE [dbo].[Customer]
+	ADD CONSTRAINT FK_Customer_Role
+	FOREIGN KEY ([roleID]) REFERENCES [dbo].[Role]([roleID]);
 
+	
 
 CREATE TABLE Payments (
     PaymentID INT IDENTITY(1,1) PRIMARY KEY,
@@ -264,6 +276,12 @@ CREATE TABLE News(
 	[description] nvarchar(max) NULL
 )
 
+	GO 
+	ALTER TABLE [dbo].[News]
+	ADD [createdBy] INT NULL;
+	ALTER TABLE [dbo].[News]
+	ADD CONSTRAINT FK_News_Admin
+	FOREIGN KEY ([createdBy]) REFERENCES [dbo].[Administrator]([administratorID]);
 
 
 
