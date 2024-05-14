@@ -1,4 +1,5 @@
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -6,7 +7,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Gas Store</title>
-        <link href="../css/styleAdmin.css" rel="stylesheet" type="text/css"/>
+        <link href="./css/styleAdmin.css" rel="stylesheet" type="text/css"/>
         <link rel="icon" type="image/x-icon" href="https://th.bing.com/th/id/R.e15d750fe41eb99350f0c56e6b66b653?rik=QJI66s2o67Q7jw&pid=ImgRaw&r=0">
     </head>
     <body>
@@ -38,23 +39,23 @@
                             <th>Email</th>
                             <th>Phone_number</th>
                             <th>Role_id</th>
-                            <th></th>
+                            <th>Action</th>
                             <th></th>
                             </thead>
                             <tbody>
-                                <c:forEach items="${account.accList}" var="accList">
+                                <c:forEach items="${requestScope.ldata}" var="o">
                                     <tr>                                    
                                         <td></td>
-                                        <td>${accList.username}</td>
-<!--                                        <td>${accList.password}</td>-->
-                                        <td>${accList.first_name}</td>
-                                        <td>${accList.last_name}</td>
-                                        <td>${accList.email}</td>
-                                        <td>${accList.phone_number}</td>
-                                        <td>${accList.role_id}</td>
-                                        <c:if test="${accList.role_id!=0}" >
-                                            <td><a style="text-decoration: none" href="AdminController?type=0&id=${accList.account_id}" >Update</a></td>
-                                            <td><a style="text-decoration: none" href="AdminController?type=1&id=${accList.account_id}" >Remove</a></td>
+                                        <td>${o.userName}</td>
+<!--                                        <td>${o.password}</td>-->
+                                        <td>${o.firstName}</td>
+                                        <td>${o.lastName}</td>
+                                        <td>${o.email}</td>
+                                        <td>${o.phone}</td>
+                                        <td>${o.roleID}</td>
+                                        <c:if test="${o.roleID!=0}" >
+                                            <td><a style="text-decoration: none" href="admin?type=0&id=${o.customerID}" >Update</a></td>
+                                            <td><a style="text-decoration: none" href="admin?type=1&id=${o.customerID}" >Remove</a></td>
                                         </c:if>
                                     </tr>
                                 </c:forEach>
@@ -62,15 +63,15 @@
                         </table>
                     </div>
                     <div class="right-column">
-                        <form action="AdminController" method="post">
-                            <input type="hidden" value="${detailaccount.account_id}" name="account_id">
+                        <form action="admin" method="post">
+                            <input type="hidden" value="${detailaccount.customerID}" name="account_id">
                             <!--                            <div class="row">  
                                                             <div class="label">Id: </div>
-                                                            <div class="input"><input type="text" name="account_id" value="${detailaccount.account_id}"></div>
+                                                            <div class="input"><input type="text" name="account_id" value="${detailaccount.customerID}"></div>
                                                         </div>-->
                             <div class="row">  
                                 <div class="label">Username:</div>
-                                <div class="input"><input type="text" name="username" value="${detailaccount.username}"></div>
+                                <div class="input"><input type="text" name="username" value="${detailaccount.userName}"></div>
                             </div>
                             <div class="row">
                                 <div class="label">Password:</div>
@@ -79,11 +80,11 @@
 
                             <div class="row">
                                 <div class="label">First Name:</div>
-                                <div class="input"><input type="text" name="first_name"value="${detailaccount.first_name}"></div>
+                                <div class="input"><input type="text" name="first_name"value="${detailaccount.firstName}"></div>
                             </div>
                             <div class="row">
                                 <div class="label">Last Name:</div>
-                                <div class="input"><input type="text" name="last_name"value="${detailaccount.last_name}"></div>
+                                <div class="input"><input type="text" name="last_name"value="${detailaccount.lastName}"></div>
                             </div>
                             <div class="row">
                                 <div class="label">Email:</div>
@@ -91,11 +92,11 @@
                             </div>
                             <div class="row">
                                 <div class="label">Phone_number:</div>
-                                <div class="input"><input type="text" name="phone_number" value="${detailaccount.phone_number}"></div>
+                                <div class="input"><input type="text" name="phone_number" value="${detailaccount.phone}"></div>
                             </div>
                             <div class="row">
                                 <div class="label">Role ID:</div>
-                                <div class="input"><input type="text" name="role_id" value="${detailaccount.role_id}"></div>
+                                <div class="input"><input type="text" name="role_id" value="${detailaccount.roleID}"></div>
                             </div>
 
                             <input type="submit" value="Insert_Update" name="btnInUp">
