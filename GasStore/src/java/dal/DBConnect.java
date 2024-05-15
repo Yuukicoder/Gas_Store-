@@ -26,7 +26,7 @@ public class DBConnect {
         }
     }
     public DBConnect() {
-        this("jdbc:sqlserver://localhost:1433;databaseName=Gas_Group6",
+        this("jdbc:sqlserver://localhost:1433;databaseName=SWP_Laptop",
                 "sa","123");
     }
     public ResultSet getData(String sql){

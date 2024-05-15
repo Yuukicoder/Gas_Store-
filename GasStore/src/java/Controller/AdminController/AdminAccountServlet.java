@@ -85,7 +85,6 @@ public class AdminAccountServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-<<<<<<< HEAD
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         CustomerDao cus = new CustomerDao();
@@ -97,11 +96,11 @@ public class AdminAccountServlet extends HttpServlet {
         String uemail = request.getParameter("email");
         String phone = request.getParameter("phone_number");
         int roleID = Integer.parseInt(request.getParameter("role_id"));
-       
+
         // Check if customerIdParam and typeParam are not null and not empty
         String customerIdParam = request.getParameter("id");
         String typeParam = request.getParameter("type");
-        Customer newCustomer = new Customer(Integer.parseInt(uid),name, pass, first, last, roleID, phone, uemail);
+        Customer newCustomer = new Customer(Integer.parseInt(uid), name, pass, first, last, roleID, phone, uemail);
         if (!uid.isEmpty()) {
             // Update existing customer
             cus.updateUser(newCustomer);
@@ -112,43 +111,42 @@ public class AdminAccountServlet extends HttpServlet {
 
         response.sendRedirect("admin");
     }
-=======
-   protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    CustomerDao cus = new CustomerDao();
-    String uid = request.getParameter("account_id");
-    String name = request.getParameter("username");
-    String pass = request.getParameter("password");
-    String first = request.getParameter("first_name");
-    String last = request.getParameter("last_name");
-    String uemail = request.getParameter("email");
-    String phone = request.getParameter("phone_number");
-    int roleID = Integer.parseInt(request.getParameter("role_id"));
 
-    // Check if uid is not null and not empty
-    if (uid != null && !uid.isEmpty()) {
-        try {
-            int userId = Integer.parseInt(uid);
-            Customer newCustomer = new Customer(userId, name, pass, first, last, roleID, phone, uemail);
-            // Update existing customer
-            cus.updateUser(newCustomer);
-        } catch (NumberFormatException e) {
-            // Log the exception (could also use a logging framework)
-            e.printStackTrace();
-            // Handle the error appropriately, e.g., setting an error message in the request
-            request.setAttribute("error", "Invalid account ID format.");
-            // Forward back to a relevant JSP or page to display the error
-            request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
-            return;
-        }
-    } else {
-        // Insert new customer
-        Customer newCustomer = new Customer(0, name, pass, first, last, roleID, phone, uemail);
-        cus.insertCustomer(newCustomer);
-    }
-    response.sendRedirect("admin");
-}
->>>>>>> main
+//    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//        CustomerDao cus = new CustomerDao();
+//        String uid = request.getParameter("account_id");
+//        String name = request.getParameter("username");
+//        String pass = request.getParameter("password");
+//        String first = request.getParameter("first_name");
+//        String last = request.getParameter("last_name");
+//        String uemail = request.getParameter("email");
+//        String phone = request.getParameter("phone_number");
+//        int roleID = Integer.parseInt(request.getParameter("role_id"));
+//
+//        // Check if uid is not null and not empty
+//        if (uid != null && !uid.isEmpty()) {
+//            try {
+//                int userId = Integer.parseInt(uid);
+//                Customer newCustomer = new Customer(userId, name, pass, first, last, roleID, phone, uemail);
+//                // Update existing customer
+//                cus.updateUser(newCustomer);
+//            } catch (NumberFormatException e) {
+//                // Log the exception (could also use a logging framework)
+//                e.printStackTrace();
+//                // Handle the error appropriately, e.g., setting an error message in the request
+//                request.setAttribute("error", "Invalid account ID format.");
+//                // Forward back to a relevant JSP or page to display the error
+//                request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
+//                return;
+//            }
+//        } else {
+//            // Insert new customer
+//            Customer newCustomer = new Customer(0, name, pass, first, last, roleID, phone, uemail);
+//            cus.insertCustomer(newCustomer);
+//        }
+//        response.sendRedirect("admin");
+//    }
 
     /**
      * Returns a short description of the servlet.
