@@ -8,6 +8,7 @@ import DAO.AccountDAO;
 import DAO.OrderDAO;
 import DAO.ProductDAO;
 import DTO.AccountDTO;
+import DTO.AdminDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -67,9 +68,9 @@ public class AdminHomeServlet extends HttpServlet {
         OrderDAO odao = new OrderDAO();
         ProductDAO pdao = new ProductDAO();
         AccountDAO adao = new AccountDAO();
-        AccountDTO account = (AccountDTO) session.getAttribute("account");
+        AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
-            if (account.getRole() == 1) {
+            if (account.getRoleID()== 1) {
                 //get income
                 float incomeToday = odao.getIncomeToday();
                 int orderToday = odao.getOrdersToday();

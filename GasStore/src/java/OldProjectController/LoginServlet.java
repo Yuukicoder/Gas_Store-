@@ -6,6 +6,7 @@ package OldProjectController;
 
 import DAO.AccountDAO;
 import DTO.AccountDTO;
+import DTO.AdminDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -79,28 +80,32 @@ public class LoginServlet extends HttpServlet {
         System.out.println("Login: username " + username + " pass" + password);
         HttpSession session = request.getSession();
         AccountDAO accountDAO = new AccountDAO();
-        AccountDTO account = accountDAO.checkLogin(username, password);
+        AdminDTO account = accountDAO.checkLogin(username, password);
         if (account == null) {
             String msg = "Username or Password is not correct!";
             request.setAttribute("mess", msg);
             request.getRequestDispatcher("login.jsp").forward(request, response);
 
-        } else {
+        } 
+        else 
+        {
             if (isSpecialCharacter(username)) {
                 String msg = "Username don't use special character";
                 request.setAttribute("mess", msg);
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 // Compare username and password case-sensitive
-            } else if (!account.getUsername().equals(username) || !account.getPassword().equals(password)) {
+            } else if (!account.getUserName().equals(username) || !account.getPassword().equals(password)) {
                 String msg = "Username or Password is not correct!";
                 request.setAttribute("mess", msg);
                 request.getRequestDispatcher("login.jsp").forward(request, response);
-            } else if (account.getRole() == 1) {
+            } else if (account.getRoleID()== 1) {
                 session.setAttribute("account", account);
                 response.sendRedirect("adminHome");
-            } else {
-                session.setAttribute("account", account);
-                response.sendRedirect("home");
+            }
+            else
+            {
+                 session.setAttribute("account", account);
+                response.sendRedirect("adminHome");
             }
         }
     }

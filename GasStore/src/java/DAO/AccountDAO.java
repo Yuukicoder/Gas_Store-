@@ -5,6 +5,7 @@
 package DAO;
 
 import DTO.AccountDTO;
+import DTO.AdminDTO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,24 +20,41 @@ import java.util.logging.Logger;
  */
 public class AccountDAO extends DBcontext {
 
-    public AccountDTO checkLogin(String username, String password) {
-        String sql = "SELECT * FROM Account WHERE Username = ? AND Password = ?";
+    public AdminDTO checkLogin(String username, String password) {
+        String sql = "SELECT * FROM Administrator WHERE Username = ? AND Password = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, username);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                AccountDTO account = new AccountDTO();
-                account.setAccountID(rs.getInt(1));
-                account.setUsername(rs.getString(2));
+                AdminDTO account = new AdminDTO();
+//                account.setAccountID(rs.getInt(1));
+//                account.setUsername(rs.getString(2));
+//                account.setPassword(rs.getString(3));
+//                account.setFullname(rs.getString(4));
+//                account.setPhone(rs.getString(5));
+//                account.setEmail(rs.getString(6));
+//                account.setAddress(rs.getString(7));
+//                account.setQue(rs.getString(8));
+//                account.setRole(rs.getInt(9));
+                account.setAdminID(rs.getInt(1));
+                account.setUserName(rs.getString(2));
                 account.setPassword(rs.getString(3));
-                account.setFullname(rs.getString(4));
-                account.setPhone(rs.getString(5));
-                account.setEmail(rs.getString(6));
-                account.setAddress(rs.getString(7));
-                account.setQue(rs.getString(8));
-                account.setRole(rs.getInt(9));
+                account.setLastLogin(rs.getString(4));
+                account.setIsActive(rs.getInt(5));
+                account.setRoleID(rs.getInt(6));
+                account.setEmail(rs.getString(7));
+                account.setImg(rs.getString(8));
+
+//                    private int adminID;
+//    private String userName;
+//    private String password;
+//    private String lastLogin;
+//    private int isActive;
+//    private int roleID;
+//    private String email;
+//    private String img;
                 return account;
             }
         } catch (Exception e) {
@@ -194,23 +212,22 @@ public class AccountDAO extends DBcontext {
         return null;
     }
 
-    public List<AccountDTO> getAllAccount() {
-        String sql = "SELECT * FROM Account";
-        ArrayList<AccountDTO> la = new ArrayList<>();
+    public List<AdminDTO> getAllAccount() {
+        String sql = "SELECT * FROM Administrator";
+        ArrayList<AdminDTO> la = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                AccountDTO account = new AccountDTO();
-                account.setAccountID(rs.getInt(1));
-                account.setUsername(rs.getString(2));
+                AdminDTO account = new AdminDTO();
+                  account.setAdminID(rs.getInt(1));
+                account.setUserName(rs.getString(2));
                 account.setPassword(rs.getString(3));
-                account.setFullname(rs.getString(4));
-                account.setPhone(rs.getString(5));
-                account.setEmail(rs.getString(6));
-                account.setAddress(rs.getString(7));
-                account.setQue(rs.getString(8));
-                account.setRole(rs.getInt(9));
+                account.setLastLogin(rs.getString(4));
+                account.setIsActive(rs.getInt(5));
+                account.setRoleID(rs.getInt(6));
+                account.setEmail(rs.getString(7));
+                account.setImg(rs.getString(8));
                 la.add(account);
             }
         } catch (Exception e) {
@@ -261,11 +278,17 @@ public class AccountDAO extends DBcontext {
     }
 
     public static void main(String[] args) {
-        AccountDTO accountDTO = new AccountDTO();
-        AccountDAO adao = new AccountDAO();
-
-        int check = adao.changePassword("12344", 2);
-        System.out.println(check);
+//        AccountDTO accountDTO = new AccountDTO();
+//        AccountDAO adao = new AccountDAO();
+//
+//        int check = adao.changePassword("12344", 2);
+//        System.out.println(check);
+            AccountDAO adao = new AccountDAO();
+            
+            List<AdminDTO> la = adao.getAllAccount();
+            for(AdminDTO a : la){
+                System.out.println(a);
+            }
     }
 
     public int updateProfile(AccountDTO accountDTO) {

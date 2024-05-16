@@ -18,7 +18,7 @@ public class DBConnect {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             //connection
             conn=DriverManager.getConnection(URL,username, password);
-//            System.out.println("connected");
+            System.out.println("connected");
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
         } catch (SQLException ex) {
@@ -26,8 +26,8 @@ public class DBConnect {
         }
     }
     public DBConnect() {
-        this("jdbc:sqlserver://localhost:1433;databaseName=SWP_Laptop",
-                "sa","123");
+        this("jdbc:sqlserver://localhost:1433;databaseName=Gas_Group6",
+                "sa","12345");
     }
     public ResultSet getData(String sql){
         ResultSet rs=null;
