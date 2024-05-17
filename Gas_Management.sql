@@ -1,5 +1,5 @@
-﻿CREATE DATABASE Gas_Group6
-Use Gas_Group6
+﻿CREATE DATABASE Gas_Management
+Use Gas_Management
 
 CREATE TABLE [dbo].[Administrator](
 		[administratorID] [int] IDENTITY(1,1) NOT NULL,
@@ -42,6 +42,7 @@ CREATE TABLE [dbo].[Customer](
 		[phone] [varchar](100) NULL,
 		[email] [varchar](100) NULL,
 		[totalMoney] [money] NULL,
+		[isCustomer] [bit] NULL,
 	 CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED 
 	(
 		[customerID] ASC
@@ -96,11 +97,9 @@ CREATE TABLE [dbo].[OrderDetails](
 CREATE TABLE DiscountUsage (
     UsageID INT IDENTITY(1,1) PRIMARY KEY,
     DiscountID INT,
-    CustomerID INT,
     UseDate DATETIME,
     OrderID INT,  
     FOREIGN KEY (DiscountID) REFERENCES Discount(DiscountID),
-    FOREIGN KEY (CustomerID) REFERENCES Customer(customerID), 
     FOREIGN KEY (OrderID) REFERENCES [Order](orderID)  
 );
 
@@ -177,87 +176,24 @@ CREATE TABLE Warranties (
     SerialID INT,
     WarrantyStartDate DATETIME,
     WarrantyEndDate DATETIME,
-    WarrantyTerms VARCHAR(MAX),  
-    FOREIGN KEY (SerialID) REFERENCES SerialNumbers(SerialID)
+    WarrantyTerms VARCHAR(MAX), 
+	supplierID int REFERENCES Supplier(supplierID),
+	customerID int REFERENCES Customer(customerID) on delete cascade,
+	BarCode nvarchar(max) NULL, 
+	ProofImg  nvarchar(max) NULL, 
+	Notes nvarchar(max) NULL,
+    FOREIGN KEY (SerialID) REFERENCES SerialNumbers(SerialID) on delete cascade
 );
 
-GO
-
-	ALTER TABLE [dbo].[Administrator]  WITH CHECK ADD  CONSTRAINT [FK_Administrator_Role] FOREIGN KEY([roleID])
-	REFERENCES [dbo].[Role] ([roleID])
-	GO
-	ALTER TABLE [dbo].[Administrator] CHECK CONSTRAINT [FK_Administrator_Role]
-	GO
-	ALTER TABLE [dbo].[Order]  WITH CHECK ADD  CONSTRAINT [FK_Order_Customer] FOREIGN KEY([customerID])
-	REFERENCES [dbo].[Customer] ([customerID])
-	GO
-	ALTER TABLE [dbo].[Order] CHECK CONSTRAINT [FK_Order_Customer]
-	GO
-	ALTER TABLE [dbo].[Order]  WITH CHECK ADD  CONSTRAINT [FK_Order_Shipments] FOREIGN KEY([shipVia])
-	REFERENCES [dbo].[Shipments] ([shipmentID])
-	GO
-	ALTER TABLE [dbo].[Order] CHECK CONSTRAINT [FK_Order_Shipments]
-	GO
-	ALTER TABLE [dbo].[OrderDetails]  WITH CHECK ADD  CONSTRAINT [FK_OrderDetails_Order] FOREIGN KEY([orderID])
-	REFERENCES [dbo].[Order] ([orderID])
-	GO
-	ALTER TABLE [dbo].[OrderDetails] CHECK CONSTRAINT [FK_OrderDetails_Order]
-	GO
-	ALTER TABLE [dbo].[OrderDetails]  WITH CHECK ADD  CONSTRAINT [FK_OrderDetails_Product] FOREIGN KEY([productID])
-	REFERENCES [dbo].[Product] ([productID])
-	GO
-	ALTER TABLE [dbo].[OrderDetails] CHECK CONSTRAINT [FK_OrderDetails_Product]
-	GO
-	ALTER TABLE [dbo].[Product]  WITH CHECK ADD  CONSTRAINT [FK_Product_Category] FOREIGN KEY([categoryID])
-	REFERENCES [dbo].[Category] ([categoryID])
-	GO
-	ALTER TABLE [dbo].[Product] CHECK CONSTRAINT [FK_Product_Category]
-	GO
-	ALTER TABLE [dbo].[Product]  WITH CHECK ADD  CONSTRAINT [FK_Product_Supplier] FOREIGN KEY([supplierId])
-	REFERENCES [dbo].[Supplier] ([supplierId])
-	GO
-	ALTER TABLE [dbo].[Product] CHECK CONSTRAINT [FK_Product_Supplier]
-	
-	GO
-	ALTER TABLE [dbo].[Product]
-	ADD [createdBy] int NULL;
-	GO
-	ALTER TABLE [dbo].[Product]  WITH CHECK ADD  CONSTRAINT [FK_Product_Administrator] FOREIGN KEY([createdBy])
-	REFERENCES [dbo].[Administrator] ([administratorID])
-	GO 
-	ALTER TABLE [dbo].[Warranties]
-	ADD [customerID] int NULL;
-	GO
-	ALTER TABLE [dbo].[Warranties]  WITH CHECK ADD  CONSTRAINT [FK_Warranties_Customer] FOREIGN KEY([customerID])
-	REFERENCES [dbo].[Customer] ([customerID])
-
-	GO
-	ALTER TABLE [dbo].[Supplier]
-	ADD [roleID] INT NULL;
-	ALTER TABLE [dbo].[Supplier]
-	ADD CONSTRAINT FK_Supplier_Roles
-	FOREIGN KEY ([roleID]) REFERENCES [dbo].[Role]([roleID]);
-	ALTER TABLE [dbo].[Supplier]
-	DROP CONSTRAINT FK_Supplier_Roles;
-
-	GO
-	ALTER TABLE Warranties
-	ADD SupplierID INT NULL;
-	ALTER TABLE Warranties
-	ADD CONSTRAINT FK_Warranties_Supplier
-	FOREIGN KEY (SupplierID) REFERENCES [dbo].[Supplier](supplierId);
-	GO
-	ALTER TABLE Warranties
-	ADD BarCode nvarchar(max) NULL, ProofImg  nvarchar(max) NULL, Notes nvarchar(max) NULL
-
-	GO
-	ALTER TABLE [dbo].[Customer]
-	ADD [roleID] INT NULL;
-	ALTER TABLE [dbo].[Customer]
-	ADD CONSTRAINT FK_Customer_Role
-	FOREIGN KEY ([roleID]) REFERENCES [dbo].[Role]([roleID]);
-
-	
+CREATE TABLE [dbo].[ProductImg](
+	[imgID] [int] IDENTITY(1,1) NOT NULL,
+	[productID] [int] NULL,
+	[Path] [nvarchar](max) NULL,
+ CONSTRAINT [PK__ProductImg] PRIMARY KEY CLUSTERED 
+(
+	[imgID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 
 CREATE TABLE Payments (
     PaymentID INT IDENTITY(1,1) PRIMARY KEY,
@@ -265,30 +201,74 @@ CREATE TABLE Payments (
     PaymentMethod VARCHAR(50),
     PaymentStatus VARCHAR(50),
     PaymentDate DATETIME,
-    FOREIGN KEY (OrderID) REFERENCES [Order](orderID)
+    FOREIGN KEY (OrderID) REFERENCES [Order](orderID) 
 );
 
-CREATE TABLE News(
-	newsID int PRIMARY KEY IDENTITY(1,1) NOT NULL,
-	img nvarchar(max) NULL,
-	title nvarchar(max) NULL,
-	[date] DATETIME NULL,
-	[description] nvarchar(max) NULL
-)
+CREATE TABLE [dbo].[Post](
+	[PostID] [int] IDENTITY(1,1) NOT NULL,
+	[administratorID] [int] NOT NULL,
+	[Title] [nvarchar](2550) NULL,
+	[DateCreated] [nvarchar](50) NULL,
+	[DateUpdated] [nvarchar](50) NULL,
+	[Postbanner] [nvarchar](250) NULL,
+	[Context] [nvarchar](max) NULL,
+	[Description] [nvarchar](max) NULL,
+	[PostCategoryID] [int] NOT NULL,
+	[updatedBy] INT NULL,
+ CONSTRAINT [PK__Post] PRIMARY KEY CLUSTERED 
+(
+	[PostID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-	GO 
-	ALTER TABLE [dbo].[News]
-	ADD [createdBy] INT NULL;
-	ALTER TABLE [dbo].[News]
-	ADD CONSTRAINT FK_News_Admin
-	FOREIGN KEY ([createdBy]) REFERENCES [dbo].[Administrator]([administratorID]);
+CREATE TABLE [dbo].[PostCategory](
+	[PostCategoryID] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](2550) NOT NULL,
+ CONSTRAINT [PK__PostCategory] PRIMARY KEY CLUSTERED 
+(
+	[PostCategoryID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 
+GO
+ALTER TABLE [dbo].[Administrator]  WITH CHECK ADD  CONSTRAINT [FK_Administrator_Role] FOREIGN KEY([roleID])
+REFERENCES [dbo].[Role] ([roleID]) on delete cascade
 
+ALTER TABLE [dbo].[Order]  WITH CHECK ADD  CONSTRAINT [FK_Order_Customer] FOREIGN KEY([customerID])
+REFERENCES [dbo].[Customer] ([customerID]) on delete cascade
+--
+ALTER TABLE [dbo].[Order]  WITH CHECK ADD  CONSTRAINT [FK_Order_Shipments] FOREIGN KEY([shipVia])
+REFERENCES [dbo].[Shipments] ([shipmentID]) on delete cascade
 
+ALTER TABLE [dbo].[OrderDetails]  WITH CHECK ADD  CONSTRAINT [FK_OrderDetails_Order] FOREIGN KEY([orderID])
+REFERENCES [dbo].[Order] ([orderID]) on delete cascade
+
+ALTER TABLE [dbo].[OrderDetails]  WITH CHECK ADD  CONSTRAINT [FK_OrderDetails_Product] FOREIGN KEY([productID])
+REFERENCES [dbo].[Product] ([productID]) on delete cascade
+
+ALTER TABLE [dbo].[Product]  WITH CHECK ADD  CONSTRAINT [FK_Product_Category] FOREIGN KEY([categoryID]) 
+REFERENCES [dbo].[Category] ([categoryID]) on delete cascade
+
+ALTER TABLE [dbo].[Product]  WITH CHECK ADD  CONSTRAINT [FK_Product_Supplier] FOREIGN KEY([supplierId])
+REFERENCES [dbo].[Supplier] ([supplierId]) on delete cascade
+
+ALTER TABLE [dbo].[Product]  WITH CHECK ADD  CONSTRAINT [FK_Product_Administrator] FOREIGN KEY([createdBy])
+REFERENCES [dbo].[Administrator] ([administratorID]) on delete cascade
+
+ALTER TABLE [dbo].[ProductImg]
+ADD CONSTRAINT FK_ProductImg_Product
+FOREIGN KEY ([productID]) REFERENCES [dbo].[Product]([productID]) on delete cascade;
+
+ALTER TABLE [dbo].[Post]
+ADD CONSTRAINT [FK_Post_PostCategory] FOREIGN KEY ([PostCategoryID])
+REFERENCES [dbo].[PostCategory] ([PostCategoryID])  on delete cascade;
+
+ALTER TABLE [dbo].[Post]
+ADD CONSTRAINT [FK_Post_Admin] FOREIGN KEY ([administratorID])
+REFERENCES [dbo].[Administrator] ([administratorID]);  
 
 INSERT INTO dbo.Role(code, name, description) VALUES('Admin', N'Administrator', N'Manager webapp')
-INSERT INTO dbo.Role(code, name, description) VALUES('Supplier', N'Supplier', N'Provide product')
-INSERT INTO dbo.Role(code, name, description) VALUES('Customer', N'Customer', N'Using webapp')
+INSERT INTO dbo.Role(code, name, description) VALUES('Staff', N'Staff', N'Website employee')
 
 INSERT INTO dbo.Shipments(CompanyName, Phone, Email, Status, createdDate) VALUES(N'J&T Express', N'1900 1088', N'JTExpress@gmail.com',1, GETDATE())
 INSERT INTO dbo.Shipments(CompanyName, Phone, Email, Status, createdDate) VALUES(N'NINJA VAN', N'1900 886 877', N'NINJAVAN@gmail.com',1, GETDATE())
@@ -296,12 +276,12 @@ INSERT INTO dbo.Shipments(CompanyName, Phone, Email, Status, createdDate) VALUES
 INSERT INTO dbo.Shipments(CompanyName, Phone, Email, Status, createdDate) VALUES(N'Ship60', N'1900 6362090', N'Ship60@gmail.com', 1, GETDATE())
 INSERT INTO dbo.Shipments(CompanyName, Phone, Email, Status, createdDate) VALUES(N'GHN Express', N'1900 636677', N'GHNExpress@gmail.com', 1, GETDATE())
 
-INSERT INTO [dbo].[Supplier]([companyName],[Status],[createdDate],[email],[phone],[homePage], [roleID])VALUES(N'PV GAS',1,CURRENT_TIMESTAMP,'pvgas@pvgas.com.vn','+84 28 3781 6777','https://www.pvgas.com.vn',2)
-INSERT INTO [dbo].[Supplier]([companyName],[Status],[createdDate],[email],[phone],[homePage], [roleID])VALUES(N'Gas Gia Đình',1,CURRENT_TIMESTAMP,'gasgiadinh.vn@gmail.com','(028) 37.155.166','http://gasgiadinh.vn',2)
-INSERT INTO [dbo].[Supplier]([companyName],[Status],[createdDate],[email],[phone],[homePage], [roleID])VALUES(N'VT Gas',1,CURRENT_TIMESTAMP,' info@vt-gas.com.vn','061. 383 1988','http://www.vtgas.com.vn/',2)
-INSERT INTO [dbo].[Supplier]([companyName],[Status],[createdDate],[email],[phone],[homePage], [roleID])VALUES('NaMilux',1,CURRENT_TIMESTAMP,'info@namilux.com','0389764184','https://namilux.com/vi/home',2)
-INSERT INTO [dbo].[Supplier]([companyName],[Status],[createdDate], [email],[phone],[homePage], [roleID])VALUES('Rinnai',1,CURRENT_TIMESTAMP,'info@rinnaivietnamofficial@gmail.com','(028) 6292 8184','https://rinnai.com.vn',2)
-INSERT INTO [dbo].[Supplier]([companyName],[Status],[createdDate],[email],[phone],[homePage], [roleID])VALUES('Windo',1,CURRENT_TIMESTAMP,'windothienthanh@gmail.com','0908492923','https://windo.vn',2)
+INSERT INTO [dbo].[Supplier]([companyName],[Status],[createdDate],[email],[phone],[homePage])VALUES(N'PV GAS',1,CURRENT_TIMESTAMP,'pvgas@pvgas.com.vn','+84 28 3781 6777','https://www.pvgas.com.vn')
+INSERT INTO [dbo].[Supplier]([companyName],[Status],[createdDate],[email],[phone],[homePage])VALUES(N'Gas Gia Đình',1,CURRENT_TIMESTAMP,'gasgiadinh.vn@gmail.com','(028) 37.155.166','http://gasgiadinh.vn')
+INSERT INTO [dbo].[Supplier]([companyName],[Status],[createdDate],[email],[phone],[homePage])VALUES(N'VT Gas',1,CURRENT_TIMESTAMP,' info@vt-gas.com.vn','061. 383 1988','http://www.vtgas.com.vn/')
+INSERT INTO [dbo].[Supplier]([companyName],[Status],[createdDate],[email],[phone],[homePage])VALUES('NaMilux',1,CURRENT_TIMESTAMP,'info@namilux.com','0389764184','https://namilux.com/vi/home')
+INSERT INTO [dbo].[Supplier]([companyName],[Status],[createdDate], [email],[phone],[homePage])VALUES('Rinnai',1,CURRENT_TIMESTAMP,'info@rinnaivietnamofficial@gmail.com','(028) 6292 8184','https://rinnai.com.vn')
+INSERT INTO [dbo].[Supplier]([companyName],[Status],[createdDate],[email],[phone],[homePage])VALUES('Windo',1,CURRENT_TIMESTAMP,'windothienthanh@gmail.com','0908492923','https://windo.vn')
 
 INSERT INTO [dbo].[Category]([code],[name], [description])VALUES('binh-gas-1',N'Bình gas',N'Bình gas là một thiết bị chứa gas được chế tạo từ vật liệu thép chuyên dụng để bảo quản và giữ an toàn khi lưu trữ, vận chuyển và sử dụng gas.')
 INSERT INTO [dbo].[Category]([code],[name],[description])VALUES('bep-gas-2',N'Bếp gas',N'Bếp gas là một loại bếp sử dụng nhiên liệu là khí gas (khí thiên nhiên) để nấu ăn')
@@ -553,44 +533,3 @@ insert into Product ([code], [name], [keywords],
 [categoryID], [supplierId], [isActive], [unitPrice], [image], [stockQuantity], [unitOnOrders], [createdDate], [createdBy])
 VALUES (N'bep-gas-khe-cao-cap-windo-6b-33', N'BẾP GAS KHÈ CAO CẤP WINDO 6B', N'WINDO 6B', N'Toàn thân bằng gang đúc nguyên khối, Bộ hòa khí ngoại nhập', N'cho hiệu năng cao cùng lửa  to và mạnh, giúp việc chế biến các món Á, món xào với lửa lớn, món chiên, nước sốt… trở nên đơn giản hơn bao giờ hết. Mặc dù cho hiệu suất cao với lửa  nhưng bếp tiêu tốn gas không đáng kể chỉ 720g/h. Sử dụng hệ thống đánh lửa Magneto tiên tiến, lên lửa cực nhanh và không phải lo thay pin bất tiện như đánh lửa IC. Số vòng lửa có nhiều mức để người dùng có thể tùy ý chỉnh theo nhu cầu nấu nướng. Sử dụng bếp gas công nghiệp là giải pháp tiết kiệm chi phí, tiện lợi, an toàn (nếu sử dụng đúng cách) cho các nhà hàng, quán ăn.',
 2, 6, 1, 899000, 'images/products/33/df.jpg', 10, 20,  CAST(N'2023-05-13T15:35:00.000' AS DateTime), 1)
-
-INSERT INTO News (img,title,[date],[description]) VALUES ('images/news/1/df.jpg', N'Điểm bạn nên làm trong quá trình sử dụng bếp gas',  GETDATE(), N'Lựa chọn bếp gas từ các thương hiệu nổi tiếng được phân phối tại các cơ sở kinh doanh uy tín trên thị trường, được đông đảo người tiêu dùng tin tưởng và lựa chọn.
-
-Chọn mua gas từ các thương hiệu uy tín như Petrolimex, Hanoi Petro, Siamgas,… và nhớ kiểm tra kỹ bình gas trước khi nhận và thanh toán.
-
-Chọn lựa các loại bếp gas có tính năng hiện đại như tự động ngắt gas, đầu hâm, khóa an toàn cho trẻ em, hẹn giờ,…')
-
-INSERT INTO News (img,title,[date],[description]) VALUES ('images/news/2/df.jpg', N'Điều bạn nên nhớ khi đổi bình gas Petrolimex',  GETDATE(), N'Mỗi bình gas Petrolimex sau quá trình chiết nạp được niêm phong chắc chắn bằng màng co và tem chống hàng giả. Sản phẩm cũng được kiểm tra kỹ lưỡng về trọng lượng và chất lượng trước khi đưa ra thị trường. Tem chống giả và màng co của Petrolimex đảm bảo tính bảo mật cao, giúp người tiêu dùng phân biệt dễ dàng giữa hàng chính hãng và hàng giả, hàng nhái.
-
-Tem chống giả được thiết kế cẩn thận. Để phân biệt bình gas Petrolimex thật và giả, bạn có thể sử dụng đèn tia cực tím chiếu vào phần tem, đặc biệt là vạch màu xanh. Nếu dòng chữ Petrolimex hiện rõ, đó là hàng thật. Ngoài ra, bạn có thể thử xoa nước lên phần vạch vàng trên tem chống giả. Nếu chữ Petrolimex hiện ra, đó là hàng chính hãng. Công nghệ hiện đại cũng cho phép kiểm tra bằng cách gửi tin nhắn hoặc quét mã QR. Giá gas Petrolimex thường được điều chỉnh để phản ánh giá xăng dầu trên thị trường thế giới, do đó luôn biến động và không có một con số cố định. Do đó, người sử dụng cần thường xuyên cập nhật và theo dõi giá gas, đồng thời chú ý sử dụng gas một cách tiết kiệm và hiệu quả để giảm thiểu chi phí.
-
-Để đổi gas Petrolimex chính hãng, bạn cần trang bị kiến thức cơ bản về kiểm tra gas và lựa chọn địa chỉ uy tín, được Petrolimex ủy quyền, có nhiều kinh nghiệm trong ngành và được đông đảo người tiêu dùng tin tưởng.
-
-Trên đây là chia sẻ của chúng tôi để bạn đọc có thêm kinh nghiệm lựa chọn bình gas Petrolimex chính hãng, chất lượng.')
-
-INSERT INTO News (img,title,[date],[description]) VALUES ('images/news/3/ht.jpg', N'Điều bạn nên nhớ khi bảo trì hệ thống gas',  GETDATE(), N'Thực hiện bảo trì định kỳ sẽ đảm bảo hệ thống gas hoạt động ổn định và giảm thiểu nguy cơ khi sử dụng.
-
-Hệ thống gas cần được thường xuyên bảo dưỡng và kiểm tra bởi các kỹ thuật viên hoặc nhân viên bảo hành có kinh nghiệm và hiểu biết về lĩnh vực này.
-
-Đề cập đến việc thay thế các ống và bộ điều chỉnh bị hỏng hoặc mòn, vì khoảng một nửa số tai nạn liên quan đến hệ thống gas khi nấu ăn là do sự rò rỉ gas qua ống cao su. Đảm bảo sử dụng phụ kiện van gas và xilanh phù hợp với loại bình gas để đảm bảo hiệu suất hoạt động của hệ thống.
-
-Cần lắp đặt lỗ thông hơi, ống khói và đường dẫn khí trong nhà để ngăn ngừa các tình huống nguy hiểm như ngộp khí hoặc cháy nổ.
-
-Trong trường hợp thiết bị hoặc đầu đốt LPG không bắt lửa ngay lập tức, cần ngừng cung cấp khí và thông gió trong vài phút. Sau đó, cần vệ sinh sạch sẽ bụi bẩn và thức ăn thừa khỏi bình gas và bếp gas, kiểm tra kết nối dây dẫn gas để xác định nguyên nhân không bắt lửa ở bếp.
-
-Một số dấu hiệu cảnh báo cho thấy hệ thống gas không hoạt động tốt bao gồm: ngọn lửa không sắc nét và chuyển sang màu vàng, cam hoặc đỏ; xuất hiện muội than trên dụng cụ nấu, nồi đen và thức ăn không chín đều hoặc lâu chín hơn bình thường.
-
-Mong rằng với chia sẻ hôm nay của chúng tôi sẽ giúp bạn đọc có thêm kinh nghiệm lắp đặt và bảo trì hệ thống gas hiệu quả.')
-
-INSERT INTO News (img,title,[date],[description]) VALUES ('images/news/4/df.jpg', N'Hệ quả khôn lường khi sử dụng sản phẩm gas kém chất lượng',  GETDATE(), N'Tuy không chỉ ảnh hưởng đến người tiêu dùng, nhưng hàng hóa kém chất lượng còn gây ra những hậu quả tiêu cực đối với các nhà sản xuất uy tín. Điều này dẫn đến sự giảm sút về doanh số, uy tín và mất lòng tin từ phía khách hàng. Vì giá cả của những sản phẩm giả mạo thương hiệu lớn thường rất rẻ, và lời quảng cáo lôi kéo đã lừa dối không ít người tiêu dùng. Do việc sử dụng thường xuyên, những sản phẩm này ảnh hưởng trực tiếp đến sức khỏe của người tiêu dùng. Các loại bếp gas giả có thể được coi như “bom nổ chậm” trong nhà, có khả năng gây ra nguy cơ cháy nổ bất ngờ. Các vấn đề như rò gas và hoen gỉ thường xảy ra. Đặc biệt, bình gas giả xuất hiện ngày càng nhiều trên thị trường, do các kẻ lừa đảo không scrupulous bơm gas thiếu khối lượng để tăng lợi nhuận, hoặc phối trộn khí không đạt tiêu chuẩn, hoặc sử dụng chất cầm thấp do giá rẻ nhằm kiếm lời cao. Tất cả những điều này đều mang theo nguy cơ lớn đối với an toàn của người sử dụng.')
-
-INSERT INTO News (img,title,[date],[description]) VALUES ('images/news/5/df.jpg', N'Những thiết bị gas chuyên dụng',  GETDATE(), N'Bộ tự động ngắt gas: Đây là thiết bị không thể thiếu trong mọi hệ thống gas hiện nay. Chức năng chính của nó là tự động đóng ngắt gas khi phát hiện sự cố rò rỉ. Đầu dò gas: Dùng để phát hiện khí gas nếu có sự rò rỉ, nhằm kích hoạt biện pháp xử lý kịp thời.
-Bộ điều khiển trung tâm: Sử dụng để nhận tín hiệu từ đầu dò và kích hoạt báo động cùng với điều khiển van gas.
-Van ngắt gas tự động và van điện từ: Thiết bị này tự động đóng ngắt gas khi xảy ra sự cố.
-Hệ thống giám sát áp suất: Bao gồm tủ điều khiển trung tâm và đồng hồ đo áp suất.
-
-Van điều áp: Thiết bị này giảm áp suất xuống mức phù hợp để hệ thống gas công nghiệp hoạt động bình thường và tránh tình trạng quá tải.
-
-Ống gas: Dùng để dẫn gas từ bình đến bếp.')
-
-
