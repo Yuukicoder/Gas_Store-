@@ -12,60 +12,57 @@ public class OrderDetail extends ProductDTO {
 
     //OrderDetailID ProductID OrderID Quantity UnitPrice DateCreated DateModified OrderDetailStatus
     private int orderDetailID;
-    private int product_id;
-    private int order_id;
+    private int productID;
     private int quantity;
-    private double oprice;
+    private double unitPrice;
 
     public OrderDetail() {
     }
 
-    public OrderDetail(int orderDetailID, int product_id, int order_id, int quantity, double oprice, int status) {
+    public OrderDetail(int orderDetailID, int productID, int quantity, double unitPrice) {
         this.orderDetailID = orderDetailID;
-        this.product_id = product_id;
-        this.order_id = order_id;
+        this.productID = productID;
         this.quantity = quantity;
-        this.oprice = oprice;
+        this.unitPrice = unitPrice;
     }
 
     public int getOrderDetailID() {
         return orderDetailID;
     }
 
-    public void setOrderDetailID(int orderDetailID) {
-        this.orderDetailID = orderDetailID;
-    }
-
-    public int getProduct_id() {
-        return product_id;
-    }
-
-    public void setProduct_id(int product_id) {
-        this.product_id = product_id;
-    }
-
-    public int getOrder_id() {
-        return order_id;
-    }
-
-    public void setOrder_id(int order_id) {
-        this.order_id = order_id;
+    public int getProductID() {
+        return productID;
     }
 
     public int getQuantity() {
         return quantity;
     }
 
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setOrderDetailID(int orderDetailID) {
+        this.orderDetailID = orderDetailID;
+    }
+
+    public void setProductID(int productID) {
+        this.productID = productID;
+    }
+
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public double getOprice() {
-        return oprice;
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
-    public void setOprice(double oprice) {
-        this.oprice = oprice;
+    @Override
+    public String toString() {
+        return "OrderDetail{" + "orderDetailID=" + orderDetailID + ", productID=" + productID + ", quantity=" + quantity + ", unitPrice=" + unitPrice + '}';
     }
+
+    
 
 }

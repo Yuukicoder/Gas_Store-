@@ -10,61 +10,58 @@ package DTO;
  */
 public class CategoryDTO {
 
-    private int CategoryID;
+    private int categoryID;
+    private String code;
     private String name;
-    private String DateCreated;
-    private String DateModified;
-    private int Status;
+    private String description;
 
     public CategoryDTO() {
     }
 
-    public CategoryDTO(int CategoryID, String name, String DateCreated, String DateModified, int Status) {
-        this.CategoryID = CategoryID;
+    public CategoryDTO(int categoryID, String code, String name, String description) {
+        this.categoryID = categoryID;
+        this.code = code;
         this.name = name;
-        this.DateCreated = DateCreated;
-        this.DateModified = DateModified;
-        this.Status = Status;
+        this.description = description;
     }
 
     public int getCategoryID() {
-        return CategoryID;
+        return categoryID;
     }
 
-    public void setCategoryID(int CategoryID) {
-        this.CategoryID = CategoryID;
+    public String getCode() {
+        return code;
     }
 
     public String getName() {
         return name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getDateCreated() {
-        return DateCreated;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setDateCreated(String DateCreated) {
-        this.DateCreated = DateCreated;
+    @Override
+    public String toString() {
+        return "CategoryDTO{" + "categoryID=" + categoryID + ", code=" + code + ", name=" + name + ", description=" + description + '}';
     }
 
-    public String getDateModified() {
-        return DateModified;
-    }
-
-    public void setDateModified(String DateModified) {
-        this.DateModified = DateModified;
-    }
-
-    public int getStatus() {
-        return Status;
-    }
-
-    public void setStatus(int Status) {
-        this.Status = Status;
-    }
+    
 
 }

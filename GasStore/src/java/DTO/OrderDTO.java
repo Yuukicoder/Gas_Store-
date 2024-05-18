@@ -4,115 +4,148 @@
  */
 package DTO;
 
-/**
- *
- * @author msi
- */
+import java.util.Date;
+
+//done
 public class OrderDTO extends AccountDTO {
 
-    private int OrderID;
-    private int AccountID;
-    private double totalPrice;
-    private String OrderDate;
-    private String Address;
-    private int Status;
-    private String name1;
-    private Double VoucherCode;
-    private String Phoneorder ;
+    private int orderID;
+    private int customerID;
+    private int trackingNumber;
+    private double totalMoney;
+    private Date orderDate;
+    private Date shippedDate;
+    private Date requiredDate;
+    private String shipAddress;
+    private int status;
+    private int process;
+    private int shipVia;
+    private String payment;
+    private String notes;
 
     public OrderDTO() {
     }
 
-    
-
-    public Double getVoucherCode() {
-        return VoucherCode;
+    public OrderDTO(int orderID, int customerID, int trackingNumber, double totalMoney, Date orderDate, Date shippedDate, Date requiredDate, String shipAddress, int status, int process, int shipVia, String payment, String notes) {
+        this.orderID = orderID;
+        this.customerID = customerID;
+        this.trackingNumber = trackingNumber;
+        this.totalMoney = totalMoney;
+        this.orderDate = orderDate;
+        this.shippedDate = shippedDate;
+        this.requiredDate = requiredDate;
+        this.shipAddress = shipAddress;
+        this.status = status;
+        this.process = process;
+        this.shipVia = shipVia;
+        this.payment = payment;
+        this.notes = notes;
     }
-
-    public void setVoucherCode(Double VoucherCode) {
-        this.VoucherCode = VoucherCode;
-    }
-
-    public OrderDTO(int OrderID, int AccountID, double totalPrice, String OrderDate, String Address, int Status, String name1, Double VoucherCode, String Phoneorder) {
-        this.OrderID = OrderID;
-        this.AccountID = AccountID;
-        this.totalPrice = totalPrice;
-        this.OrderDate = OrderDate;
-        this.Address = Address;
-        this.Status = Status;
-        this.name1 = name1;
-        this.VoucherCode = VoucherCode;
-        this.Phoneorder = Phoneorder;
-    }
-
-    public String getName1() {
-        return name1;
-    }
-
-    public void setName1(String name1) {
-        this.name1 = name1;
-    }
-
-    public String getPhoneorder() {
-        return Phoneorder;
-    }
-
-    public void setPhoneorder(String Phoneorder) {
-        this.Phoneorder = Phoneorder;
-    }
-
-   
-
-   
-
-   
 
     public int getOrderID() {
-        return OrderID;
+        return orderID;
     }
 
-    public void setOrderID(int OrderID) {
-        this.OrderID = OrderID;
+    public int getCustomerID() {
+        return customerID;
     }
 
-    public int getAccountID() {
-        return AccountID;
+    public int getTrackingNumber() {
+        return trackingNumber;
     }
 
-    public void setAccountID(int AccountID) {
-        this.AccountID = AccountID;
+    public double getTotalMoney() {
+        return totalMoney;
     }
 
-    public double getTotalPrice() {
-        return totalPrice;
+    public Date getOrderDate() {
+        return orderDate;
     }
 
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
+    public Date getShippedDate() {
+        return shippedDate;
     }
 
-    public String getOrderDate() {
-        return OrderDate;
+    public Date getRequiredDate() {
+        return requiredDate;
     }
 
-    public void setOrderDate(String OrderDate) {
-        this.OrderDate = OrderDate;
-    }
-
-    public String getAddress() {
-        return Address;
-    }
-
-    public void setAddress(String Address) {
-        this.Address = Address;
+    public String getShipAddress() {
+        return shipAddress;
     }
 
     public int getStatus() {
-        return Status;
+        return status;
     }
 
-    public void setStatus(int Status) {
-        this.Status = Status;
+    public int getProcess() {
+        return process;
     }
+
+    public int getShipVia() {
+        return shipVia;
+    }
+
+    public String getPayment() {
+        return payment;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setOrderID(int orderID) {
+        this.orderID = orderID;
+    }
+
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
+    }
+
+    public void setTrackingNumber(int trackingNumber) {
+        this.trackingNumber = trackingNumber;
+    }
+
+    public void setTotalMoney(double totalMoney) {
+        this.totalMoney = totalMoney;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public void setShippedDate(Date shippedDate) {
+        this.shippedDate = shippedDate;
+    }
+
+    public void setRequiredDate(Date requiredDate) {
+        this.requiredDate = requiredDate;
+    }
+
+    public void setShipAddress(String shipAddress) {
+        this.shipAddress = shipAddress;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public void setProcess(int process) {
+        this.process = process;
+    }
+
+    public void setShipVia(int shipVia) {
+        this.shipVia = shipVia;
+    }
+
+    public void setPayment(String payment) {
+        this.payment = payment;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+  
 
 }
