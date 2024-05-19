@@ -82,7 +82,7 @@ public class Cart {
     public double getTotalMoney() {
         double t = 0;
         for (ItemDTO i : items) {
-            t += (i.getQuantity() * i.getProduct().getPrice());
+            t += (i.getQuantity() * i.getProduct().getUnitPrice());
         }
         return t;
     }
@@ -106,7 +106,7 @@ public class Cart {
                     int id = Integer.parseInt(n[0]);
                     int quantity = Integer.parseInt(n[1]);
                     ProductDTO p = getProductById(id, list);
-                    ItemDTO t = new ItemDTO(p, quantity, p.getPrice() * 2);
+                    ItemDTO t = new ItemDTO(p, quantity, p.getUnitPrice() * 2);
                     addItem(t);
                 }
             }

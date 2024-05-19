@@ -18,7 +18,7 @@
     </servlet>
     <servlet>
         <servlet-name>ProductDashboardServlet</servlet-name>
-        <servlet-class>OldProjectController.PostDashboardServlet</servlet-class>
+        <servlet-class>OldProjectController.Product.ProductDashboardServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>HideProduct</servlet-name>
@@ -71,6 +71,18 @@
     <servlet>
         <servlet-name>UserProfileServlet</servlet-name>
         <servlet-class>OldProjectController.Account.UserProfile</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddCateServlet</servlet-name>
+        <servlet-class>OldProjectController.Category.AddCateServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteCateServlet</servlet-name>
+        <servlet-class>OldProjectController.Category.DeleteCateServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchCate</servlet-name>
+        <servlet-class>OldProjectController.Category.SearchCate</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
@@ -143,6 +155,18 @@
     <servlet-mapping>
         <servlet-name>UserProfileServlet</servlet-name>
         <url-pattern>/UserProfile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddCateServlet</servlet-name>
+        <url-pattern>/addCate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteCateServlet</servlet-name>
+        <url-pattern>/deleteCate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchCate</servlet-name>
+        <url-pattern>/searchCate</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

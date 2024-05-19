@@ -2,56 +2,51 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+
 package OldProjectController.Category;
 
-import DAO.CategoryDAO;
 import DTO.CategoryDTO;
 import dal.CategoryDao;
+import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  *
- * @author msi
+ * @author Admin
  */
-@WebServlet(name = "EditCateServlet", urlPatterns = {"/editCate"})
-public class EditCateServlet extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
+public class AddCateServlet extends HttpServlet {
+   
+    /** 
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DeleteCateServlet</title>");
+            out.println("<title>Servlet AddCateServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet DeleteCateServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AddCateServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    }
+    } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
+    /** 
      * Handles the HTTP <code>GET</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -59,21 +54,12 @@ public class EditCateServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String getCid = request.getParameter("cid");
-        try {
-            int cid = Integer.parseInt(getCid);
-            CategoryDao cdao = new CategoryDao();
-            CategoryDTO cdto = cdao.getCategoryByID(cid);
-            request.setAttribute("cdto", cdto);
-            request.getRequestDispatcher("editCategory.jsp").forward(request, response);
-        } catch (Exception e) {
-        }
-    }
+    throws ServletException, IOException {
+        request.getRequestDispatcher("AddCategory.jsp").forward(request, response);
+    } 
 
-    /**
+    /** 
      * Handles the HTTP <code>POST</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -81,25 +67,21 @@ public class EditCateServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String cateID_raw = request.getParameter("id");
+    throws ServletException, IOException {
         String cateName_raw = request.getParameter("name");
         String cateCode_raw = request.getParameter("code");
         String cateDes_raw = request.getParameter("des");
-        System.out.println(cateDes_raw);
         try {
-            int cateID = Integer.parseInt(cateID_raw);
             CategoryDao cdao = new CategoryDao();
-            cdao.updateCategory(cateID, cateCode_raw, cateName_raw, cateDes_raw);
+            cdao.addCategory(cateDes_raw, cateName_raw, cateDes_raw);
+            //cdao.updatePostCategory(cdto);
             response.sendRedirect("tableCategory");
         } catch (Exception e) {
-            
         }
     }
 
-    /**
+    /** 
      * Returns a short description of the servlet.
-     *
      * @return a String containing servlet description
      */
     @Override

@@ -19,6 +19,7 @@
 <body>
 
     <div class="container" id="container">
+        
         <div class="form-container sign-up">
             <form action="signup" method="POST">
                 <h1>Create Account</h1>

@@ -20,6 +20,7 @@
         <!-- Icon Font Stylesheet -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
         <!-- Libraries Stylesheet -->
         <link href="admin/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
@@ -52,53 +53,72 @@
                 <div class="container-fluid pt-4 px-4">
                     <div class="container-fluid pt-4 px-4">
                         <div class="row g-4">
-                            <div class="col-sm-12 col-xl-6">
-                                <div class="bg-secondary rounded h-100 p-4">
-                                    <h6 class="mb-4">Add Category</h6>
-                                    <form action="tableCategory" method="POST">
-                                        <div class="mb-3">
-                                            <label class="form-label">Category Name</label>
-                                            <input type="text" class="form-control" name="name" >
-                                        </div>
-                                        <c:if test="${msgCate != null}">                    
-                                            <p class="text-danger">${msgCate}</p>
-                                        </c:if>
-                                        <button type="submit" class="btn btn-primary">Add new category</button>
-                                    </form>
-                                </div>
-                            </div> 
                             <div class="bg-secondary text-center rounded p-4">
+                                <h3 style="color: #E57C23">${msg}</h3>
+
                                 <div class="d-flex align-items-center justify-content-between mb-4">
-                                    <h6 class="mb-0">All Categories</h6>
-                                    <a href="">Add New Category</a>
+                                    <form action="tableCategory" method="POST">       
+                                        <a href="addCate" class="btn btn-primary">Add Category</a>
+                                    </form>
+                                    <form action="tableCategory" method="post">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control bg-dark border-0" placeholder="Search category" name="search" value="${search}">
+                                            <input type="hidden" value="${tag}" name="pageIndex" id="pageIndex">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text bg-transparent text-primary" style="    border: none;
+                                                      margin-top: 4px;">
+                                                    <button type="submit" class="fa fa-search" style="text-decoration: none; border: none;background: white;"></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                                 <div class="table-responsive">
                                     <table id="categoryTable" class="table text-start align-middle table-bordered table-hover mb-0">
                                         <thead>
                                             <tr class="text-white">
+                                                <th scope="col">Code</th>
                                                 <th scope="col">Name</th>
-                                                <th scope="col">Date created</th>
-                                                <th scope="col">Modification date</th>
+                                                <th scope="col">Description</th>
                                                 <th scope="col">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <c:forEach var="la" items="${listCategory}">
                                                 <tr>
+                                                    <td>${la.getCode()}</td>
                                                     <td>${la.getName()}</td>
-                                                    <td>${la.getDateCreated()}</td>
-                                                    <td>${la.getDateModified()}</td>
-                                                    <c:if test="${la.getStatus() == 0}">
-                                                        <td><a class="btn btn-sm btn-primary" href="editCate?id=${la.getCategoryID()}">Display</a></td>
-                                                    </c:if>
-                                                    <c:if test="${la.getStatus() == 1}">
-                                                        <td><a class="btn btn-sm btn-primary" href="editCate?id=${la.getCategoryID()}">Un Display</a></td>
-                                                    </c:if>
+                                                    <td>${la.getDescription()}</td>
+                                                    <td style=" padding: 0.5rem 0.5rem;
+                                                        text-align: center;
+                                                        font-size: larger;
+                                                        transition: 0.5s;
+                                                        color: var(--color-dark);">
+                                                        <a href="deleteCate?id=${la.getCategoryID()}" class="bx bxs-trash"  style="  padding: 1rem 1rem; color:#176B87   " onclick="showMess(${la.getCategoryID()})" ></a>
+                                                        <a class="bx bxs-pencil" href="editCate?cid=${la.getCategoryID()}" style="  padding: 1rem 1rem; color:#176B87"></a>
+                                                    </td>
                                                 </tr>
                                             </c:forEach>
                                         </tbody>
                                     </table>
+
+
+
+                                    <nav style="float: right;margin-top: 25px; color: black" aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            <c:if test="${tag > 1}">
+                                                <li  class="page-item"><a style="color: black"  class="page-link" href="tableCategory?indexPage=${tag-1}&search=${search}">Previous</a></li>
+                                                </c:if>
+                                                <c:forEach begin="1" end="${endPage}" var="i">
+                                                <li style="color: black"  class="page-item ${tag == i ?"active":"" || page1 == i ?"active":""  } "><a style="color: black"  class="page-link" href="tableCategory?indexPage=${i}&search=${search}">${i}</a></li>
+                                                </c:forEach>
+                                                <c:if test="${tag<endPage}">
+                                                <li class="page-item"><a style="color: black"  class="page-link" href="tableCategory?indexPage=${tag+1}&search=${search}">Next</a></li>
+                                                </c:if>
+                                        </ul>
+                                    </nav>
                                 </div>
+
                                 <div id="pagination"></div>
                             </div>
                         </div>
@@ -107,19 +127,19 @@
                     <!--Modal-->
                     <!-- Footer Start -->
                     <div class="container-fluid pt-4 px-4">
-                    <div class="bg-secondary rounded-top p-4">
-                        <div class="row">
-                            <div class="col-12 col-sm-6 text-center text-sm-start">
-                                &copy; <a href="#">LAPTOP SHOP</a>, All Right Reserved. 
-                            </div>
-                            <div class="col-12 col-sm-6 text-center text-sm-end">
-                                <!--/*** This template is free as long as you keep the footer author?s credit link/attribution link/backlink. If you'd like to use the template without the footer author?s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                                Designed By <a href="https://gitlab.com/asusrogg14/swp391-laptopshop">SWP391 - GROUP 4</a>
-                                <br>Distributed By: <a href="#" >All members</a>
+                        <div class="bg-secondary rounded-top p-4">
+                            <div class="row">
+                                <div class="col-12 col-sm-6 text-center text-sm-start">
+                                    &copy; <a href="#">LAPTOP SHOP</a>, All Right Reserved. 
+                                </div>
+                                <div class="col-12 col-sm-6 text-center text-sm-end">
+                                    <!--/*** This template is free as long as you keep the footer author?s credit link/attribution link/backlink. If you'd like to use the template without the footer author?s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                                    Designed By <a href="https://gitlab.com/asusrogg14/swp391-laptopshop">SWP391 - GROUP 4</a>
+                                    <br>Distributed By: <a href="#" >All members</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                     <!-- Footer End -->
                 </div>
                 <!-- Content End -->
@@ -142,6 +162,44 @@
 
             <!-- Template Javascript -->
             <script src="admin/js/main.js"></script>
+            <script>
+                                                            function showMess(id) {
+                                                                var option = confirm('Are you sure to delete?');
+                                                                if (option === true) {
+                                                                    window.location.href = 'deleteCate?id=' + id;
+                                                                    ;
+                                                                } else {
+                                                                    event.preventDefault();
+                                                                }
+                                                            }
+            </script>
+            <style>
+                #categoryTable {
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+
+                #categoryTable td, #categoryTable th {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                }
+
+                #categoryTable tr:nth-child(even){
+                    background-color: #f2f2f2;
+                }
+
+                #categoryTable tr:hover {
+                    background-color: #ddd;
+                }
+
+                #categoryTable th {
+                    padding-top: 12px;
+                    padding-bottom: 12px;
+                    text-align: left;
+                    background-color: #22A699;
+                    color: white;
+                }
+            </style>
     </body>
 
 </html>
