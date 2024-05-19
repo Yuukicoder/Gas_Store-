@@ -77,11 +77,19 @@
                         <div class="">
                             <div class="bg-secondary rounded h-100 p-4">
                                 <h3 class="mb-4">Product Detail</h3>
-                                <form action="AddProduct" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
+                                <form action="productAdd" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
                                     <div class="left-side">
                                         <div class="col-md-6">
                                             <label class="form-label">Product Name</label>
                                             <input type="text" value="" class="form-control col-4" name="name" id="name" >
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Product Code</label>
+                                            <input type="text" value="" class="form-control col-4" name="code" id="code">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Product Keywords</label>
+                                            <input type="text" value="" class="form-control col-4" name="keyword" id="keyword" required>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Product Image</label>
@@ -96,6 +104,14 @@
                                             </select>
                                         </div>
                                         <div class="col-md-6">
+                                            <label class="form-label">Supplier </label>
+                                            <select name="supplier" id="supplier" class="form-control col-4">
+                                                <c:forEach items="${requestScope.listSupplier}" var="c">
+                                                    <option value="${c.getSupplierID()}">${c.getCompanyName()}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
                                             <label class="form-label">Quantity available </label>
                                             <input type="text" value="" class="form-control col-3" name="stock" id="stock" >
                                         </div>
@@ -103,82 +119,16 @@
                                             <label class="form-label">UnitPrice</label>
                                             <input type="text" value="" class="form-control col-3" name="price" id="price" >
                                         </div>
-
-                                        <div class="col-md-6" style="display: flex;
-                                             flex-direction: column;
-                                             margin-bottom: 20px;">
-                                            <label class="form-label" style="    font-weight: bold;
-                                                   margin-bottom: 5px;">RamCapacity</label>
-                                            <input type="text" value="" class="form-control col-3" name="ram" id="ram" placeholder="Number" style="margin-bottom: 1rem">
-                                            <div class="form-control col-3" style=" display: flex;
-                                                 align-items: center;">
-                                                <select name="typeRam" id="typeRam" class="" style="margin-right: 10px;
-                                                        padding: 5px;
-                                                        border: 1px solid #ccc;
-                                                        border-radius: 5px;">
-                                                    <option value="GB">GB</option>
-                                                    <option value="TB">TB</option>
-                                                </select>
-                                                <button type="button" onclick="addNewOption()" style="padding: 5px 10px;
-                                                        background-color: #22A698;
-                                                        color: #fff;
-                                                        border: none;
-                                                        border-radius: 5px;
-                                                        cursor: pointer;
-                                                        margin-right: 5px;">Add</button>
-                                                <button type="button" onclick="removeSelectedOption()" style="padding: 5px 10px;
-                                                        background-color: #22A698;
-                                                        color: #fff;
-                                                        border: none;
-                                                        border-radius: 5px;
-                                                        cursor: pointer;
-                                                        margin-right: 5px;">Delete</button>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6" style="display: flex;
-                                             flex-direction: column;
-                                             margin-bottom: 20px;">
-                                            <label class="form-label" style="    font-weight: bold;
-                                                   margin-bottom: 5px; ">StorageCapacity</label>
-                                            <input type="text" value="" class="form-control col-3" name="storage" id="storage" placeholder="Number" style="margin-bottom:1rem">
-                                            <div class="form-control col-3" style="    display: flex;
-                                                 align-items: center;">
-                                                <select name="typeStorage" id="typeStorage" class="" style="margin-right: 10px; /* Khoảng cách giữa select và buttons */
-                                                        padding: 5px;
-                                                        border: 1px solid #ccc;
-                                                        border-radius: 5px;">
-                                                    <option value="GB">GB</option>
-                                                    <option value="TB">TB</option>
-                                                </select>
-                                                <button type="button" onclick="addNewOptionStorage()" style="    padding: 5px 10px;
-                                                        background-color: #22A698;
-                                                        color: #fff;
-                                                        border: none;
-                                                        border-radius: 5px;
-                                                        cursor: pointer;
-                                                        margin-right: 5px;">Add</button>
-                                                <button type="button" onclick="removeSelectedOptionStorage()" style="    padding: 5px 10px;
-                                                        background-color: #22A698;
-                                                        color: #fff;
-                                                        border: none;
-                                                        border-radius: 5px;
-                                                        cursor: pointer;
-                                                        margin-right: 5px;">Delete</button>
-                                            </div>
-                                        </div>
-
                                         <div class="col-md-6">
-                                            <label class="form-label">CPU Brand</label>                                          
-                                            <input type="text" value="" class="form-control col-3" name="cpu" id="cpu">
-
+                                            <label class="form-label">Unit On Orders</label>
+                                            <input type="text" value="" class="form-control col-3" name="unitOnOrders" id="unitOnOrders" >
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label">Vga Brand</label>
-                                            <input type="text" value="" class="form-control col-3" name="vga" id="vga">
+                                            <label class="form-label">Short description</label>
+                                            <input type="text" value="" class="form-control col-3" name="shortDes" id="shortDes" >
                                         </div>
-
                                         <button type="submit" value=""  class="btn btn-primary" style="margin-top: 30px">Add Product</button> 
-                                    </div>
+                                    </div>   
                                     <div class="right-side">
                                         <label class="form-label">Description</label>
                                         <textarea id="description" name="descrip" rows="4" cols="50" class="form-control col-3"> </textarea>
@@ -263,9 +213,7 @@
             var description = document.getElementById("description").value;
             var descriptionWithoutSpaces = description.replace(/\s/g, "");
             var moreImage = document.getElementsByName("ides[]");
-            var ram = document.getElementById("ram").value;
-            var storage = document.getElementById("storage").value;
-
+           
             var specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
 
             if (productName === "" || imageProduct === "" || quantityAvailable === "" || unitPrice === "" || description === "") {
@@ -285,10 +233,7 @@
                 alert("Quantity should be a positive integer!");
                 return false;
             }
-            if (!quantityRegex.test(ram)) {
-                alert("Ram should be a positive integer!");
-                return false;
-            }
+            
             var positiveFloatRegex = /^([1-9]\d*([.]\d+)?|0\.\d*[1-9]\d*)$/;
 
             if (!positiveFloatRegex.test(unitPrice_raw)) {
@@ -296,10 +241,7 @@
                 return false;
             }
        
-            if (!quantityRegex.test(storage)) {
-                alert("Storage should be a positive integer!");
-                return false;
-            }
+            
             if (unitPrice <= 0 || isNaN(unitPrice)) {
                 alert("Unit Price must be a  number greater than 0!");
                 return false;
@@ -308,7 +250,7 @@
                 alert("Quantity is too large for an integer!");
                 return false;
             }
-            const maxFloatValue = 9999.99;
+            const maxFloatValue = 99999999.99;
 
             if (parseFloat(unitPrice) > maxFloatValue) {
                 alert("Unit Price is too large for a float!");
@@ -322,53 +264,8 @@
             return true;
         }
     </script>
-    <script>
-        function addNewOption() {
-            var newOption = prompt("Nhập tùy chọn mới:");
-            if (newOption) {
-                var selectElement = document.getElementById("typeRam");
-                var optionElement = document.createElement("option");
-                optionElement.value = newOption.toLowerCase();
-                optionElement.textContent = newOption.toUpperCase();
-                selectElement.appendChild(optionElement);
-            }
-        }
-
-        function removeSelectedOption() {
-            var selectElement = document.getElementById("typeRam");
-            var selectedIndex = selectElement.selectedIndex;
-
-            if (selectedIndex !== -1 && selectElement.options.length > 1) {
-                selectElement.remove(selectedIndex);
-            } else {
-                alert("Không thể xóa. Phải có ít nhất một option trong dropdown.");
-            }
-        }
-    </script>
-    <script>
-        function addNewOptionStorage() {
-            var newOption = prompt("Nhập tùy chọn mới:");
-            if (newOption) {
-                var selectElement = document.getElementById("typeStorage");
-                var optionElement = document.createElement("option");
-                optionElement.value = newOption.toLowerCase();
-                optionElement.textContent = newOption.toUpperCase();
-                selectElement.appendChild(optionElement);
-            }
-        }
-
-        function removeSelectedOptionStorage() {
-            var selectElement = document.getElementById("typeStorage");
-            var selectedIndex = selectElement.selectedIndex;
-
-            if (selectedIndex !== -1 && selectElement.options.length > 1) {
-                selectElement.remove(selectedIndex);
-            } else {
-                alert("Không thể xóa. Phải có ít nhất một option trong dropdown.");
-            }
-        }
-
-    </script>
+ 
+ 
 
     <style>
 

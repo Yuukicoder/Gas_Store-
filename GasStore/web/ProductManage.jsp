@@ -63,9 +63,9 @@
 
                                     <div class="bg-secondary rounded h-100 p-4">
 
-                                        <h5 ><a href="ProductDashboard?action=show">All Product </a></h5>
+                                        <h5 ><a href="productManage?action=show">All Product </a></h5>
                                     </div>
-                                    <form action="ProductDashboard?action=show" method="post">
+                                    <form action="productManage?action=show" method="post">
                                         <div class="input-group">
                                             <input type="text" class="form-control bg-dark border-0" placeholder="Search name product" name="search">
                                             <div class="input-group-append">
@@ -87,10 +87,6 @@
                                                 <th scope="col">Category</th>
                                                 <th scope="col">Quantity</th>
                                                 <th scope="col">Price</th>
-                                                <th scope="col">Ram</th>
-                                                <th scope="col">Storage</th>
-                                                <th scope="col">CPU</th>
-                                                <th scope="col">Vga</th>
                                                 <th scope="col"></th>
 
                                             </tr>
@@ -98,26 +94,23 @@
                                         <tbody>
                                             <c:forEach items="${requestScope.productCmap}" var="c">
                                                 <tr>
-                                                    <td><img style="width: 80px" src="images/Product/${c.getKey().getImage()}" alt="alt"/></td>
+                                                    <td><img style="width: 80px" src="${c.getKey().getImage()}" alt="alt"/></td>
                                                     <td >
-                                                        <a class="name"  href="EditProduct?pid=${c.getKey().getProductID()}">${c.getKey().getName()}</a>
+                                                        <a class="name"  href="productUpdate?pid=${c.getKey().getProductID()}">${c.getKey().getName()}</a>
                                                     </td>  
                                                     <td>${c.getValue()}</td>
                                                     <td>
-                                                        <c:if test="${c.getKey().getQuantity() != 0}">
+                                                        <c:if test="${c.getKey().getStockQuantity() != 0}">
                                                             <span class="status-green"></span>
-                                                            ${c.getKey().getQuantity()}
+                                                            ${c.getKey().getStockQuantity()}
                                                         </c:if>
-                                                        <c:if test="${c.getKey().getQuantity() == 0}">
+                                                        <c:if test="${c.getKey().getStockQuantity() == 0}">
                                                             <span class="status-red"></span>
-                                                            ${c.getKey().getQuantity()}
+                                                            ${c.getKey().getStockQuantity()}
                                                         </c:if>                                         
                                                     </td>
-                                                    <td>${c.getKey().getPrice()}</td>
-                                                    <td>${c.getKey().getRam()}</td>
-                                                    <td>${c.getKey().getStorage()}</td>
-                                                    <td>${c.getKey().getCpu()}</td>
-                                                    <td>${c.getKey().getVga()}</td>
+                                                    <td>${c.getKey().getUnitPrice()}</td>
+                                                    
                                                     <td style=" padding: 0.5rem 0.5rem;
                                                         text-align: center;
                                                         font-size: larger;
@@ -127,30 +120,30 @@
                                                            style="  padding: 1rem 1rem; color:#176B87
                                                            " onclick="showMess(${c.getKey().getProductID()})"
                                                            ></a>
-                                                        <a class="bx bxs-pencil" href="EditProduct?pid=${c.getKey().getProductID()}" style="  padding: 1rem 1rem; color:#176B87"></a>
+                                                        <a class="bx bxs-pencil" href="productUpdate?pid=${c.getKey().getProductID()}" style="  padding: 1rem 1rem; color:#176B87"></a>
                                                     </td>
                                                 </tr>
                                             </c:forEach>
                                         </tbody>
                                     </table>
-                                    <a href="AddProduct" class="btn btn-primary">Add new product</a>
+                                    <a href="productAdd" class="btn btn-primary">Add new product</a>
                                     <button style="    background: #22A699;
                                             text-decoration: none;
                                             border: none;
                                             height: 2.3rem;
-                                            border-radius: 5px; margin-top: 25px"><a href="ProductDashboard?action=hide" style="color: white"> Hide Product</a>
+                                            border-radius: 5px; margin-top: 25px"><a href="productManage?action=hide" style="color: white"> Hide Product</a>
                                     </button>
 
                                     <nav style="float: right;margin-top: 25px; color: black" aria-label="Page navigation example">
                                         <ul class="pagination">
                                             <c:if test="${tag > 1}">
-                                                <li  class="page-item"><a style="color: black"  class="page-link" href="ProductDashboard?indexPage=${tag-1}&amp;action=${action}"">Previous</a></li>
+                                                <li  class="page-item"><a style="color: black"  class="page-link" href="productManage?indexPage=${tag-1}&amp;action=${action}"">Previous</a></li>
                                                 </c:if>
                                                 <c:forEach begin="1" end="${endPage}" var="i">
-                                                <li style="color: black"  class="page-item ${tag == i ?"active":"" || page1 == i ?"active":""  } "><a style="color: black"  class="page-link" href="ProductDashboard?indexPage=${i}&amp;action=${action}">${i}</a></li>
+                                                <li style="color: black"  class="page-item ${tag == i ?"active":"" || page1 == i ?"active":""  } "><a style="color: black"  class="page-link" href="productManage?indexPage=${i}&amp;action=${action}">${i}</a></li>
                                                 </c:forEach>
                                                 <c:if test="${tag<endPage}">
-                                                <li class="page-item"><a style="color: black"  class="page-link" href="ProductDashboard?indexPage=${tag+1}&amp;action=${action}">Next</a></li>
+                                                <li class="page-item"><a style="color: black"  class="page-link" href="productManage?indexPage=${tag+1}&amp;action=${action}">Next</a></li>
                                                 </c:if>
                                         </ul>
                                     </nav>
@@ -200,7 +193,7 @@
                 function showMess(id) {
                     var option = confirm('Are you sure to hide?');
                     if (option === true) {
-                        window.location.href = 'HideProductServlet?action=hide&id=' + id;
+                        window.location.href = 'productDeactive?action=hide&id=' + id;
                     }
                 }
             </script>

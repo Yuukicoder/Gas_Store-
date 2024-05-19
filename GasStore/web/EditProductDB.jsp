@@ -80,7 +80,7 @@
                                     <button onclick="toggleScreen2()" class="btn btn-primary">Product Image</button>
                                     <hr>
 
-                                    <form action="EditProduct?pid=${pdto.getProductID()}" method="post"  enctype="multipart/form-data" onsubmit="return validateForm2()">
+                                    <form action="productUpdate?pid=${pdto.getProductID()}" method="post"  enctype="multipart/form-data" onsubmit="return validateForm2()">
                                         <div class="row">
                                             <div class=""  id="detailProduct">
                                                 <div class="left-side">
@@ -88,16 +88,24 @@
                                                         <label class="form-label">Product Name</label>
                                                         <input type="text" value="${pdto.getName()}" class="form-control col-4" name="name" id="name" required>
                                                     </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Product Code</label>
+                                                        <input type="text" value="${pdto.getCode()}" class="form-control col-4" name="code" id="code" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Product Keywords</label>
+                                                        <input type="text" value="${pdto.getKeywords()}" class="form-control col-4" name="keyword" id="keyword" required>
+                                                    </div>
 
                                                     <div class="col-md-6">
                                                         <label class="form-label">Product Image</label>
                                                         <input type="file" value="" class="form-control" name="ipro" data-index="0" id="ipro" >
-                                                        <img style="width: 20rem" src="images/Product/${pdto.getImage()}" alt="alt"/>
+                                                        <img style="width: 20rem" src="${pdto.getImage()}" alt="alt"/>
 
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label class="form-label">Category </label>
-                                                        <select name="category" id="cars" class="form-control col-4">
+                                                        <label class="form-label">Category</label>
+                                                        <select name="category" id="category" class="form-control col-4">
                                                             <option value="${categoryID}" selected>${categoryName}</option>
                                                             <c:forEach items="${requestScope.categoryDTOs}" var="c">
                                                                 <option value="${c.getCategoryID()}">${c.getName()}</option>
@@ -105,92 +113,41 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-6">
+                                                        <label class="form-label">Supplier </label>
+                                                        <select name="supplier" id="supplier" class="form-control col-4">
+                                                            <option value="${supplierID}" selected>${supplierName}</option>
+                                                            <c:forEach items="${requestScope.supplierDTOs}" var="c">
+                                                                <option value="${c.getSupplierID()}">${c.getCompanyName()}</option>
+                                                            </c:forEach>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
                                                         <label class="form-label">Quantity available </label>
-                                                        <input type="text" value="${pdto.getQuantity()}" class="form-control col-3" name="stock" id="stock" >
+                                                        <input type="text" value="${pdto.getStockQuantity()}" class="form-control col-3" name="stock" id="stock" >
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label">UnitPrice</label>
-                                                        <input type="text" value="${pdto.getPrice()}" class="form-control col-3" name="price" id="price" >
+                                                        <input type="text" value="${pdto.getUnitPrice()}" class="form-control col-3" name="price" id="price" >
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Unit On Orders</label>
+                                                        <input type="text" value="${pdto.getUnitOnOrders()}" class="form-control col-3" name="unitOnOrders" id="unitOnOrders" >
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Short description</label>
+                                                        <input type="text" value="${pdto.getShortDescription()}" class="form-control col-3" name="shortDes" id="shortDes" >
                                                     </div>
 
 
                                                     <div class="col-md-6" style="display: flex;
                                                          flex-direction: column;
                                                          margin-bottom: 20px;">
-                                                        <label class="form-label" style="    font-weight: bold;
-                                                               margin-bottom: 5px;">RamCapacity</label>
-                                                        <input type="text" value="${ramOld}" class="form-control col-3" name="ram" id="ram" placeholder="Number" style="margin-bottom: 1rem">
-                                                        <div class="form-control col-3" style=" display: flex;
-                                                             align-items: center;">
-                                                            <select name="typeRam" id="typeRam" class="" style="margin-right: 10px;
-                                                                    padding: 5px;
-                                                                    border: 1px solid #ccc;
-                                                                    border-radius: 5px;">
-                                                                <option value="GB">GB</option>
-                                                                <option value="TB">TB</option>
-                                                            </select>
-                                                            <button type="button" onclick="addNewOption()" style="padding: 5px 10px;
-                                                                    background-color: #22A698;
-                                                                    color: #fff;
-                                                                    border: none;
-                                                                    border-radius: 5px;
-                                                                    cursor: pointer;
-                                                                    margin-right: 5px;">Add</button>
-                                                            <button type="button" onclick="removeSelectedOption()" style="padding: 5px 10px;
-                                                                    background-color: #22A698;
-                                                                    color: #fff;
-                                                                    border: none;
-                                                                    border-radius: 5px;
-                                                                    cursor: pointer;
-                                                                    margin-right: 5px;">Delete</button>
-                                                        </div>
-                                                    </div>
-
-
-
-                                                    <div class="col-md-6" style="display: flex;
-                                                         flex-direction: column;
-                                                         margin-bottom: 20px;">
-                                                        <label class="form-label" style="    font-weight: bold;
-                                                               margin-bottom: 5px; ">StorageCapacity</label>
-                                                        <input type="text" value="${storageOld}" class="form-control col-3" name="storage" id="storage" placeholder="Number" style="margin-bottom:1rem">
-                                                        <div class="form-control col-3" style="    display: flex;
-                                                             align-items: center;">
-                                                            <select name="typeStorage" id="typeStorage" class="" style="margin-right: 10px; 
-                                                                    padding: 5px;
-                                                                    border: 1px solid #ccc;
-                                                                    border-radius: 5px;">
-                                                                <option value="GB">GB</option>
-                                                                <option value="TB">TB</option>
-                                                            </select>
-                                                            <button type="button" onclick="addNewOptionStorage()" style="    padding: 5px 10px;
-                                                                    background-color: #22A698;
-                                                                    color: #fff;
-                                                                    border: none;
-                                                                    border-radius: 5px;
-                                                                    cursor: pointer;
-                                                                    margin-right: 5px;">Add</button>
-                                                            <button type="button" onclick="removeSelectedOptionStorage()" style="    padding: 5px 10px;
-                                                                    background-color: #22A698;
-                                                                    color: #fff;
-                                                                    border: none;
-                                                                    border-radius: 5px;
-                                                                    cursor: pointer;
-                                                                    margin-right: 5px;">Delete</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">CPU Brand</label>
-                                                        <input type="text" value="${pdto.getCpu()}" class="form-control col-3" name="cpu" id="cpu">
-
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">Vga Brand</label>
-                                                        <input type="text" value="${pdto.getVga()}" class="form-control col-3" name="vga" id="vga">
-
                                                     </div>
                                                 </div>
+
+
+
+                                                    
                                                 <div class="right-side">
 
                                                     <label class="form-label">Description</label>
@@ -209,18 +166,17 @@
                                                     <h3>
                                                         <c:forEach items="${requestScope.pimgs}" var="c" varStatus="loop">
                                                             <input type="file" value="" class="form-control col-3" name="ides-${loop.index}" style="width: 80%; margin-bottom: .5rem; margin-top: .5rem" >
-                                                            <input type="checkbox" name="deleteImg" value="${c.getImgid()}">
-                                                            <img style="width: 12rem; margin: 0.2rem" src="images/Product/${c.getPath()}" alt="alt"/>
-                                                            <input type="hidden"name="imgID-${loop.index}" value="${c.getImgid()}">
+                                                            <input type="checkbox" name="deleteImg" value="${c.getImgID()}">
+                                                            <img style="width: 12rem; margin: 0.2rem" src="${c.getPath()}" alt="alt"/>
+                                                            <input type="hidden"name="imgID-${loop.index}" value="${c.getImgID()}">
                                                         </c:forEach>
                                                     </h3>
-                                                    <button type="submit"   class="btn btn-primary" style="margin-top: 30px" value="image" name="update" >Change Image</button> 
                                                     <button type="submit"   class="btn btn-primary" style="margin-top: 30px" value="delete" name="update" >Delete Image</button> </div>
                                                 <div class="right-side"> 
                                                     <div id="inputContainer">
                                                     </div>
                                                     <button type="button" class="btn btn-primary" style="margin-top: 30px" onclick="addImageInput()">More Image</button>
-                                                    <button type="submit"   class="btn btn-primary" style="margin-top: 30px" value="imageAdd" name="update">Add  Image</button> 
+                                                    <button type="submit"   class="btn btn-primary" style="margin-top: 30px" value="imageAdd" name="update">Add  Image</button>                                           
                                                 </div>
                                             </div>
                                         </div>
@@ -251,53 +207,8 @@
         <script src="admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
         <!-- Template Javascript -->
         <script src="admin/js/main.js"></script>
-        <script>
-                                                        function addNewOption() {
-                                                            var newOption = prompt("Nhập tùy chọn mới:");
-                                                            if (newOption) {
-                                                                var selectElement = document.getElementById("typeRam");
-                                                                var optionElement = document.createElement("option");
-                                                                optionElement.value = newOption.toLowerCase();
-                                                                optionElement.textContent = newOption.toUpperCase();
-                                                                selectElement.appendChild(optionElement);
-                                                            }
-                                                        }
 
-                                                        function removeSelectedOption() {
-                                                            var selectElement = document.getElementById("typeRam");
-                                                            var selectedIndex = selectElement.selectedIndex;
 
-                                                            if (selectedIndex !== -1 && selectElement.options.length > 1) {
-                                                                selectElement.remove(selectedIndex);
-                                                            } else {
-                                                                alert("Không thể xóa. Phải có ít nhất một option trong dropdown.");
-                                                            }
-                                                        }
-        </script>
-        <script>
-            function addNewOptionStorage() {
-                var newOption = prompt("Nhập tùy chọn mới:");
-                if (newOption) {
-                    var selectElement = document.getElementById("typeStorage");
-                    var optionElement = document.createElement("option");
-                    optionElement.value = newOption.toLowerCase();
-                    optionElement.textContent = newOption.toUpperCase();
-                    selectElement.appendChild(optionElement);
-                }
-            }
-
-            function removeSelectedOptionStorage() {
-                var selectElement = document.getElementById("typeStorage");
-                var selectedIndex = selectElement.selectedIndex;
-
-                if (selectedIndex !== -1 && selectElement.options.length > 1) {
-                    selectElement.remove(selectedIndex);
-                } else {
-                    alert("Không thể xóa. Phải có ít nhất một option trong dropdown.");
-                }
-            }
-
-        </script>
         <script>
             var screenElement1 = document.getElementById("detailProduct");
             var screenElement2 = document.getElementById("imgProduct");
@@ -358,25 +269,23 @@
                 var productName = document.getElementById("name").value;
                 var imageProduct = document.getElementById("ipro").value;
                 var quantityAvailable = document.getElementById("stock").value;
-
-                   var unitPrice_raw = document.getElementById("price").value;
-            var unitPrice = parseFloat(document.getElementById("price").value);
+                var unitPrice_raw = document.getElementById("price").value;
+                var unitPrice = parseFloat(unitPrice_raw);
                 var description = document.getElementById("w3review").value;
                 var checkbox = document.getElementsByName("deleteImg");
-                var ram = document.getElementById("ram").value;
-                var storage = document.getElementById("storage").value;
+
                 if (productName.trim() === "") {
                     alert("Please enter a product name!");
                     return false;
                 }
 
-                if (quantityAvailable === "" || unitPrice === "" || description === "") {
+                if (quantityAvailable === "" || unitPrice_raw === "" || description === "") {
                     alert("Please enter all required information!");
                     return false;
                 }
+
                 let checkedCount = 0;
                 for (let i = 0; i < checkbox.length; i++) {
-                    console.log(checkbox);
                     if (checkbox[i].checked) {
                         checkedCount++;
                     }
@@ -388,7 +297,10 @@
 
                 // Kiểm tra Product Name không chứa ký tự đặc biệt
                 var specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
-
+                if (specialCharRegex.test(productName)) {
+                    alert("Product Name should not contain special characters!");
+                    return false;
+                }
 
                 // Kiểm tra Quantity là một số nguyên dương
                 var quantityRegex = /^[1-9]\d*$/;
@@ -396,43 +308,36 @@
                     alert("Quantity should be a positive integer!");
                     return false;
                 }
-                if (!quantityRegex.test(ram)) {
-                    alert("Ram should be a positive integer!");
-                    return false;
-                }
 
-                if (!quantityRegex.test(storage)) {
-                    alert("Storage should be a positive integer!");
-                    return false;
-                }
+                // Kiểm tra Unit Price là số dương
                 var positiveFloatRegex = /^([1-9]\d*([.]\d+)?|0\.\d*[1-9]\d*)$/;
+                if (!positiveFloatRegex.test(unitPrice_raw)) {
+                    alert("Price should be a positive float!");
+                    return false;
+                }
 
-            if (!positiveFloatRegex.test(unitPrice_raw)) {
-                alert("Price should be a positive integer!");
-                return false;
-            }
+                // Kiểm tra Quantity không quá lớn
                 if (parseInt(quantityAvailable) > Number.MAX_SAFE_INTEGER) {
                     alert("Quantity is too large for an integer!");
                     return false;
                 }
-                const maxFloatValue = 9999.99;
 
-                if (parseFloat(unitPrice) > maxFloatValue) {
-                    alert("Unit Price is too large for a float!");
+                // Kiểm tra Unit Price không quá lớn
+                const maxFloatValue = 99999999.99;
+                if (unitPrice > maxFloatValue) {
+                    alert("Unit Price is too large!");
                     return false;
                 }
 
+                // Kiểm tra Description
                 if (description.trim().length <= 6 || description.trim().length === 0) {
-                    alert("Description must not empty and longer than 6 characters!");
-                    return false;
-                }
-                if (descriptionWithoutSpaces.length <= 6) {
-                    alert("Description must be longer than 6 characters!");
+                    alert("Description must not be empty and longer than 6 characters!");
                     return false;
                 }
 
                 return true;
             }
+            
 
         </script>
         <style>

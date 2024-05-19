@@ -29,7 +29,7 @@
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="tableAccount" class="dropdown-item">Account</a>
                             <a href="tableCategory" class="dropdown-item">Category</a>
-                            <a href="ProductDashboard" class="dropdown-item">Product</a>
+                            <a href="productManage" class="dropdown-item">Product</a>
                             <a href="tableOrder" class="dropdown-item">Order</a>
                             <a href="tableVoucher" class="dropdown-item">Voucher</a>
                             <a href="tableFeedback" class="dropdown-item">Feedback</a>

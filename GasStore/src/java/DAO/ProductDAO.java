@@ -4,202 +4,167 @@
  */
 package DAO;
 
-import DTO.ProductDTO;
+
+import model.*;
+
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.mail.internet.ParseException;
+import DTO.Product;
 
 /**
  *
- * @author msi
+ * @author dell456
  */
-public class ProductDAO extends DBcontext {
-
-    public List<ProductDTO> getAllProduct() {
-        String sql = "SELECT * FROM Product where status = 1";
-        List<ProductDTO> lp = new ArrayList<>();
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                ProductDTO product = new ProductDTO();
-                product.setProductID(rs.getInt(1));
-                product.setCategoryID(rs.getInt(2));
-                product.setName(rs.getString(3));
-                product.setImage(rs.getString(4));
-                product.setQuantity(rs.getInt(5));
-                product.setPrice(rs.getInt(6));
-                product.setRam(rs.getString(7));
-                product.setStorage(rs.getString(8));
-                product.setCpu(rs.getString(9));
-                product.setVga(rs.getString(10));
-//                product.setStatus(rs.getInt(11));
-                lp.add(product);
-            }
-        } catch (Exception e) {
+public class ProductDAO extends DBcontext{
+    PreparedStatement stm;
+    ResultSet rs;
+   public List<Product> getAllProduct() {
+    String sql = "SELECT * FROM Product WHERE isActive = 1";
+    List<Product> lp = new ArrayList<>();
+    try {
+        stm = connection.prepareStatement(sql);
+        rs = stm.executeQuery();
+        while (rs.next()) {
+            Product product = new Product();
+            product.setProductID(rs.getInt("productID"));
+            product.setCode(rs.getString("code"));
+            product.setName(rs.getString("name"));
+            product.setKeywords(rs.getString("keywords"));
+            product.setShortDescription(rs.getString("shortDescription"));
+            product.setDescription(rs.getString("description"));
+            product.setCategoryID(rs.getInt("categoryID"));
+            product.setSupplierID(rs.getInt("supplierID"));
+            product.setIsActive(rs.getBoolean("isActive"));
+            product.setUnitPrice(rs.getFloat("unitPrice"));
+            product.setImage(rs.getString("image"));
+            product.setStockQuantity(rs.getInt("stockQuantity"));
+            product.setUnitOnOrders(rs.getInt("unitOnOrders"));
+            product.setCreatedDate(rs.getString("createdDate"));
+            product.setCreatedBy(rs.getInt("createdBy"));
+            lp.add(product);
         }
-        return lp;
+    } catch (Exception e) {
+        e.printStackTrace();  // Consider logging the exception
     }
-
-    public ProductDTO getProductByID(int id) {
-        String sql = "SELECT * FROM Product WHERE ProductID = " + id;
+    return lp;
+}
+    public Product getProductByID(int id) {
+        String sql = "SELECT * FROM Product WHERE productID = " + id;
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                ProductDTO product = new ProductDTO();
-                product.setProductID(rs.getInt(1));
-                product.setCategoryID(rs.getInt(2));
-                product.setName(rs.getString(3));
-                product.setImage(rs.getString(4));
-                product.setQuantity(rs.getInt(5));
-                product.setPrice(rs.getInt(6));
-                product.setRam(rs.getString(7));
-                product.setStorage(rs.getString(8));
-                product.setCpu(rs.getString(9));
-                product.setVga(rs.getString(10));
-                product.setStatus(rs.getInt(11));
-                product.setDescription(rs.getString(12));
+                Product product = new Product();
+            product.setProductID(rs.getInt("productID"));
+            product.setCode(rs.getString("code"));
+            product.setName(rs.getString("name"));
+            product.setKeywords(rs.getString("keywords"));
+            product.setShortDescription(rs.getString("shortDescription"));
+            product.setDescription(rs.getString("description"));
+            product.setCategoryID(rs.getInt("categoryID"));
+            product.setSupplierID(rs.getInt("supplierID"));
+            product.setIsActive(rs.getBoolean("isActive"));
+            product.setUnitPrice(rs.getFloat("unitPrice"));
+            product.setImage(rs.getString("image"));
+            product.setStockQuantity(rs.getInt("stockQuantity"));
+            product.setUnitOnOrders(rs.getInt("unitOnOrders"));
+            product.setCreatedDate(rs.getString("createdDate"));
+            product.setCreatedBy(rs.getInt("createdBy"));
                 return product;
             }
         } catch (Exception e) {
         }
         return null;
     }
-
-    public void addProduct(int CateID, String name, int quantity, double price, String ram, String storage, String cpu, String vga, int Status) {
-        String sql = "";
-    }
-
-    public List<ProductDTO> getProductByCategory(int id) {
-        String sql = "SELECT p.ProductID, p.Name, p.Image, p.QuantityAvailable, p.UnitPrice, p.RamCapacity, p.StorageCapacity,p.CpuBrand, p.VgaBrand FROM Product p\n"
-                + "JOIN Category c\n"
-                + "ON c.CategoryID = p.CategoryID \n"
-                + "WHERE c.CategoryID = ? and p.Status = 1";
-        List<ProductDTO> lp = new ArrayList<>();
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                ProductDTO pro = new ProductDTO();
-                pro.setProductID(rs.getInt(1));
-                pro.setName(rs.getString(2));
-                pro.setImage(rs.getString(3));
-                pro.setQuantity(rs.getInt(4));
-                pro.setPrice(rs.getInt(5));
-                pro.setRam(rs.getString(6));
-                pro.setStorage(rs.getString(7));
-                pro.setCpu(rs.getString(8));
-                pro.setVga(rs.getString(9));
-                lp.add(pro);
-            }
-        } catch (Exception e) {
+   
+public List<Product> getProductByCategory(int id) {
+    String sql = "SELECT p.productID, p.code, p.name, p.keywords, p.shortDescription, p.description, "
+               + "p.categoryID, p.supplierID, p.isActive, p.unitPrice, p.image, p.stockQuantity, "
+               + "p.unitOnOrders, p.createdDate, p.createdBy "
+               + "FROM Product p "
+               + "JOIN Category c ON c.categoryID = p.categoryID "
+               + "WHERE c.categoryID = ? AND p.isActive = 1";
+    List<Product> lp = new ArrayList<>();
+    try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Product product = new Product();
+            product.setProductID(rs.getInt("productID"));
+            product.setCode(rs.getString("code"));
+            product.setName(rs.getString("name"));
+            product.setKeywords(rs.getString("keywords"));
+            product.setShortDescription(rs.getString("shortDescription"));
+            product.setDescription(rs.getString("description"));
+            product.setCategoryID(rs.getInt("categoryID"));
+            product.setSupplierID(rs.getInt("supplierID"));
+            product.setIsActive(rs.getBoolean("isActive"));
+            product.setUnitPrice(rs.getFloat("unitPrice"));
+            product.setImage(rs.getString("image"));
+            product.setStockQuantity(rs.getInt("stockQuantity"));
+            product.setUnitOnOrders(rs.getInt("unitOnOrders"));
+            product.setCreatedDate(rs.getString("createdDate"));
+            product.setCreatedBy(rs.getInt("createdBy"));
+            lp.add(product);
         }
-        return lp;
+    } catch (Exception e) {
+        e.printStackTrace();  // Consider logging the exception
     }
+    return lp;
+}  
 
-    public List<ProductDTO> searchByKey(String key) {
-        List<ProductDTO> list = new ArrayList<>();
-        String sql = "SELECT * FROM Product WHERE Status = 1 and Name LIKE '%" + key + "%'";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                ProductDTO product = new ProductDTO();
-                product.setProductID(rs.getInt(1));
-                product.setCategoryID(rs.getInt(2));
-                product.setName(rs.getString(3));
-                product.setImage(rs.getString(4));
-                product.setQuantity(rs.getInt(5));
-                product.setPrice(rs.getInt(6));
-                product.setRam(rs.getString(7));
-                product.setStorage(rs.getString(8));
-                product.setCpu(rs.getString(9));
-                product.setVga(rs.getString(10));
-                product.setStatus(rs.getInt(11));
-                product.setDescription(rs.getString(12));
-
-                list.add(product);
-            }
-        } catch (Exception e) {
+    public List<Product> searchByKeywords(String key) {
+    List<Product> list = new ArrayList<>();
+    String sql = "SELECT * FROM Product WHERE isActive = 1 AND keywords LIKE ?";
+    try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, "%" + key + "%");
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Product product = new Product();
+            product.setProductID(rs.getInt("productID"));
+            product.setCode(rs.getString("code"));
+            product.setName(rs.getString("name"));
+            product.setKeywords(rs.getString("keywords"));
+            product.setShortDescription(rs.getString("shortDescription"));
+            product.setDescription(rs.getString("description"));
+            product.setCategoryID(rs.getInt("categoryID"));
+            product.setSupplierID(rs.getInt("supplierID"));
+            product.setIsActive(rs.getBoolean("isActive"));
+            product.setUnitPrice(rs.getFloat("unitPrice"));
+            product.setImage(rs.getString("image"));
+            product.setStockQuantity(rs.getInt("stockQuantity"));
+            product.setUnitOnOrders(rs.getInt("unitOnOrders"));
+            product.setCreatedDate(rs.getString("createdDate"));
+            product.setCreatedBy(rs.getInt("createdBy"));
+            list.add(product);
         }
-        return list;
+    } catch (Exception e) {
+        e.printStackTrace();  // Consider logging the exception
     }
-
-    public List<ProductDTO> filterProducts(String brandName, String brandCPU, String storage, String ram, String vga, Integer priceRange) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM dbo.Product p INNER JOIN dbo.Category c ON p.CategoryID = c.CategoryID WHERE 1 = 1 and p.status = 1 and c.Status = 1");
-        List<ProductDTO> lp = new ArrayList<>();
-
-        HashMap<Integer, String> priceRangeMappings = new HashMap<>();
-        priceRangeMappings.put(200, " AND p.unitPrice BETWEEN 0 AND 200");
-        priceRangeMappings.put(300, " AND p.unitPrice BETWEEN 200 AND 300");
-        priceRangeMappings.put(400, " AND p.unitPrice BETWEEN 300 AND 400");
-        priceRangeMappings.put(500, " AND p.unitPrice > 500");
-
-        try {
-            if (brandName != null && !brandName.isEmpty()) {
-                sql.append(" AND c.Name = '" + brandName + "'");
-            }
-
-            if (brandCPU != null && !brandCPU.isEmpty()) {
-                sql.append(" AND p.CpuBrand LIKE '%" + brandCPU + "%'");
-            }
-
-            if (storage != null && !storage.isEmpty()) {
-                sql.append(" AND p.StorageCapacity LIKE '%" + storage + "%'");
-            }
-
-            if (ram != null && !ram.isEmpty()) {
-                sql.append(" AND p.RamCapacity LIKE '%" + ram + "%'");
-            }
-            if (vga != null && !vga.isEmpty()) {
-                sql.append(" AND p.VgaBrand LIKE '%" + vga + "%'");
-            }
-            if (priceRange != null) {
-                sql.append(priceRangeMappings.get(priceRange));
-            }
-
-            PreparedStatement ps = connection.prepareStatement(sql.toString());
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                ProductDTO product = new ProductDTO();
-                product.setProductID(rs.getInt(1));
-                product.setCategoryID(rs.getInt(2));
-                product.setName(rs.getString(3));
-                product.setImage(rs.getString(4));
-                product.setQuantity(rs.getInt(5));
-                product.setPrice(rs.getDouble(6));
-                product.setRam(rs.getString(7));
-                product.setStorage(rs.getString(8));
-                product.setCpu(rs.getString(9));
-                product.setVga(rs.getString(10));
-                product.setStatus(rs.getInt(11));
-                product.setDescription(rs.getString(12));
-                lp.add(product);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return lp;
-    }
-
+    return list;
+}
+    
     public int actionWithProductById(int id, String action) {
         String sql = "";
         if (action.equals("hide")) {
-            sql = "update Product set Status = 0\n"
-                    + "where ProductID = ?";
+            sql = "update Product set isActive = 0\n"
+                    + "where productID = ?";
         }
         if (action.equals("show")) {
-            sql = "update Product set Status = 1\n"
-                    + "where ProductID = ?";
+            sql = "update Product set isActive = 1\n"
+                    + "where productID = ?";
         }
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -210,145 +175,141 @@ public class ProductDAO extends DBcontext {
             System.out.println("Hide" + e.getMessage());
         }
         return 0;
-
+    }
+    
+    public HashMap<Product, String> getProductWithCategory(String action) {
+    String sql = "";
+    if (action.equals("hide")) {
+        sql = "SELECT c.name AS categoryName, p.productID FROM Product p "
+            + "JOIN Category c ON p.categoryID = c.categoryID WHERE p.isActive = 0";
+    } else {
+        sql = "SELECT c.name AS categoryName, p.productID FROM Product p "
+            + "JOIN Category c ON p.categoryID = c.categoryID WHERE p.isActive = 1";
     }
 
-    public HashMap<ProductDTO, String> getProductWithCategory(String action) {
-        String sql = "";
-        if (action.equals("hide")) {
-            sql = "select c.Name, p.ProductID from Product p join Category c on p.CategoryID = c.CategoryID where p.Status = 0";
-        } else {
-            sql = "select c.Name, p.ProductID from Product p join Category c on p.CategoryID = c.CategoryID where p.Status = 1";
+    HashMap<Product, String> productCMap = new HashMap<>();
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        ResultSet rs = st.executeQuery();
+        while (rs.next()) {
+            String categoryName = rs.getString("categoryName");
+            Product product = getProductByID(rs.getInt("productID"));
+            productCMap.put(product, categoryName);
         }
+    } catch (SQLException e) {
+        System.out.println("Error: " + e.getMessage());
+    }
+    return productCMap;
+}
+    public int updateProduct(Product productDTO, int checkImg) {
+    String sql;
+    if (checkImg == 1) {
+        sql = "UPDATE [dbo].[Product]\n"
+            + "   SET [categoryID] = ?,\n"
+            + "      [code] = ?,\n"
+            + "      [name] = ?,\n"
+            + "      [keywords] = ?,\n"
+            + "      [shortDescription] = ?,\n"
+            + "      [description] = ?,\n"
+            + "      [supplierID] = ?,\n"
+            + "      [isActive] = ?,\n"
+            + "      [unitPrice] = ?,\n"
+            + "      [image] = ?,\n"
+            + "      [stockQuantity] = ?,\n"
+            + "      [unitOnOrders] = ?\n"
 
-        HashMap<ProductDTO, String> productCMap = new HashMap<>();
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                String categoryName;
-                ProductDTO product = getProductByID(rs.getInt("ProductID"));
-                categoryName = rs.getString("Name");
-                productCMap.put(product, categoryName);
-            }
-            return productCMap;
-        } catch (SQLException e) {
-            System.out.println("Hide" + e.getMessage());
+            + " WHERE productID = ?";
+    } else {
+        sql = "UPDATE [dbo].[Product]\n"
+            + "   SET [categoryID] = ?,\n"
+            + "      [code] = ?,\n"
+            + "      [name] = ?,\n"
+            + "      [keywords] = ?,\n"
+            + "      [shortDescription] = ?,\n"
+            + "      [description] = ?,\n"
+            + "      [supplierID] = ?,\n"
+            + "      [isActive] = ?,\n"
+            + "      [unitPrice] = ?,\n"
+            + "      [stockQuantity] = ?,\n"
+            + "      [unitOnOrders] = ?\n"
 
-        }
-        return null;
+            + " WHERE productID = ?";
     }
 
-    public int updateProduct(ProductDTO productDTO, int checkImg) {
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        st.setInt(1, productDTO.getCategoryID());
+        st.setString(2, productDTO.getCode());
+        st.setString(3, productDTO.getName());
+        st.setString(4, productDTO.getKeywords());
+        st.setString(5, productDTO.getShortDescription());
+        st.setString(6, productDTO.getDescription());
+        st.setInt(7, productDTO.getSupplierID());
+        st.setBoolean(8, productDTO.isIsActive());
+        st.setBigDecimal(9, BigDecimal.valueOf(productDTO.getUnitPrice()));
         if (checkImg == 1) {
-            String sql = "UPDATE [dbo].[Product]\n"
-                    + "   SET [CategoryID] = ?,\n"
-                    + "      [Name] = ?,\n"
-                    + "      [QuantityAvailable] = ?,\n"
-                    + "      [UnitPrice] = ?,\n"
-                    + "      [RamCapacity] = ?,\n"
-                    + "      [StorageCapacity] = ?,\n"
-                    + "      [CpuBrand] = ?,\n"
-                    + "      [VgaBrand] =  ?,\n "
-                    + "      [Image] = ?\n     "
-                    + "      ,[Description] = ?"
-                    + " WHERE ProductID = ?";
-            try {
-                PreparedStatement st = connection.prepareStatement(sql);
-                st.setInt(1, productDTO.getCategoryID());
-                st.setString(2, productDTO.getName());
-                st.setInt(3, productDTO.getQuantity());
-                st.setDouble(4, productDTO.getPrice());
-                st.setString(5, productDTO.getRam());
-                st.setString(6, productDTO.getStorage());
-                st.setString(7, productDTO.getCpu());
-                st.setString(8, productDTO.getVga());
-                st.setString(9, productDTO.getImage());
-                st.setString(10, productDTO.getDescription());
-
-                st.setInt(11, productDTO.getProductID());
-                int checkUpdate = st.executeUpdate();
-                return checkUpdate;
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
+            st.setString(10, productDTO.getImage());
+            st.setInt(11, productDTO.getStockQuantity());
+            st.setInt(12, productDTO.getUnitOnOrders());
+            st.setInt(13, productDTO.getProductID());
         } else {
-            System.out.println(productDTO.getDescription());
-            String sql = "UPDATE [dbo].[Product]\n"
-                    + "   SET [CategoryID] = ?,\n"
-                    + "      [Name] = ?,\n"
-                    + "      [QuantityAvailable] = ?,\n"
-                    + "      [UnitPrice] = ?,\n"
-                    + "      [RamCapacity] = ?,\n"
-                    + "      [StorageCapacity] = ?,\n"
-                    + "      [CpuBrand] = ?,\n"
-                    + "      [VgaBrand] = ?,\n"
-                    + "      [Description] = ?\n"
-                    + " WHERE ProductID = ?";
-            try {
-                PreparedStatement st = connection.prepareStatement(sql);
-                st.setInt(1, productDTO.getCategoryID());
-                st.setString(2, productDTO.getName());
-                st.setInt(3, productDTO.getQuantity());
-                st.setDouble(4, productDTO.getPrice());
-                st.setString(5, productDTO.getRam());
-                st.setString(6, productDTO.getStorage());
-                st.setString(7, productDTO.getCpu());
-                st.setString(8, productDTO.getVga());
-                st.setString(9, productDTO.getDescription());
-                st.setInt(10, productDTO.getProductID());
-                int checkUpdate = st.executeUpdate();
-                return checkUpdate;
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
-
+            st.setInt(10, productDTO.getStockQuantity());
+            st.setInt(11, productDTO.getUnitOnOrders());
+            st.setInt(12, productDTO.getProductID());
         }
 
-        return 0;
+        return st.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
     }
 
-    public int addNewProduct(ProductDTO productDTO) {
-        String sql = "INSERT INTO [dbo].[Product] "
-                + "([CategoryID], [Name], [Image], [QuantityAvailable], [UnitPrice], "
-                + "[RamCapacity], [StorageCapacity], [CpuBrand], [VgaBrand], [Description], [Status]) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    return 0;
+}
+    public int addNewProduct(Product productDTO) {
+    String sql = "INSERT INTO [dbo].[Product] "
+            + "([code], [name], [keywords], [shortDescription], [description], [categoryID], [supplierID], "
+            + "[isActive], [unitPrice], [image], [stockQuantity], [unitOnOrders], [createdDate], [createdBy]) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.setInt(1, productDTO.getCategoryID());
-            st.setString(2, productDTO.getName());
-            st.setString(3, productDTO.getImage());
-            st.setInt(4, productDTO.getQuantity());
-            st.setDouble(5, productDTO.getPrice());
-            st.setString(6, productDTO.getRam());
-            st.setString(7, productDTO.getStorage());
-            st.setString(8, productDTO.getCpu());
-            st.setString(9, productDTO.getVga());
-            st.setString(10, productDTO.getDescription());
-            st.setInt(11, 1);
-            int checkUpdate = st.executeUpdate();
-            int productID = 0;
-            if (checkUpdate == 1) {
-                productID = getNewProductID();
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        st.setString(1, productDTO.getCode());
+        st.setString(2, productDTO.getName());
+        st.setString(3, productDTO.getKeywords());
+        st.setString(4, productDTO.getShortDescription());
+        st.setString(5, productDTO.getDescription());
+        st.setInt(6, productDTO.getCategoryID());
+        st.setInt(7, productDTO.getSupplierID());
+        st.setBoolean(8, productDTO.isIsActive());
+        st.setFloat(9, productDTO.getUnitPrice());
+        st.setString(10, productDTO.getImage());
+        st.setInt(11, productDTO.getStockQuantity());
+        st.setInt(12, productDTO.getUnitOnOrders());
+        st.setTimestamp(13, Timestamp.valueOf(productDTO.getCreatedDate()));
+        st.setInt(14, productDTO.getCreatedBy());
 
-            }
-            return productID;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        int checkUpdate = st.executeUpdate();
+        if (checkUpdate == 1) {
+            // Assuming 'getNewProductID()' fetches the last inserted ID correctly
+            return getNewProductID();
         }
-        return 0;
+    } catch (SQLException e) {
+        System.out.println("SQL Exception: " + e.getMessage());
+    } catch (IllegalArgumentException e) {
+        System.out.println("Date formatting issue: " + e.getMessage());
     }
-
+    return 0;
+}
+    
     private int getNewProductID() {
-        String sql = "select top(1) ProductID from Product order by ProductID desc";
+        String sql = "select top(1) productID from Product order by productID desc";
         try {
             int productID = 0;
 
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                productID = rs.getInt("ProductID");
+                productID = rs.getInt("productID");
 
             }
             return productID;
@@ -357,138 +318,172 @@ public class ProductDAO extends DBcontext {
         }
         return 0;
     }
+    
+    public LinkedHashMap<Product, String> pagingProduct(String action, int index) {
+    LinkedHashMap<Product, String> productCMap = new LinkedHashMap<>();
+    String sql = "";
+    if (action.equals("hide")) {
+        // Assuming isActive 'false' means hide
+        sql = "SELECT c.name, p.productID FROM Product p JOIN Category c ON p.categoryID = c.categoryID "
+                + "WHERE p.isActive = 0 ORDER BY p.productID DESC OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+    } else {
+        // Assuming isActive 'true' means show
+        sql = "SELECT c.name, p.productID FROM Product p JOIN Category c ON p.categoryID = c.categoryID "
+                + "WHERE p.isActive = 1 ORDER BY p.productID DESC OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+    }
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        st.setInt(1, (index - 1) * 5);
+        ResultSet rs = st.executeQuery();
+        while (rs.next()) {
+            int productId = rs.getInt("productID");
+            String categoryName = rs.getString("name");
 
-//  
-    public LinkedHashMap<ProductDTO, String> pagingProduct(String action, int index) {
-        LinkedHashMap<ProductDTO, String> productCMap = new LinkedHashMap<>();
-        String sql = "";
-        if (action.equals("hide")) {
-            sql = "select c.Name, p.ProductID from Product p join Category c on p.CategoryID = c.CategoryID\n"
-                    + "where p.Status = 0 order by p.ProductID desc offset ? rows fetch next 5 rows only";
-        } else {
-            sql = "select c.Name, p.ProductID from Product p join Category c on p.CategoryID = c.CategoryID\n"
-                    + "where p.Status = 1 order by p.ProductID desc offset ? rows fetch next 5 rows only";
-        }
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.setInt(1, (index - 1) * 5);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                String categoryName;
-                ProductDTO product = getProductByID(rs.getInt("ProductID"));
-                categoryName = rs.getString("Name");
+            // Fetch the full product details
+            Product product = getProductByID(productId); // Assuming this method fetches all product details
+            if (product != null) {
                 productCMap.put(product, categoryName);
             }
-            return productCMap;
-        } catch (SQLException e) {
-            System.out.println("Hide" + e.getMessage());
-
         }
-
-        return null;
+        return productCMap;
+    } catch (SQLException e) {
+        System.out.println("SQL Exception: " + e.getMessage());
     }
 
+    return null;
+}
+    
+    public LinkedHashMap<Product, String> searchProductsPaging(String action, int index, String searchQuery) {
+    LinkedHashMap<Product, String> productCMap = new LinkedHashMap<>();
+    String sql = "";
+    if (action.equals("hide")) {
+        // Assuming isActive 'false' means hide
+        sql = "SELECT c.name, p.productID FROM Product p JOIN Category c ON p.categoryID = c.categoryID "
+                + "WHERE p.isActive = 0 AND p.name LIKE ? "
+                + "ORDER BY p.productID DESC OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+    } else {
+        // Assuming isActive 'true' means show
+        sql = "SELECT c.name, p.productID FROM Product p JOIN Category c ON p.categoryID = c.categoryID "
+                + "WHERE p.isActive = 1 AND p.name LIKE ? "
+                + "ORDER BY p.productID DESC OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+    }
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        String searchPattern = "%" + searchQuery + "%";
+        st.setString(1, searchPattern);
+        st.setInt(2, (index - 1) * 5);
+        ResultSet rs = st.executeQuery();
+        while (rs.next()) {
+            int productId = rs.getInt("productID");
+            String categoryName = rs.getString("name");
+
+            // Fetch the full product details
+            Product product = getProductByID(productId); // Assuming this method fetches all product details
+            if (product != null) {
+                productCMap.put(product, categoryName);
+            }
+        }
+        return productCMap;
+    } catch (SQLException e) {
+        System.out.println("SQL Exception: " + e.getMessage());
+    }
+
+    return null;
+}
+    public int countProducts(String action, String searchQuery) {
+    String sql = "";
+    if (action.equals("hide")) {
+        // Assuming isActive 'false' means hide
+        sql = "SELECT COUNT(*) FROM Product p JOIN Category c ON p.categoryID = c.categoryID "
+                + "WHERE p.isActive = 0 AND p.name LIKE ? ";
+    } else {
+        // Assuming isActive 'true' means show
+        sql = "SELECT COUNT(*) FROM Product p JOIN Category c ON p.categoryID = c.categoryID "
+                + "WHERE p.isActive = 1 AND p.name LIKE ? ";
+    }
+
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        String searchPattern = "%" + searchQuery + "%";
+        st.setString(1, searchPattern);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1); // Return the count
+        }
+    } catch (SQLException e) {
+        System.out.println("SQL Exception: " + e.getMessage());
+    }
+
+    return 0; // Return 0 if there is an error or no matching products
+}
+    
     public int getTotalNewProduct() {
-        String sql = "SELECT COUNT(ProductID) AS Count\n"
-                + "FROM Product\n"
-                + "WHERE CAST(DateCreate AS DATE) = CAST(GETDATE() AS DATE);";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            int Count = 0;
-            if (rs.next()) {
-                Count = rs.getInt("Count");
-            }
-            return Count;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+    String sql = "SELECT COUNT(productID) AS Count FROM Product WHERE CAST(createdDate AS DATE) = CAST(GETDATE() AS DATE)";
+    try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        int count = 0; // It's a good practice to use camelCase for variable names in Java
+        if (rs.next()) {
+            count = rs.getInt("Count");
         }
-        return 0;
+        return count;
+    } catch (SQLException e) {
+        System.out.println("SQL Error: " + e.getMessage());
     }
-
+    return 0;
+}
+    
     public int getTotalProduct() {
-        String sql = "SELECT COUNT(ProductID) AS Count\n"
-                + "FROM Product";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            int Count = 0;
-            if (rs.next()) {
-                Count = rs.getInt("Count");
-            }
-            return Count;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+    String sql = "SELECT COUNT(productID) AS Count FROM Product";
+    try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("Count");
         }
-        return 0;
+    } catch (SQLException e) {
+        System.out.println("SQL Error: " + e.getMessage());
     }
-
-    public List<ProductDTO> getAllProductHide() {
-        String sql = "SELECT * FROM Product where status = 0";
-        List<ProductDTO> lp = new ArrayList<>();
+    return 0;
+}
+    
+    public List<Product> getAllProductHide() {
+        String sql = "SELECT * FROM Product where isActive = 0";
+        List<Product> lp = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                ProductDTO product = new ProductDTO();
-                product.setProductID(rs.getInt(1));
-                product.setCategoryID(rs.getInt(2));
-                product.setName(rs.getString(3));
-                product.setImage(rs.getString(4));
-                product.setQuantity(rs.getInt(5));
-                product.setPrice(rs.getInt(6));
-                product.setRam(rs.getString(7));
-                product.setStorage(rs.getString(8));
-                product.setCpu(rs.getString(9));
-                product.setVga(rs.getString(10));
-//                product.setStatus(rs.getInt(11));
-                lp.add(product);
+                Product product = new Product();
+            product.setProductID(rs.getInt("productID"));
+            product.setCode(rs.getString("code"));
+            product.setName(rs.getString("name"));
+            product.setKeywords(rs.getString("keywords"));
+            product.setShortDescription(rs.getString("shortDescription"));
+            product.setDescription(rs.getString("description"));
+            product.setCategoryID(rs.getInt("categoryID"));
+            product.setSupplierID(rs.getInt("supplierID"));
+            product.setIsActive(rs.getBoolean("isActive"));
+            product.setUnitPrice(rs.getFloat("unitPrice"));
+            product.setImage(rs.getString("image"));
+            product.setStockQuantity(rs.getInt("stockQuantity"));
+            product.setUnitOnOrders(rs.getInt("unitOnOrders"));
+            product.setCreatedDate(rs.getString("createdDate"));
+            product.setCreatedBy(rs.getInt("createdBy"));
+            lp.add(product);
             }
         } catch (Exception e) {
         }
         return lp;
     }
-
-    private List<String> getDistinctOptions(String property) {
-        String sql = String.format("SELECT DISTINCT %s FROM Product", property);
-        List<String> options = new ArrayList<>();
-        try {
-            ResultSet rs = connection.prepareStatement(sql).executeQuery();
-            while (rs.next()) {
-                String resultString = rs.getString(1);
-                if (resultString != null && !resultString.isEmpty()) {
-                    options.add(rs.getString(1));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return options;
-    }
-
-    public List<String> getRamOptions() {
-        return this.getDistinctOptions("RamCapacity");
-    }
-
-    public List<String> getVgaOptions() {
-        return this.getDistinctOptions("VgaBrand");
-    }
-
-    public List<String> getDiskCapacityOptions() {
-        return this.getDistinctOptions("StorageCapacity");
-    }
-
-    public List<String> getCpuOptions() {
-        return this.getDistinctOptions("CpuBrand");
-    }
-
-    public LinkedHashMap<ProductDTO, String> getSearchProduct(String searchKey, String action) {
-        LinkedHashMap<ProductDTO, String> productCMap = new LinkedHashMap<>();
+    
+    public LinkedHashMap<Product, String> getSearchProduct(String searchKey, String action) {
+        LinkedHashMap<Product, String> productCMap = new LinkedHashMap<>();
         String sql = "";
         if (action.equals("hide")) {
-            sql = "SELECT * FROM Product WHERE Name LIKE N'%' + ? + '%' and Status = 0;";
+            sql = "SELECT * FROM Product WHERE name LIKE N'%' + ? + '%' and isActive = 0;";
         } else {
-            sql = "SELECT * FROM Product WHERE Name LIKE N'%' + ? + '%' and Status = 1;";
+            sql = "SELECT * FROM Product WHERE name LIKE N'%' + ? + '%' and isActive = 1;";
         }
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -496,8 +491,8 @@ public class ProductDAO extends DBcontext {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 String categoryName;
-                ProductDTO product = getProductByID(rs.getInt("ProductID"));
-                categoryName = rs.getString("Name");
+                Product product = getProductByID(rs.getInt("productID"));
+                categoryName = rs.getString("name");
                 productCMap.put(product, categoryName);
             }
             return productCMap;
@@ -508,11 +503,11 @@ public class ProductDAO extends DBcontext {
 
         return null;
     }
-
+    
     public static void main(String[] args) {
-        ProductDAO pd = new ProductDAO();
-        LinkedHashMap<ProductDTO, String> productCMap = pd.getSearchProduct("ac", "show");
-        System.out.println(productCMap.size());
-
+        ProductDAO p = new ProductDAO();
+        Product pro = new Product(0, "hihi", "hihi", "hihi", "hihi", "hihi", 2, 2, true, 100, "hihi", 200, 20, null, 1);
+        int n = p.addNewProduct(pro);
+        System.out.println(n);
     }
 }

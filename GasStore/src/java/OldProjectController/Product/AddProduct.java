@@ -4,13 +4,15 @@
  */
 package OldProjectController.Product;
 
-import DAO.AccountDAO;
+
 import DAO.CategoryDAO;
 import DAO.ProductDAO;
 import DAO.ProductImgDAO;
+import DAO.SupplierDAO;
 import DTO.AccountDTO;
-import DTO.CategoryDTO;
+import DTO.Category;
 import DTO.ProductDTO;
+import DTO.Supplier;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -69,18 +71,21 @@ public class AddProduct extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        AccountDTO account = (AccountDTO) session.getAttribute("account");
-        if (account != null) {
-            if (account.getRole() == 1) {
+//        AccountDTO account = (AccountDTO) session.getAttribute("account");
+//        if (account != null) {
+//            if (account.getRole() == 1) {
+                SupplierDAO supplierDAO = new SupplierDAO();
                 CategoryDAO categoryDAO = new CategoryDAO();
-                List<CategoryDTO> cdtos = categoryDAO.getAllCategory();
+                List<Category> cdtos = categoryDAO.getAllCategory();
+                List<Supplier> listSupplier = supplierDAO.getAllSupplier();
+                request.setAttribute("listSupplier", listSupplier);
                 request.setAttribute("cdtos", cdtos);
                 request.getRequestDispatcher("AddProduct.jsp").forward(request, response);
             }
-        } else {
-            response.sendRedirect("403.jsp");
-        }
-    }
+//        } else {
+//            response.sendRedirect("403.jsp");
+//        }
+    
 
     /**
      * Handles the HTTP <code>POST</code> method.

@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import model.Product;
 
 /**
  *
@@ -61,19 +62,15 @@ public class ProductDashboardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        AccountDTO account = (AccountDTO) session.getAttribute("account");
-        if (account != null) {
-            if (account.getRole() == 1) {
-                
-            
+        
         String message = (String) session.getAttribute("msg");
         session.removeAttribute("msg");
 
-        List<ProductDTO> productDTOs = new ArrayList<>();
+        List<Product> productDTOs = new ArrayList<>();
         ProductDAO productDAO = new ProductDAO();
-        CategoryDAO categoryDAO = new CategoryDAO();
-        LinkedHashMap<ProductDTO, String> productCmap = new LinkedHashMap<>();
-        HashMap<CategoryDTO, Integer> countCategory = new HashMap<>();
+        
+        LinkedHashMap<Product, String> productCmap = new LinkedHashMap<>();
+        
 
         //hide product 
         String action = request.getParameter("action");
@@ -123,12 +120,9 @@ public class ProductDashboardServlet extends HttpServlet {
             }
         } catch (Exception e) {
         }
-            }
-            else {
-            response.sendRedirect("403.jsp");
-        }
+            
     }
-    }
+    
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -141,15 +135,14 @@ public class ProductDashboardServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        AccountDTO account = (AccountDTO) session.getAttribute("account");
-        if (account != null) {
-            if (account.getRole() == 1) {
+                HttpSession session = request.getSession();
+        
+        
                 String searchKey = request.getParameter("search");
                 System.out.println(searchKey);
                 String action = request.getParameter("action");
 
-                LinkedHashMap<ProductDTO, String> productCmap = new LinkedHashMap<>();
+                LinkedHashMap<Product, String> productCmap = new LinkedHashMap<>();
 
                 ProductDAO productDAO = new ProductDAO();
 
@@ -160,10 +153,8 @@ public class ProductDashboardServlet extends HttpServlet {
                 request.setAttribute("action", action);
                 request.getRequestDispatcher("ProductSearch.jsp").forward(request, response);
             }
-        } else {
-            response.sendRedirect("403.jsp");
-        }
-    }
+        
+    
         /**
          * Returns a short description of the servlet.
          *

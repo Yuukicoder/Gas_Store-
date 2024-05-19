@@ -4,7 +4,8 @@
  */
 package DAO;
 
-import DTO.CategoryDTO;
+import DTO.Category;
+import DTO.Category;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,19 +21,18 @@ import java.util.List;
  */
 public class CategoryDAO extends DBcontext {
 
-    public List<CategoryDTO> getAllCategory() {
+    public List<Category> getAllCategory() {
         String sql = "SELECT * FROM Category";
-        ArrayList<CategoryDTO> lc = new ArrayList<>();
+        ArrayList<Category> lc = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                CategoryDTO category = new CategoryDTO();
+                Category category = new Category();
                 category.setCategoryID(rs.getInt(1));
-                category.setName(rs.getString(2));
-                category.setDateCreated(rs.getString(3));
-                category.setDateModified(rs.getString(4));
-                category.setStatus(rs.getInt(5));
+                category.setCode(rs.getString(2));
+                category.setName(rs.getString(3));
+                category.setDescription(rs.getString(3));
                 lc.add(category);
             }
         } catch (SQLException e) {
@@ -41,19 +41,18 @@ public class CategoryDAO extends DBcontext {
         return lc;
     }
 
-    public List<CategoryDTO> displayCategoryinHome() {
-        String sql = "SELECT * FROM Category WHERE Status = 1";
-        ArrayList<CategoryDTO> lc = new ArrayList<>();
+    public List<Category> displayCategoryinHome() {
+        String sql = "SELECT * FROM Category";
+        ArrayList<Category> lc = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                CategoryDTO category = new CategoryDTO();
+                Category category = new Category();
                 category.setCategoryID(rs.getInt(1));
-                category.setName(rs.getString(2));
-                category.setDateCreated(rs.getString(3));
-                category.setDateModified(rs.getString(4));
-                category.setStatus(rs.getInt(5));
+                category.setCode(rs.getString(2));
+                category.setName(rs.getString(3));
+                category.setDescription(rs.getString(3));
                 lc.add(category);
             }
         } catch (SQLException e) {
@@ -62,29 +61,28 @@ public class CategoryDAO extends DBcontext {
         return lc;
     }
 
-    public void addCategory(String name, String date, int Status) {
-        String sql = "INSERT INTO [Category] (Name, DateCreated, Status) VALUES (?,?,?)";
+    public void addCategory(String code, String name, String description) {
+        String sql = "INSERT INTO [Category] (code, name, description) VALUES (?,?,?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, name);
-            ps.setString(2, date);
-            ps.setInt(3, Status);
+            ps.setString(1, code);
+            ps.setString(2, name);
+            ps.setString(3, description);
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public CategoryDTO getCategoryByColumnName(String columnName, String input) {
+    public Category getCategoryByColumnName(String columnName, String input) {
         String sql = "SELECT * FROM Category WHERE [" + columnName + "] = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, input);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                CategoryDTO category = new CategoryDTO();
-                category.setName(rs.getString(2));
-                category.setStatus(rs.getInt(5));
+                Category category = new Category();
+                category.setName(rs.getString(3));
                 return category;
             }
         } catch (SQLException e) {
@@ -105,7 +103,7 @@ public class CategoryDAO extends DBcontext {
         }
     }
 
-    public HashMap<CategoryDTO, Integer> getQuantityCategory(String action) {
+    public HashMap<Category, Integer> getQuantityCategory(String action) {
         String sql = "select c.CategoryID, count(p.ProductID) as NumProduct from Product p right join Category c \n"
                 + "                on p.CategoryID = c.CategoryID where p.Status = 1\n"
                 + "                group by c.CategoryID";
@@ -114,7 +112,7 @@ public class CategoryDAO extends DBcontext {
                     + "                on p.CategoryID = c.CategoryID where p.Status = 0\n"
                     + "                group by c.CategoryID";
         }
-        HashMap<CategoryDTO, Integer> countProduct = new HashMap<>();
+        HashMap<Category, Integer> countProduct = new HashMap<>();
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
@@ -122,7 +120,7 @@ public class CategoryDAO extends DBcontext {
                 int categoryID;
                 categoryID = rs.getInt("CategoryID");
                 int numProduct = rs.getInt("NumProduct");
-                CategoryDTO categoryDTO = getCategoryByID(categoryID);
+                Category categoryDTO = getCategoryByID(categoryID);
                 countProduct.put(categoryDTO, numProduct);
             }
             return countProduct;
@@ -134,22 +132,20 @@ public class CategoryDAO extends DBcontext {
 
     }
 
-    public CategoryDTO getCategoryByID(int categoryID) {
-        String sql = "SELECT * FROM Category WHERE CategoryID = ?";
+    public Category getCategoryByID(int categoryID) {
+        String sql = "SELECT * FROM Category WHERE categoryID = ?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, categoryID);
             ResultSet rs = st.executeQuery();
-            CategoryDTO categoryDTO = new CategoryDTO();
+            Category category = new Category();
             if (rs.next()) {
-                categoryDTO.setCategoryID(categoryID);
-                categoryDTO.setName(rs.getString("Name"));
-                categoryDTO.setDateCreated(rs.getString("DateCreated"));
-                categoryDTO.setDateModified(rs.getString("DateModified"));
-                categoryDTO.setStatus(rs.getInt("Status"));
-
+                category.setCategoryID(rs.getInt(1));
+                category.setCode(rs.getString(2));
+                category.setName(rs.getString(3));
+                category.setDescription(rs.getString(3));
             }
-            return categoryDTO;
+            return category;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

@@ -4,14 +4,14 @@
  */
 package OldProjectController.Product;
 
-import DAO.AccountDAO;
+
 import DAO.CategoryDAO;
 import DAO.ProductDAO;
 import DAO.ProductImgDAO;
-import DTO.AccountDTO;
-import DTO.CategoryDTO;
-import DTO.ProductDTO;
-import DTO.ProductImgDTO;
+import DAO.SupplierDAO;
+import DTO.Category;
+import DTO.ProductImg;
+import DTO.Supplier;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -21,9 +21,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import model.Product;
 
 /**
  *
@@ -74,19 +73,23 @@ public class EditProductDBServlet extends HttpServlet {
         try {
             int product_id = Integer.parseInt(product_id_raw);
             ProductImgDAO pidao = new ProductImgDAO();
-            List<ProductImgDTO> pimgs = pidao.getPImgByPid(product_id);
+            List<ProductImg> pimgs = pidao.getPImgByPid(product_id);
             request.setAttribute("pimgs", pimgs);
             ProductDAO productDAO = new ProductDAO();
             CategoryDAO categoryDAO = new CategoryDAO();
-            ProductDTO pdto = productDAO.getProductByID(product_id);
-            CategoryDTO category = categoryDAO.getCategoryByID(pdto.getCategoryID());
-            List<CategoryDTO> categoryDTOs = categoryDAO.getAllCategory();
+            SupplierDAO s = new SupplierDAO();
+            Product pdto = productDAO.getProductByID(product_id);
+            Category category = categoryDAO.getCategoryByID(pdto.getCategoryID());
+            List<Category> categoryDTOs = categoryDAO.getAllCategory();
+            Supplier supplier = s.getSupplierByID(pdto.getCategoryID());
+            List<Supplier> supplierDTOs = s.getAllSupplier();
             request.setAttribute("pdto", pdto);
-            request.setAttribute("ramOld", getDigit(pdto.getRam()));
-            request.setAttribute("storageOld", getDigit(pdto.getStorage()));
             request.setAttribute("categoryName", category.getName());
             request.setAttribute("categoryID", category.getCategoryID());
             request.setAttribute("categoryDTOs", categoryDTOs);
+            request.setAttribute("supplierName", supplier.getCompanyName());
+            request.setAttribute("supplierID", supplier.getSupplierID());
+            request.setAttribute("supplierDTOs", supplierDTOs);
             request.getRequestDispatcher("EditProductDB.jsp").forward(request, response);
 
         } catch (Exception e) {
@@ -110,162 +113,157 @@ public class EditProductDBServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String pid_raw = request.getParameter("pid");
-        String name = request.getParameter("name");
-        String category_raw = request.getParameter("category");
-        String stock_raw = request.getParameter("stock");
-        String price_raw = request.getParameter("price");
-        String typeRam = request.getParameter("typeRam");
-        String ram_raw = request.getParameter("ram");
-        String ram = "";
-        
-            ram = ram_raw + typeRam;
-        
-        String typeStorage = request.getParameter("typeStorage");
-        String storage_raw = request.getParameter("storage") ;
-        String storage = "";
-        
-            storage = storage_raw + typeStorage;
-        
-        String cpu = request.getParameter("cpu");
-        String vga = request.getParameter("vga");
-        String descrip = request.getParameter("descrip");
-        HttpSession session = request.getSession();
-
-        String button = request.getParameter("update");
+         HttpSession session = request.getSession();
+        String pid_raw = (String)request.getParameter("pid");
+        String name = (String)request.getParameter("name");
+        String category_raw =(String)request.getParameter("category");
+        String supplier_raw = (String)request.getParameter("supplier");
+        String stock_raw = (String)request.getParameter("stock");
+        String price_raw = (String)request.getParameter("price");
+        String unitOnOrders_raw = (String)request.getParameter("unitOnOrders");
+        String descrip = (String)request.getParameter("descrip");
+        String code_raw = (String)request.getParameter("code");
+        String keyword_raw = (String)request.getParameter("keyword");
+        String shortDes_raw = (String)request.getParameter("shortDes");
+        String button = (String)request.getParameter("update");
         ProductImgDAO pidao = new ProductImgDAO();
-
-        try {
+        
+//        try {
             int pid = Integer.parseInt(pid_raw);
-            int categoryID = Integer.parseInt(category_raw);
             int stock = Integer.parseInt(stock_raw);
-            double price = Double.parseDouble(price_raw);
+            int categoryID = Integer.parseInt(category_raw);
+            float price = Float.parseFloat(price_raw);
+            int supplierID = Integer.parseInt(supplier_raw);
+            int unitOnOrders = Integer.parseInt(unitOnOrders_raw);
             int checkUpdateProduct = 0;
             ProductDAO pdao = new ProductDAO();
             int checkImg = 1;
             if (button.equals("product")) {
                 Part p = request.getPart("ipro");
                 String fileName = p.getSubmittedFileName();
+                
                 if (!fileName.isEmpty()) {
-                    ProductDTO productDTO = new ProductDTO(pid, categoryID, name, fileName, stock, price, ram, storage, cpu, vga, 1, descrip, 0);
+                    System.out.println(fileName);
+                    Product productDTO = new Product(pid, code_raw, name, keyword_raw, shortDes_raw, descrip, categoryID, supplierID, true, price, fileName, stock, unitOnOrders, null, 1);
                     checkUpdateProduct = pdao.updateProduct(productDTO, checkImg);
                 } else {
                     checkImg = 0;
-                    ProductDTO productDTO = new ProductDTO(pid, categoryID, name, null, stock, price, ram, storage, cpu, vga, 1, descrip, 0);
+                    Product productDTO = new Product(pid, code_raw, name, keyword_raw, shortDes_raw, descrip, categoryID, supplierID, true, price, null, stock, unitOnOrders, null, 1);
                     checkUpdateProduct = pdao.updateProduct(productDTO, checkImg);
                 }
                 if (checkUpdateProduct == 1) {
                     if (!fileName.isEmpty()) {
-                        String path = getServletContext().getRealPath("") + "images/Product";
+                       String path = getServletContext().getRealPath("") + "images/product_detail";
+                        
                         File file = new File(path);
                         p.write(path + File.separator + fileName);
                         session.setAttribute("msg", "Update Success!");
-                        response.sendRedirect("ProductDashboard");
+                        response.sendRedirect("productManage");
                     } else {
                         session.setAttribute("msg", "Update Success!");
-                        response.sendRedirect("ProductDashboard");
+                        response.sendRedirect("productManage");
                     }
 
                 }
             }
 
-            if (button.equals("image")) {
-                boolean isUpdated = false;  // Biến kiểm tra xem có cập nhật thành công ít nhất một tệp không
+//            if (button.equals("image")) {
+//                boolean isUpdated = false;  // Biến kiểm tra xem có cập nhật thành công ít nhất một tệp không
+//
+//                List<Part> idesList = new ArrayList<>(request.getParts());
+//                for (Part ides : idesList) {
+//                    String fieldName = ides.getName();
+//                    if (fieldName.startsWith("ides-")) {
+//                        String fileDes = ides.getSubmittedFileName();
+//
+//                        if (fileDes != null && !fileDes.isEmpty()) {
+//                            int i = Integer.parseInt(fieldName.substring(5));
+//                            String imgID_raw = request.getParameter("imgID-" + i);
+//                            int imgID = Integer.parseInt(imgID_raw);
+//                            ProductImgDTO productImgDTO = new ProductImgDTO(imgID, pid, fileDes);
+//
+//                            checkUpdateProduct = pidao.updateProductImage(productImgDTO);
+//
+//                            if (checkUpdateProduct == 1) {
+//                                String path = getServletContext().getRealPath("") + "images/Product";
+//                                File file = new File(path);
+//                                ides.write(path + File.separator + fileDes);
+//                                isUpdated = true;  // Đánh dấu là đã cập nhật thành công ít nhất một tệp
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                if (isUpdated) {
+//                    session.setAttribute("msg", "Update Success!");
+//                } else {
+//                    session.setAttribute("msg", "No update for ImageProduct");
+//                }
+//                response.sendRedirect("ProductDashboard");
+//            }
+//            if (button.equals("imageAdd")) {
+//                String[] ides = request.getParameterValues("ides[]");
+//                List<Part> parts = new ArrayList<>();
+//                Collection<Part> requestParts = request.getParts();
+//                ArrayList<String> list = new ArrayList<>();
+//                for (Part part : requestParts) {
+//                    if (part.getName().equals("ides[]")) {
+//                        parts.add(part);
+//                        String fiString = part.getSubmittedFileName();
+//
+//                        list.add(fiString);
+//                    }
+//                }
+//                if (list.size() != 0) {
+//                    int check = pidao.addNewImageProduct(list, pid);
+//                    if (check != 0) {
+//                        for (int i = 0; i < list.size(); i++) {
+//                            String path = getServletContext().getRealPath("") + "images/Product";
+//
+//                            // Sử dụng Part từ danh sách parts, không phải requestParts
+//                            Part part = parts.get(i);
+//                            part.write(path + File.separator + list.get(i));
+//                        }
+//                        session.setAttribute("msg", "Update ImageProduct Sucess!");
+//                        response.sendRedirect("ProductDashboard");
+//                    } else {
+//                        session.setAttribute("msg", "Have no update for ImageProduct");
+//                        response.sendRedirect("ProductDashboard");
+//                    }
+//                } else {
+//                    session.setAttribute("msg", "Have no update for ImageProduct");
+//                    response.sendRedirect("ProductDashboard");
+//                }
+//
+//            }
+//            if (button.equals("delete")) {
+//                String[] checkboxValues = request.getParameterValues("deleteImg");
+//                if (checkboxValues != null) {
+//                    ArrayList<Integer> listImge = new ArrayList<>();
+//                    for (int i = 0; i < checkboxValues.length; i++) {
+//                        try {
+//                            int imgID = Integer.parseInt(checkboxValues[i]);
+//                            listImge.add(imgID);
+//                        } catch (Exception e) {
+//                        }
+//
+//                    }
+//                    int checkDeleteImg = pidao.deleteImage(listImge);
+//                    if (checkDeleteImg != 0) {
+//                        session.setAttribute("msg", "Update ImageProduct Sucess!");
+//                        response.sendRedirect("ProductDashboard");
+//
+//                    }
+//                } else {
+//                    session.setAttribute("msg", "Have no update for ImageProduct");
+//                    response.sendRedirect("ProductDashboard");
+//                }
+//
+//            }
 
-                List<Part> idesList = new ArrayList<>(request.getParts());
-                for (Part ides : idesList) {
-                    String fieldName = ides.getName();
-                    if (fieldName.startsWith("ides-")) {
-                        String fileDes = ides.getSubmittedFileName();
-
-                        if (fileDes != null && !fileDes.isEmpty()) {
-                            int i = Integer.parseInt(fieldName.substring(5));
-                            String imgID_raw = request.getParameter("imgID-" + i);
-                            int imgID = Integer.parseInt(imgID_raw);
-                            ProductImgDTO productImgDTO = new ProductImgDTO(imgID, pid, fileDes);
-
-                            checkUpdateProduct = pidao.updateProductImage(productImgDTO);
-
-                            if (checkUpdateProduct == 1) {
-                                String path = getServletContext().getRealPath("") + "images/Product";
-                                File file = new File(path);
-                                ides.write(path + File.separator + fileDes);
-                                isUpdated = true;  // Đánh dấu là đã cập nhật thành công ít nhất một tệp
-                            }
-                        }
-                    }
-                }
-
-                if (isUpdated) {
-                    session.setAttribute("msg", "Update Success!");
-                } else {
-                    session.setAttribute("msg", "No update for ImageProduct");
-                }
-                response.sendRedirect("ProductDashboard");
-            }
-            if (button.equals("imageAdd")) {
-                String[] ides = request.getParameterValues("ides[]");
-                List<Part> parts = new ArrayList<>();
-                Collection<Part> requestParts = request.getParts();
-                ArrayList<String> list = new ArrayList<>();
-                for (Part part : requestParts) {
-                    if (part.getName().equals("ides[]")) {
-                        parts.add(part);
-                        String fiString = part.getSubmittedFileName();
-
-                        list.add(fiString);
-                    }
-                }
-                if (list.size() != 0) {
-                    int check = pidao.addNewImageProduct(list, pid);
-                    if (check != 0) {
-                        for (int i = 0; i < list.size(); i++) {
-                            String path = getServletContext().getRealPath("") + "images/Product";
-
-                            // Sử dụng Part từ danh sách parts, không phải requestParts
-                            Part part = parts.get(i);
-                            part.write(path + File.separator + list.get(i));
-                        }
-                        session.setAttribute("msg", "Update ImageProduct Sucess!");
-                        response.sendRedirect("ProductDashboard");
-                    } else {
-                        session.setAttribute("msg", "Have no update for ImageProduct");
-                        response.sendRedirect("ProductDashboard");
-                    }
-                } else {
-                    session.setAttribute("msg", "Have no update for ImageProduct");
-                    response.sendRedirect("ProductDashboard");
-                }
-
-            }
-            if (button.equals("delete")) {
-                String[] checkboxValues = request.getParameterValues("deleteImg");
-                if (checkboxValues != null) {
-                    ArrayList<Integer> listImge = new ArrayList<>();
-                    for (int i = 0; i < checkboxValues.length; i++) {
-                        try {
-                            int imgID = Integer.parseInt(checkboxValues[i]);
-                            listImge.add(imgID);
-                        } catch (Exception e) {
-                        }
-
-                    }
-                    int checkDeleteImg = pidao.deleteImage(listImge);
-                    if (checkDeleteImg != 0) {
-                        session.setAttribute("msg", "Update ImageProduct Sucess!");
-                        response.sendRedirect("ProductDashboard");
-
-                    }
-                } else {
-                    session.setAttribute("msg", "Have no update for ImageProduct");
-                    response.sendRedirect("ProductDashboard");
-                }
-
-            }
-
-        } catch (Exception e) {
-        }
-//            public ProductDTO(int productID, int categoryID, String name, String image, int quantity, double price, String ram, String storage, String cpu, String vga, int Status, String description, int sold) {
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
 
     }
 

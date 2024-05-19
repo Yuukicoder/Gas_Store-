@@ -6,6 +6,7 @@ package OldProjectController.Account;
 
 import DAO.AccountDAO;
 import DTO.AccountDTO;
+import DTO.AdminDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -60,7 +61,7 @@ public class TableAccountServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         AccountDAO accountDAO = new AccountDAO();
-        List<AccountDTO>  la = accountDAO.getAllAccount();
+        List<AdminDTO>  la = accountDAO.getAllAccount();
         request.setAttribute("listAccount", la);
         request.getRequestDispatcher("TableAccount.jsp").forward(request, response);
     }
