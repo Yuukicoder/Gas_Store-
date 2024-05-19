@@ -8,6 +8,7 @@ import DAO.AccountDAO;
 import DAO.PostCategoryDAO;
 import DAO.PostListDAO;
 import DTO.AccountDTO;
+import DTO.AdminDTO;
 import DTO.PostCategoryDTO;
 import DTO.PostDTO;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -66,9 +68,9 @@ public class AddPostServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        AccountDTO account = (AccountDTO) session.getAttribute("account");
+        AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
-            if (account.getRole() == 1) {
+            if (account.getRoleID()== 1 || account.getRoleID()== 2) {
                 //List User
                 PostCategoryDAO postCategoryDAO = new PostCategoryDAO();
                 ArrayList<PostCategoryDTO> postCategoryDTOs = postCategoryDAO.getAllPostCategory();
@@ -94,11 +96,13 @@ public class AddPostServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
+         HttpSession session = request.getSession();
         String content = request.getParameter("content");
         String title = request.getParameter("title");
         String category = request.getParameter("category");
         System.out.println(category);
+        System.out.println(content);
+        System.out.println(title);
         Part banner = request.getPart("banner");
         String fileBanner = banner.getSubmittedFileName();
 
@@ -106,7 +110,9 @@ public class AddPostServlet extends HttpServlet {
             session.setAttribute("msg", "Add New Post Not Sucess!");
             response.sendRedirect("postDashboard");
         } else {
-            PostDTO pdto = new PostDTO(0, title, "", fileBanner, "", content, category);
+            String currentDate = LocalDate.now().toString();
+            PostDTO pdto = new PostDTO(0, 0, title, currentDate, currentDate, fileBanner, 
+                    content, title, 0, 0);
             PostListDAO postListDAO = new PostListDAO();
             int checkAddPost = postListDAO.addNewPost(pdto);
             if (checkAddPost != 0) {
@@ -119,7 +125,6 @@ public class AddPostServlet extends HttpServlet {
                 System.out.println("error server");
             }
         }
-
     }
 
     /**

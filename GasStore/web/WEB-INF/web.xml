@@ -72,6 +72,10 @@
         <servlet-name>UserProfileServlet</servlet-name>
         <servlet-class>OldProjectController.Account.UserProfile</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddPostServlet2</servlet-name>
+        <servlet-class>Controller.AddPostServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
         <url-pattern>/signup</url-pattern>
@@ -118,7 +122,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AddPostServlet</servlet-name>
-        <url-pattern>/AddPost</url-pattern>
+        <url-pattern>/AddPostURL</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>DeletePostServlet</servlet-name>
@@ -143,6 +147,10 @@
     <servlet-mapping>
         <servlet-name>UserProfileServlet</servlet-name>
         <url-pattern>/UserProfile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddPostServlet2</servlet-name>
+        <url-pattern>/AddPostServletURL</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

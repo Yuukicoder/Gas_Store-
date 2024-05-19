@@ -49,7 +49,7 @@
             <!-- Content Start -->
             <div class="content">
                 <%@include file="component/navbarAdmin.jsp" %>
-                <form action="AddPost" method="post" enctype="multipart/form-data"onsubmit="return validate_Form()">
+                <form action="AddPostURL" method="POST" enctype="multipart/form-data"onsubmit="return validate_Form()">
 
                     <div class="container">
                         <div class="row">
@@ -79,7 +79,7 @@
                         <script>
                             CKEDITOR.replace('content');
                         </script>
-                        <button type="submit"   class="btn btn-primary" style="margin-top: 30px" value="imageAdd" name="update">Add  Post</button> 
+                        <button type="submit"   class="btn btn-primary" style="margin-top: 30px" value="imageAdd" >Add  Post</button> 
                     </div>
 
                 </form>

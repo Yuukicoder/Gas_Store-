@@ -118,7 +118,7 @@
                                 <div class="d-flex align-items-center justify-content-between mb-4">
                                     <form action="tableCategory" method="POST">       
                                         <a href="postDashboard" class="btn btn-primary">All Post</a>
-                                        <a href="AddPost" class="btn btn-primary">Add post</a>
+                                        <a href="AddPostURL" class="btn btn-primary">Add post</a>
                                     </form>
                                      <form action="postDashboard" method="post">
                                         <div class="input-group">
@@ -142,7 +142,7 @@
                                                 <th scope="col">Category</th>                                              
                                                 <th scope="col">Banner</th>                                              
                                                 <th scope="col">Date </th>                                              
-                                                <th scope="col">Action </th>                                              
+                                                <th scope="col">Action</th>                                              
 
                                             </tr>
                                         </thead>

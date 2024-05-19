@@ -57,12 +57,12 @@
                 <div class="toggle-panel toggle-left">
                     <h1>Welcome Back!</h1>
                     <p>Nhập thông tin cá nhân của bạn để sử dụng tất cả các tính năng của trang web</p>
-                    <button class="hidden" id="login">Sign In</button>
+                     <button class="btn btn-primary btn-block" type="submit" id="login"><i class="fas fa-user-plus"></i>Sign In</button>
                 </div>
                 <div class="toggle-panel toggle-right">
                     <h1>Hello, Friend!</h1>
                     <p>Đăng ký với thông tin cá nhân của bạn để sử dụng tất cả các tính năng của trang web</p>
-                    <button class="hidden" id="register">Sign Up</button>
+                    <button class="btn btn-primary btn-block" type="submit" id="register"><i class="fas fa-user-plus"></i>Sign Up</button>
                 </div>
             </div>
         </div>

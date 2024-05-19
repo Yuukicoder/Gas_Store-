@@ -8,7 +8,7 @@ package DTO;
  *
  * @author Admin
  */
-public class AdminDTO {
+public class AdminDTO extends RoleDTO{
     private int adminID;
     private String userName;
     private String password;
@@ -36,64 +36,71 @@ public class AdminDTO {
         return adminID;
     }
 
-    public void setAdminID(int adminID) {
-        this.adminID = adminID;
-    }
-
     public String getUserName() {
         return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getLastLogin() {
         return lastLogin;
-    }
-
-    public void setLastLogin(String lastLogin) {
-        this.lastLogin = lastLogin;
     }
 
     public int getIsActive() {
         return isActive;
     }
 
-    public void setIsActive(int isActive) {
-        this.isActive = isActive;
-    }
-
     public int getRoleID() {
         return roleID;
-    }
-
-    public void setRoleID(int roleID) {
-        this.roleID = roleID;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getImg() {
         return img;
+    }
+
+    public void setAdminID(int adminID) {
+        this.adminID = adminID;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setLastLogin(String lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public void setIsActive(int isActive) {
+        this.isActive = isActive;
+    }
+
+    public void setRoleID(int roleID) {
+        this.roleID = roleID;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setImg(String img) {
         this.img = img;
     }
+
+    @Override
+    public String toString() {
+        return "AdminDTO{" + "adminID=" + adminID + ", userName=" + userName + ", password=" + password + ", lastLogin=" + lastLogin + ", isActive=" + isActive + ", roleID=" + roleID + ", email=" + email + ", img=" + img + '}';
+    }
+
+    
     
 }
