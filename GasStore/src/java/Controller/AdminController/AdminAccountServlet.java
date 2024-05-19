@@ -98,7 +98,7 @@ public class AdminAccountServlet extends HttpServlet {
         String roleIdParam = request.getParameter("role_id");
         String usearch = request.getParameter("search");
 
-        if (usearch != null) {
+        if (usearch == null) {
             List<Customer> li;
             if (!usearch.isEmpty()) {
                 li = cus.getAllByAccount(usearch);
