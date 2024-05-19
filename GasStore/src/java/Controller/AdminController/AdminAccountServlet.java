@@ -4,6 +4,7 @@
  */
 package Controller.AdminController;
 
+import DTO.AccountDTO;
 import dal.CustomerDao;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Customer;
 
@@ -19,7 +21,7 @@ import model.Customer;
  *
  * @author vip2021
  */
-@WebServlet(name = "AdminAccountServlet", urlPatterns = {"/admin"})
+@WebServlet(name = "AdminAccountServlet", urlPatterns = {"/TableAccount"})
 public class AdminAccountServlet extends HttpServlet {
 
     /**
@@ -36,7 +38,7 @@ public class AdminAccountServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         CustomerDao cus = new CustomerDao();
         List<Customer> li = cus.getAll();
-        request.setAttribute("ldata", li);
+        request.setAttribute("lidata", li);
 
         String customerIdParam = request.getParameter("id");
         String typeParam = request.getParameter("type");
@@ -51,13 +53,12 @@ public class AdminAccountServlet extends HttpServlet {
             } else if (type == 1) {
                 cus.deleteAccount(customerIdParam);
                 // Redirect to the admin page after deletion
-                response.sendRedirect("admin");
+                response.sendRedirect("TableAccount");
                 return; // Return to avoid forwarding request again
             }
         }
 
-        // Forward the request to the JSP page
-        request.getRequestDispatcher("admin/admin.jsp").forward(request, response);
+        request.getRequestDispatcher("TableAccount.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -73,7 +74,6 @@ public class AdminAccountServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-
     }
 
     /**
@@ -95,58 +95,41 @@ public class AdminAccountServlet extends HttpServlet {
         String last = request.getParameter("last_name");
         String uemail = request.getParameter("email");
         String phone = request.getParameter("phone_number");
-        int roleID = Integer.parseInt(request.getParameter("role_id"));
+        String roleIdParam = request.getParameter("role_id");
+        String usearch = request.getParameter("search");
 
-        // Check if customerIdParam and typeParam are not null and not empty
-        String customerIdParam = request.getParameter("id");
-        String typeParam = request.getParameter("type");
-        Customer newCustomer = new Customer(Integer.parseInt(uid), name, pass, first, last, roleID, phone, uemail);
-        if (!uid.isEmpty()) {
-            // Update existing customer
-            cus.updateUser(newCustomer);
+        if (usearch != null) {
+            List<Customer> li;
+            if (!usearch.isEmpty()) {
+                li = cus.getAllByAccount(usearch);
+            } else {
+                li = cus.getAll();
+            }
+            request.setAttribute("lidata", li);
+            request.getRequestDispatcher("TableAccount.jsp").forward(request, response);
         } else {
-            // Insert new customer
-            cus.insertCustomer(newCustomer);
+            if (roleIdParam != null && !roleIdParam.isEmpty()) {
+                int roleID = Integer.parseInt(roleIdParam);
+
+                Customer newCustomer = new Customer(
+                        uid != null && !uid.isEmpty() ? Integer.parseInt(uid) : 0,
+                        name, pass, first, last, roleID, phone, uemail
+                );
+
+                if (uid != null && !uid.isEmpty()) {
+                    // Update existing customer
+                    cus.updateUser(newCustomer);
+                } else {
+                    // Insert new customer
+                    cus.insertCustomer(newCustomer);
+                }
+
+                response.sendRedirect("TableAccount");
+            } else {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Role ID cannot be empty");
+            }
         }
-
-        response.sendRedirect("admin");
     }
-
-//    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//        CustomerDao cus = new CustomerDao();
-//        String uid = request.getParameter("account_id");
-//        String name = request.getParameter("username");
-//        String pass = request.getParameter("password");
-//        String first = request.getParameter("first_name");
-//        String last = request.getParameter("last_name");
-//        String uemail = request.getParameter("email");
-//        String phone = request.getParameter("phone_number");
-//        int roleID = Integer.parseInt(request.getParameter("role_id"));
-//
-//        // Check if uid is not null and not empty
-//        if (uid != null && !uid.isEmpty()) {
-//            try {
-//                int userId = Integer.parseInt(uid);
-//                Customer newCustomer = new Customer(userId, name, pass, first, last, roleID, phone, uemail);
-//                // Update existing customer
-//                cus.updateUser(newCustomer);
-//            } catch (NumberFormatException e) {
-//                // Log the exception (could also use a logging framework)
-//                e.printStackTrace();
-//                // Handle the error appropriately, e.g., setting an error message in the request
-//                request.setAttribute("error", "Invalid account ID format.");
-//                // Forward back to a relevant JSP or page to display the error
-//                request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
-//                return;
-//            }
-//        } else {
-//            // Insert new customer
-//            Customer newCustomer = new Customer(0, name, pass, first, last, roleID, phone, uemail);
-//            cus.insertCustomer(newCustomer);
-//        }
-//        response.sendRedirect("admin");
-//    }
 
     /**
      * Returns a short description of the servlet.

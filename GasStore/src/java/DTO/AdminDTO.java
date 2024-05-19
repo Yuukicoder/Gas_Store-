@@ -9,6 +9,7 @@ package DTO;
  * @author Admin
  */
 public class AdminDTO {
+
     private int adminID;
     private String userName;
     private String password;
@@ -19,6 +20,15 @@ public class AdminDTO {
     private String img;
 
     public AdminDTO() {
+    }
+
+    public AdminDTO(int adminID, String userName, String password, int roleID, String email, String img) {
+        this.adminID = adminID;
+        this.userName = userName;
+        this.password = password;
+        this.roleID = roleID;
+        this.email = email;
+        this.img = img;
     }
 
     public AdminDTO(int adminID, String userName, String password, String lastLogin, int isActive, int roleID, String email, String img) {
@@ -95,5 +105,5 @@ public class AdminDTO {
     public void setImg(String img) {
         this.img = img;
     }
-    
+
 }

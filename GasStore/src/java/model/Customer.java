@@ -11,6 +11,7 @@ import java.util.Date;
  * @author vip2021
  */
 public class Customer {
+
     private int customerID;
     private String userName;
     private String password;
@@ -73,8 +74,6 @@ public class Customer {
     public void setEmail(String email) {
         this.email = email;
     }
-    
-   
 
     public int getCustomerID() {
         return customerID;
@@ -82,6 +81,10 @@ public class Customer {
 
     public void setCustomerID(int customerID) {
         this.customerID = customerID;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 
     public String getUserName() {
@@ -188,5 +191,4 @@ public class Customer {
         this.roleID = roleID;
     }
 
-    
 }
