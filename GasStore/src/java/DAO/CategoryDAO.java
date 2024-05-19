@@ -8,8 +8,6 @@ import DTO.CategoryDTO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,10 +27,9 @@ public class CategoryDAO extends DBcontext {
             while (rs.next()) {
                 CategoryDTO category = new CategoryDTO();
                 category.setCategoryID(rs.getInt(1));
-                category.setName(rs.getString(2));
-                category.setDateCreated(rs.getString(3));
-                category.setDateModified(rs.getString(4));
-                category.setStatus(rs.getInt(5));
+                category.setCode(rs.getString(2));
+                category.setName(rs.getString(3));
+                category.setDescription(rs.getString(3));
                 lc.add(category);
             }
         } catch (SQLException e) {
@@ -41,26 +38,26 @@ public class CategoryDAO extends DBcontext {
         return lc;
     }
 
-    public List<CategoryDTO> displayCategoryinHome() {
-        String sql = "SELECT * FROM Category WHERE Status = 1";
-        ArrayList<CategoryDTO> lc = new ArrayList<>();
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                CategoryDTO category = new CategoryDTO();
-                category.setCategoryID(rs.getInt(1));
-                category.setName(rs.getString(2));
-                category.setDateCreated(rs.getString(3));
-                category.setDateModified(rs.getString(4));
-                category.setStatus(rs.getInt(5));
-                lc.add(category);
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return lc;
-    }
+//    public List<CategoryDTO> displayCategoryinHome() {
+//        String sql = "SELECT * FROM Category WHERE Status = 1";
+//        ArrayList<CategoryDTO> lc = new ArrayList<>();
+//        try {
+//            PreparedStatement ps = connection.prepareStatement(sql);
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next()) {
+//                CategoryDTO category = new CategoryDTO();
+//                category.setCategoryID(rs.getInt(1));
+//                category.setName(rs.getString(2));
+//                category.setDateCreated(rs.getString(3));
+//                category.setDateModified(rs.getString(4));
+//                category.setStatus(rs.getInt(5));
+//                lc.add(category);
+//            }
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        }
+//        return lc;
+//    }
 
     public void addCategory(String name, String date, int Status) {
         String sql = "INSERT INTO [Category] (Name, DateCreated, Status) VALUES (?,?,?)";
@@ -83,8 +80,9 @@ public class CategoryDAO extends DBcontext {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 CategoryDTO category = new CategoryDTO();
-                category.setName(rs.getString(2));
-                category.setStatus(rs.getInt(5));
+                category.setCode(rs.getString(2));
+                category.setName(rs.getString(3));
+                category.setDescription(rs.getString(4));
                 return category;
             }
         } catch (SQLException e) {
@@ -143,11 +141,9 @@ public class CategoryDAO extends DBcontext {
             CategoryDTO categoryDTO = new CategoryDTO();
             if (rs.next()) {
                 categoryDTO.setCategoryID(categoryID);
-                categoryDTO.setName(rs.getString("Name"));
-                categoryDTO.setDateCreated(rs.getString("DateCreated"));
-                categoryDTO.setDateModified(rs.getString("DateModified"));
-                categoryDTO.setStatus(rs.getInt("Status"));
-
+                categoryDTO.setCode(rs.getString(2));
+                categoryDTO.setName(rs.getString(3));
+                categoryDTO.setDescription(rs.getString(3));
             }
             return categoryDTO;
         } catch (SQLException e) {

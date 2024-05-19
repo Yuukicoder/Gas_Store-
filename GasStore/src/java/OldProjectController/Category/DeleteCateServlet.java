@@ -4,23 +4,20 @@
  */
 package OldProjectController.Category;
 
-import DAO.CategoryDAO;
 import DTO.CategoryDTO;
 import dal.CategoryDao;
+import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  *
- * @author msi
+ * @author Admin
  */
-@WebServlet(name = "EditCateServlet", urlPatterns = {"/editCate"})
-public class EditCateServlet extends HttpServlet {
+public class DeleteCateServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -60,15 +57,11 @@ public class EditCateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String getCid = request.getParameter("cid");
-        try {
-            int cid = Integer.parseInt(getCid);
-            CategoryDao cdao = new CategoryDao();
-            CategoryDTO cdto = cdao.getCategoryByID(cid);
-            request.setAttribute("cdto", cdto);
-            request.getRequestDispatcher("editCategory.jsp").forward(request, response);
-        } catch (Exception e) {
-        }
+        String cateId_raw = request.getParameter("id");
+        int cateId = Integer.parseInt(cateId_raw);
+        CategoryDao cdao = new CategoryDao();
+        cdao.deleteCategory(cateId);
+        response.sendRedirect("tableCategory");
     }
 
     /**
@@ -82,19 +75,7 @@ public class EditCateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String cateID_raw = request.getParameter("id");
-        String cateName_raw = request.getParameter("name");
-        String cateCode_raw = request.getParameter("code");
-        String cateDes_raw = request.getParameter("des");
-        System.out.println(cateDes_raw);
-        try {
-            int cateID = Integer.parseInt(cateID_raw);
-            CategoryDao cdao = new CategoryDao();
-            cdao.updateCategory(cateID, cateCode_raw, cateName_raw, cateDes_raw);
-            response.sendRedirect("tableCategory");
-        } catch (Exception e) {
-            
-        }
+        processRequest(request, response);
     }
 
     /**
