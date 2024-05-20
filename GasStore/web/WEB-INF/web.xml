@@ -72,6 +72,10 @@
         <servlet-name>UserProfileServlet</servlet-name>
         <servlet-class>OldProjectController.Account.UserProfile</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AdminAccountServlet</servlet-name>
+        <servlet-class>AdminAccountServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
         <url-pattern>/signup</url-pattern>
@@ -143,6 +147,10 @@
     <servlet-mapping>
         <servlet-name>UserProfileServlet</servlet-name>
         <url-pattern>/UserProfile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminAccountServlet</servlet-name>
+        <url-pattern>/ManageUser</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

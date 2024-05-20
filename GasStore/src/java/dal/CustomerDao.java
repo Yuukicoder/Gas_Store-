@@ -48,7 +48,10 @@ public class CustomerDao extends DBContext {
             rs = stm.executeQuery();
             while (rs.next()) {
                 
-                Customer em = new Customer(rs.getInt("customerID"),rs.getString("userName"),rs.getString("password"),rs.getString("firstName"),rs.getString("lastName"),rs.getInt("roleID"), rs.getString("phone"),rs.getString("email"));
+                Customer em = new Customer(rs.getInt("customerID"),
+                        rs.getString("userName"),rs.getString("password"),
+                        rs.getString("firstName"),rs.getString("lastName"),
+                         rs.getString("phone"),rs.getString("email"));
                         list.add(em);
             }
         } catch (SQLException e) {
@@ -68,7 +71,7 @@ public class CustomerDao extends DBContext {
                  Customer em = new Customer(rs.getInt("customerID"),rs.getString("userName"),
                          rs.getString("password"),rs.getString("firstName"),
                          rs.getString("lastName"),
-                         rs.getInt("roleID"), rs.getString("phone"),rs.getString("email"));
+                         rs.getBoolean("isCustomer"), rs.getString("phone"),rs.getString("email"));
                   return  em;   
             }
         } catch (SQLException e) {
@@ -88,7 +91,7 @@ public class CustomerDao extends DBContext {
                  Customer em = new Customer(rs.getInt("customerID"),rs.getString("userName"),
                          rs.getString("password"),rs.getString("firstName"),
                          rs.getString("lastName"),
-                         rs.getInt("roleID"), rs.getString("phone"),rs.getString("email"));
+                         rs.getBoolean("isCustomer"), rs.getString("phone"),rs.getString("email"));
                  list.add(em);
             }
         } catch (SQLException e) {
@@ -121,7 +124,7 @@ public class CustomerDao extends DBContext {
         preparedStatement.setString(4, customer.getLastName());
  
         preparedStatement.setString(5, customer.getPhone());
-        preparedStatement.setInt(6, customer.getRoleID());
+        preparedStatement.setBoolean(6, customer.isIsCustomer());
         preparedStatement.setString(7, customer.getEmail());
         preparedStatement.setInt(8, customer.getCustomerID());
          preparedStatement.executeUpdate();
@@ -131,8 +134,8 @@ public class CustomerDao extends DBContext {
     }
     public void insertCustomer(Customer customer) {
     try {
-        String sql = "INSERT INTO Customer (userName, password, firstName, lastName, phone,roleID, email) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Customer (userName, password, firstName, lastName, phone, email) " +
+                     "VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         Timestamp createdTimestamp = Timestamp.valueOf(LocalDateTime.now());
         // Set values for parameters
@@ -143,8 +146,8 @@ public class CustomerDao extends DBContext {
         preparedStatement.setString(4, customer.getLastName());
  
         preparedStatement.setString(5, customer.getPhone());
-        preparedStatement.setInt(6, customer.getRoleID());
-        preparedStatement.setString(7, customer.getEmail());
+    
+        preparedStatement.setString(6, customer.getEmail());
        
         
         // Execute the query
@@ -157,9 +160,9 @@ public class CustomerDao extends DBContext {
     public static void main(String[] args) {
         CustomerDao cus = new CustomerDao();
         
-        List<Customer> li = cus.getAll();
-        for(Customer l: li){
-            System.out.println(l.getUserName());
-        }
+        Customer li = cus.getAllByID(1);
+       
+            System.out.println(li.getUserName());
+        
     }
 }
