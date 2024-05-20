@@ -5,14 +5,10 @@
 package DAO;
 
 import DTO.Category;
-import DTO.Category;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -32,7 +28,7 @@ public class CategoryDAO extends DBcontext {
                 category.setCategoryID(rs.getInt(1));
                 category.setCode(rs.getString(2));
                 category.setName(rs.getString(3));
-                category.setDescription(rs.getString(3));
+                category.setDescription(rs.getString(4));
                 lc.add(category);
             }
         } catch (SQLException e) {
@@ -41,18 +37,19 @@ public class CategoryDAO extends DBcontext {
         return lc;
     }
 
-    public List<Category> displayCategoryinHome() {
-        String sql = "SELECT * FROM Category";
-        ArrayList<Category> lc = new ArrayList<>();
+    public List<Category> searchCategory(String name) {
+        String sql = "SELECT * FROM Category WHERE name LIKE ?";
+        List<Category> lc = new ArrayList<>();
         try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, "%" + name + "%");
+            ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Category category = new Category();
                 category.setCategoryID(rs.getInt(1));
                 category.setCode(rs.getString(2));
                 category.setName(rs.getString(3));
-                category.setDescription(rs.getString(3));
+                category.setDescription(rs.getString(4));
                 lc.add(category);
             }
         } catch (SQLException e) {
@@ -61,97 +58,103 @@ public class CategoryDAO extends DBcontext {
         return lc;
     }
 
-    public void addCategory(String code, String name, String description) {
-        String sql = "INSERT INTO [Category] (code, name, description) VALUES (?,?,?)";
+    public void addCategory(String code, String name, String des) {
+        String sql = "insert into Category(code, name, description) Values (?,?,?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, code);
             ps.setString(2, name);
-            ps.setString(3, description);
+            ps.setString(3, des);
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public Category getCategoryByColumnName(String columnName, String input) {
-        String sql = "SELECT * FROM Category WHERE [" + columnName + "] = ?";
+    public void updateCategory(int id, String code, String name, String des) {
+        System.out.println("update in dao: " + des);
+        try {
+            String sql = "update Category set code = ?, name = ?, description = ? where categoryID = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, code);
+            ps.setString(2, name);
+            ps.setString(3, des);
+            System.out.println("update in dao: " + des);
+            ps.setInt(4, id);
+            ps.execute();
+        } catch (Exception e) {
+            System.out.println("update: " + e.getMessage());
+        }
+    }
+
+    public void deleteCategory(int id) {
+        try {
+            String strQSL = "delete from Category where categoryID = ?";
+            PreparedStatement ps = connection.prepareStatement(strQSL);
+            ps.setInt(1, id);
+            ps.execute();
+        } catch (Exception e) {
+            System.out.println("delete: " + e.getMessage());
+        }
+    }
+
+    public List<Category> pagging(int pageIndex) {
+        String sql = "select * from Category order by categoryID offset ? rows fetch next 5 rows only";
+        ArrayList<Category> lc = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, input);
+            ps.setInt(1, (pageIndex - 1) * 5);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Category category = new Category();
-                category.setName(rs.getString(3));
-                return category;
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
-
-    public void changeStatusCategoryByID(int status, int id) {
-        String sql = "UPDATE Category SET Status = ? WHERE CategoryID  = ?";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, status);
-            ps.setInt(2, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public HashMap<Category, Integer> getQuantityCategory(String action) {
-        String sql = "select c.CategoryID, count(p.ProductID) as NumProduct from Product p right join Category c \n"
-                + "                on p.CategoryID = c.CategoryID where p.Status = 1\n"
-                + "                group by c.CategoryID";
-        if (action.equals("hide")) {
-            sql = "select c.CategoryID, count(p.ProductID) as NumProduct from Product p right join Category c \n"
-                    + "                on p.CategoryID = c.CategoryID where p.Status = 0\n"
-                    + "                group by c.CategoryID";
-        }
-        HashMap<Category, Integer> countProduct = new HashMap<>();
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 int categoryID;
                 categoryID = rs.getInt("CategoryID");
-                int numProduct = rs.getInt("NumProduct");
-                Category categoryDTO = getCategoryByID(categoryID);
-                countProduct.put(categoryDTO, numProduct);
+                Category c = getCategoryByID(categoryID);
+                lc.add(c);
             }
-            return countProduct;
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
+        return lc;
+    }
 
+    public List<Category> paggingSearch(int pageIndex, String search) {
+        String sql = "select * from Category where name like ? order by categoryID offset ? rows fetch next 5 rows only";
+        ArrayList<Category> lc = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, "%" + search + "%");
+            ps.setInt(2, (pageIndex - 1) * 5);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int categoryID;
+                categoryID = rs.getInt("CategoryID");
+                Category c = getCategoryByID(categoryID);
+                lc.add(c);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return lc;
     }
 
     public Category getCategoryByID(int categoryID) {
-        String sql = "SELECT * FROM Category WHERE categoryID = ?";
+        String sql = "SELECT * FROM Category WHERE CategoryID = ?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, categoryID);
             ResultSet rs = st.executeQuery();
-            Category category = new Category();
+            Category categoryDTO = new Category();
             if (rs.next()) {
-                category.setCategoryID(rs.getInt(1));
-                category.setCode(rs.getString(2));
-                category.setName(rs.getString(3));
-                category.setDescription(rs.getString(3));
+                categoryDTO.setCategoryID(categoryID);
+                categoryDTO.setCode(rs.getString(2));
+                categoryDTO.setName(rs.getString(3));
+                categoryDTO.setDescription(rs.getString(4));
             }
-            return category;
+            return categoryDTO;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return null;
     }
-
-
 
 }

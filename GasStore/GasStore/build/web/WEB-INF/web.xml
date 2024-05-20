@@ -72,6 +72,22 @@
         <servlet-name>UserProfileServlet</servlet-name>
         <servlet-class>OldProjectController.Account.UserProfile</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TableCategoryServlet</servlet-name>
+        <servlet-class>Controller.Category.TableCategoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddCateServlet</servlet-name>
+        <servlet-class>Controller.Category.AddCateServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteCateServlet</servlet-name>
+        <servlet-class>Controller.Category.DeleteCateServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditCateServlet</servlet-name>
+        <servlet-class>Controller.Category.EditCateServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
         <url-pattern>/signup</url-pattern>
@@ -143,6 +159,22 @@
     <servlet-mapping>
         <servlet-name>UserProfileServlet</servlet-name>
         <url-pattern>/UserProfile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TableCategoryServlet</servlet-name>
+        <url-pattern>/tableCategory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddCateServlet</servlet-name>
+        <url-pattern>/addCate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteCateServlet</servlet-name>
+        <url-pattern>/deleteCate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditCateServlet</servlet-name>
+        <url-pattern>/editCate</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
