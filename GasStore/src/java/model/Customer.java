@@ -25,31 +25,41 @@ public class Customer {
     private String address;
     private String phone;
     private int totalMoney;
-    private int roleID;
+    private boolean isCustomer;
     private String email;
 
-    public Customer(String userName, String password, String firstName, String lastName, int roleID, String phone, String email) {
-        this.userName = userName;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
-        this.roleID = roleID;
-        this.email = email;
-    }
-
-    public Customer(int customerID, String userName, String password, String firstName, String lastName, int roleID, String phone, String email) {
+    public Customer(int customerID, String userName, String password, String firstName, String lastName, String phone, String email) {
         this.customerID = customerID;
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
-        this.roleID = roleID;
+        this.email = email;
+    }
+    
+    public Customer(String userName, String password, String firstName, String lastName,boolean isCustomer, String phone, String email) {
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.isCustomer = isCustomer;
         this.email = email;
     }
 
-    public Customer(int customerID, String userName, String password, Date created, Date lastLogin, boolean status, boolean gender, String image, String firstName, String lastName, String address, String phone, int totalMoney, int roleID, String email) {
+    public Customer(int customerID, String userName, String password, String firstName, String lastName, boolean isCustomer, String phone, String email) {
+        this.customerID = customerID;
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.isCustomer = isCustomer;
+        this.email = email;
+    }
+
+    public Customer(int customerID, String userName, String password, Date created, Date lastLogin, boolean status, boolean gender, String image, String firstName, String lastName, String address, String phone, int totalMoney, boolean isCustomer, String email) {
         this.customerID = customerID;
         this.userName = userName;
         this.password = password;
@@ -63,7 +73,7 @@ public class Customer {
         this.address = address;
         this.phone = phone;
         this.totalMoney = totalMoney;
-        this.roleID = roleID;
+        this.isCustomer = isCustomer;
         this.email = email;
     }
 
@@ -183,12 +193,13 @@ public class Customer {
         this.totalMoney = totalMoney;
     }
 
-    public int getRoleID() {
-        return roleID;
+    public boolean isIsCustomer() {
+        return isCustomer;
     }
 
-    public void setRoleID(int roleID) {
-        this.roleID = roleID;
+    public void setIsCustomer(boolean isCustomer) {
+        this.isCustomer = isCustomer;
     }
 
+   
 }

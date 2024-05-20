@@ -1,19 +1,18 @@
+
+
+
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller.AdminController;
-
-import DTO.AccountDTO;
 import dal.CustomerDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Customer;
 
@@ -21,7 +20,6 @@ import model.Customer;
  *
  * @author vip2021
  */
-@WebServlet(name = "AdminAccountServlet", urlPatterns = {"/TableAccount"})
 public class AdminAccountServlet extends HttpServlet {
 
     /**
@@ -36,28 +34,22 @@ public class AdminAccountServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String pid = request.getParameter("id");
+        String t = request.getParameter("type");
         CustomerDao cus = new CustomerDao();
         List<Customer> li = cus.getAll();
         request.setAttribute("lidata", li);
-
-        String customerIdParam = request.getParameter("id");
-        String typeParam = request.getParameter("type");
-
-        if (customerIdParam != null && typeParam != null && !customerIdParam.isEmpty() && !typeParam.isEmpty()) {
-            int customerId = Integer.parseInt(customerIdParam);
-            int type = Integer.parseInt(typeParam);
-
-            if (type == 0) {
-                Customer u = cus.getAllByID(customerId);
+        if (pid != null && !pid.isEmpty() && t != null && !t.isEmpty()) {
+            if (t.equals("0")) {
+                Customer u = cus.getAllByID(Integer.parseInt(pid));
                 request.setAttribute("detailaccount", u);
-            } else if (type == 1) {
-                cus.deleteAccount(customerIdParam);
-                // Redirect to the admin page after deletion
-                response.sendRedirect("TableAccount");
-                return; // Return to avoid forwarding request again
+
+            } else {
+                cus.deleteAccount(pid);
+                response.sendRedirect("ManageUser");
+                return;
             }
         }
-
         request.getRequestDispatcher("TableAccount.jsp").forward(request, response);
     }
 
@@ -88,47 +80,18 @@ public class AdminAccountServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         CustomerDao cus = new CustomerDao();
+        String s = request.getParameter("search");
         String uid = request.getParameter("account_id");
         String name = request.getParameter("username");
         String pass = request.getParameter("password");
         String first = request.getParameter("first_name");
         String last = request.getParameter("last_name");
-        String uemail = request.getParameter("email");
+        String mail = request.getParameter("email");
         String phone = request.getParameter("phone_number");
-        String roleIdParam = request.getParameter("role_id");
-        String usearch = request.getParameter("search");
-
-        if (usearch != null) {
-            List<Customer> li;
-            if (!usearch.isEmpty()) {
-                li = cus.getAllByAccount(usearch);
-            } else {
-                li = cus.getAll();
-            }
-            request.setAttribute("lidata", li);
-            request.getRequestDispatcher("TableAccount.jsp").forward(request, response);
-        } else {
-            if (roleIdParam != null && !roleIdParam.isEmpty()) {
-                int roleID = Integer.parseInt(roleIdParam);
-
-                Customer newCustomer = new Customer(
-                        uid != null && !uid.isEmpty() ? Integer.parseInt(uid) : 0,
-                        name, pass, first, last, roleID, phone, uemail
-                );
-
-                if (uid != null && !uid.isEmpty()) {
-                    // Update existing customer
-                    cus.updateUser(newCustomer);
-                } else {
-                    // Insert new customer
-                    cus.insertCustomer(newCustomer);
-                }
-
-                response.sendRedirect("TableAccount");
-            } else {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Role ID cannot be empty");
-            }
-        }
+        Customer newCustomer = new Customer(uid != null && !uid.isEmpty() ? Integer.parseInt(uid) : 0, name,
+                pass, first, last, phone, mail);
+        cus.insertCustomer(newCustomer);
+        response.sendRedirect("ManageUser");
     }
 
     /**
