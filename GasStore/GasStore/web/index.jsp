@@ -36,7 +36,7 @@
     </head>
     <%
         ProductDAO pd = new ProductDAO();
-        List<ProductDTO> list = (List<ProductDTO>) pd.getAllProduct();
+        List<Product> list = (List<Product>) pd.getAllProduct();
     %>
     <body>
 
