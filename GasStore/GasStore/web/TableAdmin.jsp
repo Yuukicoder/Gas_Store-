@@ -62,7 +62,7 @@
             <div class="container-fluid pt-4 px-4">
                 <div class="bg-secondary text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h2 class="mb-0">All Users</h2>
+                        <h2 class="mb-0">All Employee</h2>
                     </div>
                     <div class="container-fluid pt-4 px-4">
                         <div class="bg-secondary text-center rounded p-4">
@@ -82,22 +82,22 @@
                                     <thead>
                                         <tr class="text-white">
                                             <th scope="col">Username</th>
-                                            <th scope="col">Full Name</th>
-                                            <th scope="col">Phone</th>
+                                            <th scope="col">Role</th>
+                                           
                                             <th scope="col">Email</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach items="${requestScope.lidata}" var="o">
+                                        <c:forEach items="${requestScope.adata}" var="l">
                                             <tr>
-                                                <td>${o.getUserName()}</td>
-                                                <td>${o.getFullName()}</td>
-                                                <td>${o.getPhone()}</td>
-                                                <td>${o.getEmail()}</td>
+                                                <td>${l.getUserName()}</td>
+                                                <td>${l.getName()}</td>
+                                                <td>${l.getEmail()}</td>
+                                                
                                                 <td>
-                                                    <a href="ManageUser?type=0&id=${o.getCustomerID()}" class="update-button">Update</a><br>
-                                                    <a href="ManageUser?type=1&id=${o.getCustomerID()}">Delete</a>
+                                                    <a href="ManageStaff?type=0&id=${l.getAdministratorID()}" class="update-button">Update</a><br>
+                                                    <a href="ManageStaff?type=1&id=${l.getAdministratorID()}">Delete</a>
                                                 </td>
                                             </tr>
                                         </c:forEach>

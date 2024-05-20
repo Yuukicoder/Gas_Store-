@@ -72,6 +72,18 @@
         <servlet-name>UserProfileServlet</servlet-name>
         <servlet-class>OldProjectController.Account.UserProfile</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SupplierManageServlet</servlet-name>
+        <servlet-class>Controller.SupplierManageServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminAccountServlet</servlet-name>
+        <servlet-class>Controller.AdminAccountServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminManagerServlet</servlet-name>
+        <servlet-class>Controller.AdminManagerServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
         <url-pattern>/signup</url-pattern>
@@ -143,6 +155,18 @@
     <servlet-mapping>
         <servlet-name>UserProfileServlet</servlet-name>
         <url-pattern>/UserProfile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SupplierManageServlet</servlet-name>
+        <url-pattern>/ManageSupplier</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminAccountServlet</servlet-name>
+        <url-pattern>/ManageUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminManagerServlet</servlet-name>
+        <url-pattern>/ManageStaff</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
