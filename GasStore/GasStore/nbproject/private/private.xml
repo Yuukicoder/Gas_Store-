@@ -2,14 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/D:/SWP391/Gas_Store-/GasStore/web/HideProduct.jsp</file>
-            <file>file:/D:/SWP391/Gas_Store-/GasStore/src/java/Controller/ProductManageServlet.java</file>
-            <file>file:/D:/SWP391/Gas_Store-/GasStore/web/ProductManage.jsp</file>
-            <file>file:/D:/SWP391/Gas_Store-/GasStore/web/AddProduct.jsp</file>
-            <file>file:/D:/SWP391/Gas_Store-/GasStore/src/java/DAO/ProductDAO.java</file>
-            <file>file:/D:/SWP391/Gas_Store-/GasStore/src/java/OldProjectController/Product/HideProductServlet.java</file>
-            <file>file:/D:/SWP391/Gas_Store-/GasStore/src/java/Controller/ShowProductServlet.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
