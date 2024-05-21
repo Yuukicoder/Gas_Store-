@@ -4,8 +4,6 @@
  */
 package dal;
 
-import DTO.AccountDTO;
-import DTO.AdminDTO;
 import java.sql.Timestamp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +11,8 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Administrator;
 import model.Customer;
 
@@ -61,7 +61,7 @@ public class CustomerDao extends DBContext {
             rs = stm.executeQuery();
             while (rs.next()) {
 
-                 Administrator em = new Administrator(rs.getInt("administratorID"),
+                Administrator em = new Administrator(rs.getInt("administratorID"),
                         rs.getString("userName"), rs.getString("password"),
                         rs.getInt("roleID"), rs.getString("email"),
                         rs.getString("img"), rs.getString("name"));
@@ -198,12 +198,151 @@ public class CustomerDao extends DBContext {
         }
     }
 
-    public static void main(String[] args) {
-        CustomerDao cus = new CustomerDao();
-
-        List<Administrator> li = cus.getAllAdmin();
-        for (Administrator l : li) {
-            System.out.println(l.getUserName());
+    public Customer checkgmail(String Email) {
+        String sql = "SELECT [email]\n"
+                + "  FROM [dbo].[Customer] where email = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, Email);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Customer cus = new Customer();
+                cus.setEmail(rs.getString("Email"));
+                return cus;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerDao.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
+    }
+
+    public Customer checkuser(String username) {
+        String sql = "select [userName] from [Customer] where userName = ? ";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Customer cus = new Customer();
+                cus.setUserName(rs.getString("Username"));
+                return cus;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public Customer checkuserandPass(String username, String password) {
+        String sql = "SELECT * FROM [Customer] WHERE userName = ? AND password = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Customer cus = new Customer();
+                cus.setCustomerID(rs.getInt("customerID"));
+                cus.setUserName(rs.getString("userName"));
+                cus.setPassword(rs.getString("password"));
+                cus.setFirstName(rs.getString("firstName"));
+                cus.setLastName(rs.getString("lastName"));
+                cus.setPhone(rs.getString("phone"));
+                cus.setEmail(rs.getString("email"));
+                cus.setIsCustomer(rs.getBoolean("isCustomer"));
+                return cus;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public void updatePassword(String username, String newPassword) {
+        String sql = "UPDATE [Customer] SET password = ? WHERE userName = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, newPassword);
+            ps.setString(2, username);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public Customer registerCustomer(String firstName, String lastName, String username, String password, String email, String phone, String address) {
+        String sql = "INSERT INTO [dbo].[Customer]\n"
+                + "           ([userName]\n"
+                + "           ,[password]\n"
+                + "           ,[created]\n"
+                + "           ,[lastLogin]\n"
+                + "           ,[status]\n"
+                + "           ,[gender]\n"
+                + "           ,[image]\n"
+                + "           ,[firstName]\n"
+                + "           ,[lastName]\n"
+                + "           ,[address]\n"
+                + "           ,[phone]\n"
+                + "           ,[email]\n"
+                + "           ,[totalMoney]\n"
+                + "           ,[isCustomer])\n"
+                + "     VALUES\n"
+                + "           (?, ?, CURRENT_TIMESTAMP, NULL, 1, NULL, NULL, ?, ?, ?, ?, ?, 0, 1)";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ps.setString(3, firstName);
+            ps.setString(4, lastName);
+            ps.setString(5, address);
+            ps.setString(6, phone);
+            ps.setString(7, email);
+
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        CustomerDao customerDao = new CustomerDao();
+
+        // Kiểm tra phương thức registerCustomer
+//        String firstName = "John";
+//        String lastName = "Doe";
+//        String username = "johndoe";
+//        String password = "Password123";
+//        String email = "johndoe@example.com";
+//        String phone = "0123456789";
+//        String address = "123 Main St";
+//
+//        Customer customer = new Customer();
+//        customer.setUserName(username);
+//        customer.setPassword(password);
+//        customer.setFirstName(firstName);
+//        customer.setLastName(lastName);
+//        customer.setPhone(phone);
+//        customer.setEmail(email);
+//
+//        customerDao.insertCustomer(customer);
+//
+//        System.out.println("Customer registered successfully!");
+        Customer cus = customerDao.checkuserandPass("huy1", "Tuonghuy123456");
+        System.out.println(cus.getPassword());
+        customerDao.updatePassword("huy1", "Tuonghuy123456@");
+        System.out.println(cus.getPassword());
+        
+        // Kiểm tra phương thức getAll để đảm bảo khách hàng được thêm vào cơ sở dữ liệu
+//        List<Customer> customers = customerDao.getAll();
+//        for (Customer c : customers) {
+//            System.out.println("Customer ID: " + c.getCustomerID());
+//            System.out.println("Username: " + c.getUserName());
+//            System.out.println("Full Name: " + c.getFullName());
+//            System.out.println("Email: " + c.getEmail());
+//            System.out.println("Phone: " + c.getPhone());
+//            System.out.println("---------------------------");
+//        }
     }
 }
