@@ -22,7 +22,7 @@ public class Administrator {
     private String name;
     private String discription;
 
-    public Administrator(int administratorID, String userName, String password, int roleID, String email, String img, String name) {
+    public Administrator(int administratorID, String userName, String password, int roleID, String email, String img, String name,boolean isActive) {
         this.administratorID = administratorID;
         this.userName = userName;
         this.password = password;
@@ -30,6 +30,7 @@ public class Administrator {
         this.email = email;
         this.img = img;
         this.name = name;
+        this.isActive = isActive;
     }
 
     public Administrator(int administratorID, String userName, String password, int roleID, String email, String img) {
@@ -40,6 +41,8 @@ public class Administrator {
         this.email = email;
         this.img = img;
     }
+
+   
     
     public Administrator(int administratorID, String userName, String password, Date lastLogin, boolean isActive, int roleID, String email, String img) {
         this.administratorID = administratorID;

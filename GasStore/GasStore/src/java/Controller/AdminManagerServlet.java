@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Administrator;
+import model.Customer;
 
 /**
  *
@@ -32,9 +33,20 @@ public class AdminManagerServlet extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
          CustomerDao cus = new CustomerDao();
-
+         String pid = request.getParameter("aid");
+        String tp = request.getParameter("atype");
         List<Administrator> li = cus.getAllAdmin();
         request.setAttribute("adata", li);
+        if (pid != null && !pid.isEmpty() && tp != null && !tp.isEmpty()) {
+            if (tp.equals("0")) {
+                Administrator u = cus.getAdminByID(Integer.parseInt(pid));
+                request.setAttribute("detail", u);
+            } else {
+                cus.deleteStaff(pid);
+                response.sendRedirect("ManageStaff");
+                return;
+            }
+        }
         request.getRequestDispatcher("TableAdmin.jsp").forward(request, response);
     } 
 
@@ -62,7 +74,21 @@ public class AdminManagerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        CustomerDao cus = new CustomerDao();
+//        String s = request.getParameter("search");
+        String adid = request.getParameter("accountID");
+        String aname = request.getParameter("admin_name");
+        String apass = request.getParameter("passWord");
+        String amail = request.getParameter("aemail");
+        String ac = request.getParameter("active");
+        String arole = request.getParameter("roleid");
+        Administrator newAdmin = new Administrator(adid != null && !adid.isEmpty() ? Integer.parseInt(adid) : 0,aname,apass,Boolean.parseBoolean(ac),Integer.parseInt(arole),amail);
+        if (adid != null && !adid.isEmpty()) {
+            cus.updateStaff(newAdmin);
+        } else {
+            cus.insertStaff(newAdmin);
+        }
+        response.sendRedirect("ManageStaff");
     }
 
     /** 

@@ -41,7 +41,7 @@ public class CustomerDao extends DBContext {
                 Administrator em = new Administrator(rs.getInt("administratorID"),
                         rs.getString("userName"), rs.getString("password"),
                         rs.getInt("roleID"), rs.getString("email"),
-                        rs.getString("img"), rs.getString("name"));
+                        rs.getString("img"), rs.getString("name"),rs.getBoolean("isActive"));
                 li.add(em);
             }
         } catch (SQLException e) {
@@ -64,13 +64,68 @@ public class CustomerDao extends DBContext {
                  Administrator em = new Administrator(rs.getInt("administratorID"),
                         rs.getString("userName"), rs.getString("password"),
                         rs.getInt("roleID"), rs.getString("email"),
-                        rs.getString("img"), rs.getString("name"));
+                        rs.getString("img"), rs.getString("name"),rs.getBoolean("isActive"));
                 return em;
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
         return null;
+    }
+    
+    public void deleteStaff(String id) {
+        String query = "delete from Administrator\n" + "where administratorID = ?";
+        try {
+
+            stm = connection.prepareStatement(query);
+            stm.setInt(1, Integer.parseInt(id));
+            stm.executeUpdate();
+
+        } catch (Exception e) {
+        }
+    }
+
+    public void updateStaff(Administrator admin) {
+        String sql = "update Administrator set userName = ? ,password = ?, isActive = ?, roleID = ?, email = ? where administratorID = ?";
+        try {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//        Timestamp createdTimestamp = Timestamp.valueOf(LocalDateTime.now());
+            // Set values for parameters
+           
+             preparedStatement.setString(1, admin.getUserName());
+            preparedStatement.setString(2, admin.getPassword());
+
+            preparedStatement.setBoolean(3, admin.isIsActive());
+            preparedStatement.setInt(4, admin.getRoleID());
+
+            preparedStatement.setString(5, admin.getEmail());
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public void insertStaff(Administrator admin) {
+        try {
+            String sql = "INSERT INTO Administrator (userName, password, isActive,roleID, email) "
+                    + "VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            // Set values for parameters
+            preparedStatement.setString(1, admin.getUserName());
+            preparedStatement.setString(2, admin.getPassword());
+
+            preparedStatement.setBoolean(3, admin.isIsActive());
+            preparedStatement.setInt(4, admin.getRoleID());
+
+            preparedStatement.setString(5, admin.getEmail());
+
+
+            // Execute the query
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error inserting customer: " + e.getMessage());
+        }
     }
 
     /**
@@ -197,13 +252,50 @@ public class CustomerDao extends DBContext {
             System.out.println("Error inserting customer: " + e.getMessage());
         }
     }
+    public List<Customer> getPaginatedCustomers(int pageNum, int pageSize) {
+    list = new ArrayList<>();
+    try {
+        String strSelect = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY customerID) AS rownum FROM Customer) AS temp WHERE rownum BETWEEN ? AND ?";
+        stm = connection.prepareStatement(strSelect);
+        int startRow = (pageNum - 1) * pageSize + 1;
+        int endRow = startRow + pageSize - 1;
+        stm.setInt(1, startRow);
+        stm.setInt(2, endRow);
+        rs = stm.executeQuery();
+        while (rs.next()) {
+            Customer em = new Customer(rs.getInt("customerID"), rs.getString("userName"),
+                    rs.getString("password"), rs.getString("firstName"),
+                    rs.getString("lastName"),
+                    rs.getBoolean("isCustomer"), rs.getString("phone"), rs.getString("email"));
+            list.add(em);
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+    return list;
+}
+
+public int getTotalCustomers() {
+    int count = 0;
+    try {
+        String query = "SELECT COUNT(*) AS total FROM Customer";
+        stm = connection.prepareStatement(query);
+        rs = stm.executeQuery();
+        if (rs.next()) {
+            count = rs.getInt("total");
+        }
+    } catch (SQLException e) {
+        System.out.println(e);
+    }
+    return count;
+}
+
 
     public static void main(String[] args) {
         CustomerDao cus = new CustomerDao();
-
-        List<Administrator> li = cus.getAllAdmin();
-        for (Administrator l : li) {
-            System.out.println(l.getUserName());
-        }
+        Administrator newAdmin = new Administrator(3,"anhducokok","zY4TUvlhy5EPVCt2DAmRN7whEQg",true,2,"duc123@gmail.com");
+        cus.updateStaff(newAdmin);
+//        System.out.println(Boolean.parseBoolean("false"));
     }
 }
+
