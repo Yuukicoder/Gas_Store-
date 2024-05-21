@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package Controller;
 
 import dal.CustomerDao;
@@ -20,27 +19,39 @@ import model.Customer;
  * @author vip2021
  */
 public class AdminAccountServlet extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String pid = request.getParameter("id");
         String t = request.getParameter("type");
         CustomerDao cus = new CustomerDao();
-        List<Customer> li = cus.getAll();
+        int pageNum = request.getParameter("pageNum") != null ? Integer.parseInt(request.getParameter("pageNum")) : 1;
+        int pageSize = 5; 
+        List<Customer> li = cus.getPaginatedCustomers(pageNum, pageSize);
         request.setAttribute("lidata", li);
+
+        
+        int totalCustomers = cus.getTotalCustomers();
+        int totalPages = (int) Math.ceil((double) totalCustomers / pageSize);
+
+       
+        request.setAttribute("pageNum", pageNum);
+        request.setAttribute("totalPages", totalPages);
+
         if (pid != null && !pid.isEmpty() && t != null && !t.isEmpty()) {
             if (t.equals("0")) {
                 Customer u = cus.getAllByID(Integer.parseInt(pid));
                 request.setAttribute("detailaccount", u);
-                
             } else {
                 cus.deleteAccount(pid);
                 response.sendRedirect("ManageUser");
@@ -48,6 +59,7 @@ public class AdminAccountServlet extends HttpServlet {
             }
         }
         request.getRequestDispatcher("TableAccount.jsp").forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -86,7 +98,7 @@ public class AdminAccountServlet extends HttpServlet {
         String mail = request.getParameter("email");
         String phone = request.getParameter("phone_number");
         Customer newCustomer = new Customer(uid != null && !uid.isEmpty() ? Integer.parseInt(uid) : 0, name,
-                pass, first, last, phone,mail);
+                pass, first, last, phone, mail);
         if (uid != null && !uid.isEmpty()) {
             cus.updateUser(newCustomer);
         } else {
