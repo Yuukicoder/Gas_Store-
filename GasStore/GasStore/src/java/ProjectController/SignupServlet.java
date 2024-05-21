@@ -4,8 +4,9 @@
  */
 package ProjectController;
 
-import DAO.AccountDAO;
-import DTO.AccountDTO;
+
+import Controller.MaHoa;
+import dal.CustomerDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import model.Customer;
 
 /**
  *
@@ -73,15 +75,17 @@ public class SignupServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       String fullname_raw = request.getParameter("fullname");
+       String firstname_raw = request.getParameter("firstname");
+       String lastname_raw = request.getParameter("lastname");
         String user_raw = request.getParameter("username");
-        String gamil_raw = request.getParameter("mail");
+        String gamil_raw = request.getParameter("email");
         String password_raw = request.getParameter("password");
         String phone_raw = request.getParameter("phone");
-
-        AccountDAO dao = new AccountDAO();
-        AccountDTO accountDTO = dao.checkgmail(gamil_raw);
-        AccountDTO checkuser = dao.checkuser(user_raw);
+        System.out.println(firstname_raw);
+        String fullname_raw = firstname_raw + lastname_raw;
+        CustomerDao dao = new CustomerDao();
+        Customer accountDTO = dao.checkgmail(gamil_raw);
+        Customer checkuser = dao.checkuser(user_raw);
         //check format gmail 
         String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         Pattern pattern = Pattern.compile(EMAIL_REGEX);
@@ -103,38 +107,39 @@ public class SignupServlet extends HttpServlet {
             request.setAttribute("fullname", fullname_raw);
             request.setAttribute("gmail", gamil_raw);
             request.setAttribute("pass", password_raw);
-            request.getRequestDispatcher("signup.jsp").forward(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else if (checkuser != null) {
             request.setAttribute("err", "Username already exists ");
             request.setAttribute("fullname", fullname_raw);
-            request.getRequestDispatcher("signup.jsp").forward(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else if (!matcher.matches()) {
             request.setAttribute("err", "Invalid email format");
             request.setAttribute("fullname", fullname_raw);
             request.setAttribute("user", user_raw);
             request.setAttribute("pass", password_raw);
-            request.getRequestDispatcher("signup.jsp").forward(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else if (!matcher1.matches()) {
             request.setAttribute("err", "Password must have uppercase and lowercase letters and be longer than 6 characters");
             request.setAttribute("user", user_raw);
             request.setAttribute("fullname", fullname_raw);
             request.setAttribute("gmail", gamil_raw);
-            request.getRequestDispatcher("signup.jsp").forward(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else if (accountDTO != null) {
             request.setAttribute("err", "Email already exists ");
             request.setAttribute("user", user_raw);
             request.setAttribute("fullname", fullname_raw);
-            request.getRequestDispatcher("signup.jsp").forward(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } 
         else if(!matcher2.matches()){ 
             request.setAttribute("err", "Phone number must be 10 digits");
             request.setAttribute("user", user_raw);
             request.setAttribute("fullname", fullname_raw);
-            request.getRequestDispatcher("signup.jsp").forward(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
         else {
-            dao.register(fullname_raw, user_raw, password_raw, gamil_raw,phone_raw);
-            request.getRequestDispatcher("signin.jsp").forward(request, response);
+            Customer cus = new Customer(user_raw, MaHoa.toSHA1(password_raw), firstname_raw, lastname_raw, true, phone_raw, gamil_raw);
+            dao.insertCustomer(cus);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
 

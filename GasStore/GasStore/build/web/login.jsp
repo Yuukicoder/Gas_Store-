@@ -29,14 +29,16 @@
                     <input type="text" id="username-input1" class="form-control" placeholder="Username" required autofocus="" name="username">
                     <input type="password" id="password-field1" class="form-control" placeholder="Password" required autofocus="" name="password">
                     <input type="password" id="user-repeatpass" class="form-control" placeholder="Repeat Password" required autofocus="" name="repass">
-                    <input type="text" id="fullname-input" class="form-control" placeholder="Fullname" required autofocus="" name="fullname">
-                    <input type="email" id="email-input" class="form-control" placeholder="Gmail" required autofocus="" name="email">
-                    <input type="tel" id="phone-input" class="form-control" placeholder="Số điện thoại" required autofocus="" name="phone">
+                    <input type="text" id="firstname-input" class="form-control" placeholder="First Name" required autofocus="" name="firstname">
+                    <input type="text" id="lastname-input" class="form-control" placeholder="Last Name" required autofocus="" name="lastname">
+                    <input type="email" id="email-input" class="form-control" placeholder="Email" required autofocus="" name="email">
+                    <input type="tel" id="phone-input" class="form-control" placeholder="Phone Number" required autofocus="" name="phone">
                     <button class="btn btn-primary btn-block" type="submit"><i class="fas fa-user-plus"></i> Sign Up</button>
                 </form>
             </div>
 
             <div class="form-container sign-in">
+                
                 <form action="login" class="signin-form" method="POST" onsubmit="return validateForm()">
                     <h1>Đăng Nhập</h1>
                     <div class="social-icons">
@@ -70,7 +72,7 @@
                 </div>
             </div>
         </div>
-
+                     <div style="color: red;"><b>${err}</b></div>
         <script src="login.js"></script>
         <script>
                         const form = document.querySelector('.signin-form');
