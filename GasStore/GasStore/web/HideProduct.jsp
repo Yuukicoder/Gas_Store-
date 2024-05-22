@@ -172,7 +172,7 @@
                                                             function showMess(id) {
                                                                 var option = confirm('Are you sure to show?');
                                                                 if (option === true) {
-                                                                    window.location.href = 'productShow?action=show&id=' + id;
+                                                                    window.location.href = 'productDeactive?action=show&id=' + id;
                                                                 }
                                                             }
             </script>

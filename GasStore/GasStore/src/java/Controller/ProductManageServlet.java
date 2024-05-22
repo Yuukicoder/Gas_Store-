@@ -5,6 +5,7 @@
 package Controller;
 
 import DAO.ProductDAO;
+import DTO.AdminDTO;
 import DTO.ProductDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -27,35 +28,38 @@ public class ProductManageServlet extends HttpServlet{
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-                String searchKey = request.getParameter("search");
-                System.out.println(searchKey);
-                String action = request.getParameter("action");
-                String indexPage_raw = request.getParameter("indexPage");
-                LinkedHashMap<Product, String> allSearchProduct = new LinkedHashMap<>();
-                LinkedHashMap<Product, String> productCmap = new LinkedHashMap<>();
-                ProductDAO productDAO = new ProductDAO();
-                allSearchProduct = productDAO.getSearchProduct(searchKey, action);
-                int indexPage = 0;
-                if (indexPage_raw == null) {
-                    indexPage = 1;
-                } else {
-                    indexPage = Integer.parseInt(indexPage_raw);
+        HttpSession session = request.getSession();
+        AdminDTO account = (AdminDTO) session.getAttribute("account");
+        if (account != null) {        
+            String searchKey = request.getParameter("search");
+            System.out.println(searchKey);
+            String action = request.getParameter("action");
+            String indexPage_raw = request.getParameter("indexPage");
+            LinkedHashMap<Product, String> allSearchProduct = new LinkedHashMap<>();
+            LinkedHashMap<Product, String> productCmap = new LinkedHashMap<>();
+            ProductDAO productDAO = new ProductDAO();
+            allSearchProduct = productDAO.getSearchProduct(searchKey, action);
+            int indexPage = 0;
+            if (indexPage_raw == null) {
+                indexPage = 1;
+            } else {
+                indexPage = Integer.parseInt(indexPage_raw);
+            }
+            if (action == null || action.equals("show")) {
+                action = "normal";
+                productCmap = productDAO.searchProductsPaging(action, indexPage, searchKey);
+                int productCount = productDAO.countProducts(action, searchKey);
+                int endPage = productCount / 5;
+                if (productCount % 5 != 0) {
+                    endPage++;
                 }
-                if (action == null || action.equals("show")) {
-                    action = "normal";
-                    productCmap = productDAO.searchProductsPaging(action, indexPage, searchKey);
-                    int productCount = productDAO.countProducts(action, searchKey);
-                    int endPage = productCount / 5;
-                    if (productCount % 5 != 0) {
-                        endPage++;
-                    }
-                    request.setAttribute("endPage", endPage);
-                    request.setAttribute("search", searchKey);
-                    request.setAttribute("action", "show");
-                    request.setAttribute("tag", indexPage);
-                    request.setAttribute("size", allSearchProduct.size());
-                    request.setAttribute("productCmap", productCmap);
-                    request.getRequestDispatcher("ProductSearch.jsp").forward(request, response);
+                request.setAttribute("endPage", endPage);
+                request.setAttribute("search", searchKey);
+                request.setAttribute("action", "show");
+                request.setAttribute("tag", indexPage);
+                request.setAttribute("size", allSearchProduct.size());
+                request.setAttribute("productCmap", productCmap);
+                request.getRequestDispatcher("ProductSearch.jsp").forward(request, response);
 
             } else {
                 productCmap = productDAO.searchProductsPaging(action, indexPage, searchKey);
@@ -72,69 +76,73 @@ public class ProductManageServlet extends HttpServlet{
                 request.setAttribute("productCmap", productCmap);
                 request.getRequestDispatcher("HideProduct.jsp").forward(request, response);
             }
-                
-
-     
-         
+        }else{
+            response.sendRedirect("403.jsp");
+        }        
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String message = (String) session.getAttribute("msg");
-        session.removeAttribute("msg");
-        List<Product> productDTOs = new ArrayList<>();
-        ProductDAO productDAO = new ProductDAO();
-        
-        LinkedHashMap<Product, String> productCmap = new LinkedHashMap<>();
-        
+        AdminDTO account = (AdminDTO) session.getAttribute("account");
+        if (account != null) {
+            String message = (String) session.getAttribute("msg");
+            session.removeAttribute("msg");
+            List<Product> productDTOs = new ArrayList<>();
+            ProductDAO productDAO = new ProductDAO();
 
-        //hide product 
-        String action = request.getParameter("action");
-        String indexPage_raw = request.getParameter("indexPage");
+            LinkedHashMap<Product, String> productCmap = new LinkedHashMap<>();
 
-        try {
-            int indexPage = 0;
-            if (indexPage_raw == null) {
-                indexPage = 1;
-            } else {
-                indexPage = Integer.parseInt(indexPage_raw);
-            }
-            if (action == null || action.equals("show")) {
-                action = "normal";
-                productCmap = productDAO.pagingProduct(action, indexPage);
-                productDTOs = productDAO.getAllProduct();
 
-                int numProduct = productDTOs.size();
-                int endPage = numProduct / 5;
-                if (numProduct % 5 != 0) {
-                    endPage++;
+            //hide product 
+            String action = request.getParameter("action");
+            String indexPage_raw = request.getParameter("indexPage");
+
+            try {
+                int indexPage = 0;
+                if (indexPage_raw == null) {
+                    indexPage = 1;
+                } else {
+                    indexPage = Integer.parseInt(indexPage_raw);
                 }
-                request.setAttribute("endPage", endPage);
-                request.setAttribute("action", "show");
-                request.setAttribute("tag", indexPage);
-                request.setAttribute("msg", message);
-                request.setAttribute("productCmap", productCmap);
-                request.getRequestDispatcher("ProductManage.jsp").forward(request, response);
+                if (action == null || action.equals("show")) {
+                    action = "normal";
+                    productCmap = productDAO.pagingProduct(action, indexPage);
+                    productDTOs = productDAO.getAllProduct();
 
-            } else {
-                productCmap = productDAO.pagingProduct(action, indexPage);
-                productDTOs = productDAO.getAllProductHide();
-                int numProduct = productDTOs.size();
-                int endPage = numProduct / 5;
-                if (numProduct % 5 != 0) {
-                    endPage++;
+                    int numProduct = productDTOs.size();
+                    int endPage = numProduct / 5;
+                    if (numProduct % 5 != 0) {
+                        endPage++;
+                    }
+                    request.setAttribute("endPage", endPage);
+                    request.setAttribute("action", "show");
+                    request.setAttribute("tag", indexPage);
+                    request.setAttribute("msg", message);
+                    request.setAttribute("productCmap", productCmap);
+                    request.getRequestDispatcher("ProductManage.jsp").forward(request, response);
+
+                } else {
+                    productCmap = productDAO.pagingProduct(action, indexPage);
+                    productDTOs = productDAO.getAllProductHide();
+                    int numProduct = productDTOs.size();
+                    int endPage = numProduct / 5;
+                    if (numProduct % 5 != 0) {
+                        endPage++;
+                    }
+
+                    request.setAttribute("action", "hide");
+                    request.setAttribute("endPage", endPage);
+                    request.setAttribute("tag", indexPage);
+                    request.setAttribute("msg", message);
+                    request.setAttribute("productCmap", productCmap);
+                    request.getRequestDispatcher("HideProduct.jsp").forward(request, response);
                 }
-
-                request.setAttribute("action", "hide");
-                request.setAttribute("endPage", endPage);
-                request.setAttribute("tag", indexPage);
-                request.setAttribute("msg", message);
-                request.setAttribute("productCmap", productCmap);
-                request.getRequestDispatcher("HideProduct.jsp").forward(request, response);
             }
-        }
-         catch (Exception e) {
+            catch (Exception e) {
+            }
+        }else{
+            response.sendRedirect("403.jsp");
         }
     }
     
