@@ -289,12 +289,40 @@ public int getTotalCustomers() {
     }
     return count;
 }
+        public boolean isUsernameAvailable(String username) {
+        String sql = "SELECT COUNT(*) AS count FROM Customer WHERE userName = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count") == 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking username availability: " + e.getMessage());
+        }
+        return false;
+    }
 
+    // Helper method to check if email is available
+    public boolean isEmailAvailable(String email) {
+        String sql = "SELECT COUNT(*) AS count FROM Customer WHERE email = ? ";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count") == 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking email availability: " + e.getMessage());
+        }
+        return false;
+    }
 
     public static void main(String[] args) {
         CustomerDao cus = new CustomerDao();
-        Administrator newAdmin = new Administrator(3,"anhducokok","zY4TUvlhy5EPVCt2DAmRN7whEQg",true,2,"duc123@gmail.com");
-        cus.updateStaff(newAdmin);
+        System.out.println(cus.isUsernameAvailable("abc"));
 //        System.out.println(Boolean.parseBoolean("false"));
     }
 }

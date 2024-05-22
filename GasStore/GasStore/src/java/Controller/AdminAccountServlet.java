@@ -36,7 +36,7 @@ public class AdminAccountServlet extends HttpServlet {
         String t = request.getParameter("type");
         CustomerDao cus = new CustomerDao();
         int pageNum = request.getParameter("pageNum") != null ? Integer.parseInt(request.getParameter("pageNum")) : 1;
-        int pageSize = 5; 
+        int pageSize = 5;
         List<Customer> li = cus.getPaginatedCustomers(pageNum, pageSize);
         request.setAttribute("lidata", li);
 
@@ -102,7 +102,10 @@ public class AdminAccountServlet extends HttpServlet {
         if (uid != null && !uid.isEmpty()) {
             cus.updateUser(newCustomer);
         } else {
-            cus.insertCustomer(newCustomer);
+            if (cus.isUsernameAvailable(name) && cus.isEmailAvailable(mail)) {
+
+                cus.insertCustomer(newCustomer);
+            }
         }
         response.sendRedirect("ManageUser");
     }

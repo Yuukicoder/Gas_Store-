@@ -65,7 +65,7 @@
                             <h2 class="mb-0">All Users</h2>
                         </div>
                         <div class="row">
-                            <div class=" pt-4 px-4 col-lg-9">
+                            <div class=" pt-4 px-2 col-lg-8">
                                 <div class="bg-secondary text-center rounded p-4">
                                     <div class="col-lg-4 col-6 text-left">
                                         <form action="ManageUser" method="post">
@@ -108,162 +108,167 @@
 
 
                                     </div>
-                                    <div class="pagination col-lg-12">
-                                        <c:if test="${pageNum > 1}">
-                                            
-                                            <a href="?pageNum=${pageNum - 1}"> Previous</a>
-                                        </c:if>
-                                        Page ${pageNum} of ${totalPages}
-                                        <c:if test="${pageNum < totalPages}">
-                                            <a href="?pageNum=${pageNum + 1}">Next </a>
-                                            
-                                        </c:if>
+                                    <div class="row">
+                                            <div class="pagination row">
+                                                <div class="col-lg-4">
+                                                    <c:if test="${pageNum > 1}">
+
+                                                        <a href="?pageNum=${pageNum - 1}"> Previous</a>
+                                                    </c:if></div><div class="col-lg-4">
+                                                    Page ${pageNum} of ${totalPages}
+                                                </div><div class="col-lg-4">
+                                                    <c:if test="${pageNum < totalPages}">
+                                                        <a href="?pageNum=${pageNum + 1}">Next </a>
+
+                                                    </c:if>
+                                                </div>
+                                            </div>
+                                        </div>
+                                   
                                     </div>
                                 </div>
 
-                            </div>
 
+                                <div class=" pt-4 insert-div col-lg-4">
+                                    <div class="bg-secondary text-center rounded p-4">
+                                        <h2 class="font-weight-bold mb-4">Insert New Account</h2>
+                                        <form action="ManageUser" method="post">
+                                            <input type="hidden" value="${detailaccount.customerID}" name="account_id">
 
-                            <div class=" pt-4 px-4 insert-div col-lg-3">
-                                <div class="bg-secondary text-center rounded p-4">
-                                    <h2 class="font-weight-bold mb-4">Insert New Account</h2>
-                                    <form action="ManageUser" method="post">
-                                        <input type="hidden" value="${detailaccount.customerID}" name="account_id">
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control" id="username" name="username" value="${detailaccount.userName}" placeholder="Username">
+                                                        <label for="username">Username</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control" id="password" name="password" value="${detailaccount.password}" placeholder="Password">
+                                                        <label for="password">Password</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control" id="first_name" name="first_name" value="${detailaccount.firstName}" placeholder="First Name">
+                                                        <label for="first_name">First Name</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control" id="last_name" name="last_name" value="${detailaccount.lastName}" placeholder="Last Name">
+                                                        <label for="last_name">Last Name</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control" id="email" name="email" value="${detailaccount.email}" placeholder="Email">
+                                                        <label for="email">Email</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control" id="phone_number" name="phone_number" value="${detailaccount.phone}" placeholder="Phone Number">
+                                                        <label for="phone_number">Phone Number</label>
+                                                    </div>
+                                                </div>
 
-                                        <div class="row g-3">
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" class="form-control" id="username" name="username" value="${detailaccount.userName}" placeholder="Username">
-                                                    <label for="username">Username</label>
+                                                <div class="col-12">
+                                                    <button type="submit" class="btn btn-primary w-100" name="btnInUp">Insert/Update</button>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" class="form-control" id="password" name="password" value="${detailaccount.password}" placeholder="Password">
-                                                    <label for="password">Password</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" class="form-control" id="first_name" name="first_name" value="${detailaccount.firstName}" placeholder="First Name">
-                                                    <label for="first_name">First Name</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" class="form-control" id="last_name" name="last_name" value="${detailaccount.lastName}" placeholder="Last Name">
-                                                    <label for="last_name">Last Name</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" class="form-control" id="email" name="email" value="${detailaccount.email}" placeholder="Email">
-                                                    <label for="email">Email</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" class="form-control" id="phone_number" name="phone_number" value="${detailaccount.phone}" placeholder="Phone Number">
-                                                    <label for="phone_number">Phone Number</label>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-12">
-                                                <button type="submit" class="btn btn-primary w-100" name="btnInUp">Insert/Update</button>
-                                            </div>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class=" m-3 mt-3 col-lg-3">
+                        <a href="ManageAccount.jsp" class="btn btn-primary">Back to Manager Account</a>
+                    </div>
                 </div>
-                <div class=" m-3 mt-3 col-lg-3">
-                    <a href="ManageAccount.jsp" class="btn btn-primary">Back to Manager Account</a>
-                </div>
+
+                <!-- Blank End -->
+                <!-- Content End -->
+                <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
             </div>
 
-            <!-- Blank End -->
-            <!-- Content End -->
-            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-        </div>
+            <!-- JavaScript Libraries -->
+            <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="admin/lib/chart/chart.min.js"></script>
+            <script src="admin/lib/easing/easing.min.js"></script>
+            <script src="admin/lib/waypoints/waypoints.min.js"></script>
+            <script src="admin/lib/owlcarousel/owl.carousel.min.js"></script>
+            <script src="admin/lib/tempusdominus/js/moment.min.js"></script>
+            <script src="admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
+            <script src="admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+            <script src="admin/js/main.js"></script>
+            <script>
+                const toggleInsertAnchor = document.getElementById('toggleInsert');
+                const insertDiv = document.querySelector('.insert-div');
 
-        <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="admin/lib/chart/chart.min.js"></script>
-        <script src="admin/lib/easing/easing.min.js"></script>
-        <script src="admin/lib/waypoints/waypoints.min.js"></script>
-        <script src="admin/lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="admin/lib/tempusdominus/js/moment.min.js"></script>
-        <script src="admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
-        <script src="admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-        <script src="admin/js/main.js"></script>
-        <script>
-            const toggleInsertAnchor = document.getElementById('toggleInsert');
-            const insertDiv = document.querySelector('.insert-div');
-
-            toggleInsertAnchor.addEventListener('click', function (event) {
-                event.preventDefault();
-                if (insertDiv.style.display === 'none') {
-                    insertDiv.style.display = 'block';
-                } else {
-                    insertDiv.style.display = 'none';
-                }
-            });
-
-            const updateButtons = document.querySelectorAll('.update-button');
-
-            updateButtons.forEach(button => {
-                button.addEventListener('click', function () {
+                toggleInsertAnchor.addEventListener('click', function (event) {
+                    event.preventDefault();
                     if (insertDiv.style.display === 'none') {
                         insertDiv.style.display = 'block';
+                    } else {
+                        insertDiv.style.display = 'none';
                     }
                 });
-            });
-        </script>
-        <style>
-            #productTable {
-                border-collapse: collapse;
-                width: 100%;
-                color: #333;
-            }
 
-            #productTable td, #productTable th {
-                border: 1px solid #ddd;
-                padding: 8px;
-            }
+                const updateButtons = document.querySelectorAll('.update-button');
 
-            #productTable tr:nth-child(even) {
-                background-color: #f2f2f2;
-                color: #000;
-            }
+                updateButtons.forEach(button => {
+                    button.addEventListener('click', function () {
+                        if (insertDiv.style.display === 'none') {
+                            insertDiv.style.display = 'block';
+                        }
+                    });
+                });
+            </script>
+            <style>
+                #productTable {
+                    border-collapse: collapse;
+                    width: 100%;
+                    color: #333;
+                }
 
-            #productTable tr:hover {
-                background-color: #ddd;
-                color: red;
-            }
+                #productTable td, #productTable th {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                }
 
-            #productTable th {
-                padding-top: 12px;
-                padding-bottom: 12px;
-                text-align: left;
-                background-color: #22A699;
-                color: white;
-            }
+                #productTable tr:nth-child(even) {
+                    background-color: #f2f2f2;
+                    color: #000;
+                }
 
-            #productTable td {
-                color: #111;
-            }
+                #productTable tr:hover {
+                    background-color: #ddd;
+                    color: red;
+                }
 
-            #productTable tr:nth-child(even) td {
-                color: #000;
-            }
+                #productTable th {
+                    padding-top: 12px;
+                    padding-bottom: 12px;
+                    text-align: left;
+                    background-color: #22A699;
+                    color: white;
+                }
 
-            #productTable tr:hover td {
-                color: #000;
-            }
-        </style>
+                #productTable td {
+                    color: #111;
+                }
+
+                #productTable tr:nth-child(even) td {
+                    color: #000;
+                }
+
+                #productTable tr:hover td {
+                    color: #000;
+                }
+            </style>
 
     </body>
 
