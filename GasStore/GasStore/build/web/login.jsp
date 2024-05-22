@@ -20,11 +20,7 @@
     <div class="container" id="container">
         <div class="form-container sign-up">
             <form action="changepass" method="POST">
-                <h1>Change Password</h1>
-                <div class="social-icons">
-                    <a href="https://accounts.google.com/o/oauth2/auth?scope=profile%20email&redirect_uri=http://localhost:8080/Test6-FrontEnd(1)/login&response_type=code&client_id=740029421192-c126d7mbqg2666s0s1lr15ana8k6i45m.apps.googleusercontent.com&approval_prompt=force" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-                </div>
-                <span>or use your email for password change</span>
+                <h1>Change Password</h1>    
                 <input type="text" id="username-input1" class="form-control" placeholder="Username" required autofocus="" name="user">
                 <input type="password" id="password-field1" class="form-control" placeholder="Old Password" required autofocus="" name="pass">
                 <input type="password" id="new-password" class="form-control" placeholder="New Password" required autofocus="" name="newPassword">
@@ -39,7 +35,7 @@
                 <div class="social-icons">
                     <a href="https://accounts.google.com/o/oauth2/auth?scope=profile%20email&redirect_uri=http://localhost:8080/Test6-FrontEnd(1)/login&response_type=code&client_id=740029421192-c126d7mbqg2666s0s1lr15ana8k6i45m.apps.googleusercontent.com&approval_prompt=force" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
                 </div>
-                <span>Hoặc username password</span>
+<!--                <span>Hoặc username password</span>-->
                 <div style="color: red;"><b>${mess}</b></div>
                 <input type="text" id="username-input" class="form-control" placeholder="Username" required="" autofocus="" name="username">
                 <input type="password" id="password-field" class="form-control" placeholder="Password" required="" name="password">

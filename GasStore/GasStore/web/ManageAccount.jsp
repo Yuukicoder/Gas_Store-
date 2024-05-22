@@ -55,14 +55,14 @@
                 <div class="container-fluid pt-4 px-4">
                     <div class="bg-secondary text-center rounded p-4">
                         <div class="d-flex align-items-center justify-content-between mb-4">
-                            <h2 class="mb-0">Account Management</h2>
+                            <h2 class="mb-0" style="color: #0077b6;">Account Management</h2>
                         </div>
                         <div class="row">
                             <!-- Manage User Card -->
                             <div class="col-md-4">
                                 <a href="ManageUser" class="text-decoration-none">
                                     <div class="card bg-secondary text-center text-white rounded p-4">
-                                        <h2 class="mb-0">Manage User</h2>
+                                        <h2 class="mb-0" style="color: #0077b6;">Manage User</h2>
                                     </div>
                                 </a>
                             </div>
@@ -71,7 +71,7 @@
                             <div class="col-md-4">
                                 <a href="ManageStaff" class="text-decoration-none">
                                     <div class="card bg-secondary text-center text-white rounded p-4">
-                                        <h2 class="mb-0">Manage Admin</h2>
+                                        <h2 class="mb-0" style="color: #0077b6;">Manage Admin</h2>
                                     </div>
                                 </a>
                             </div>
@@ -80,7 +80,7 @@
                             <div class="col-md-4">
                                 <a href="ManageSupplier" class="text-decoration-none">
                                     <div class="card bg-secondary text-center text-white rounded p-4">
-                                        <h2 class="mb-0">Manage Supplier</h2>
+                                        <h2 class="mb-0" style="color: #0077b6;">Manage Supplier</h2>
                                     </div>
                                 </a>
                             </div>
@@ -114,5 +114,6 @@
                 transform: scale(1.05);
             }
         </style>
+      
     </body>
 </html>

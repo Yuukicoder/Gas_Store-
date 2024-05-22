@@ -77,10 +77,10 @@
                             </div>
                             <div class="mb-3 text-danger text-center"><b>${mess}</b></div>
                             <div class="d-grid">
-                                <button class="btn btn-primary" type="submit">Sign Up</button>
+                                <button class="btn" style="background-color: #0077b6; color: white" type="submit">Sign Up</button>
                             </div>
                             <div class="text-center pt-2">
-                                <a href="login">Back to Login</a>
+                                <a href="login" style="color: #0077b6">Back to Login</a>
                             </div>
                         </form>
                     </div>

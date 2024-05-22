@@ -127,7 +127,7 @@
                                         </tbody>
                                     </table>
                                     <a href="productAdd" class="btn btn-primary">Add new product</a>
-                                    <button style="    background: #22A699;
+                                    <button style="    background: #0077b6;
                                             text-decoration: none;
                                             border: none;
                                             height: 2.3rem;
@@ -222,7 +222,7 @@
                     padding-top: 12px;
                     padding-bottom: 12px;
                     text-align: left;
-                    background-color: #22A699;
+                    background-color: #0077b6;
                     color: white;
                 }
             </style>

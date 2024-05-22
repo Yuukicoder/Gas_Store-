@@ -87,7 +87,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6 col-xl-3">
-                            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="background-color: #22A699;">
+                            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="background-color: #0077b6;">
                                 <i class="bx bx-money-withdraw fa-3x text-primary" style="color: white;"></i>
                                 <div class="ms-3">
                                     <p class="mb-2" style="color: white">Revenue Today</p>
