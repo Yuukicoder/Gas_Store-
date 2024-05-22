@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Change Password</title>
+        <title>Sign Up</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/q-icon.png" />
         <!-- Bootstrap icons-->
@@ -44,27 +44,39 @@
             <div class="container h-100 d-flex align-items-center justify-content-center">
                 <div class="form-container text-black">
                     <div class="form-content">
-                        <p class="text-center h1 fw-bold mb-5">Change Password</p>
-                        <form action="changepass" method="post">
+                        <p class="text-center h1 fw-bold mb-5">Sign Up</p>
+                        <form action="signup" method="post">
                             <div class="mb-3">
-                                <label for="form3Example1c" class="form-label">Enter UserName</label>
-                                <input type="text" id="form3Example1c" class="form-control" required name="user"/>
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" id="username" class="form-control" required name="username"/>
                             </div>
                             <div class="mb-3">
-                                <label for="form3Example1c" class="form-label">Enter Password</label>
-                                <input type="password" id="form3Example1c" class="form-control" required name="pass"/>
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" id="password" class="form-control" required name="password"/>
                             </div>
                             <div class="mb-3">
-                                <label for="form3Example1c" class="form-label">New Password</label>
-                                <input type="password" id="form3Example1c" class="form-control" required name="newPassword"/>
+                                <label for="repass" class="form-label">Repeat Password</label>
+                                <input type="password" id="repass" class="form-control" required name="repass"/>
                             </div>
                             <div class="mb-3">
-                                <label for="form3Example3c" class="form-label">Confirm Password</label>
-                                <input type="password" id="form3Example3c" class="form-control" required name="confirmPassword"/>
+                                <label for="firstname" class="form-label">First Name</label>
+                                <input type="text" id="firstname" class="form-control" required name="firstname"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="lastname" class="form-label">Last Name</label>
+                                <input type="text" id="lastname" class="form-control" required name="lastname"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" id="email" class="form-control" required name="email"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" id="phone" class="form-control" required name="phone"/>
                             </div>
                             <div class="mb-3 text-danger text-center"><b>${mess}</b></div>
                             <div class="d-grid">
-                                <button class="btn btn-primary" type="submit">Confirm</button>
+                                <button class="btn btn-primary" type="submit">Sign Up</button>
                             </div>
                             <div class="text-center pt-2">
                                 <a href="login">Back to Login</a>

@@ -42,13 +42,13 @@ public class ChangePassServlet extends HttpServlet {
         
         if (account == null) {
             request.setAttribute("mess", "Account does not exist or wrong password !");
-            request.getRequestDispatcher("change-newpassword.jsp").forward(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
         
         if (!pass.equals(repass)) {
             request.setAttribute("mess", "password does not match!");
-            request.getRequestDispatcher("change-newpassword.jsp").forward(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
         

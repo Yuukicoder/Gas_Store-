@@ -107,39 +107,39 @@ public class SignupServlet extends HttpServlet {
             request.setAttribute("fullname", fullname_raw);
             request.setAttribute("gmail", gamil_raw);
             request.setAttribute("pass", password_raw);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         } else if (checkuser != null) {
             request.setAttribute("err", "Username already exists ");
             request.setAttribute("fullname", fullname_raw);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         } else if (!matcher.matches()) {
             request.setAttribute("err", "Invalid email format");
             request.setAttribute("fullname", fullname_raw);
             request.setAttribute("user", user_raw);
             request.setAttribute("pass", password_raw);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         } else if (!matcher1.matches()) {
             request.setAttribute("err", "Password must have uppercase and lowercase letters and be longer than 6 characters");
             request.setAttribute("user", user_raw);
             request.setAttribute("fullname", fullname_raw);
             request.setAttribute("gmail", gamil_raw);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         } else if (accountDTO != null) {
             request.setAttribute("err", "Email already exists ");
             request.setAttribute("user", user_raw);
             request.setAttribute("fullname", fullname_raw);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         } 
         else if(!matcher2.matches()){ 
             request.setAttribute("err", "Phone number must be 10 digits");
             request.setAttribute("user", user_raw);
             request.setAttribute("fullname", fullname_raw);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         }
         else {
             Customer cus = new Customer(user_raw, MaHoa.toSHA1(password_raw), firstname_raw, lastname_raw, true, phone_raw, gamil_raw);
             dao.insertCustomer(cus);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         }
     }
 
