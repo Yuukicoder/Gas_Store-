@@ -92,7 +92,7 @@ public class AdminAccountServlet extends HttpServlet {
         String s = request.getParameter("search");
         String uid = request.getParameter("account_id");
         String name = request.getParameter("username");
-        String pass = request.getParameter("password");
+        String pass = MaHoa.toSHA1(request.getParameter("password"));
         String first = request.getParameter("first_name");
         String last = request.getParameter("last_name");
         String mail = request.getParameter("email");

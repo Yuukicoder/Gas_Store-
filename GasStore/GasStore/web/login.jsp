@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="login.css">
     <title>LOGIN</title>
     <script>
-        function doforgetPass() {
-            window.location.href = "changepass";
+        function signup() {
+            window.location.href = "signup";
         }
     </script>
 </head>
@@ -46,7 +46,7 @@
 
                 <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Sign in</button>
                 <hr>
-                <button class="btn btn-success btn-block" type="button" onclick="doforgetPass()">Sign Up</button>
+                <button class="btn btn-success btn-block" type="button" onclick="signup()">Sign Up</button>
                 <hr>
             </form>
         </div>
