@@ -61,7 +61,7 @@ public class SignupServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("signup.jsp").forward(request, response);
+        request.getRequestDispatcher("SignUp.jsp").forward(request, response);
     }
 
     /**
@@ -79,7 +79,9 @@ public class SignupServlet extends HttpServlet {
        String lastname_raw = request.getParameter("lastname");
         String user_raw = request.getParameter("username");
         String gamil_raw = request.getParameter("email");
-        String password_raw = request.getParameter("password");
+        String password_raw = MaHoa.toSHA1(request.getParameter("password"));
+        String password_raw2 = request.getParameter("password");
+        String repass_raw = MaHoa.toSHA1(request.getParameter("repass"));
         String phone_raw = request.getParameter("phone");
         System.out.println(firstname_raw);
         String fullname_raw = firstname_raw + lastname_raw;
@@ -93,53 +95,84 @@ public class SignupServlet extends HttpServlet {
         //check password 
         String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z]).{6,}$";
         Pattern pattern1 = Pattern.compile(PASSWORD_REGEX);
-        Matcher matcher1 = pattern1.matcher(password_raw);
+        Matcher matcher1 = pattern1.matcher(password_raw2);
         
         //check sdt 
          String regex = "^0\\d{9}$";
          Pattern number = Pattern.compile(regex);
         Matcher matcher2 = number.matcher(phone_raw);
         //check 
-
+        
+        if(!password_raw.equals(repass_raw)){
+            request.setAttribute("err", "you must enter the same password");
+            request.setAttribute("user", user_raw);
+            request.setAttribute("gmail", gamil_raw);
+            request.setAttribute("pass", password_raw);
+            request.setAttribute("phone", phone_raw);
+            request.setAttribute("firstname", firstname_raw);
+            request.setAttribute("lastname", lastname_raw);
+            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
+        }
+        
         if (user_raw.isEmpty() || gamil_raw.isEmpty() || password_raw.isEmpty()) {
             request.setAttribute("err", "you must enter email or password or user");
             request.setAttribute("user", user_raw);
-            request.setAttribute("fullname", fullname_raw);
             request.setAttribute("gmail", gamil_raw);
-            request.setAttribute("pass", password_raw);
+            request.setAttribute("pass", password_raw2);
+            request.setAttribute("phone", phone_raw);
+            request.setAttribute("firstname", firstname_raw);
+            request.setAttribute("lastname", lastname_raw);
             request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         } else if (checkuser != null) {
             request.setAttribute("err", "Username already exists ");
-            request.setAttribute("fullname", fullname_raw);
+            request.setAttribute("user", user_raw);
+            request.setAttribute("gmail", gamil_raw);
+            request.setAttribute("pass", password_raw2);
+            request.setAttribute("phone", phone_raw);
+            request.setAttribute("firstname", firstname_raw);
+            request.setAttribute("lastname", lastname_raw);
             request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         } else if (!matcher.matches()) {
-            request.setAttribute("err", "Invalid email format");
-            request.setAttribute("fullname", fullname_raw);
             request.setAttribute("user", user_raw);
-            request.setAttribute("pass", password_raw);
+            request.setAttribute("gmail", gamil_raw);
+            request.setAttribute("pass", password_raw2);
+            request.setAttribute("phone", phone_raw);
+            request.setAttribute("firstname", firstname_raw);
+            request.setAttribute("lastname", lastname_raw);
             request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         } else if (!matcher1.matches()) {
             request.setAttribute("err", "Password must have uppercase and lowercase letters and be longer than 6 characters");
             request.setAttribute("user", user_raw);
-            request.setAttribute("fullname", fullname_raw);
             request.setAttribute("gmail", gamil_raw);
+            request.setAttribute("pass", password_raw2);
+            request.setAttribute("phone", phone_raw);
+            request.setAttribute("firstname", firstname_raw);
+            request.setAttribute("lastname", lastname_raw);
             request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         } else if (accountDTO != null) {
             request.setAttribute("err", "Email already exists ");
             request.setAttribute("user", user_raw);
-            request.setAttribute("fullname", fullname_raw);
+            request.setAttribute("gmail", gamil_raw);
+            request.setAttribute("pass", password_raw2);
+            request.setAttribute("phone", phone_raw);
+            request.setAttribute("firstname", firstname_raw);
+            request.setAttribute("lastname", lastname_raw);
             request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         } 
         else if(!matcher2.matches()){ 
             request.setAttribute("err", "Phone number must be 10 digits");
             request.setAttribute("user", user_raw);
-            request.setAttribute("fullname", fullname_raw);
+            request.setAttribute("gmail", gamil_raw);
+            request.setAttribute("pass", password_raw2);
+            request.setAttribute("phone", phone_raw);
+            request.setAttribute("firstname", firstname_raw);
+            request.setAttribute("lastname", lastname_raw);
             request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         }
         else {
             Customer cus = new Customer(user_raw, MaHoa.toSHA1(password_raw), firstname_raw, lastname_raw, true, phone_raw, gamil_raw);
             dao.insertCustomer(cus);
-            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }
 

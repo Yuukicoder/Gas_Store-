@@ -78,7 +78,7 @@ public class AdminManagerServlet extends HttpServlet {
 //        String s = request.getParameter("search");
         String adid = request.getParameter("accountID");
         String aname = request.getParameter("admin_name");
-        String apass = request.getParameter("passWord");
+        String apass = MaHoa.toSHA1(request.getParameter("passWord"));
         String amail = request.getParameter("aemail");
         String ac = request.getParameter("active");
         String arole = request.getParameter("roleid");

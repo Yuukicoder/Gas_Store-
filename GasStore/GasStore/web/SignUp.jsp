@@ -45,34 +45,35 @@
                 <div class="form-container text-black">
                     <div class="form-content">
                         <p class="text-center h1 fw-bold mb-5">Sign Up</p>
+                        <p style="color: red">${err}</p>
                         <form action="signup" method="post">
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
-                                <input type="text" id="username" class="form-control" required name="username"/>
+                                <input type="text" value="${user}" id="username" class="form-control" required name="username"/>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
-                                <input type="password" id="password" class="form-control" required name="password"/>
+                                <input type="password" value="${pass}" id="password" class="form-control" required name="password"/>
                             </div>
                             <div class="mb-3">
                                 <label for="repass" class="form-label">Repeat Password</label>
-                                <input type="password" id="repass" class="form-control" required name="repass"/>
+                                <input type="password"  id="repass" class="form-control" required name="repass"/>
                             </div>
                             <div class="mb-3">
                                 <label for="firstname" class="form-label">First Name</label>
-                                <input type="text" id="firstname" class="form-control" required name="firstname"/>
+                                <input type="text" value="${firstname}" id="firstname" class="form-control" required name="firstname"/>
                             </div>
                             <div class="mb-3">
                                 <label for="lastname" class="form-label">Last Name</label>
-                                <input type="text" id="lastname" class="form-control" required name="lastname"/>
+                                <input type="text" value="${lastname}" id="lastname" class="form-control" required name="lastname"/>
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" id="email" class="form-control" required name="email"/>
+                                <input type="email" value="${gmail}" id="email" class="form-control" required name="email"/>
                             </div>
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Phone Number</label>
-                                <input type="tel" id="phone" class="form-control" required name="phone"/>
+                                <input type="tel" value="${phone}" id="phone" class="form-control" required name="phone"/>
                             </div>
                             <div class="mb-3 text-danger text-center"><b>${mess}</b></div>
                             <div class="d-grid">

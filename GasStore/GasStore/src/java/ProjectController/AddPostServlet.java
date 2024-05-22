@@ -8,6 +8,7 @@ import DAO.AccountDAO;
 import DAO.PostCategoryDAO;
 import DAO.PostListDAO;
 import DTO.AccountDTO;
+import DTO.AdminDTO;
 import DTO.PostCategoryDTO;
 import DTO.PostDTO;
 import java.io.IOException;
@@ -66,9 +67,9 @@ public class AddPostServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        AccountDTO account = (AccountDTO) session.getAttribute("account");
+        AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
-            if (account.getRole() == 1) {
+            if (account.getRoleID()== 1 || account.getRoleID()== 2) {
                 //List User
                 PostCategoryDAO postCategoryDAO = new PostCategoryDAO();
                 ArrayList<PostCategoryDTO> postCategoryDTOs = postCategoryDAO.getAllPostCategory();
