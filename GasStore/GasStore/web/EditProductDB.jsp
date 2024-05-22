@@ -106,18 +106,20 @@
                                                     <div class="col-md-6">
                                                         <label class="form-label">Category</label>
                                                         <select name="category" id="category" class="form-control col-4">
-                                                            <option value="${categoryID}" selected>${categoryName}</option>
                                                             <c:forEach items="${requestScope.categoryDTOs}" var="c">
-                                                                <option value="${c.getCategoryID()}">${c.getName()}</option>
+                                                                <option value="${c.getCategoryID()}" ${c.getCategoryID() == categoryID ? 'selected' : ''}>
+                                                                    ${c.getName()}
+                                                                </option>
                                                             </c:forEach>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label">Supplier </label>
                                                         <select name="supplier" id="supplier" class="form-control col-4">
-                                                            <option value="${supplierID}" selected>${supplierName}</option>
                                                             <c:forEach items="${requestScope.supplierDTOs}" var="c">
-                                                                <option value="${c.getSupplierID()}">${c.getCompanyName()}</option>
+                                                                <option value="${c.getSupplierID()}" ${c.getSupplierID() == supplierID ? 'selected' : ''}>
+                                                                    ${c.getCompanyName()}
+                                                                </option>
                                                             </c:forEach>
                                                         </select>
                                                     </div>
