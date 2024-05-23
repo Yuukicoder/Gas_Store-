@@ -170,7 +170,7 @@ public class SignupServlet extends HttpServlet {
             request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         }
         else {
-            Customer cus = new Customer(user_raw, MaHoa.toSHA1(password_raw), firstname_raw, lastname_raw, true, phone_raw, gamil_raw);
+            Customer cus = new Customer(user_raw, password_raw, firstname_raw, lastname_raw, true, phone_raw, gamil_raw);
             dao.insertCustomer(cus);
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
