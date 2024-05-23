@@ -33,7 +33,7 @@
             <form action="login" class="signin-form" method="POST" onsubmit="return validateForm()">
                 <h1>Đăng Nhập</h1>
                 <div class="social-icons">
-                    <a href="https://accounts.google.com/o/oauth2/auth?scope=profile%20email&redirect_uri=http://localhost:8080/Test6-FrontEnd(1)/login&response_type=code&client_id=740029421192-c126d7mbqg2666s0s1lr15ana8k6i45m.apps.googleusercontent.com&approval_prompt=force" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="https://accounts.google.com/o/oauth2/auth?scope=profile%20email&redirect_uri=http://localhost:8888/GasStore2/login&response_type=code&client_id=1038400586522-1g779ncgmua1fqbnblc92t35mjn7nf9c.apps.googleusercontent.com&approval_prompt=force" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
                 </div>
 <!--                <span>Hoặc username password</span>-->
                 <div style="color: red;"><b>${mess}</b></div>
