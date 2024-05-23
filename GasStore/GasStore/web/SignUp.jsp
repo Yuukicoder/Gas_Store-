@@ -40,11 +40,11 @@
     </head>
 
     <body>
-        <section class="vh-100" style="background-color: #eee;">
+        <section class="vh-100" style="background-color: #eee; color: #0077b6;">
             <div class="container h-100 d-flex align-items-center justify-content-center">
-                <div class="form-container text-black">
+                <div class="form-container text-black" >
                     <div class="form-content">
-                        <p class="text-center h1 fw-bold mb-5">Sign Up</p>
+                        <p class="text-center h1 fw-bold mb-5" style="color: #0077b6">Sign Up</p>
                         <p style="color: red">${err}</p>
                         <form action="signup" method="post">
                             <div class="mb-3">
