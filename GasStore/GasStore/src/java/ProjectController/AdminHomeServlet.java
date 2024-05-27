@@ -93,7 +93,29 @@ public class AdminHomeServlet extends HttpServlet {
                 request.setAttribute("totalCustomer", totalAccount);
                 request.setAttribute("ListOrder", odao.listOrderInAdminHome(8));
                 request.getRequestDispatcher("adminHome.jsp").forward(request, response);
-            } else {
+            }else if(account.getRoleID()== 2){
+                 float incomeToday = odao.getIncomeToday();
+                int orderToday = odao.getOrdersToday();
+                int orderDelivered = odao.getTotalOrdersDelivered();
+                int orderCanceled = odao.getTotalOrdersCancled();
+                int newProduct = pdao.getTotalNewProduct();
+                int totalProductA = pdao.getTotalProduct();
+                int newAccount = adao.getTotalNewAccount();
+                int totalAccount = adao.getTotalAccount();
+                 AccountDAO accountDAO = new AccountDAO();
+                request.setAttribute("listUser", account);
+                request.setAttribute("incomeToday", incomeToday);
+                request.setAttribute("orderToday", orderToday);
+                request.setAttribute("totalOrderDelivered", orderDelivered);
+                request.setAttribute("totalOrderCanceled", orderCanceled);
+                request.setAttribute("newProduct", newProduct);
+                request.setAttribute("totalProduct", totalProductA);
+                request.setAttribute("newAccount", newAccount);
+                request.setAttribute("totalCustomer", totalAccount);
+                request.setAttribute("ListOrder", odao.listOrderInAdminHome(8));
+                request.getRequestDispatcher("StaffHome.jsp").forward(request, response);
+            }
+            else {
                 response.sendRedirect("403.jsp");
             }
         } else {

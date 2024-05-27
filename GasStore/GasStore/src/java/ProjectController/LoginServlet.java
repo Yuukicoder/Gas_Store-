@@ -103,6 +103,11 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("account", account);
                 response.sendRedirect("adminHome");
             }
+            else if(account.getRoleID()==2){
+                session.setAttribute("account", account);
+                response.sendRedirect("adminHome");
+                        
+            }
             else
             {
                  session.setAttribute("account", account);

@@ -3,15 +3,45 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/SWP391/project/Gas_Store-/GasStore/GasStore/src/java/Controller/AdminAccountServlet.java</file>
-            <file>file:/D:/SWP391/project/Gas_Store-/GasStore/GasStore/src/java/ProjectController/AddPostServlet.java</file>
-            <file>file:/D:/SWP391/project/Gas_Store-/GasStore/GasStore/web/TableAdmin.jsp</file>
-            <file>file:/D:/SWP391/project/Gas_Store-/GasStore/GasStore/src/java/ProjectController/SignupServlet.java</file>
-            <file>file:/D:/SWP391/project/Gas_Store-/GasStore/GasStore/web/SignUp.jsp</file>
-            <file>file:/D:/SWP391/project/Gas_Store-/GasStore/GasStore/src/java/Controller/AdminManagerServlet.java</file>
-            <file>file:/D:/SWP391/project/Gas_Store-/GasStore/GasStore/web/login.jsp</file>
-            <file>file:/D:/SWP391/project/Gas_Store-/GasStore/GasStore/src/java/Controller/ChangePassServlet.java</file>
-            <file>file:/D:/SWP391/project/Gas_Store-/GasStore/GasStore/web/WEB-INF/web.xml</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/dal/DBContext.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/adminHome.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/dal/CustomerDao.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/admin/css/style.css</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DTO/AccountDTO.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/img/user2.png</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/SignUp.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/Controller/Category/ManageCateServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/LoginServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/StaffHome.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/403.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DAO/AccountDAO.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/component/navbarAdmin.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/Controller/MaHoa.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/ManageAccount.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DTO/AdminDTO.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/TableAdmin.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DAO/DBcontext.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/Controller/AdminAccountServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/component/SideBarAdmin.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/Controller/ChangePassServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/component/narbarStaff.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Category/TableCategoryServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/Controller/AddProductServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/SignupServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/login.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/TableCategory.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/login.js</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/ProductManage.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/login.css</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/img/No%20Image.jpg</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/AddPostServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/component/SideBarStaff.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/TableOrder.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/LogoutServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/admin/scss/bootstrap/scss/_pagination.scss</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/AdminHomeServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/HomeServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/Controller/AdminManagerServlet.java</file>
         </group>
     </open-files>
 </project-private>
