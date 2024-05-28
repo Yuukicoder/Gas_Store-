@@ -57,13 +57,26 @@
                                 <h3 style="color: #E57C23">${msg}</h3>
 
                                 <div class="d-flex align-items-center justify-content-between mb-4">
-                                    <form action="tableCategory" method="POST">       
+                                    <form action="manageCate" method="POST">       
                                         <a href="addCate" class="btn btn-primary">Add Category</a>
                                     </form>
+
+                                    <form action="manageCate" id="pageSizeSelector" method="POST">
+                                        <select class="form-control" name="pageSize" id="pageSize" onchange="document.getElementById('pageSizeSelector').submit();">
+                                            <option value="5" <%= "5".equals(request.getAttribute("currentPageSize")) ? "selected" : "" %>>5</option>
+                                            <option value="10" <%= "10".equals(request.getAttribute("currentPageSize")) ? "selected" : "" %>>10</option>
+                                            <option value="15" <%= "15".equals(request.getAttribute("currentPageSize")) ? "selected" : "" %>>15</option>
+                                            <option value="20" <%= "20".equals(request.getAttribute("currentPageSize")) ? "selected" : "" %>>20</option>
+                                            <option value="0" <%= "0".equals(request.getAttribute("currentPageSize")) ? "selected" : "" %>>All</option>
+                                        </select>
+                                        <input type="hidden" name="search" value="${search}">
+                                    </form>
+
                                     <form action="manageCate" method="post">
                                         <div class="input-group">
                                             <input type="text" class="form-control bg-dark border-0" placeholder="Search category" name="search" value="${search}">
                                             <input type="hidden" value="${tag}" name="pageIndex" id="pageIndex">
+                                            <input type="hidden" value="${currentPageSize}" name="pageSize" id="pageSize">
                                             <div class="input-group-append">
                                                 <span class="input-group-text bg-transparent text-primary" style="    border: none;
                                                       margin-top: 4px;">
@@ -107,13 +120,13 @@
                                     <nav style="float: right;margin-top: 25px; color: black" aria-label="Page navigation example">
                                         <ul class="pagination">
                                             <c:if test="${tag > 1}">
-                                                <li  class="page-item"><a style="color: black"  class="page-link" href="manageCate?indexPage=${tag-1}&search=${search}">Previous</a></li>
+                                                <li  class="page-item"><a style="color: black"  class="page-link" href="manageCate?indexPage=${tag-1}&search=${search}&pageSize=${currentPageSize}">Previous</a></li>
                                                 </c:if>
                                                 <c:forEach begin="1" end="${endPage}" var="i">
-                                                <li style="color: black"  class="page-item ${tag == i ?"active":"" || page1 == i ?"active":""  } "><a style="color: white;background: #0077b6; border: none"  class="page-link" href="manageCate?indexPage=${i}&search=${search}">${i}</a></li>
+                                                <li style="color: black"  class="page-item ${tag == i ?"active":"" || page1 == i ?"active":""  } "><a style="color: black"  class="page-link" href="manageCate?indexPage=${i}&search=${search}&pageSize=${currentPageSize}">${i}</a></li>
                                                 </c:forEach>
                                                 <c:if test="${tag<endPage}">
-                                                <li class="page-item"><a style="color: black"  class="page-link" href="manageCate?indexPage=${tag+1}&search=${search}">Next</a></li>
+                                                <li class="page-item"><a style="color: black"  class="page-link" href="manageCate?indexPage=${tag+1}&search=${search}&pageSize=${currentPageSize}">Next</a></li>
                                                 </c:if>
                                         </ul>
                                     </nav>
@@ -130,11 +143,11 @@
                         <div class="bg-secondary rounded-top p-4">
                             <div class="row">
                                 <div class="col-12 col-sm-6 text-center text-sm-start">
-                                    &copy; <a href="#">GasStore</a>, All Right Reserved. 
+                                    &copy; <a href="#">LAPTOP SHOP</a>, All Right Reserved. 
                                 </div>
                                 <div class="col-12 col-sm-6 text-center text-sm-end">
                                     <!--/*** This template is free as long as you keep the footer author?s credit link/attribution link/backlink. If you'd like to use the template without the footer author?s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                                    Designed By <a href="https://gitlab.com/asusrogg14/swp391-laptopshop">SWP391 - GROUP 6</a>
+                                    Designed By <a href="https://gitlab.com/asusrogg14/swp391-laptopshop">SWP391 - GROUP 4</a>
                                     <br>Distributed By: <a href="#" >All members</a>
                                 </div>
                             </div>
@@ -172,6 +185,10 @@
                                                                     event.preventDefault();
                                                                 }
                                                             }
+
+                                                            function pageSize(pageSize) {
+                                                                window.location.href = 'tableCate?paseSize=' + pageSize;
+                                                            }
             </script>
             <style>
                 #categoryTable {
@@ -196,7 +213,7 @@
                     padding-top: 12px;
                     padding-bottom: 12px;
                     text-align: left;
-                    background-color: #0077b6;
+                    background-color: #22A699;
                     color: white;
                 }
             </style>

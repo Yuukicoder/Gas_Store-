@@ -106,7 +106,7 @@ public class StaffManageCateServlet extends HttpServlet {
                 if (numProduct % 5 != 0) {
                     endPage++;
                 }
-                result = categoryDAO.paggingSearch(indexPage, search);
+                result = categoryDAO.paggingSearch(indexPage, 5, search);
 
                 request.setAttribute("search", search);
                 request.setAttribute("endPage", endPage);
@@ -147,7 +147,7 @@ public class StaffManageCateServlet extends HttpServlet {
             if (numProduct % 5 != 0) {
                 endPage++;
             }
-            result = categoryDAO.paggingSearch(indexPage, search);
+            result = categoryDAO.paggingSearch(indexPage, 5, search);
 
             request.setAttribute("search", search);
             request.setAttribute("endPage", endPage);

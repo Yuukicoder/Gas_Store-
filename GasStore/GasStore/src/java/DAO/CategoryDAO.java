@@ -71,7 +71,7 @@ public class CategoryDAO extends DBcontext {
             System.out.println(e.getMessage());
         }
     }
-    
+
     public void updateCategory(int id, String code, String name, String des) {
         System.out.println("update in dao: " + des);
         try {
@@ -98,7 +98,7 @@ public class CategoryDAO extends DBcontext {
             System.out.println("delete: " + e.getMessage());
         }
     }
-    
+
     public List<Category> pagging(int pageIndex) {
         String sql = "select * from Category order by categoryID offset ? rows fetch next 5 rows only";
         ArrayList<Category> lc = new ArrayList<>();
@@ -118,23 +118,27 @@ public class CategoryDAO extends DBcontext {
         return lc;
     }
 
-    public List<Category> paggingSearch(int pageIndex, String search) {
-        String sql = "select * from Category where name like ? order by categoryID offset ? rows fetch next 5 rows only";
+    public List<Category> paggingSearch(int pageIndex, int pageSize, String search) {
+        System.out.println("pageSize: " + pageSize);
+        String sql = "select * from Category where name like ? order by categoryID offset ? rows fetch next ? rows only";
         ArrayList<Category> lc = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, "%" + search + "%");
-            ps.setInt(2, (pageIndex - 1) * 5);
+            ps.setInt(2, (pageIndex - 1) * pageSize);
+            ps.setInt(3, pageSize);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 int categoryID;
-                categoryID = rs.getInt("CategoryID");
+                categoryID = rs.getInt("categoryID");
+
                 Category c = getCategoryByID(categoryID);
                 lc.add(c);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        System.out.println("list size: " + lc.size());
         return lc;
     }
 
@@ -235,7 +239,5 @@ public class CategoryDAO extends DBcontext {
         }
         return null;
     }
-
-
 
 }

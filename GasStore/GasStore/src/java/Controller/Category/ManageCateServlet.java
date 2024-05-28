@@ -61,62 +61,57 @@ public class ManageCateServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String search = request.getParameter("search");
-        System.out.println("doGet");
-        if (search == null || search.isEmpty()) {
-            CategoryDAO categoryDAO = new CategoryDAO();
-            List<Category> lc = categoryDAO.getAllCategory();
-            List<Category> result;
-            String indexPage_raw = request.getParameter("indexPage");
-            try {
-                int indexPage = 0;
-                if (indexPage_raw == null) {
-                    indexPage = 1;
-                } else {
-                    indexPage = Integer.parseInt(indexPage_raw);
-                }
-                int numProduct = lc.size();
-                int endPage = numProduct / 5;
-                if (numProduct % 5 != 0) {
-                    endPage++;
-                }
-                result = categoryDAO.pagging(indexPage);
-
-                request.setAttribute("search", "");
-                request.setAttribute("endPage", endPage);
-                request.setAttribute("tag", indexPage);
-                request.setAttribute("listCategory", result);
-                request.getRequestDispatcher("TableCategory.jsp").forward(request, response);
-            } catch (Exception e) {
-
-            }
-        } else {
-            CategoryDAO categoryDAO = new CategoryDAO();
-            List<Category> lc = categoryDAO.searchCategory(search);
-            List<Category> result;
-            String indexPage_raw = request.getParameter("indexPage");
-            try {
-                int indexPage = 0;
-                if (indexPage_raw == null) {
-                    indexPage = 1;
-                } else {
-                    indexPage = Integer.parseInt(indexPage_raw);
-                }
-                int numProduct = lc.size();
-                int endPage = numProduct / 5;
-                if (numProduct % 5 != 0) {
-                    endPage++;
-                }
-                result = categoryDAO.paggingSearch(indexPage, search);
-
-                request.setAttribute("search", search);
-                request.setAttribute("endPage", endPage);
-                request.setAttribute("tag", indexPage);
-                request.setAttribute("listCategory", result);
-                request.getRequestDispatcher("TableCategory.jsp").forward(request, response);
-            } catch (Exception e) {
-
-            }
+        
+        if (search == null) {
+            search = "";
         }
+        CategoryDAO categoryDAO = new CategoryDAO();
+        List<Category> lc = categoryDAO.searchCategory(search);
+        List<Category> result;
+        String indexPage_raw = request.getParameter("indexPage");
+        
+        String pageSize_raw = request.getParameter("pageSize");
+        
+        int pageSize = 0;
+        
+        if (pageSize_raw == null) {
+            pageSize_raw = "5";
+            pageSize = 5;
+        } else if (pageSize_raw.equals("0")) {
+            request.setAttribute("currentPageSize", pageSize_raw);
+            request.setAttribute("tag", 1);
+            request.setAttribute("endPage", 1);
+            request.setAttribute("search", search);
+            request.setAttribute("listCategory", lc);
+            request.getRequestDispatcher("TableCategory.jsp").forward(request, response);
+        } else {
+            pageSize = Integer.parseInt(pageSize_raw);
+        }
+        
+        try {
+            int indexPage = 0;
+            if (indexPage_raw == null) {
+                indexPage = 1;
+            } else {
+                indexPage = Integer.parseInt(indexPage_raw);
+            }
+            int numProduct = lc.size();
+            int endPage = numProduct / pageSize;
+            if (numProduct % pageSize != 0) {
+                endPage++;
+            }
+            result = categoryDAO.paggingSearch(indexPage, pageSize, search);
+            
+            request.setAttribute("currentPageSize", pageSize_raw);
+            request.setAttribute("search", search);
+            request.setAttribute("endPage", endPage);
+            request.setAttribute("tag", indexPage);
+            request.setAttribute("listCategory", result);
+            request.getRequestDispatcher("TableCategory.jsp").forward(request, response);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        
     }
 
     /**
@@ -131,10 +126,33 @@ public class ManageCateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String search = request.getParameter("search");
+        
+        if (search == null) {
+            search = "";
+        }
         CategoryDAO categoryDAO = new CategoryDAO();
         List<Category> lc = categoryDAO.searchCategory(search);
         List<Category> result;
         String indexPage_raw = request.getParameter("indexPage");
+        
+        String pageSize_raw = request.getParameter("pageSize");
+        
+        int pageSize = 0;
+        
+        if (pageSize_raw == null) {
+            pageSize_raw = "5";
+            pageSize = 5;
+        } else if (pageSize_raw.equals("0")) {
+            request.setAttribute("currentPageSize", pageSize_raw);
+            request.setAttribute("tag", 1);
+            request.setAttribute("endPage", 1);
+            request.setAttribute("search", search);
+            request.setAttribute("listCategory", lc);
+            request.getRequestDispatcher("TableCategory.jsp").forward(request, response);
+        } else {
+            pageSize = Integer.parseInt(pageSize_raw);
+        }
+        
         try {
             int indexPage = 0;
             if (indexPage_raw == null) {
@@ -143,19 +161,21 @@ public class ManageCateServlet extends HttpServlet {
                 indexPage = Integer.parseInt(indexPage_raw);
             }
             int numProduct = lc.size();
-            int endPage = numProduct / 5;
-            if (numProduct % 5 != 0) {
+            int endPage = numProduct / pageSize;
+            if (numProduct % pageSize != 0) {
                 endPage++;
             }
-            result = categoryDAO.paggingSearch(indexPage, search);
-
+            result = categoryDAO.paggingSearch(indexPage, pageSize, search);
+            
+            System.out.println("endPage: " + endPage);
+            request.setAttribute("currentPageSize", pageSize_raw);
             request.setAttribute("search", search);
             request.setAttribute("endPage", endPage);
             request.setAttribute("tag", indexPage);
             request.setAttribute("listCategory", result);
             request.getRequestDispatcher("TableCategory.jsp").forward(request, response);
         } catch (Exception e) {
-
+            System.out.println(e.getMessage());
         }
     }
 
