@@ -88,6 +88,10 @@
         <servlet-name>LoginGoogleServlet</servlet-name>
         <servlet-class>ProjectController.LoginGoogleServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LoginFaceBookServlet</servlet-name>
+        <servlet-class>ProjectController.LoginFaceBookServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
         <url-pattern>/signup</url-pattern>
@@ -179,6 +183,10 @@
     <servlet-mapping>
         <servlet-name>LoginGoogleServlet</servlet-name>
         <url-pattern>/LoginGoogleServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginFaceBookServlet</servlet-name>
+        <url-pattern>/LoginFaceBookServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
