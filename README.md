@@ -1,2 +1,4 @@
-**_GasStore_**
-![Alt text](https://lanit.com.vn/wp-content/uploads/2023/09/leetcode.png "Optional title")
+# <span style = " color: red">GasStore</span>
+<span style="color:blue;">===================================================================</span>
+![Alt text](./images/images/Logo/GasStoreLogo.png "logo")
+<span style="color:blue;">===================================================================</span>
