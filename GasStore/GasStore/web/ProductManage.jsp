@@ -87,7 +87,20 @@
                                                 <th scope="col">Category</th>
                                                 <th scope="col">Quantity</th>
                                                 <th scope="col">Price</th>
-                                                <th scope="col"></th>
+                                                <th scope="col">
+                                                    <form method="get" action="productManage">
+                                                        <select name="numPage" onchange="this.form.submit()">
+                                                            <option value="5" ${numPage == '5' ? 'selected' : ''}>5</option>
+                                                            <option value="10" ${numPage == '10' ? 'selected' : ''}>10</option>
+                                                            <option value="20" ${numPage == '20' ? 'selected' : ''}>20</option>
+                                                            <option value="50" ${numPage == '50' ? 'selected' : ''}>50</option>
+                                                            <option value="all" ${numPage == 'all' ? 'selected' : ''}>All</option>
+                                                        </select>
+                                                        <input type="hidden" name="indexPage" value="${tag}" />
+                                                        <input type="hidden" name="action" value="${action}" />
+                                                        
+                                                    </form>
+                                                </th>
 
                                             </tr>
                                         </thead>
@@ -127,7 +140,7 @@
                                         </tbody>
                                     </table>
                                     <a href="productAdd" class="btn btn-primary">Add new product</a>
-                                    <button style="    background: #0077b6;
+                                    <button style="    background: #22A699;
                                             text-decoration: none;
                                             border: none;
                                             height: 2.3rem;
@@ -137,13 +150,13 @@
                                     <nav style="float: right;margin-top: 25px; color: black" aria-label="Page navigation example">
                                         <ul class="pagination">
                                             <c:if test="${tag > 1}">
-                                                <li  class="page-item"><a style="color: black"  class="page-link" href="productManage?indexPage=${tag-1}&amp;action=${action}"">Previous</a></li>
+                                                <li  class="page-item"><a style="color: black"  class="page-link" href="productManage?indexPage=${tag-1}&amp;action=${action}&amp;numPage=${numPage != null ? numPage : '5'}"">Previous</a></li>
                                                 </c:if>
                                                 <c:forEach begin="1" end="${endPage}" var="i">
-                                                <li style="color: black"  class="page-item ${tag == i ?"active":"" || page1 == i ?"active":""  } "><a style="color: black"  class="page-link" href="productManage?indexPage=${i}&amp;action=${action}">${i}</a></li>
+                                                <li style="color: black"  class="page-item ${tag == i ?"active":"" || page1 == i ?"active":""  } "><a style="color: black"  class="page-link" href="productManage?indexPage=${i}&amp;action=${action}&amp;numPage=${numPage != null ? numPage : '5'}">${i}</a></li>
                                                 </c:forEach>
                                                 <c:if test="${tag<endPage}">
-                                                <li class="page-item"><a style="color: black"  class="page-link" href="productManage?indexPage=${tag+1}&amp;action=${action}">Next</a></li>
+                                                <li class="page-item"><a style="color: black"  class="page-link" href="productManage?indexPage=${tag+1}&amp;action=${action}&amp;numPage=${numPage != null ? numPage : '5'}">Next</a></li>
                                                 </c:if>
                                         </ul>
                                     </nav>
@@ -222,7 +235,7 @@
                     padding-top: 12px;
                     padding-bottom: 12px;
                     text-align: left;
-                    background-color: #0077b6;
+                    background-color: #22A699;
                     color: white;
                 }
             </style>

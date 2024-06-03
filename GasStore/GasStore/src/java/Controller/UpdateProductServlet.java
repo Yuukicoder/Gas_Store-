@@ -8,6 +8,7 @@ import DAO.CategoryDAO;
 import DAO.ProductDAO;
 import DAO.ProductImgDAO;
 import DAO.SupplierDAO;
+import DTO.AccountDTO;
 import DTO.AdminDTO;
 import DTO.Category;
 import DTO.ProductImg;
@@ -41,9 +42,7 @@ public class UpdateProductServlet extends HttpServlet{
     private static final long serialVersionUID = 1L;
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-        
-     HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
             String pid_raw = (String)request.getParameter("pid");
@@ -199,5 +198,4 @@ public class UpdateProductServlet extends HttpServlet{
             response.sendRedirect("403.jsp");
         }  
     }
-    
 }

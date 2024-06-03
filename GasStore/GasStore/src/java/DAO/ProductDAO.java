@@ -319,21 +319,22 @@ public List<Product> getProductByCategory(int id) {
         return 0;
     }
     
-    public LinkedHashMap<Product, String> pagingProduct(String action, int index) {
+    public LinkedHashMap<Product, String> pagingProduct(String action, int index, int numPage) {
     LinkedHashMap<Product, String> productCMap = new LinkedHashMap<>();
     String sql = "";
     if (action.equals("hide")) {
         // Assuming isActive 'false' means hide
         sql = "SELECT c.name, p.productID FROM Product p JOIN Category c ON p.categoryID = c.categoryID "
-                + "WHERE p.isActive = 0 ORDER BY p.productID DESC OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+                + "WHERE p.isActive = 0 ORDER BY p.productID DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
     } else {
         // Assuming isActive 'true' means show
         sql = "SELECT c.name, p.productID FROM Product p JOIN Category c ON p.categoryID = c.categoryID "
-                + "WHERE p.isActive = 1 ORDER BY p.productID DESC OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+                + "WHERE p.isActive = 1 ORDER BY p.productID DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
     }
     try {
         PreparedStatement st = connection.prepareStatement(sql);
-        st.setInt(1, (index - 1) * 5);
+        st.setInt(1, (index - 1) * numPage);
+        st.setInt(2, numPage == Integer.MAX_VALUE ? Integer.MAX_VALUE : numPage); // Fetch all if numPage is Integer.MAX_VALUE
         ResultSet rs = st.executeQuery();
         while (rs.next()) {
             int productId = rs.getInt("productID");
@@ -353,30 +354,48 @@ public List<Product> getProductByCategory(int id) {
     return null;
 }
     
-    public LinkedHashMap<Product, String> searchProductsPaging(String action, int index, String searchQuery) {
+    public LinkedHashMap<Product, String> searchProductsPaging(String action, int index, int numPage, String searchQuery) {
     LinkedHashMap<Product, String> productCMap = new LinkedHashMap<>();
-    String sql = "";
+    StringBuilder queryBuilder = new StringBuilder();
+    
+    // Remove extra spaces and split the searchQuery into words
+    String[] keywords = searchQuery.trim().replaceAll("\\s+", " ").split(" ");
+    
     if (action.equals("hide")) {
         // Assuming isActive 'false' means hide
-        sql = "SELECT c.name, p.productID FROM Product p JOIN Category c ON p.categoryID = c.categoryID "
-                + "WHERE p.isActive = 0 AND p.name LIKE ? "
-                + "ORDER BY p.productID DESC OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+        queryBuilder.append("SELECT c.name, p.productID FROM Product p JOIN Category c ON p.categoryID = c.categoryID ")
+                    .append("WHERE p.isActive = 0 AND (");
     } else {
         // Assuming isActive 'true' means show
-        sql = "SELECT c.name, p.productID FROM Product p JOIN Category c ON p.categoryID = c.categoryID "
-                + "WHERE p.isActive = 1 AND p.name LIKE ? "
-                + "ORDER BY p.productID DESC OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+        queryBuilder.append("SELECT c.name, p.productID FROM Product p JOIN Category c ON p.categoryID = c.categoryID ")
+                    .append("WHERE p.isActive = 1 AND (");
     }
-    try {
-        PreparedStatement st = connection.prepareStatement(sql);
-        String searchPattern = "%" + searchQuery + "%";
-        st.setString(1, searchPattern);
-        st.setInt(2, (index - 1) * 5);
+    
+    // Build the dynamic SQL query for each keyword
+    for (int i = 0; i < keywords.length; i++) {
+        queryBuilder.append("p.name LIKE ? ");
+        if (i < keywords.length - 1) {
+            queryBuilder.append("OR ");
+        }
+    }
+    queryBuilder.append(") ORDER BY p.productID DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+    
+    String sql = queryBuilder.toString();
+    
+    try (PreparedStatement st = connection.prepareStatement(sql)) {
+        // Set the keyword parameters
+        for (int i = 0; i < keywords.length; i++) {
+            st.setString(i + 1, "%" + keywords[i] + "%");
+        }
+        // Set the pagination parameters
+        st.setInt(keywords.length + 1, (index - 1) * numPage);
+        st.setInt(keywords.length + 2, numPage == Integer.MAX_VALUE ? Integer.MAX_VALUE : numPage);
+        
         ResultSet rs = st.executeQuery();
         while (rs.next()) {
             int productId = rs.getInt("productID");
             String categoryName = rs.getString("name");
-
+            
             // Fetch the full product details
             Product product = getProductByID(productId); // Assuming this method fetches all product details
             if (product != null) {
@@ -387,7 +406,7 @@ public List<Product> getProductByCategory(int id) {
     } catch (SQLException e) {
         System.out.println("SQL Exception: " + e.getMessage());
     }
-
+    
     return null;
 }
     public int countProducts(String action, String searchQuery) {
@@ -476,33 +495,44 @@ public List<Product> getProductByCategory(int id) {
         }
         return lp;
     }
-    
-    public LinkedHashMap<Product, String> getSearchProduct(String searchKey, String action) {
-        LinkedHashMap<Product, String> productCMap = new LinkedHashMap<>();
-        String sql = "";
-        if (action.equals("hide")) {
-            sql = "SELECT * FROM Product WHERE name LIKE N'%' + ? + '%' and isActive = 0;";
-        } else {
-            sql = "SELECT * FROM Product WHERE name LIKE N'%' + ? + '%' and isActive = 1;";
-        }
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, searchKey);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                String categoryName;
-                Product product = getProductByID(rs.getInt("productID"));
-                categoryName = rs.getString("name");
-                productCMap.put(product, categoryName);
-            }
-            return productCMap;
-        } catch (SQLException e) {
-            System.out.println("Hide" + e.getMessage());
+public LinkedHashMap<Product, String> getSearchProduct(String searchKey, String action) {
+    LinkedHashMap<Product, String> productCMap = new LinkedHashMap<>();
+    StringBuilder queryBuilder = new StringBuilder();
 
-        }
+    // Remove extra spaces and split the searchKey into words
+    String[] keywords = searchKey.trim().replaceAll("\\s+", " ").split(" ");
 
-        return null;
+    if (action.equals("hide")) {
+        queryBuilder.append("SELECT * FROM Product WHERE isActive = 0 AND (");
+    } else {
+        queryBuilder.append("SELECT * FROM Product WHERE isActive = 1 AND (");
     }
+
+    // Build the dynamic SQL query
+    for (int i = 0; i < keywords.length; i++) {
+        queryBuilder.append("name LIKE N'%").append(keywords[i]).append("%'");
+        if (i < keywords.length - 1) {
+            queryBuilder.append(" OR ");
+        }
+    }
+    queryBuilder.append(");");
+
+    String sql = queryBuilder.toString();
+
+    try (PreparedStatement st = connection.prepareStatement(sql)) {
+        ResultSet rs = st.executeQuery();
+        while (rs.next()) {
+            String categoryName;
+            Product product = getProductByID(rs.getInt("productID"));
+            categoryName = rs.getString("name");
+            productCMap.put(product, categoryName);
+        }
+    } catch (SQLException e) {
+        System.out.println("Hide" + e.getMessage());
+    }
+
+    return productCMap;
+}
     
     public static void main(String[] args) {
         ProductDAO p = new ProductDAO();

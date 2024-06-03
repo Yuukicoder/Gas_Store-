@@ -97,7 +97,20 @@
                                                     <th scope="col">Quantity</th>
                                                     <th scope="col">Price</th>
                                                     
-                                                    <th scope="col"></th>
+                                                    <th scope="col">
+                                                        <form method="post" action="productManage">
+                                                        <select name="numPage" onchange="this.form.submit()">
+                                                            <option value="5" ${numPage == '5' ? 'selected' : ''}>5</option>
+                                                            <option value="10" ${numPage == '10' ? 'selected' : ''}>10</option>
+                                                            <option value="20" ${numPage == '20' ? 'selected' : ''}>20</option>
+                                                            <option value="50" ${numPage == '50' ? 'selected' : ''}>50</option>
+                                                            <option value="all" ${numPage == 'all' ? 'selected' : ''}>All</option>
+                                                        </select>
+                                                        <input type="hidden" name="indexPage" value="${tag}" />
+                                                        <input type="hidden" name="action" value="${action}" />
+                                                        <input type="hidden" name="search" value="${search}" />
+                                                    </form>
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -135,7 +148,7 @@
                                                 </c:forEach>
                                             </tbody>
                                         </table>
-                                        <a href="AddProduct" class="btn btn-primary">Add new product</a>
+                                        <a href="productAdd" class="btn btn-primary">Add new product</a>
                                         <button style="    background: #22A699;
                                                 text-decoration: none;
                                                 border: none;
@@ -148,6 +161,7 @@
                                                 <input type="hidden" name="action" value="${action}">
                                                 <input type="hidden" name="indexPage" id="indexPage">
                                                 <input type="hidden" name="search" value="${search}">
+                                                <input type="hidden" name="numPage" value="${numPage != null ? numPage : '5'}">
                                             </form>
 
                                             <ul class="pagination">
@@ -220,9 +234,9 @@
                 }
                 
                 function submitForm(indexPage) {
-        document.getElementById("indexPage").value = indexPage;
-        document.getElementById("paginationForm").submit();
-    }
+                    document.getElementById("indexPage").value = indexPage;
+                    document.getElementById("paginationForm").submit();
+                }
             </script>
 
 

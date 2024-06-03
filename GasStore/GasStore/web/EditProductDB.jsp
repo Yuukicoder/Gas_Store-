@@ -112,7 +112,7 @@
                                                                 </option>
                                                             </c:forEach>
                                                         </select>
-                                                    </div>
+                                                                                                            </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label">Supplier </label>
                                                         <select name="supplier" id="supplier" class="form-control col-4">
@@ -167,7 +167,7 @@
                                                 <div class="left-side"> <p>Image Description</p>
                                                     <h3>
                                                         <c:forEach items="${requestScope.pimgs}" var="c" varStatus="loop">
-                                                            <input type="file" value="" class="form-control col-3" name="ides-${loop.index}" style="width: 80%; margin-bottom: .5rem; margin-top: .5rem" >
+                                                            
                                                             <input type="checkbox" name="deleteImg" value="${c.getImgID()}">
                                                             <img style="width: 12rem; margin: 0.2rem" src="${c.getPath()}" alt="alt"/>
                                                             <input type="hidden"name="imgID-${loop.index}" value="${c.getImgID()}">

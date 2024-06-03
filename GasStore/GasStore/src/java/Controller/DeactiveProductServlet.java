@@ -23,7 +23,7 @@ public class DeactiveProductServlet extends HttpServlet{
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-               HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
             try {
@@ -46,6 +46,5 @@ public class DeactiveProductServlet extends HttpServlet{
         }else{
             response.sendRedirect("403.jsp");
         }
-    }
-    
+    }  
 }

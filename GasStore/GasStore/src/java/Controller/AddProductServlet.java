@@ -45,7 +45,7 @@ public class AddProductServlet extends HttpServlet{
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-                HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
             String name = request.getParameter("name");
@@ -117,13 +117,12 @@ public class AddProductServlet extends HttpServlet{
         }else{
             response.sendRedirect("403.jsp");
         }
-        
              
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
             SupplierDAO supplierDAO = new SupplierDAO();
@@ -136,7 +135,7 @@ public class AddProductServlet extends HttpServlet{
         }else{
             response.sendRedirect("403.jsp");
         }
-            }
     }
+}
     
 
