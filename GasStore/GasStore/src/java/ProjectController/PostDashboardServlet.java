@@ -92,16 +92,16 @@ public class PostDashboardServlet extends HttpServlet {
                         int pcateID = Integer.parseInt(pcateID_raw);
                         postDTOs = pldao.getAllPostWithCondition(pcateID);
                         int numPost = postDTOs.size();
-                        endPage = numPost / 3;
-                        if (numPost % 3 != 0) {
+                        endPage = numPost / 5;
+                        if (numPost % 5 != 0) {
                             endPage++;
                         }
                         postDTOs = pldao.pagingPostWithCondition(pcateID, indexPage);
                     } else {
                         postDTOs = pldao.getAllPost();
                         int numPost = postDTOs.size();
-                        endPage = numPost / 3;
-                        if (numPost % 3 != 0) {
+                        endPage = numPost / 5;
+                        if (numPost % 5 != 0) {
                             endPage++;
                         }
                         postDTOs = pldao.pagingPost(indexPage);
@@ -139,7 +139,7 @@ public class PostDashboardServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                String searchKey = request.getParameter("search");
+                String searchKey = request.getParameter("search").trim();
         System.out.println(searchKey);
         ArrayList<PostDTO> postDTOs = new ArrayList<>();
         PostListDAO pldao = new PostListDAO();

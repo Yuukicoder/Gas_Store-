@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package DAO;
 
 import DTO.PostDTO;
@@ -12,15 +8,14 @@ import java.util.ArrayList;
 
 /**
  *
- * @author 1234
+ * Author 1234
  */
 public class PostListDAO extends DBcontext {
 
     public ArrayList<PostDTO> getAllPost() {
-        String sql = "select p.PostID, p.Title, p.DateCreated, p.Postbanner, p.Context, p.Description, c.Name\n"
-                + "                from Post p join PostCategory c\n"
-                + "                on p.PostCategoryID = c.PostCategoryID";
-
+        String sql = "SELECT p.PostID, p.Title, p.DateCreated, p.DateUpdated, p.Postbanner, p.Context, p.Description, c.Name\n"
+                    + "FROM Post p\n"
+                    + "JOIN PostCategory c ON p.PostCategoryID = c.PostCategoryID";
         ArrayList<PostDTO> postDTOs = new ArrayList<>();
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -29,22 +24,22 @@ public class PostListDAO extends DBcontext {
                 PostDTO postDTO = new PostDTO();
                 postDTO.setPostID(rs.getInt("PostID"));
                 postDTO.setTitle(rs.getString("Title"));
-                postDTO.setPostImg(rs.getString("Postbanner"));
-                postDTO.setDescription(rs.getString("Description"));
                 postDTO.setDateCreated(rs.getString("DateCreated"));
+                postDTO.setDateUpdated(rs.getString("DateUpdated"));
+                postDTO.setPostbanner(rs.getString("Postbanner"));
+                postDTO.setDescription(rs.getString("Description"));
                 postDTO.setContext(rs.getString("Context"));
-                postDTO.setCategory(rs.getString("Name"));
+                postDTO.setPostCate(rs.getString("Name"));
                 postDTOs.add(postDTO);
             }
-
         } catch (SQLException e) {
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
         return postDTOs;
     }
 
     public PostDTO getPostDTOByID(int postID) {
-        String sql = "select * from Post where PostID = ? ";
+        String sql = "SELECT * FROM Post WHERE PostID = ?";
         PostDTO postDTO = new PostDTO();
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -53,11 +48,11 @@ public class PostListDAO extends DBcontext {
             if (rs.next()) {
                 postDTO.setPostID(rs.getInt("PostID"));
                 postDTO.setTitle(rs.getString("Title"));
-                postDTO.setPostImg(rs.getString("Postbanner"));
-                postDTO.setDescription(rs.getString("Description"));
                 postDTO.setDateCreated(rs.getString("DateCreated"));
+                postDTO.setDateUpdated(rs.getString("DateUpdated"));
+                postDTO.setPostbanner(rs.getString("Postbanner"));
+                postDTO.setDescription(rs.getString("Description"));
                 postDTO.setContext(rs.getString("Context"));
-
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -65,18 +60,9 @@ public class PostListDAO extends DBcontext {
         return postDTO;
     }
 
-    public static void main(String[] args) {
-        PostListDAO pldao = new PostListDAO();
-        ArrayList<PostDTO> pdtos = pldao.getPostSearch("Lenovo");
-        System.out.println(pdtos.size());
-
-    }
-
     public ArrayList<PostDTO> getPostLatest(int postID) {
-        String sql = "	select top(2) * from Post where PostID != ?\n"
-                + "	order by DateCreated desc ";
+        String sql = "SELECT TOP(2) * FROM Post WHERE PostID != ? ORDER BY DateCreated DESC";
         ArrayList<PostDTO> postDTOs = new ArrayList<>();
-
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, postID);
@@ -85,12 +71,12 @@ public class PostListDAO extends DBcontext {
                 PostDTO postDTO = new PostDTO();
                 postDTO.setPostID(rs.getInt("PostID"));
                 postDTO.setTitle(rs.getString("Title"));
-                postDTO.setPostImg(rs.getString("Postbanner"));
-                postDTO.setDescription(rs.getString("Description"));
                 postDTO.setDateCreated(rs.getString("DateCreated"));
+                postDTO.setDateUpdated(rs.getString("DateUpdated"));
+                postDTO.setPostbanner(rs.getString("Postbanner"));
+                postDTO.setDescription(rs.getString("Description"));
                 postDTO.setContext(rs.getString("Context"));
                 postDTOs.add(postDTO);
-
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -102,14 +88,15 @@ public class PostListDAO extends DBcontext {
         String sql = "";
         ArrayList<PostDTO> postDTOs = new ArrayList<>();
         if (num == 0) {
-            sql = "select top(6)  p.PostID, p.Title, p.DateCreated, p.Postbanner, p.Context, p.Description, c.Name from Post p \n"
-                    + "join PostCategory c on p.PostCategoryID = c.PostCategoryID\n"
-                    + "order by DateCreated desc";
+            sql = "SELECT TOP(6) p.PostID, p.Title, p.DateCreated, p.DateUpdated, p.Postbanner, p.Context, p.Description, c.Name\n"
+                + "FROM Post p\n"
+                + "JOIN PostCategory c ON p.PostCategoryID = c.PostCategoryID\n"
+                + "ORDER BY DateCreated DESC";
         } else {
-            sql = "select p.PostID, p.Title, p.DateCreated, p.Postbanner, p.Context, p.Description, c.Name"
-                    + " from "
-                    + "Post p join PostCategory c on p.PostCategoryID = c.PostCategoryID\n"
-                    + "	where c.PostCategoryID = ? order by DateCreated desc";
+            sql = "SELECT p.PostID, p.Title, p.DateCreated, p.DateUpdated, p.Postbanner, p.Context, p.Description, c.Name\n"
+                + "FROM Post p\n"
+                + "JOIN PostCategory c ON p.PostCategoryID = c.PostCategoryID\n"
+                + "WHERE c.PostCategoryID = ? ORDER BY DateCreated DESC";
         }
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -121,16 +108,15 @@ public class PostListDAO extends DBcontext {
                 PostDTO postDTO = new PostDTO();
                 postDTO.setPostID(rs.getInt("PostID"));
                 postDTO.setTitle(rs.getString("Title"));
-                postDTO.setPostImg(rs.getString("Postbanner"));
-                postDTO.setDescription(rs.getString("Description"));
                 postDTO.setDateCreated(rs.getString("DateCreated"));
+                postDTO.setDateUpdated(rs.getString("DateUpdated"));
+                postDTO.setPostbanner(rs.getString("Postbanner"));
+                postDTO.setDescription(rs.getString("Description"));
                 postDTO.setContext(rs.getString("Context"));
-                postDTO.setCategory(rs.getString("Name"));
-
+                postDTO.setPostCate(rs.getString("Name"));
                 postDTOs.add(postDTO);
             }
             return postDTOs;
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -148,14 +134,14 @@ public class PostListDAO extends DBcontext {
                 PostDTO postDTO = new PostDTO();
                 postDTO.setPostID(rs.getInt("PostID"));
                 postDTO.setTitle(rs.getString("Title"));
-                postDTO.setPostImg(rs.getString("Postbanner"));
-                postDTO.setDescription(rs.getString("Description"));
                 postDTO.setDateCreated(rs.getString("DateCreated"));
+                postDTO.setDateUpdated(rs.getString("DateUpdated"));
+                postDTO.setPostbanner(rs.getString("Postbanner"));
+                postDTO.setDescription(rs.getString("Description"));
                 postDTO.setContext(rs.getString("Context"));
                 postDTOs.add(postDTO);
             }
             return postDTOs;
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -164,23 +150,35 @@ public class PostListDAO extends DBcontext {
 
     public int addNewPost(PostDTO pdto) {
         PostCategoryDAO postCategoryDAO = new PostCategoryDAO();
-        int categoryId = postCategoryDAO.getCategoryIDByName(pdto.getCategory());
+        int categoryId = postCategoryDAO.getCategoryIDByName(pdto.getPostCate());
+        System.out.println(pdto.getPostCate());
+        System.out.println(categoryId);
+        if (categoryId == -1) {
+            // Handle invalid category ID
+            System.out.println("Invalid Post Category ID");
+            return 0;
+        }
         String sql = "INSERT INTO [dbo].[Post]\n"
-                + "           ([AccountID],\n"
-                + "            [Title]\n"
-                + "           ,[DateCreated]\n"
-                + "           ,[Postbanner]\n"
-                + "           ,[Context]\n"
-                + "           ,[PostCategoryID])\n"
-                + "     VALUES\n"
-                + "           (?,?,FORMAT(GETDATE(), 'yyyy-MM-dd'),?,?,?)";
+                    + "           ([administratorID],\n"
+                    + "            [Title],\n"
+                    + "            [DateCreated],\n"
+                    + "            [DateUpdated],\n"
+                    + "            [Postbanner],\n"
+                    + "            [Context],\n"
+                    + "            [Description],\n"
+                    + "            [PostCategoryID],\n"
+                    + "            [updatedBy])\n"
+                    + "     VALUES\n"
+                    + "           (?,?,FORMAT(GETDATE(), 'yyyy-MM-dd'),FORMAT(GETDATE(), 'yyyy-MM-dd'),?,?,?,?,?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, 1);
+            ps.setInt(1, pdto.getAdministratorID());
             ps.setString(2, pdto.getTitle());
-            ps.setString(3, pdto.getPostImg());
+            ps.setString(3, pdto.getPostbanner());
             ps.setString(4, pdto.getContext());
-            ps.setInt(5, categoryId);
+            ps.setString(5, pdto.getDescription());
+            ps.setInt(6, categoryId);
+            ps.setInt(7, pdto.getUpdatedBy());
             int checkAdd = ps.executeUpdate();
             return checkAdd;
         } catch (SQLException e) {
@@ -190,7 +188,7 @@ public class PostListDAO extends DBcontext {
     }
 
     public int deletePostByID(int postID) {
-        String sql = "delete Post where PostID = ?";
+        String sql = "DELETE FROM Post WHERE PostID = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, postID);
@@ -203,64 +201,85 @@ public class PostListDAO extends DBcontext {
     }
 
     public ArrayList<PostDTO> pagingPostWithCondition(int pcateID, int indexPage) {
-        String sql = "select p.PostID, p.Title, p.DateCreated, p.Postbanner, p.Context, p.Description, c.Name\n"
-                + "                from Post p join PostCategory c\n"
-                + "                on p.PostCategoryID = c.PostCategoryID\n"
-                + "                 where p.PostCategoryID = ?\n"
-                + "                 ORDER BY p.DateCreated DESC\n"
-                + "                 OFFSET ? ROWS FETCH NEXT 3 ROWS ONLY";
+        String sql = "SELECT p.PostID, p.Title, p.DateCreated, p.DateUpdated, p.Postbanner, p.Context, p.Description, c.Name\n"
+                    + "FROM Post p\n"
+                    + "JOIN PostCategory c ON p.PostCategoryID = c.PostCategoryID\n"
+                    + "WHERE p.PostCategoryID = ?\n"
+                    + "ORDER BY p.DateCreated DESC\n"
+                    + "OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
         ArrayList<PostDTO> postDTOs = new ArrayList<>();
         try {
             PreparedStatement st = connection.prepareStatement(sql);
-            st.setInt(1, (pcateID));
-            st.setInt(2, (indexPage - 1) * 3);
+            st.setInt(1, pcateID);
+            st.setInt(2, (indexPage - 1) * 5);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 PostDTO postDTO = new PostDTO();
                 postDTO.setPostID(rs.getInt("PostID"));
                 postDTO.setTitle(rs.getString("Title"));
-                postDTO.setPostImg(rs.getString("Postbanner"));
-                postDTO.setDescription(rs.getString("Description"));
                 postDTO.setDateCreated(rs.getString("DateCreated"));
+                postDTO.setDateUpdated(rs.getString("DateUpdated"));
+                postDTO.setPostbanner(rs.getString("Postbanner"));
+                postDTO.setDescription(rs.getString("Description"));
                 postDTO.setContext(rs.getString("Context"));
-                postDTO.setCategory(rs.getString("Name"));
+                postDTO.setPostCate(rs.getString("Name"));
                 postDTOs.add(postDTO);
             }
-
         } catch (SQLException e) {
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
         return postDTOs;
     }
 
     public ArrayList<PostDTO> pagingPost(int indexPage) {
-        String sql = "select p.PostID, p.Title, p.DateCreated, p.Postbanner, p.Context, p.Description, c.Name\n"
-                + "                from Post p join PostCategory c\n"
-                + "                on p.PostCategoryID = c.PostCategoryID\n"
-                + "                ORDER BY p.DateCreated DESC\n"
-                + "OFFSET ? ROWS FETCH NEXT 3 ROWS ONLY";
+        String sql = "SELECT p.PostID, p.Title, p.DateCreated, p.DateUpdated, p.Postbanner, p.Context, p.Description, c.Name\n"
+                    + "FROM Post p\n"
+                    + "JOIN PostCategory c ON p.PostCategoryID = c.PostCategoryID\n"
+                    + "ORDER BY p.DateCreated DESC\n"
+                    + "OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
         ArrayList<PostDTO> postDTOs = new ArrayList<>();
         try {
             PreparedStatement st = connection.prepareStatement(sql);
-            st.setInt(1, (indexPage - 1) * 3);
-
+            st.setInt(1, (indexPage - 1) * 5);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 PostDTO postDTO = new PostDTO();
                 postDTO.setPostID(rs.getInt("PostID"));
                 postDTO.setTitle(rs.getString("Title"));
-                postDTO.setPostImg(rs.getString("Postbanner"));
-                postDTO.setDescription(rs.getString("Description"));
                 postDTO.setDateCreated(rs.getString("DateCreated"));
+                postDTO.setDateUpdated(rs.getString("DateUpdated"));
+                postDTO.setPostbanner(rs.getString("Postbanner"));
+                postDTO.setDescription(rs.getString("Description"));
                 postDTO.setContext(rs.getString("Context"));
-                postDTO.setCategory(rs.getString("Name"));
+                postDTO.setPostCate(rs.getString("Name"));
                 postDTOs.add(postDTO);
             }
-
         } catch (SQLException e) {
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
         return postDTOs;
     }
 
+    public static void main(String[] args) {
+        PostListDAO postListDAO = new PostListDAO();
+        
+        // Create a new PostDTO instance with sample data
+        PostDTO newPost = new PostDTO();
+        newPost.setAdministratorID(1);  // Sample administrator ID
+        newPost.setTitle("Sample Post Title");
+        newPost.setPostbanner("sample_banner.jpg");
+        newPost.setContext("This is a sample post context.");
+        newPost.setDescription("This is a sample description.");
+        newPost.setPostCate("test");  // Ensure this category exists in your PostCategory table
+        newPost.setUpdatedBy(1);  // Sample updater ID
+        
+        // Add the new post
+        int result = postListDAO.addNewPost(newPost);
+        
+        if (result > 0) {
+            System.out.println("Post added successfully!");
+        } else {
+            System.out.println("Failed to add post.");
+        }
+    }
 }

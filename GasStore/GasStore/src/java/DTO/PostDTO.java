@@ -10,103 +10,137 @@ package DTO;
  */
 public class PostDTO {
 
-    private int postID;
-    private String title;
-    private String dateCreated;
-    private String postImg;
-    private String description ;
-    private String context;
-    private String category;
-
-    public PostDTO(int postID, String title, String dateCreated, String postImg, String description, String context) {
-        this.postID = postID;
-        this.title = title;
-        this.dateCreated = dateCreated;
-        this.postImg = postImg;
-        this.description = description;
-        this.context = context;
-    }
-
-    public PostDTO(int postID, String title, String dateCreated, String postImg, String description, String context, String category) {
-        this.postID = postID;
-        this.title = title;
-        this.dateCreated = dateCreated;
-        this.postImg = postImg;
-        this.description = description;
-        this.context = context;
-        this.category = category;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-    
-
-    public String getContext() {
-        return context;
-    }
-
-    public void setContext(String context) {
-        this.context = context;
-    }
-    
-
-    public int getPostID() {
-        return postID;
-    }
-
-    public void setPostID(int postID) {
-        this.postID = postID;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(String dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-
-
-    public String getPostImg() {
-        return postImg;
-    }
-
-    public void setPostImg(String postImg) {
-        this.postImg = postImg;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-
+    private int PostID;
+    private int administratorID;
+    private String Title;
+    private String DateCreated;
+    private String DateUpdated;
+    private String Postbanner ;
+    private String Context;
+    private String Description;
+    private String PostCate;
+    private int updatedBy;
 
     public PostDTO() {
     }
+
+    public PostDTO(int PostID, int administratorID, String Title, String DateCreated, String DateUpdated, String Postbanner, String Context, String Description, String PostCate, int updatedBy) {
+        this.PostID = PostID;
+        this.administratorID = administratorID;
+        this.Title = Title;
+        this.DateCreated = DateCreated;
+        this.DateUpdated = DateUpdated;
+        this.Postbanner = Postbanner;
+        this.Context = Context;
+        this.Description = Description;
+        this.PostCate = PostCate;
+        this.updatedBy = updatedBy;
+    }
+
+    public PostDTO(int PostID, String Title, String Postbanner, String Context, String Description) {
+        this.PostID = PostID;
+        this.Title = Title;
+        this.Postbanner = Postbanner;
+        this.Context = Context;
+        this.Description = Description;
+    }
+
+    public PostDTO(int PostID, int administratorID, String Title, String Postbanner, String Context, String Description, String PostCate, int updatedBy) {
+        this.PostID = PostID;
+        this.administratorID = administratorID;
+        this.Title = Title;
+        this.Postbanner = Postbanner;
+        this.Context = Context;
+        this.Description = Description;
+        this.PostCate = PostCate;
+        this.updatedBy = updatedBy;
+    }
     
-           
     
-    
-    
-    
- 
+
+    public int getPostID() {
+        return PostID;
+    }
+
+    public int getAdministratorID() {
+        return administratorID;
+    }
+
+    public String getTitle() {
+        return Title;
+    }
+
+    public String getDateCreated() {
+        return DateCreated;
+    }
+
+    public String getDateUpdated() {
+        return DateUpdated;
+    }
+
+    public String getPostbanner() {
+        return Postbanner;
+    }
+
+    public String getContext() {
+        return Context;
+    }
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public String getPostCate() {
+        return PostCate;
+    }
+
+    public int getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setPostID(int PostID) {
+        this.PostID = PostID;
+    }
+
+    public void setAdministratorID(int administratorID) {
+        this.administratorID = administratorID;
+    }
+
+    public void setTitle(String Title) {
+        this.Title = Title;
+    }
+
+    public void setDateCreated(String DateCreated) {
+        this.DateCreated = DateCreated;
+    }
+
+    public void setDateUpdated(String DateUpdated) {
+        this.DateUpdated = DateUpdated;
+    }
+
+    public void setPostbanner(String Postbanner) {
+        this.Postbanner = Postbanner;
+    }
+
+    public void setContext(String Context) {
+        this.Context = Context;
+    }
+
+    public void setDescription(String Description) {
+        this.Description = Description;
+    }
+
+    public void setPostCate(String PostCate) {
+        this.PostCate = PostCate;
+    }
+
+    public void setUpdatedBy(int updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    @Override
+    public String toString() {
+        return "PostDTO{" + "PostID=" + PostID + ", administratorID=" + administratorID + ", Title=" + Title + ", DateCreated=" + DateCreated + ", DateUpdated=" + DateUpdated + ", Postbanner=" + Postbanner + ", Context=" + Context + ", Description=" + Description + ", PostCate=" + PostCate + ", updatedBy=" + updatedBy + '}';
+    }
     
 }
