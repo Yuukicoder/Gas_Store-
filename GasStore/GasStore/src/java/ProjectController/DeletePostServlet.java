@@ -7,6 +7,7 @@ package ProjectController;
 import DAO.AccountDAO;
 import DAO.PostListDAO;
 import DTO.AccountDTO;
+import DTO.AdminDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -60,9 +61,9 @@ public class DeletePostServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        AccountDTO account = (AccountDTO) session.getAttribute("account");
+        AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
-            if (account.getRole() == 1) {
+            if (account.getRoleID()== 1 || account.getRoleID()== 2) {
                 String postID_raw = request.getParameter("id");
                 PostListDAO postListDAO = new PostListDAO();
                 try {

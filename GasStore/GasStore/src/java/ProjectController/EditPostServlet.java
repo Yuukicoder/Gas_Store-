@@ -9,11 +9,13 @@ import DAO.PostCategoryDAO;
 import DAO.PostDetailDAO;
 import DAO.PostListDAO;
 import DTO.AccountDTO;
+import DTO.AdminDTO;
 import DTO.PostCategoryDTO;
 import DTO.PostDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,6 +28,11 @@ import java.util.ArrayList;
  *
  * @author 1234
  */
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024 * 2,  // 2MB
+    maxFileSize = 1024 * 1024 * 10,       // 10MB
+    maxRequestSize = 1024 * 1024 * 50     // 50MB
+)
 public class EditPostServlet extends HttpServlet {
 
     /**
@@ -67,9 +74,9 @@ public class EditPostServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        AccountDTO account = (AccountDTO) session.getAttribute("account");
+        AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
-            if (account.getRole() == 1) {
+            if (account.getRoleID()== 1 || account.getRoleID()== 2) {
                 //List User
                 String poid_raw = request.getParameter("pcid");
 
@@ -103,42 +110,60 @@ public class EditPostServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String pid_raw = request.getParameter("pid");
-        String banner_raw = request.getParameter("pbanner");
-        String content = request.getParameter("content");
-        String title = request.getParameter("title");
-        try {
-            int pid = Integer.parseInt(pid_raw);
-            Part banner = request.getPart("banner");
-            String fileBanner = banner.getSubmittedFileName();
-            PostDTO pdto = new PostDTO();
-            if (fileBanner.isEmpty()) {
-                pdto = new PostDTO(pid, title, "", banner_raw, "", content, "category");
-            } else {
-                pdto = new PostDTO(pid, title, "", fileBanner, "", content, "category");
-            }
-            PostDetailDAO postDetailDAO = new PostDetailDAO();
-            int checkUpdatePost = postDetailDAO.updatePost(pdto);
-            if (checkUpdatePost != 0) {
-                if (!fileBanner.isEmpty()) {
-                    String path = getServletContext().getRealPath("") + "images/Post";
-                    File file = new File(path);
-                    banner.write(path + File.separator + fileBanner);
-                }
-                session.setAttribute("msg", "Update Post Sucess!");
-                response.sendRedirect("postDashboard");
-            } else {
-                System.out.println("error server");
-            }
-        } catch (Exception e) {
+@Override
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    HttpSession session = request.getSession();
+    String pid_raw = request.getParameter("pid");
+    String banner_raw = request.getParameter("pbanner");
+    String content = request.getParameter("content");
+    String title = request.getParameter("title");
 
+    try {
+        int pid = Integer.parseInt(pid_raw);
+        Part banner = request.getPart("banner");
+        String fileBanner = banner.getSubmittedFileName();
+
+        PostDTO pdto;
+        if (fileBanner.isEmpty()) {
+            // Không có file banner mới được tải lên
+            pdto = new PostDTO(pid, title, banner_raw, content, "updated");
+        } else {
+            // Kiểm tra kiểu MIME của file
+            String mimeType = getServletContext().getMimeType(fileBanner);
+            if (mimeType == null || !mimeType.startsWith("image/")) {
+                session.setAttribute("msg", "Chỉ được tải lên tệp hình ảnh (JPG, PNG, GIF).");
+                response.sendRedirect("postDashboard?pid=" + pid);
+                return;
+            }
+
+            pdto = new PostDTO(pid, title, fileBanner, content, "updated");
         }
 
+        PostDetailDAO postDetailDAO = new PostDetailDAO();
+        int checkUpdatePost = postDetailDAO.updatePost(pdto);
+        if (checkUpdatePost != 0) {
+            if (!fileBanner.isEmpty()) {
+                // Lưu file banner mới
+                String path = getServletContext().getRealPath("") + "images/Post";
+                File file = new File(path);
+                banner.write(path + File.separator + fileBanner);
+            }
+            session.setAttribute("msg", "Cập nhật bài viết thành công!");
+            response.sendRedirect("postDashboard");
+        } else {
+            session.setAttribute("msg", "Lỗi máy chủ. Vui lòng thử lại sau.");
+            response.sendRedirect("postDashboard");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        session.setAttribute("msg", "Lỗi: " + e.getMessage());
+        response.sendRedirect("postDashboard");
     }
+}
+
+
+
 
     /**
      * Returns a short description of the servlet.

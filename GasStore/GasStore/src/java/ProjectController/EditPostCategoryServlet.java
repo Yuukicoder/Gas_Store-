@@ -7,6 +7,7 @@ package ProjectController;
 import DAO.AccountDAO;
 import DAO.PostCategoryDAO;
 import DTO.AccountDTO;
+import DTO.AdminDTO;
 import DTO.PostCategoryDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -61,9 +62,9 @@ public class EditPostCategoryServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
                HttpSession session = request.getSession();
-        AccountDTO account = (AccountDTO) session.getAttribute("account");
+        AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
-            if (account.getRole() == 1) {
+            if (account.getRoleID()== 1 || account.getRoleID()== 2) {
                 String pcid_raw = request.getParameter("pcid");
 
                 try {
