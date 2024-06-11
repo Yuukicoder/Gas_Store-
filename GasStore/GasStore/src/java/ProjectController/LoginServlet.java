@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package ProjectController;
 
 import Controller.MaHoa;
@@ -13,6 +12,7 @@ import DTO.Constants;
 import DTO.UserGoogleDTO;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import dal.CustomerDao;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -23,6 +23,7 @@ import jakarta.servlet.http.HttpSession;
 import java.awt.BorderLayout;
 import java.io.IOException;
 import java.io.PrintWriter;
+import model.Customer;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
@@ -32,23 +33,25 @@ import org.apache.http.client.fluent.Request;
  * @author Admin
  */
 public class LoginServlet extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 //                String code = request.getParameter("code");
 //                String accessToken = getToken(code);
 // //               System.out.println(accessToken);
 //                UserGoogleDTO user = getUserInfo(accessToken);
 
-    } 
+    }
 //    public static String getToken(String code) throws ClientProtocolException, IOException {
 //		// call api to get token
 //		String response = Request.Post(Constants.GOOGLE_LINK_GET_TOKEN)
@@ -72,14 +75,16 @@ public class LoginServlet extends HttpServlet {
 //		return googlePojo;
 //	}
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-     @Override
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -100,14 +105,15 @@ public class LoginServlet extends HttpServlet {
 //    }
     }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-       @Override
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String username = request.getParameter("username");
@@ -117,34 +123,44 @@ public class LoginServlet extends HttpServlet {
         AccountDAO accountDAO = new AccountDAO();
         AdminDTO account = accountDAO.checkLogin(username, password);
         if (account == null) {
-            String msg = "Username or Password is not correct!";
-            request.setAttribute("mess", msg);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-
-        } 
-        else 
-        {
+          CustomerDao cus = new CustomerDao();
+                Customer customer = cus.checkuserandPass(username, password);
+                if (customer == null) {
+                    String msg = "Username or Password is not correct!";
+                    request.setAttribute("mess", msg);
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                }
+                else{
+                    session.setAttribute("account", customer);
+                    response.sendRedirect("home");
+                }
+        } else {
             if (isSpecialCharacter(username)) {
                 String msg = "Username don't use special character";
                 request.setAttribute("mess", msg);
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 // Compare username and password case-sensitive
             } else if (!account.getUserName().equals(username) || !account.getPassword().equals(password)) {
-                String msg = "Username or Password is not correct!";
-                request.setAttribute("mess", msg);
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-            } else if (account.getRoleID()== 1) {
+                CustomerDao cus = new CustomerDao();
+                Customer customer = cus.checkuserandPass(username, password);
+                if (customer == null) {
+                    String msg = "Username or Password is not correct!";
+                    request.setAttribute("mess", msg);
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                }
+                else{
+                    session.setAttribute("account", customer);
+                    response.sendRedirect("home");
+                }
+            } else if (account.getRoleID() == 1) {
                 session.setAttribute("account", account);
                 response.sendRedirect("adminHome");
-            }
-            else if(account.getRoleID()==2){
+            } else if (account.getRoleID() == 2) {
                 session.setAttribute("account", account);
                 response.sendRedirect("adminHome");
-                        
-            }
-            else
-            {
-                 session.setAttribute("account", account);
+
+            } else {
+                session.setAttribute("account", account);
                 response.sendRedirect("adminHome");
             }
         }
@@ -161,6 +177,7 @@ public class LoginServlet extends HttpServlet {
         return false;
 
     }
+
     @Override
     public String getServletInfo() {
         return "Short description";

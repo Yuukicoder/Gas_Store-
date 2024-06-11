@@ -31,8 +31,28 @@ public class Customer {
     public Customer() {
     }
     
-    
+    public Customer(String userName, String password, String email) {
+      
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+    }
 
+    public Customer(int customerID, String userName, String password, String image, String firstName, String lastName, String phone, String email) {
+        this.customerID = customerID;
+        this.userName = userName;
+        this.password = password;
+//        this.status = status;
+//        this.gender = gender;
+        this.image = image;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+      
+        this.email = email;
+    }
+    
+    
     public Customer(int customerID, String userName, String password, String firstName, String lastName, String phone, String email) {
         this.customerID = customerID;
         this.userName = userName;
@@ -81,7 +101,7 @@ public class Customer {
         this.isCustomer = isCustomer;
         this.email = email;
     }
-
+    
     public String getEmail() {
         return email;
     }

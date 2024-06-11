@@ -3,8 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller;
+package Controller.AdminAccountServlet;
 
+import static Controller.MaHoa.toSHA1;
+import DTO.AdminDTO;
 import dal.CustomerDao;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,16 +14,15 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.Administrator;
+import jakarta.servlet.http.HttpSession;
 import model.Customer;
 
 /**
  *
  * @author vip2021
  */
-public class AdminManagerServlet extends HttpServlet {
-   
+public class InsertAccountServlet extends HttpServlet {
+     
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -32,22 +33,28 @@ public class AdminManagerServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         CustomerDao cus = new CustomerDao();
-         String pid = request.getParameter("aid");
-        String tp = request.getParameter("atype");
-        List<Administrator> li = cus.getAllAdmin();
-        request.setAttribute("adata", li);
-        if (pid != null && !pid.isEmpty() && tp != null && !tp.isEmpty()) {
-            if (tp.equals("0")) {
-                Administrator u = cus.getAdminByID(Integer.parseInt(pid));
-                request.setAttribute("detail", u);
-            } else {
-                cus.deleteStaff(pid);
-                response.sendRedirect("ManageStaff");
-                return;
+        HttpSession session = request.getSession();
+        AdminDTO account = (AdminDTO) session.getAttribute("account");
+        if (account != null) {
+            if (account.getRoleID() == 1) {
+          
+       String pid = request.getParameter("id");
+        String t = request.getParameter("type");
+        CustomerDao cus = new CustomerDao();
+       
+        if (pid != null && !pid.isEmpty() && t != null && !t.isEmpty()) {
+            if (t.equals("0")) {
+                Customer u = cus.getAllByID(Integer.parseInt(pid));
+                request.setAttribute("detailaccount", u);
             }
         }
-        request.getRequestDispatcher("TableAdmin.jsp").forward(request, response);
+        request.getRequestDispatcher("InsertAccount.jsp").forward(request, response);
+          } else {
+                response.sendRedirect("403.jsp");
+            }
+        } else {
+            response.sendRedirect("403.jsp");
+        }
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -76,19 +83,29 @@ public class AdminManagerServlet extends HttpServlet {
     throws ServletException, IOException {
         CustomerDao cus = new CustomerDao();
 //        String s = request.getParameter("search");
-        String adid = request.getParameter("accountID");
-        String aname = request.getParameter("admin_name");
-        String apass = MaHoa.toSHA1(request.getParameter("passWord"));
-        String amail = request.getParameter("aemail");
-        String ac = request.getParameter("active");
-        String arole = request.getParameter("roleid");
-        Administrator newAdmin = new Administrator(adid != null && !adid.isEmpty() ? Integer.parseInt(adid) : 0,aname,apass,Boolean.parseBoolean(ac),Integer.parseInt(arole),amail);
-        if (adid != null && !adid.isEmpty()) {
-            cus.updateStaff(newAdmin);
+        String uid = request.getParameter("account_id");
+        String name = request.getParameter("username");
+        String pass = request.getParameter("password");
+        String first = request.getParameter("first_name");
+        String last = request.getParameter("last_name");
+        String mail = request.getParameter("email");
+        String phone = request.getParameter("phone_number");
+//        String uimage = request.getParameter("uimg");
+        
+        if (uid != null && !uid.isEmpty()) {
+            Customer newCustomer = new Customer(uid != null && !uid.isEmpty() ? Integer.parseInt(uid) : 0, name,
+                pass, first, last, phone, mail);
+            cus.updateUser(newCustomer);
+            response.sendRedirect("ManageUser");
+            return;
         } else {
-            cus.insertStaff(newAdmin);
+            Customer newCustomer = new Customer(uid != null && !uid.isEmpty() ? Integer.parseInt(uid) : 0, name,
+                toSHA1(pass), first, last, phone, mail);
+            cus.insertCustomer(newCustomer);
+            response.sendRedirect("ManageUser");
+            return;
         }
-        response.sendRedirect("ManageStaff");
+//        response.sendRedirect("ManageUser");
     }
 
     /** 
@@ -99,5 +116,4 @@ public class AdminManagerServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

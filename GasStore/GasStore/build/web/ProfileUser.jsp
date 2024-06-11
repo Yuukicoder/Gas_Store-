@@ -57,23 +57,23 @@
                             <div class="row mt-3">
                                 <div class="col-md-12">
                                     <label class="labels">User Name</label>
-                                    <input type="text" class="form-control"  value="${account.getUsername()}" name="user" id="uname">
+                                    <input type="text" class="form-control"  value="" name="user" id="uname">
                                 </div>
                                 <div class="col-md-12">
                                     <label class="labels">Full name</label>
-                                    <input type="text" class="form-control" value="${account.getFullname()}" name="name" id="ufullname">
+                                    <input type="text" class="form-control" value="" name="name" id="ufullname">
                                 </div>
                                 <div class="col-md-12">
                                     <label class="labels">Mobile Number</label>
-                                    <input type="text" class="form-control"  value="${account.getPhone()}" name="mobile" id="uphone">
+                                    <input type="text" class="form-control"  value="" name="mobile" id="uphone">
                                 </div>
                                 <div class="col-md-12">
                                     <label class="labels">Email</label>
-                                    <input type="text" class="form-control"  value="${account.getEmail()}" name="email" id="uemail">
+                                    <input type="text" class="form-control"  value="" name="email" id="uemail">
                                 </div>
                                 <div class="col-md-12">
                                     <label class="labels">Address</label>
-                                    <input type="text" class="form-control"  value="${account.getAddress()}" name="address" id="uaddress">
+                                    <input type="text" class="form-control"  value="" name="address" id="uaddress">
                                 </div>
                             </div>
                             <div class="mt-5 text-center">

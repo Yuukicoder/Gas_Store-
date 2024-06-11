@@ -64,8 +64,8 @@
                         <div class="d-flex align-items-center justify-content-between mb-4">
                             <h2 class="mb-0">All Users</h2>
                         </div>
-                        <div class="row">
-                            <div class=" pt-4 px-4 col-lg-9">
+                        <!--<div class="row">-->
+                            <!--<div class=" pt-4 px-2 col-lg-8">-->
                                 <div class="bg-secondary text-center rounded p-4">
                                     <div class="col-lg-4 col-6 text-left">
                                         <form action="ManageUser" method="post">
@@ -75,13 +75,20 @@
                                                     <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                                                 </div>
                                             </div>
-                                        </form>
+                                        </form><div class="col-lg-6 col-6">
+                                    <div class="m-3 mt-4">
+                                        <a href="insert-account" class="btn btn-primary">Add new Users</a>
+                                    </div>
+                                    </div>
                                     </div>
 
                                     <div class="table-responsive">
                                         <table id="productTable" class="table text-start align-middle table-bordered table-hover mb-0">
                                             <thead>
                                                 <tr class="text-white">
+                                                    
+                                                    <th scope="col">ID</th>
+                                                    
                                                     <th scope="col">Username</th>
                                                     <th scope="col">Full Name</th>
                                                     <th scope="col">Phone</th>
@@ -90,14 +97,16 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <c:forEach items="${requestScope.lidata}" var="o">
+                                                <c:set var="count" value="0" />
+                                                <c:forEach items="${requestScope.lidata}" var="o" varStatus="status">
                                                     <tr>
+                                                        <td>${status.index+1}</td>
                                                         <td>${o.getUserName()}</td>
                                                         <td>${o.getFullName()}</td>
                                                         <td>${o.getPhone()}</td>
                                                         <td>${o.getEmail()}</td>
                                                         <td>
-                                                            <a href="ManageUser?type=0&id=${o.getCustomerID()}" class="update-button">Update</a><br>
+                                                            <a href="insert-account?type=0&id=${o.getCustomerID()}" class="update-button">Update</a><br>
                                                             <a href="ManageUser?type=1&id=${o.getCustomerID()}">Delete</a>
                                                         </td>
                                                     </tr>
@@ -108,78 +117,34 @@
 
 
                                     </div>
-                                    <div class="pagination col-lg-12">
-                                        <c:if test="${pageNum > 1}">
-                                            
-                                            <a href="?pageNum=${pageNum - 1}"> Previous</a>
-                                        </c:if>
-                                        Page ${pageNum} of ${totalPages}
-                                        <c:if test="${pageNum < totalPages}">
-                                            <a href="?pageNum=${pageNum + 1}">Next </a>
-                                            
-                                        </c:if>
-                                    </div>
-                                </div>
+                                    <div class="row">
+                                        <div class="pagination row">
+                                            <div class="col-lg-4">
+                                                <c:if test="${pageNum > 1}">
 
-                            </div>
+                                                    <a href="?pageNum=${pageNum - 1}"> Previous</a>
+                                                </c:if></div><div class="col-lg-4">
+                                                Page ${pageNum} of ${totalPages}
+                                            </div><div class="col-lg-4">
+                                                <c:if test="${pageNum < totalPages}">
+                                                    <a href="?pageNum=${pageNum + 1}">Next </a>
 
-
-                            <div class=" pt-4 px-4 insert-div col-lg-3">
-                                <div class="bg-secondary text-center rounded p-4">
-                                    <h2 class="font-weight-bold mb-4">Insert New Account</h2>
-                                    <form action="ManageUser" method="post">
-                                        <input type="hidden" value="${detailaccount.customerID}" name="account_id">
-
-                                        <div class="row g-3">
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" class="form-control" id="username" name="username" value="${detailaccount.userName}" placeholder="Username">
-                                                    <label for="username">Username</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" class="form-control" id="password" name="password" value="${detailaccount.password}" placeholder="Password">
-                                                    <label for="password">Password</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" class="form-control" id="first_name" name="first_name" value="${detailaccount.firstName}" placeholder="First Name">
-                                                    <label for="first_name">First Name</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" class="form-control" id="last_name" name="last_name" value="${detailaccount.lastName}" placeholder="Last Name">
-                                                    <label for="last_name">Last Name</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" class="form-control" id="email" name="email" value="${detailaccount.email}" placeholder="Email">
-                                                    <label for="email">Email</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" class="form-control" id="phone_number" name="phone_number" value="${detailaccount.phone}" placeholder="Phone Number">
-                                                    <label for="phone_number">Phone Number</label>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-12">
-                                                <button type="submit" class="btn btn-primary w-100" name="btnInUp">Insert/Update</button>
+                                                </c:if>
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
-                            </div>
+                                    </div>
+                                    
+
+<!--                                </div>
+                            </div>-->
+
+
+                         
                         </div>
                     </div>
                 </div>
                 <div class=" m-3 mt-3 col-lg-3">
-                    <a href="ManageAccount.jsp" class="btn btn-primary">Back to Manager Account</a>
+                    <a href="adminHome" class="btn btn-primary">Back to Manager Account</a>
                 </div>
             </div>
 

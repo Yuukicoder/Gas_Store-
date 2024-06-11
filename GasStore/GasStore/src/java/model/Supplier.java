@@ -19,6 +19,21 @@ public class Supplier {
        private String phone;
        private String homePage;
 
+    public Supplier(int supplierId, String companyName, String email, String phone, String homePage) {
+        this.supplierId = supplierId;
+        this.companyName = companyName;
+        this.email = email;
+        this.phone = phone;
+        this.homePage = homePage;
+    }
+
+    public Supplier(String companyName, String email, String phone, String homePage) {
+        this.companyName = companyName;
+        this.email = email;
+        this.phone = phone;
+        this.homePage = homePage;
+    }
+
     public Supplier(int supplierId, String companyName, boolean status, Date createdDate, String email, String phone, String homePage) {
         this.supplierId = supplierId;
         this.companyName = companyName;
@@ -28,7 +43,6 @@ public class Supplier {
         this.phone = phone;
         this.homePage = homePage;
     }
-
     public int getSupplierId() {
         return supplierId;
     }

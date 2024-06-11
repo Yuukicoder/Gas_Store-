@@ -74,15 +74,15 @@
     </servlet>
     <servlet>
         <servlet-name>SupplierManageServlet</servlet-name>
-        <servlet-class>Controller.SupplierManageServlet</servlet-class>
+        <servlet-class>Controller.AdminAccountServlet.SupplierManageServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AdminAccountServlet</servlet-name>
-        <servlet-class>Controller.AdminAccountServlet</servlet-class>
+        <servlet-class>Controller.AdminAccountServlet.AdminAccountServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AdminManagerServlet</servlet-name>
-        <servlet-class>Controller.AdminManagerServlet</servlet-class>
+        <servlet-class>Controller.AdminAccountServlet.AdminManagerServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LoginGoogleServlet</servlet-name>
@@ -91,6 +91,18 @@
     <servlet>
         <servlet-name>LoginFaceBookServlet</servlet-name>
         <servlet-class>ProjectController.LoginFaceBookServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InsertAdminServlet</servlet-name>
+        <servlet-class>Controller.AdminAccountServlet.InsertAdminServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InsertAccountServlet</servlet-name>
+        <servlet-class>Controller.AdminAccountServlet.InsertAccountServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InsertSupplierServlet</servlet-name>
+        <servlet-class>Controller.AdminAccountServlet.InsertSupplierServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
@@ -187,6 +199,18 @@
     <servlet-mapping>
         <servlet-name>LoginFaceBookServlet</servlet-name>
         <url-pattern>/LoginFaceBookServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InsertAdminServlet</servlet-name>
+        <url-pattern>/create-admin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InsertAccountServlet</servlet-name>
+        <url-pattern>/insert-account</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InsertSupplierServlet</servlet-name>
+        <url-pattern>/insert-supplier</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

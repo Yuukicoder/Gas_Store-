@@ -57,103 +57,65 @@
                 <!-- Navbar Start -->
                 <%@include file="component/navbarAdmin.jsp" %>
                 <!-- Navbar End -->
-
-                <!-- Blank Start -->
-                <div class="container-fluid pt-4 px-4 col-lg-12">
+                <div class="container-fluid pt-4 px-4 insert-div">
                     <div class="bg-secondary text-center rounded p-4">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <h2 class="mb-0">All Users</h2>
-                        </div>
-                        <!--<div class="row">-->
-                            <!--<div class=" pt-4 px-2 col-lg-8">-->
-                                <div class="bg-secondary text-center rounded p-4">
-                                    <div class="col-lg-4 col-6 text-left">
-                                        <form action="ManageUser" method="post">
-                                            <div class="input-group mb-3">
-                                                <input type="text" class="form-control bg-dark border-0" placeholder="Search for account" name="search">
-                                                <div class="input-group-append">
-                                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                                                </div>
-                                            </div>
-                                        </form><div class="col-lg-6 col-6">
-                                    <div class="m-3 mt-4">
-                                        <a href="insert-account" class="btn btn-primary">Add new Users</a>
+                        <c:if test="${empty detail.supplierId}">
+                            <h2 class="font-weight-bold mb-4">Insert New Supplier Account</h2>
+                        </c:if>
+                        <c:if test="${not empty detail.supplierId}">
+                            <h2 class="font-weight-bold mb-4">View Supplier Account</h2>
+                        </c:if>
+                        <form action="insert-supplier" method="post">
+                            <input type="hidden" value="${detail.supplierId}" name="account_id">
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="username" name="username" value="${detail.companyName}" placeholder="Company Name">
+                                        <label for="username">Company Name</label>
                                     </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="email" name="email" value="${detail.email}" placeholder="Email">
+                                        <label for="password">Email</label>
                                     </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="phone" name="phone" value="${detail.phone}" placeholder="Phone">
+                                        <label for="first_name">Phone</label>
                                     </div>
-
-                                    <div class="table-responsive">
-                                        <table id="productTable" class="table text-start align-middle table-bordered table-hover mb-0">
-                                            <thead>
-                                                <tr class="text-white">
-                                                    
-                                                    <th scope="col">ID</th>
-                                                    
-                                                    <th scope="col">Username</th>
-                                                    <th scope="col">Full Name</th>
-                                                    <th scope="col">Phone</th>
-                                                    <th scope="col">Email</th>
-                                                    <th scope="col">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <c:set var="count" value="0" />
-                                                <c:forEach items="${requestScope.lidata}" var="o" varStatus="status">
-                                                    <tr>
-                                                        <td>${status.index+1}</td>
-                                                        <td>${o.getUserName()}</td>
-                                                        <td>${o.getFullName()}</td>
-                                                        <td>${o.getPhone()}</td>
-                                                        <td>${o.getEmail()}</td>
-                                                        <td>
-                                                            <a href="insert-account?type=0&id=${o.getCustomerID()}" class="update-button">Update</a><br>
-                                                            <a href="ManageUser?type=1&id=${o.getCustomerID()}">Delete</a>
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
-                                            </tbody>
-                                        </table>
-
-
-
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="last_name" name="HomePage" value="${detail.homePage}" placeholder="HomePage">
+                                        <label for="last_name">Home Page</label>
                                     </div>
-                                    <div class="row">
-                                        <div class="pagination row">
-                                            <div class="col-lg-4">
-                                                <c:if test="${pageNum > 1}">
+                                </div>
 
-                                                    <a href="?pageNum=${pageNum - 1}"> Previous</a>
-                                                </c:if></div><div class="col-lg-4">
-                                                Page ${pageNum} of ${totalPages}
-                                            </div><div class="col-lg-4">
-                                                <c:if test="${pageNum < totalPages}">
-                                                    <a href="?pageNum=${pageNum + 1}">Next </a>
-
-                                                </c:if>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-
-<!--                                </div>
-                            </div>-->
-
-
-                         
-                        </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary w-100" name="btnInUp">Insert/Update</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class=" m-3 mt-3 col-lg-3">
-                    <a href="adminHome" class="btn btn-primary">Back to Manager Account</a>
+
+               
+                
+                                <div class="m-4 mt-4">
+                    <a href="ManageSupplier" class="btn btn-primary">Back</a>
                 </div>
             </div>
-
             <!-- Blank End -->
+
+
+
+
             <!-- Content End -->
             <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
         </div>
-
-        <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="admin/lib/chart/chart.min.js"></script>

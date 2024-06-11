@@ -8,6 +8,7 @@ import Controller.MaHoa;
 import DAO.AccountDAO;
 import DTO.AccountDTO;
 import DTO.AdminDTO;
+import dal.CustomerDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,12 +17,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import model.Customer;
 
 /**
  *
  * @author msi
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
+@WebServlet(name = "LoginServlet", urlPatterns = {"/login-u"})
 public class LoginServlet2 extends HttpServlet {
 
     /**
@@ -72,34 +74,43 @@ public class LoginServlet2 extends HttpServlet {
         AccountDAO accountDAO = new AccountDAO();
         AdminDTO account = accountDAO.checkLogin(username, password);
         if (account == null) {
-            String msg = "Username or Password is not correct!";
-            request.setAttribute("mess", msg);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-
-        } 
-        else 
-        {
+            CustomerDao cus = new CustomerDao();
+            Customer customer = cus.checkuserandPass(username, password);
+            if (customer == null) {
+                String msg = "Username or Password is not correct!";
+                request.setAttribute("mess", msg);
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            } else {
+                session.setAttribute("account", customer);
+                response.sendRedirect("home");
+                return;
+            }
+        } else {
             if (isSpecialCharacter(username)) {
                 String msg = "Username don't use special character";
                 request.setAttribute("mess", msg);
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 // Compare username and password case-sensitive
             } else if (!account.getUserName().equals(username) || !account.getPassword().equals(password)) {
-                String msg = "Username or Password is not correct!";
-                request.setAttribute("mess", msg);
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-            } else if (account.getRoleID()== 1) {
+                CustomerDao cus = new CustomerDao();
+                Customer customer = cus.checkuserandPass(username, password);
+                if (customer == null) {
+                    String msg = "Username or Password is not correct!";
+                    request.setAttribute("mess", msg);
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                } else {
+                    session.setAttribute("account", customer);
+                    response.sendRedirect("home");
+                }
+            } else if (account.getRoleID() == 1) {
                 session.setAttribute("account", account);
                 response.sendRedirect("adminHome");
-            }
-            else if(account.getRoleID()==2){
+            } else if (account.getRoleID() == 2) {
                 session.setAttribute("account", account);
                 response.sendRedirect("adminHome");
-                        
-            }
-            else
-            {
-                 session.setAttribute("account", account);
+
+            } else {
+                session.setAttribute("account", account);
                 response.sendRedirect("adminHome");
             }
         }
