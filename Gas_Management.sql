@@ -50,17 +50,16 @@ CREATE TABLE [dbo].[Customer](
 	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 CREATE TABLE Discount (
-    DiscountID INT IDENTITY(1,1) PRIMARY KEY,
-    DiscountCode VARCHAR(255) NOT NULL,
-    Description TEXT,
-    DiscountAmount DECIMAL(10,2) NOT NULL,
-    DiscountType VARCHAR(10) CHECK (DiscountType IN ('PERCENT', 'FIXED')), 
-    MinimumPurchase DECIMAL(10,2) DEFAULT 0.00,
-    StartDate DATE,
-    EndDate DATE,
-    IsActive BIT DEFAULT 1  
+    discountID INT IDENTITY(1,1) PRIMARY KEY,
+    discountCode VARCHAR(255) NOT NULL,
+    [name] NVARCHAR(max),
+    discountAmount DECIMAL(10,2) NOT NULL,
+    discountType VARCHAR(10) CHECK (DiscountType IN ('PERCENT', 'FIXED')), 
+    startDate DATE,
+    endDate DATE,
+	quantity int
 );
-CREATE UNIQUE INDEX idx_CouponCode ON Discount(DiscountCode);
+CREATE UNIQUE INDEX idx_CouponCode ON Discount(discountCode);
 
 CREATE TABLE [dbo].[Order](
 		[orderID] [int] IDENTITY(1,1) NOT NULL,
@@ -82,6 +81,18 @@ CREATE TABLE [dbo].[Order](
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
+CREATE TABLE [dbo].[OrderHistory](
+	[orderHistoryID] [int] IDENTITY(1,1) NOT NULL,
+	[orderID] [int] NOT NULL,
+	[customerID] [int] NOT NULL,
+	[status] [varchar](255) NOT NULL,
+	[updatedDate] [nvarchar](50) NULL,
+	CONSTRAINT [PK__OrderHistory] PRIMARY KEY CLUSTERED 
+	(
+		[orderHistoryID] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+	) ON [PRIMARY]
+
 CREATE TABLE [dbo].[OrderDetails](
 		[orderID] [int] NOT NULL,
 		[productID] [int] NOT NULL,
@@ -95,12 +106,12 @@ CREATE TABLE [dbo].[OrderDetails](
 	) ON [PRIMARY]
 
 CREATE TABLE DiscountUsage (
-    UsageID INT IDENTITY(1,1) PRIMARY KEY,
-    DiscountID INT,
-    UseDate DATETIME,
-    OrderID INT,  
-    FOREIGN KEY (DiscountID) REFERENCES Discount(DiscountID),
-    FOREIGN KEY (OrderID) REFERENCES [Order](orderID)  
+    usageID INT IDENTITY(1,1) PRIMARY KEY,
+    discountID INT,
+    useDate DATE,
+    orderID INT,  
+    FOREIGN KEY (discountID) REFERENCES Discount(DiscountID),
+    FOREIGN KEY (orderID) REFERENCES [Order](orderID)  
 );
 
 CREATE TABLE [dbo].[Product](
@@ -267,8 +278,22 @@ ALTER TABLE [dbo].[Post]
 ADD CONSTRAINT [FK_Post_Admin] FOREIGN KEY ([administratorID])
 REFERENCES [dbo].[Administrator] ([administratorID]);  
 
+ALTER TABLE [dbo].[Order]
+DROP COLUMN requiredDate
+
+ALTER TABLE [dbo].[Order]
+DROP COLUMN process
+
+ALTER TABLE [dbo].[Order]
+DROP COLUMN shippedDate
+
+ALTER TABLE [dbo].[OrderHistory]  WITH CHECK ADD  CONSTRAINT [FK_OrderHistory_Orders] FOREIGN KEY([orderID])
+REFERENCES [dbo].[Order] ([orderID])
+
 INSERT INTO dbo.Role(code, name, description) VALUES('Admin', N'Administrator', N'Manager webapp')
 INSERT INTO dbo.Role(code, name, description) VALUES('Staff', N'Staff', N'Website employee')
+
+INSERT [dbo].[Customer] ([userName], [password], [created], [lastLogin], [status], [gender], [image], [firstName], [lastName], [address], [phone], [email], [totalMoney], [isCustomer]) VALUES (N'duc', N'Qua3CCUdJoXNHnIq6rQW/tVqu1M=', NULL, NULL, 1, NULL, NULL, N'huy', N'nguyen', NULL, N'0377043909', N'test@gmail.com', NULL, 1)
 
 INSERT INTO dbo.Shipments(CompanyName, Phone, Email, Status, createdDate) VALUES(N'J&T Express', N'1900 1088', N'JTExpress@gmail.com',1, GETDATE())
 INSERT INTO dbo.Shipments(CompanyName, Phone, Email, Status, createdDate) VALUES(N'NINJA VAN', N'1900 886 877', N'NINJAVAN@gmail.com',1, GETDATE())
@@ -392,14 +417,14 @@ INSERT [dbo].[Product] ([code], [name], [keywords],
 [shortDescription], [description],
 [categoryID], [supplierId], [isActive], [unitPrice], [image], [stockQuantity], [unitOnOrders], [createdDate], [createdBy]) VALUES
 (N'bao-ro-ri-gas-13', N'BÁO RÒ RỈ GAS', N'báo;rò rỉ',
-N'Đơn vị chuyên nhập khẩu, phân phối sỉ và lẻ các thiết bị Gas, van Gas an toàn, hệ thống gas trung tâm, hệ thống gas công nghiệp, máy báo rò rỉ gas, dây gas… đảm bảo tuyệt đối an toàn khi sử dụng.:Thiết bị báo rò rỉ gas đã trở nên khá quen thuộc với nhiều nhà bếp nhà hàng, bếp công nghiệp và cả bếp của các gia đình hiện nay. Công dụng chính của thiết bị gas này là phát hiện khí gas bị rò rỉ và báo động khi có các sự cố về rò rỉ gas, đảm bảo an toàn trong nhà bếp.::Đặc biệt là trong các nhà hàng thì các thiết bị bếp hoặc van dây được sử dụng với cường độ cao & thường xuyên thì việc xì gas hay rò rỉ gas rất dễ xảy ra. Trong nhiều trường hợp khác nguyên nhân xảy ra các sự cố về gas cũng có thể là do vết dầu mỡ bắn vào lâu ngày làm mục dây gas hoặc chuột bọ cắn dây gas, vì vậy việc trang bị cho nhà bếp một thiết bị báo rò rỉ gas này là khá quan trọng và đảm bảo an toàn cho cả người và tài sản của nhà hàng.::Thiết bị báo rò rỉ gas sẽ phát huy tác dụng tốt nhất khi kết hợp với thiết bị ngắt gas tự động và còi hú báo động, khi có sự cố thì thiết bị này sẽ truyền tín hiệu đến còi hú để báo động sự cố và thiết bị ngắt gas cũng tự động ngắt gas ngăn không cho gas tiếp tục rò rỉ ra ngoài.::Hiện nay trên thị trường thì các thiết bị báo rò rỉ gas khá đa dạng về nguồn gốc xuất xứ như Hàn Quốc, Trung Quốc, Đài Loan, Nhật Bản…Tùy theo ngân sách và nhu cầu của từng nhà hàng thì có thể sắm thiết bị cho phù hợp.::Toàn phát là đơn vị chuyên nhập khẩu và phân phối các thiết bị báo rò rỉ gas an toàn của Hàn Quốc, Nhật Bản, Hàn Quốc. chúng tôi sẵn sàng tư vấn cho quý vị lựa chọn thiết bị phù hợp, lắp đặt tận nơi, hướng dẫn sử dụng và bảo hành bảo trì chu đáo cho các sản phẩm bán ra.', N'Model	VTD 2005 (AC type):Nhận biết loại khí	LPG, LNG, Khí Mêtan, Khí dễ cháy:Điểm cảnh báo	Nồng độ cảnh báo 25% LEL:(Điểm cài đặt 18% LEL)::Công nghệ phát hiện	Khuyếch tán và phân tích chất dế cháy:Thời gian kích hoạt	Trong vòng 20 giây:Nhiệt độ và độ ẩm vận hành	0℃~40℃. < 90% (RH):Nguồn điện	AC 220V. 50/60Hz:Tiêu thụ điện năng	1.5W:Trọng lượng và Kích thước	224g và 70x120x38mm:Cảnh báo	 Đèn LED màu vàng:Phát âm báo (70dB DC 12V 20mA):ABS Nhựa chống cháy',
+N'Phát hiện khí gas bị rò rỉ và báo động khi có các sự cố về rò rỉ gas', N'Model	VTD 2005 (AC type):Nhận biết loại khí	LPG, LNG, Khí Mêtan, Khí dễ cháy:Điểm cảnh báo	Nồng độ cảnh báo 25% LEL:(Điểm cài đặt 18% LEL)::Công nghệ phát hiện	Khuyếch tán và phân tích chất dế cháy:Thời gian kích hoạt	Trong vòng 20 giây:Nhiệt độ và độ ẩm vận hành	0℃~40℃. < 90% (RH):Nguồn điện	AC 220V. 50/60Hz:Tiêu thụ điện năng	1.5W:Trọng lượng và Kích thước	224g và 70x120x38mm:Cảnh báo	 Đèn LED màu vàng:Phát âm báo (70dB DC 12V 20mA):ABS Nhựa chống cháy',
 3, 1, 1, 200000, 'images/products/13/df.jpg', 3151, 245, CAST(N'1969-04-22T08:37:27.990' AS DateTime), 1)
 
 INSERT [dbo].[Product] ([code], [name], [keywords],
 [shortDescription], [description],
 [categoryID], [supplierId], [isActive], [unitPrice], [image], [stockQuantity], [unitOnOrders], [createdDate], [createdBy]) VALUES
 (N'bao-ro-ri-gas-jic-678n-14', N'BÁO RÒ RỈ GAS JIC-678N', N'báo;rò rỉ;JIC-678N',
-N'', N'Thiết bị báo rò rỉ gas đã trở nên khá quen thuộc với nhiều nhà bếp nhà hàng, bếp công nghiệp và cả bếp của các gia đình hiện nay. Công dụng chính của thiết bị gas này là phát hiện khí gas bị rò rỉ và báo động khi có các sự cố về rò rỉ gas, đảm bảo an toàn trong nhà bếp.:Đặc biệt là trong các nhà hàng thì các thiết bị bếp hoặc van dây được sử dụng với cường độ cao & thường xuyên thì việc xì gas hay rò rỉ gas rất dễ xảy ra. Trong nhiều trường hợp khác nguyên nhân xảy ra các sự cố về gas cũng có thể là do vết dầu mỡ bắn vào lâu ngày làm mục dây gas hoặc chuột bọ cắn dây gas, vì vậy việc trang bị cho nhà bếp một thiết bị báo rò rỉ gas này là khá quan trọng và đảm bảo an toàn cho cả người và tài sản của nhà hàng.:Thiết bị báo rò rỉ gas sẽ phát huy tác dụng tốt nhất khi kết hợp với thiết bị ngắt gas tự động và còi hú báo động, khi có sự cố thì thiết bị này sẽ truyền tín hiệu đến còi hú để báo động sự cố và thiết bị ngắt gas cũng tự động ngắt gas ngăn không cho gas tiếp tục rò rỉ ra ngoài.:Hiện nay trên thị trường thì các thiết bị báo rò rỉ gas khá đa dạng về nguồn gốc xuất xứ như Hàn Quốc, Trung Quốc, Đài Loan, Nhật Bản…Tùy theo ngân sách và nhu cầu của từng nhà hàng thì có thể sắm thiết bị cho phù hợp.:Toàn phát là đơn vị chuyên nhập khẩu và phân phối các thiết bị báo rò rỉ gas an toàn của Hàn Quốc, Nhật Bản, Hàn Quốc. chúng tôi sẵn sàng tư vấn cho quý vị lựa chọn thiết bị phù hợp, lắp đặt tận nơi, hướng dẫn sử dụng và bảo hành bảo trì chu đáo cho các sản phẩm bán ra.:Ngoài ra Petro VN cũng là nhà thầu::Lắp đặt mới, thay thế các thiết bị đã cũ, bảo trì bảo dưỡng hệ thống gas, ống gas, van dây gas của các nhà hàng đã sử dụng lâu ngày & có nguy cơ bị xì gas hoặc không đảm bảo an toàn khi có các sự cố về Gas.:Nhận tư vấn thiết kế thi công hệ thống gas an toàn tuyệt đối khi sử dụng cho nhà bếp nhà hàng, bếp công nghiệp căng tin trường học, bệnh viện nhà máy khu chế xuất…',
+N'Phát hiện khí gas bị rò rỉ và báo động khi có các sự cố về rò rỉ gas', N'Thiết bị báo rò rỉ gas đã trở nên khá quen thuộc với nhiều nhà bếp nhà hàng, bếp công nghiệp và cả bếp của các gia đình hiện nay. Công dụng chính của thiết bị gas này là phát hiện khí gas bị rò rỉ và báo động khi có các sự cố về rò rỉ gas, đảm bảo an toàn trong nhà bếp.:Đặc biệt là trong các nhà hàng thì các thiết bị bếp hoặc van dây được sử dụng với cường độ cao & thường xuyên thì việc xì gas hay rò rỉ gas rất dễ xảy ra. Trong nhiều trường hợp khác nguyên nhân xảy ra các sự cố về gas cũng có thể là do vết dầu mỡ bắn vào lâu ngày làm mục dây gas hoặc chuột bọ cắn dây gas, vì vậy việc trang bị cho nhà bếp một thiết bị báo rò rỉ gas này là khá quan trọng và đảm bảo an toàn cho cả người và tài sản của nhà hàng.:Thiết bị báo rò rỉ gas sẽ phát huy tác dụng tốt nhất khi kết hợp với thiết bị ngắt gas tự động và còi hú báo động, khi có sự cố thì thiết bị này sẽ truyền tín hiệu đến còi hú để báo động sự cố và thiết bị ngắt gas cũng tự động ngắt gas ngăn không cho gas tiếp tục rò rỉ ra ngoài.:Hiện nay trên thị trường thì các thiết bị báo rò rỉ gas khá đa dạng về nguồn gốc xuất xứ như Hàn Quốc, Trung Quốc, Đài Loan, Nhật Bản…Tùy theo ngân sách và nhu cầu của từng nhà hàng thì có thể sắm thiết bị cho phù hợp.:Toàn phát là đơn vị chuyên nhập khẩu và phân phối các thiết bị báo rò rỉ gas an toàn của Hàn Quốc, Nhật Bản, Hàn Quốc. chúng tôi sẵn sàng tư vấn cho quý vị lựa chọn thiết bị phù hợp, lắp đặt tận nơi, hướng dẫn sử dụng và bảo hành bảo trì chu đáo cho các sản phẩm bán ra.:Ngoài ra Petro VN cũng là nhà thầu::Lắp đặt mới, thay thế các thiết bị đã cũ, bảo trì bảo dưỡng hệ thống gas, ống gas, van dây gas của các nhà hàng đã sử dụng lâu ngày & có nguy cơ bị xì gas hoặc không đảm bảo an toàn khi có các sự cố về Gas.:Nhận tư vấn thiết kế thi công hệ thống gas an toàn tuyệt đối khi sử dụng cho nhà bếp nhà hàng, bếp công nghiệp căng tin trường học, bệnh viện nhà máy khu chế xuất…',
 3, 1, 1, 195000, 'images/products/14/df.jpg', 2041, 25, CAST(N'1969-04-22T08:37:27.990' AS DateTime), 1)
 
 INSERT [dbo].[Product] ([code], [name], [keywords],
@@ -415,21 +440,27 @@ INSERT [dbo].[Product] ([code], [name], [keywords],
 [shortDescription], [description],
 [categoryID], [supplierId], [isActive], [unitPrice], [image], [stockQuantity], [unitOnOrders], [createdDate], [createdBy]) VALUES
 (N'day-dan-gas-cao-ap-cong-nghiep-windo-16', N'Dây dẫn gas cao áp công nghiệp WINDO', N'dây dẫn;cáo áp',
-N'sdesc', N'Dây dẫn gas công nghiệp là sản phẩm đầu ra áp suất cao dùng cho van bếp gas công nghiệp khè nấu nhanh có độ bền rất cao,được người việt tin dùng toàn quốc. -Dây gas sử dụng cho van gas công nghiệp dùng bình gas 12kg hoặc bình gas bò 45kg - 50kg. -Sử dụng cao su chuyên dụng NBR ( nhật bản ) -->có độ bóng,không mùi,không bị lão hoá.',
+N'Sản phẩm chất lượng cao, được thiết kế đặc biệt để đảm bảo an toàn và hiệu suất cho hệ thống dẫn gas.', N'Dây dẫn gas công nghiệp là sản phẩm đầu ra áp suất cao dùng cho van bếp gas công nghiệp khè nấu nhanh có độ bền rất cao,được người việt tin dùng toàn quốc. -Dây gas sử dụng cho van gas công nghiệp dùng bình gas 12kg hoặc bình gas bò 45kg - 50kg. -Sử dụng cao su chuyên dụng NBR ( nhật bản ) -->có độ bóng,không mùi,không bị lão hoá.',
 3, 6, 1, 150000, 'images/products/16/df.jpg', 1000, 311, CAST(N'1969-04-22T08:37:27.990' AS DateTime), 1)
 
 INSERT [dbo].[Product] ([code], [name], [keywords],
 [shortDescription], [description],
 [categoryID], [supplierId], [isActive], [unitPrice], [image], [stockQuantity], [unitOnOrders], [createdDate], [createdBy]) VALUES
 (N'van-dieu-ap-ngat-gas-tu-dong-cao-ap-windo-wd-349-17', N'VAN ĐIỀU ÁP NGẮT GAS TỰ ĐỘNG CAO ÁP WINDO WD-349', N'van;van điều áp;ngắt gas;tự động;windo;wd-349',
-N'VAN ĐIỀU ÁP NGẮT GAS TỰ ĐỘNG CAO ÁP WINDO WD-349', N'desc',
+N'VAN ĐIỀU ÁP NGẮT GAS TỰ ĐỘNG CAO ÁP WINDO WD-349', N'Van điều áp ngắt gas tự động cao áp WINDO WD-349 là một thiết bị an toàn và hiệu quả được thiết kế để kiểm soát áp suất trong hệ thống gas cao áp. Với chức năng tự động ngắt gas khi áp suất vượt quá mức cho phép, van này giúp bảo vệ hệ thống khỏi các nguy cơ gây cháy nổ do áp suất quá cao.
+
+Sử dụng công nghệ tiên tiến và vật liệu chất lượng cao, van điều áp WINDO WD-349 đảm bảo độ chính xác và đáng tin cậy trong việc kiểm soát áp suất. Thiết kế thông minh và dễ dàng lắp đặt giúp tối ưu hóa hiệu suất hoạt động của hệ thống gas và giảm thiểu sự cố.
+
+Với khả năng hoạt động tự động và đáng tin cậy, van điều áp ngắt gas tự động cao áp WINDO WD-349 là một phần không thể thiếu trong hệ thống gas công nghiệp và thương mại, giúp bảo vệ an toàn và tăng cường hiệu suất hoạt động.',
 3, 6, 1, 70000, 'images/products/17/df.jpg', 422, 43, CAST(N'1969-04-22T08:37:27.990' AS DateTime), 1)
 
 INSERT [dbo].[Product] ([code], [name], [keywords],
 [shortDescription], [description],
 [categoryID], [supplierId], [isActive], [unitPrice], [image], [stockQuantity], [unitOnOrders], [createdDate], [createdBy]) VALUES
 (N'van-dieu-ap-ngat-gas-tu-dong-cao-ap-windo-wd-348-18', N'VAN ĐIỀU ÁP NGẮT GAS TỰ ĐỘNG CAO ÁP WINDO WD-348', N'van;van điều áp;ngắt gas;tự động;windo;wd-348',
-N'VAN ĐIỀU ÁP NGẮT GAS TỰ ĐỘNG CAO ÁP WINDO WD-348', N'desc',
+N'VAN ĐIỀU ÁP NGẮT GAS TỰ ĐỘNG CAO ÁP WINDO WD-348', N'Van điều áp ngắt gas tự động cao áp WINDO WD-348 là một thiết bị chất lượng cao được thiết kế để kiểm soát áp suất trong hệ thống gas cao áp. Với chức năng tự động ngắt gas khi áp suất vượt quá mức cho phép, van này đảm bảo an toàn và độ tin cậy cao cho hệ thống.
+
+Sử dụng công nghệ tiên tiến và vật liệu chất lượng, van WINDO WD-348 giúp duy trì áp suất ổn định trong hệ thống gas, ngăn ngừa các tình huống nguy hiểm có thể xảy ra do áp suất quá cao. Thiết kế thông minh và dễ dàng lắp đặt, van này phù hợp với nhiều ứng dụng trong ngành công nghiệp và thương mại.',
 3, 6, 1, 70000, 'images/products/18/df.jpg', 111, 64, CAST(N'1969-04-22T08:37:27.990' AS DateTime), 1)
 
 
@@ -439,21 +470,33 @@ INSERT [dbo].[Product] ([code], [name], [keywords],
 [shortDescription], [description],
 [categoryID], [supplierId], [isActive], [unitPrice], [image], [stockQuantity], [unitOnOrders], [createdDate], [createdBy]) VALUES
 (N'van-dieu-ap-srg-19', N'Van điều áp SRG', N'Van điều áp;SRG',
-N'Van điều áp đảm bảo đường truyền gas ổn định, an toàn', N'',
+N'Van điều áp đảm bảo đường truyền gas ổn định, an toàn', N'VAN ĐIỀU ÁP SRG là một thiết bị chất lượng cao được sử dụng để kiểm soát áp suất trong hệ thống gas. Thiết bị này được thiết kế để tự động điều chỉnh áp suất và duy trì mức áp suất ổn định trong hệ thống.
+
+Với tính năng tự động điều chỉnh, VAN ĐIỀU ÁP SRG giúp ngăn chặn các vấn đề có thể xảy ra do áp suất gas biến đổi không đều, bảo vệ hệ thống khỏi những cú sốc áp suất đột ngột và đảm bảo hoạt động ổn định của các thiết bị và đường ống gas.
+
+VAN ĐIỀU ÁP SRG được sản xuất với công nghệ tiên tiến và vật liệu chất lượng, đảm bảo độ tin cậy cao và tuổi thọ dài lâu. Thiết bị này dễ dàng lắp đặt và vận hành, phù hợp cho nhiều ứng dụng trong các ngành công nghiệp và thương mại.',
 3, 3, 1, 70000, 'images/products/19/df.jpg', 4380, 43, CAST(N'1969-04-22T08:37:27.990' AS DateTime), 1)
 
 INSERT [dbo].[Product] ([code], [name], [keywords],
 [shortDescription], [description],
 [categoryID], [supplierId], [isActive], [unitPrice], [image], [stockQuantity], [unitOnOrders], [createdDate], [createdBy]) VALUES
 (N'van-dieu-ap-comap-20', N'Van điều áp Comap', N'Van điều áp;Comap',
-N'Van điều áp đảm bảo đường truyền gas ổn định, an toàn', N'',
+N'Van điều áp đảm bảo đường truyền gas ổn định, an toàn', N'VAN ĐIỀU ÁP COMAP là một thiết bị điều chỉnh áp suất chất lượng cao được sử dụng trong hệ thống gas. Thiết bị này được thiết kế để tự động điều chỉnh áp suất và duy trì mức áp suất ổn định trong hệ thống gas.
+
+Với tính năng tự động điều chỉnh, VAN ĐIỀU ÁP COMAP giúp ngăn chặn các vấn đề có thể xảy ra do áp suất gas biến đổi không đều, bảo vệ hệ thống khỏi những cú sốc áp suất đột ngột và đảm bảo hoạt động ổn định của các thiết bị và đường ống gas.
+
+Thiết bị này được sản xuất với công nghệ tiên tiến và vật liệu chất lượng, đảm bảo độ tin cậy cao và tuổi thọ dài lâu. VAN ĐIỀU ÁP COMAP cung cấp hiệu suất ổn định và đáng tin cậy trong môi trường làm việc khắc nghiệt và yêu cầu cao về kiểm soát áp suất.',
 3, 3, 1, 80000, 'images/products/20/df.jpg', 6423, 222, CAST(N'1969-04-22T08:37:27.990' AS DateTime), 1)
 
 INSERT [dbo].[Product] ([code], [name], [keywords],
 [shortDescription], [description],
 [categoryID], [supplierId], [isActive], [unitPrice], [image], [stockQuantity], [unitOnOrders], [createdDate], [createdBy]) VALUES
 (N'van-dieu-ap-reca-21', N'Van điều áp Reca', N'Van điều áp;Reca',
-N'Van điều áp đảm bảo đường truyền gas ổn định, an toàn', N'',
+N'Van điều áp đảm bảo đường truyền gas ổn định, an toàn', N'VAN ĐIỀU ÁP RECA là một thành phần quan trọng trong hệ thống gas, được thiết kế để điều chỉnh áp suất gas và bảo vệ hệ thống khỏi những biến động áp suất không mong muốn.
+
+Thiết bị này tự động điều chỉnh áp suất vào mức ổn định và an toàn, đảm bảo rằng các thiết bị và đường ống gas hoạt động hiệu quả và ổn định. VAN ĐIỀU ÁP RECA giúp ngăn chặn các vấn đề có thể xảy ra do áp suất gas biến đổi không đều, như sự cố về áp suất quá cao hoặc quá thấp.
+
+Thiết bị này được chế tạo từ các vật liệu chất lượng cao và được sản xuất với công nghệ tiên tiến, đảm bảo độ bền và độ tin cậy cao trong môi trường làm việc khắc nghiệt. VAN ĐIỀU ÁP RECA cung cấp hiệu suất ổn định và đáng tin cậy trong mọi điều kiện hoạt động.',
 3, 3, 1, 65000, 'images/products/21/df.jpg', 3423, 43, CAST(N'1969-04-22T08:37:27.990' AS DateTime), 1)
 
 
@@ -461,7 +504,7 @@ INSERT [dbo].[Product] ([code], [name], [keywords],
 [shortDescription], [description],
 [categoryID], [supplierId], [isActive], [unitPrice], [image], [stockQuantity], [unitOnOrders], [createdDate], [createdBy]) VALUES
 (N'vong-chan-gio-the-he-moi-22', N'VÒNG CHẮN GIÓ THẾ HỆ MỚI', N'chắn gió',
-N'', N'Vòng kiềng chắn gió thế hệ mới, sử dụng cho bếp gas mini của NaMilux.:Khả nặng chịu tải lên đến 25kg:Giúp che chắn ngọn lửa không bị gió khi ở ngoài trời.:Giúp tăng hiệu suất đốt (giảm thoát nhiệt) tiết kiệm thời gian nấu lên đến 36%. Và đồng thời tiết kiệm gas 36%:Lưu ý: chỉ sử dụng môi trường ngoài trời nơi có gió lùa. Nếu sử dụng trong phòng thì nhiệt độ tụ quá cao có thể ảnh hưởng đến độ bền của đầu đốt.',
+N'Giảm thiểu tối đa tác động của gió, giữ cho không gian bên trong vệt gió luôn yên tĩnh và thoải mái.', N'Vòng kiềng chắn gió thế hệ mới, sử dụng cho bếp gas mini của NaMilux.:Khả nặng chịu tải lên đến 25kg:Giúp che chắn ngọn lửa không bị gió khi ở ngoài trời.:Giúp tăng hiệu suất đốt (giảm thoát nhiệt) tiết kiệm thời gian nấu lên đến 36%. Và đồng thời tiết kiệm gas 36%:Lưu ý: chỉ sử dụng môi trường ngoài trời nơi có gió lùa. Nếu sử dụng trong phòng thì nhiệt độ tụ quá cao có thể ảnh hưởng đến độ bền của đầu đốt.',
 3, 4, 1, 100000, 'images/products/22/df.jpg', 56365, 3256, CAST(N'1969-04-22T08:37:27.990' AS DateTime), 1)
 
 
@@ -533,3 +576,73 @@ insert into Product ([code], [name], [keywords],
 [categoryID], [supplierId], [isActive], [unitPrice], [image], [stockQuantity], [unitOnOrders], [createdDate], [createdBy])
 VALUES (N'bep-gas-khe-cao-cap-windo-6b-33', N'BẾP GAS KHÈ CAO CẤP WINDO 6B', N'WINDO 6B', N'Toàn thân bằng gang đúc nguyên khối, Bộ hòa khí ngoại nhập', N'cho hiệu năng cao cùng lửa  to và mạnh, giúp việc chế biến các món Á, món xào với lửa lớn, món chiên, nước sốt… trở nên đơn giản hơn bao giờ hết. Mặc dù cho hiệu suất cao với lửa  nhưng bếp tiêu tốn gas không đáng kể chỉ 720g/h. Sử dụng hệ thống đánh lửa Magneto tiên tiến, lên lửa cực nhanh và không phải lo thay pin bất tiện như đánh lửa IC. Số vòng lửa có nhiều mức để người dùng có thể tùy ý chỉnh theo nhu cầu nấu nướng. Sử dụng bếp gas công nghiệp là giải pháp tiết kiệm chi phí, tiện lợi, an toàn (nếu sử dụng đúng cách) cho các nhà hàng, quán ăn.',
 2, 6, 1, 899000, 'images/products/33/df.jpg', 10, 20,  CAST(N'2023-05-13T15:35:00.000' AS DateTime), 1)
+
+
+
+INSERT INTO ProductImg([productID], [Path]) VALUES (1, 'images/product_detail/1_1.jpg')
+INSERT INTO ProductImg([productID], [Path]) VALUES (1, 'images/product_detail/1_2.jpg')
+INSERT INTO ProductImg([productID], [Path]) VALUES (2, 'images/product_detail/2_1.jpg')
+INSERT INTO ProductImg([productID], [Path]) VALUES (2, 'images/product_detail/2_2.jpg')
+INSERT INTO ProductImg([productID], [Path]) VALUES (3, 'images/product_detail/3_1.jpg')
+INSERT INTO ProductImg([productID], [Path]) VALUES (3, 'images/product_detail/3_2.jpg')
+INSERT INTO ProductImg([productID], [Path]) VALUES (4, 'images/product_detail/4_1.jpg')
+INSERT INTO ProductImg([productID], [Path]) VALUES (4, 'images/product_detail/4_2.jpg')
+INSERT INTO ProductImg([productID], [Path]) VALUES (5, 'images/product_detail/5_1.jpg')
+INSERT INTO ProductImg([productID], [Path]) VALUES (5, 'images/product_detail/5_2.jpg')
+INSERT INTO ProductImg([productID], [Path]) VALUES (6, 'images/product_detail/6_1.jpg')
+INSERT INTO ProductImg([productID], [Path]) VALUES (6, 'images/product_detail/6_2.jpg')
+INSERT INTO ProductImg([productID], [Path]) VALUES (7, 'images/product_detail/7_1.jpg')
+INSERT INTO ProductImg([productID], [Path]) VALUES (7, 'images/product_detail/7_2.jpg')
+INSERT INTO ProductImg([productID], [Path]) VALUES (8, 'images/product_detail/8_1.jpg')
+INSERT INTO ProductImg([productID], [Path]) VALUES (8, 'images/product_detail/8_2.jpg')
+INSERT INTO ProductImg([productID], [Path]) VALUES (9, 'images/product_detail/9_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (9, 'images/product_detail/9_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (10, 'images/product_detail/10_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (10, 'images/product_detail/10_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (11, 'images/product_detail/11_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (11, 'images/product_detail/11_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (12, 'images/product_detail/12_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (12, 'images/product_detail/12_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (13, 'images/product_detail/13_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (13, 'images/product_detail/13_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (14, 'images/product_detail/14_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (14, 'images/product_detail/14_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (15, 'images/product_detail/15_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (15, 'images/product_detail/15_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (16, 'images/product_detail/16_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (16, 'images/product_detail/16_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (17, 'images/product_detail/17_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (17, 'images/product_detail/17_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (18, 'images/product_detail/18_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (18, 'images/product_detail/18_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (19, 'images/product_detail/19_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (19, 'images/product_detail/19_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (20, 'images/product_detail/20_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (20, 'images/product_detail/20_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (21, 'images/product_detail/21_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (21, 'images/product_detail/21_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (22, 'images/product_detail/22_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (22, 'images/product_detail/22_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (23, 'images/product_detail/23_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (23, 'images/product_detail/23_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (24, 'images/product_detail/24_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (24, 'images/product_detail/24_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (25, 'images/product_detail/25_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (25, 'images/product_detail/25_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (26, 'images/product_detail/26_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (26, 'images/product_detail/26_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (27, 'images/product_detail/27_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (27, 'images/product_detail/27_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (28, 'images/product_detail/28_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (28, 'images/product_detail/28_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (29, 'images/product_detail/29_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (29, 'images/product_detail/29_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (30, 'images/product_detail/30_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (30, 'images/product_detail/30_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (31, 'images/product_detail/31_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (31, 'images/product_detail/31_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (32, 'images/product_detail/32_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (32, 'images/product_detail/32_2.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (33, 'images/product_detail/33_1.jpg');
+INSERT INTO ProductImg([productID], [Path]) VALUES (33, 'images/product_detail/33_2.jpg');
+
