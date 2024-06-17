@@ -70,7 +70,7 @@
     </servlet>
     <servlet>
         <servlet-name>UserProfileServlet</servlet-name>
-        <servlet-class>ProjectController.UserProfile</servlet-class>
+        <servlet-class>ProjectController.Account.UserProfile</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>SupplierManageServlet</servlet-name>

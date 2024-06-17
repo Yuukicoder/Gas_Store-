@@ -10,6 +10,7 @@
 
     <head>
         <meta charset="UTF-8">
+        <title>GasStore</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="select.css">
@@ -32,22 +33,121 @@
         <link rel="stylesheet" href="css/productCard.css">
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-        <title>Document</title>
+        <style>
+            .image-overlay {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                display: none;
+                justify-content: center;
+                align-items: center;
+                color: white;
+                font-size: 24px;
+                cursor: pointer;
+            }
+
+           
+            #profileImage:hover + #imageOverlay,
+            #imageOverlay:hover {
+                display: flex;
+                background: rgba(0, 0, 0, 0.5);
+                width: 180px;
+                height: 180px;
+                border-radius: 50%;
+            }
+            /* CSS để cấu trúc giao diện */
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            .row {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            .col-md-3, .col-md-4, .col-md-5 {
+                flex-basis: 0;
+                flex-grow: 1;
+                max-width: 100%;
+            }
+
+            .border-right {
+                border-right: 1px solid #ccc;
+            }
+
+            .d-flex {
+                display: flex;
+            }
+
+            .align-items-center {
+                align-items: center;
+            }
+
+            .text-center {
+                text-align: center;
+            }
+
+            .py-5 {
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+            }
+
+            .mt-5 {
+                margin-top: 3rem;
+            }
+
+            /* CSS để tạo cửa sổ */
+            .overlay {
+                display: flex;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                justify-content: center;
+                align-items: center;
+
+            }
+            body.modal-open {
+                overflow: hidden;
+            }
+
+
+            /* CSS để tạo màn hình che phủ */
+
+
+
+        </style>
     </head>
 
     <body>
         <%@include file="component/topbar.jsp" %>
         <%@include file="component/navbar.jsp" %>
-        <div class="container rounded bg-white mt-5 mb-5">
-            <form action="UserProfile?aid=${account.getAccountID()}" method="post" id="formUpdate" onsubmit="return ValidateProfileForm()">
+        <div class="container rounded bg-white mt-3 mb-5">
+            <form action="UserProfile?aid=${account.getCustomerID()}" method="post" id="formUpdate" onsubmit="return ValidateProfileForm()">
                 <div class="row">
                     <div class="col-md-3 border-right">
-                        <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                            <img class="rounded-circle mt-5" width="180px" src="images/user.jpg">
-                            <span class="font-weight-bold">${account.getUsername()}</span>
-                            <span class="text-black-50">${account.getEmail()}</span>
+                        <div class="d-flex flex-column align-items-center text-center p-3 py-5 position-relative">
+                            <img id="profileImage" class="rounded-circle mt-5" width="180px" src="${sessionScope.account.getImage()}">
+                            <div id="imageOverlay" class="image-overlay">
+                                <span class="edit-icon">&#9998;</span> <!-- Unicode for a pen icon -->
+                            </div>
+                            <input type="file" id="imageUpload" class="d-none" accept="image/*">
+                            <span class="font-weight-bold">${sessionScope.account.getUserName()}</span>
+                            <span class="text-black-50">${sessionScope.account.getFullName()}</span>
                         </div>
                     </div>
+
                     <div class="col-md-5 border-right">
                         <div class="p-3 py-5">
                             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -57,23 +157,23 @@
                             <div class="row mt-3">
                                 <div class="col-md-12">
                                     <label class="labels">User Name</label>
-                                    <input type="text" class="form-control"  value="" name="user" id="uname">
+                                    <input type="text" class="form-control"  value="${requestScope.account.getUserName()}" name="user" id="uname">
                                 </div>
                                 <div class="col-md-12">
                                     <label class="labels">Full name</label>
-                                    <input type="text" class="form-control" value="" name="name" id="ufullname">
+                                    <input type="text" class="form-control" value="${requestScope.account.getFullName()}" name="name" id="ufullname">
                                 </div>
                                 <div class="col-md-12">
                                     <label class="labels">Mobile Number</label>
-                                    <input type="text" class="form-control"  value="" name="mobile" id="uphone">
+                                    <input type="text" class="form-control"  value="${requestScope.account.getPhone()}" name="mobile" id="uphone">
                                 </div>
                                 <div class="col-md-12">
                                     <label class="labels">Email</label>
-                                    <input type="text" class="form-control"  value="" name="email" id="uemail">
+                                    <input type="text" class="form-control"  value="${requestScope.account.getEmail()}" name="email" id="uemail">
                                 </div>
                                 <div class="col-md-12">
                                     <label class="labels">Address</label>
-                                    <input type="text" class="form-control"  value="" name="address" id="uaddress">
+                                    <input type="text" class="form-control"  value="${requestScope.account.getAddress()}" name="address" id="uaddress">
                                 </div>
                             </div>
                             <div class="mt-5 text-center">
@@ -104,7 +204,7 @@
                         <h4 class="text-right">Change Password</h4>
                     </div>
 
-                    <form action="UserProfile?aid=${account.getAccountID()}" method="post" id="formUpdate" onsubmit="return savePassword();">
+                    <form action="UserProfile?aid=${account.getCustomerID()}" method="post" id="formUpdate" onsubmit="return savePassword();">
                         <div class="row mt-3">
                             <div class="col-md-12">
                                 <label class="labels">Enter old password</label>
@@ -193,78 +293,7 @@
                 }
             }
         </script>
-        <style>
-            /* CSS để cấu trúc giao diện */
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-            }
 
-            .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 20px;
-            }
-
-            .row {
-                display: flex;
-                flex-wrap: wrap;
-            }
-
-            .col-md-3, .col-md-4, .col-md-5 {
-                flex-basis: 0;
-                flex-grow: 1;
-                max-width: 100%;
-            }
-
-            .border-right {
-                border-right: 1px solid #ccc;
-            }
-
-            .d-flex {
-                display: flex;
-            }
-
-            .align-items-center {
-                align-items: center;
-            }
-
-            .text-center {
-                text-align: center;
-            }
-
-            .py-5 {
-                padding-top: 3rem;
-                padding-bottom: 3rem;
-            }
-
-            .mt-5 {
-                margin-top: 3rem;
-            }
-
-            /* CSS để tạo cửa sổ */
-            .overlay {
-                display: flex;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.5);
-                justify-content: center;
-                align-items: center;
-
-            }
-            body.modal-open {
-                overflow: hidden;
-            }
-
-
-            /* CSS để tạo màn hình che phủ */
-
-
-        </style>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
         <script src="lib/easing/easing.min.js"></script>
@@ -331,6 +360,29 @@
 
             }
 
+        </script>
+        <script>
+            document.getElementById('profileImage').addEventListener('click', function () {
+                this.classList.toggle('blur');
+                document.getElementById('imageOverlay').style.display = 'flex';
+            });
+
+            document.getElementById('imageOverlay').addEventListener('click', function () {
+                document.getElementById('imageUpload').click();
+            });
+
+            document.getElementById('imageUpload').addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('profileImage').src = e.target.result;
+                        document.getElementById('profileImage').classList.remove('blur');
+                        document.getElementById('imageOverlay').style.display = 'none';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
         </script>
 
     </body>

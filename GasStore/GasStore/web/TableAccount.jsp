@@ -88,7 +88,7 @@
                                                 <tr class="text-white">
                                                     
                                                     <th scope="col">ID</th>
-                                                    
+                                                    <th scope ="col">Avatar</th>
                                                     <th scope="col">Username</th>
                                                     <th scope="col">Full Name</th>
                                                     <th scope="col">Phone</th>
@@ -101,6 +101,7 @@
                                                 <c:forEach items="${requestScope.lidata}" var="o" varStatus="status">
                                                     <tr>
                                                         <td>${status.index+1}</td>
+                                                        <td><img src="${o.getImage()}" width="70%" height="50%" alt="alt"/></td>
                                                         <td>${o.getUserName()}</td>
                                                         <td>${o.getFullName()}</td>
                                                         <td>${o.getPhone()}</td>

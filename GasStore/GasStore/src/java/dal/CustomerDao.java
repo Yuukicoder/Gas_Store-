@@ -527,6 +527,7 @@ public class CustomerDao extends DBContext {
                 cus.setCustomerID(rs.getInt("customerID"));
                 cus.setUserName(rs.getString("userName"));
                 cus.setPassword(rs.getString("password"));
+                cus.setImage(rs.getString("image"));
                 cus.setFirstName(rs.getString("firstName"));
                 cus.setLastName(rs.getString("lastName"));
                 cus.setPhone(rs.getString("phone"));

@@ -23,7 +23,7 @@ import model.Customer;
  *
  * @author msi
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/login-u"})
+@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet2 extends HttpServlet {
 
     /**

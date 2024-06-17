@@ -48,7 +48,9 @@
                         <div class="d-inline-flex align-items-center">
                             <div class="btn-group dropdown">
                                 <button type="button" class="btn btn-sm btn-light dropdown-toggle dropbtn" onclick="toggleDropdown()">
-                                    ${account.getFullName()}
+                                    <img src="${sessionScope.account.getImage()}" width="10%" height="" alt="avatar"/>
+                                    
+                                    ${sessionScope.account.getFullName()}
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-content" id="myDropdown">
                                     <a class="dropdown-item" href="mypurchase">My Purchase</a>

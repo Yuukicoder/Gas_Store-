@@ -37,6 +37,7 @@ public class Customer {
         this.password = password;
         this.email = email;
     }
+    
 
     public Customer(int customerID, String userName, String password, String image, String firstName, String lastName, String phone, String email) {
         this.customerID = customerID;
@@ -48,7 +49,6 @@ public class Customer {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
-      
         this.email = email;
     }
     

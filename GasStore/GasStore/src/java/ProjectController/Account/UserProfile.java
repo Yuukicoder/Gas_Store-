@@ -6,6 +6,7 @@ package ProjectController.Account;
 
 import DAO.AccountDAO;
 import DTO.AccountDTO;
+import dal.CustomerDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Customer;
 
 /**
  *
@@ -31,19 +33,16 @@ public class UserProfile extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet UserProfile</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet UserProfile at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+         String aid_raw = request.getParameter("aid");
+            int aid = Integer.parseInt(aid_raw);
+            HttpSession session = request.getSession();
+            AccountDAO accountDAO = new AccountDAO();
+            CustomerDao cus = new CustomerDao();
+            Customer c =  cus.getAllByID(aid);
+            request.setAttribute("account", c);
+//            request.setAttribute("passAcc", account.getPassword());
+            request.getRequestDispatcher("ProfileUser.jsp").forward(request, response);
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -58,17 +57,7 @@ public class UserProfile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String aid_raw = request.getParameter("aid");
-        try {
-            int aid = Integer.parseInt(aid_raw);
-            HttpSession session = request.getSession();
-            AccountDAO accountDAO = new AccountDAO();
-            AccountDTO account = accountDAO.getAccountById(aid);
-            request.setAttribute("account", account);
-            request.setAttribute("passAcc", account.getPassword());
-            request.getRequestDispatcher("ProfileUser.jsp").forward(request, response);
-        } catch (Exception e) {
-        }
+        processRequest(request, response);
 
     }
 
