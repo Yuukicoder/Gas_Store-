@@ -14,6 +14,7 @@ import DTO.PostDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,6 +27,11 @@ import java.util.ArrayList;
  *
  * @author 1234
  */
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024 * 2,  // 2MB
+    maxFileSize = 1024 * 1024 * 10,       // 10MB
+    maxRequestSize = 1024 * 1024 * 50     // 50MB
+)
 public class AddPostServlet extends HttpServlet {
 
     /**
@@ -93,35 +99,42 @@ public class AddPostServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String content = request.getParameter("content");
-        String title = request.getParameter("title");
-        String category = request.getParameter("category");
-        System.out.println(category);
-        Part banner = request.getPart("banner");
-        String fileBanner = banner.getSubmittedFileName();
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    HttpSession session = request.getSession();
+    String content = request.getParameter("content");
+    String title = request.getParameter("title");
+    String category = request.getParameter("category");
+    System.out.println(category);
+    Part banner = request.getPart("banner");
+    String fileBanner = banner.getSubmittedFileName();
 
-        if (content.isEmpty() || title.isEmpty() || fileBanner.isEmpty()) {
-            session.setAttribute("msg", "Add New Post Not Sucess!");
+    String mimeType = getServletContext().getMimeType(fileBanner);
+    if (mimeType == null || !mimeType.startsWith("image/")) {
+        session.setAttribute("msg", "Chỉ được tải lên tệp hình ảnh (JPG, PNG, GIF).");
+        response.sendRedirect("postDashboard");
+        return;
+    }
+
+    if (content.isEmpty() || title.isEmpty() || fileBanner.isEmpty()) {
+        session.setAttribute("msg", "Add New Post Not Sucess!");
+        response.sendRedirect("postDashboard");
+    } else {
+        PostDTO pdto = new PostDTO(0, 1, title, fileBanner, content, "", category, 1);
+        PostListDAO postListDAO = new PostListDAO();
+        int checkAddPost = postListDAO.addNewPost(pdto);
+        if (checkAddPost != 0) {
+            String path = getServletContext().getRealPath("") + "images/Post";
+            File file = new File(path);
+            banner.write(path + File.separator + fileBanner);
+            session.setAttribute("msg", "Add New Post Sucess!");
             response.sendRedirect("postDashboard");
         } else {
-            PostDTO pdto = new PostDTO(0, title, "", fileBanner, "", content, category);
-            PostListDAO postListDAO = new PostListDAO();
-            int checkAddPost = postListDAO.addNewPost(pdto);
-            if (checkAddPost != 0) {
-                String path = getServletContext().getRealPath("") + "images/Post";
-                File file = new File(path);
-                banner.write(path + File.separator + fileBanner);
-                session.setAttribute("msg", "Add New Post Sucess!");
-                response.sendRedirect("postDashboard");
-            } else {
-                System.out.println("error server");
-            }
+            System.out.println("error server");
         }
-
     }
+}
+
 
     /**
      * Returns a short description of the servlet.

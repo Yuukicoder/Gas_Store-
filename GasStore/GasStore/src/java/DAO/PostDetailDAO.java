@@ -30,11 +30,11 @@ public class PostDetailDAO extends DBcontext {
             if (rs.next()) {
                 postDTO.setPostID(rs.getInt("PostID"));
                 postDTO.setTitle(rs.getString("Title"));
-                postDTO.setPostImg(rs.getString("Postbanner"));
+                postDTO.setPostbanner(rs.getString("Postbanner"));
                 postDTO.setDescription(rs.getString("Description"));
                 postDTO.setDateCreated(rs.getString("DateCreated"));
                 postDTO.setContext(rs.getString("Context"));
-                postDTO.setCategory(rs.getString("Name"));
+                postDTO.setPostCate(rs.getString("Name"));
 
             }
         } catch (SQLException e) {
@@ -52,7 +52,7 @@ public class PostDetailDAO extends DBcontext {
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, pdto.getTitle());
-            ps.setString(2, pdto.getPostImg());
+            ps.setString(2, pdto.getPostbanner());
             ps.setString(3, pdto.getContext());
             ps.setInt(4, pdto.getPostID());
             int checkAdd = ps.executeUpdate();
@@ -66,7 +66,7 @@ public class PostDetailDAO extends DBcontext {
     public static void main(String[] args) {
         PostDetailDAO p = new PostDetailDAO();
         PostDTO pdto = p.getPostDTOByID(1);
-        System.out.println(pdto.getCategory());
+        System.out.println(pdto.getPostCate());
     }
 
 }

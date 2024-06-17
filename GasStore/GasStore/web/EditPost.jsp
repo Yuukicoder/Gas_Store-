@@ -60,7 +60,7 @@
                                     <textarea id="w3review" name="title" rows="4" cols="50" class="form-control col-3">${pdto.getTitle()}</textarea>
                                     <label class="form-label" style="color: #E57C23">Category</label>
                                     <select name="category" id="category" class="form-control col-4">
-                                        <option value="${pdto.getCategory()}" selected>${pdto.getCategory()}</option>
+                                        <option value="${pdto.getPostCate()}" selected>${pdto.getPostCate()}</option>
                                         <c:forEach items="${requestScope.postCategoryDTOs}" var="c">
                                             <option value="${c.getName()}">${c.getName()}</option>
                                         </c:forEach>                                     
@@ -72,7 +72,7 @@
                                     <label class="form-label" style="color: #E57C23">Banner</label>
 
                                     <input type="file" value="" class="form-control col-3" name="banner" style="width: 80%; margin-bottom: .5rem; margin-top: .5rem">
-                                    <img style="width: 12rem; margin: 0.2rem" src="images/Post/${pdto.getPostImg()}" alt="alt" id="img"/>
+                                    <img style="width: 12rem; margin: 0.2rem" src="images/Post/${pdto.getPostbanner()}" alt="alt" id="img"/>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                             CKEDITOR.replace('content');
                         </script>
                         <input name="pid" value="${pdto.getPostID()}" hidden> 
-                        <input name="pbanner" value="${pdto.getPostImg()}" hidden> 
+                        <input name="pbanner" value="${pdto.getPostbanner()}" hidden> 
 
                         <button type="submit"   class="btn btn-primary" style="margin-top: 30px" value="imageAdd" name="update">Update  Post</button> 
                     </div>
