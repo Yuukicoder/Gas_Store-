@@ -63,9 +63,7 @@
                                 <div class="d-flex align-items-center justify-content-between mb-4">
 
                                     <div class="bg-secondary rounded h-100 p-4">
-
                                         <h5 ><a href="productManage?action=${action}">All Product </a></h5>
-
                                     </div>
                                     <form action="productManage?action=show" method="post">
                                         <div class="input-group">

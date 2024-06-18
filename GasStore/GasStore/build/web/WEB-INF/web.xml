@@ -92,6 +92,10 @@
         <servlet-name>LoginFaceBookServlet</servlet-name>
         <servlet-class>ProjectController.LoginFaceBookServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProductDetailServlet</servlet-name>
+        <servlet-class>Controller.ProductDetailServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
         <url-pattern>/signup</url-pattern>
@@ -187,6 +191,10 @@
     <servlet-mapping>
         <servlet-name>LoginFaceBookServlet</servlet-name>
         <url-pattern>/LoginFaceBookServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductDetailServlet</servlet-name>
+        <url-pattern>/productDetail</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -68,7 +68,6 @@ public class VoucherServlet extends HttpServlet {
         String code = request.getParameter("code").toUpperCase();
         VoucherDAO vdao = new VoucherDAO();
         vdao.addVoucher(name, code, start, end, discount, quantity);
-         
         response.sendRedirect("tableVoucher");
     }
 

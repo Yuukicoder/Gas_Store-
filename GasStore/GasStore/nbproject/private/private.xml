@@ -3,8 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/FPT/2024/Summer2024/SPW391/-_-/Gas_Store-/GasStore/GasStore/src/java/dal/DBContext.java</file>
-            <file>file:/D:/FPT/2024/Summer2024/SPW391/-_-/Gas_Store-/GasStore/GasStore/src/java/DAO/DBcontext.java</file>
+            <file>file:/D:/SWP391/Test2/Gas_Store-/GasStore/GasStore/web/TableOrder.jsp</file>
+            <file>file:/D:/SWP391/Test2/Gas_Store-/GasStore/GasStore/web/TableVoucher.jsp</file>
+            <file>file:/D:/SWP391/Test2/Gas_Store-/GasStore/GasStore/web/detail.jsp</file>
+            <file>file:/D:/SWP391/Test2/Gas_Store-/GasStore/GasStore/src/java/Controller/ProductDetailServlet.java</file>
         </group>
     </open-files>
 </project-private>

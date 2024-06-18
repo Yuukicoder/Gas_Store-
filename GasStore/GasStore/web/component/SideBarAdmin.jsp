@@ -30,8 +30,8 @@
                             <a href="ManageAccount.jsp" class="dropdown-item">Account</a>
                             <a href="manageCate" class="dropdown-item">Category</a>
                             <a href="productManage" class="dropdown-item">Product</a>
-                            <a href="tableOrder" class="dropdown-item">Order</a>
-                            <a href="tableVoucher" class="dropdown-item">Voucher</a>
+                            <a href="orderTable" class="dropdown-item">Order</a>
+                            <a href="discountTable" class="dropdown-item">Discount</a>
                             <a href="tableFeedback" class="dropdown-item">Feedback</a>
                             <a href="postDashboard" class="dropdown-item">Post</a>
                         </div>

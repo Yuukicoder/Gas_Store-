@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,6 +31,13 @@
 
         <!-- Template Stylesheet -->
         <link href="admin/css/style.css" rel="stylesheet">
+        
+        <style>
+            /* CSS style for center aligning content in table cells */
+            .table th,td {
+                text-align: center;
+            }
+        </style>
     </head>
 
     <body>
@@ -55,30 +63,31 @@
                             <div class="bg-secondary text-center rounded p-4">
                                 <div class="table-responsive">
                                     <div class="d-flex align-items-center justify-content-between mb-4">
-                                        <a href="tableOrder">Order List</a>
+                                        <a href="orderTable">Order List</a>
                                         
                                     </div>
                                     <table id="categoryTable" class="table text-start align-middle table-bordered table-hover mb-0">
                                         <thead>
                                             <tr class="text-white">
                                                 <th scope="col">No</th>
+                                                <th scope="col">OrderID</th>
                                                 <th scope="col">Product </th>
                                                 <th scope="col">Quantity</th>
-                                                <th scope="col">Unit Price</th>
-
+                                                <th scope="col">Unit Price (VND)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <c:set var="tt" value="0"/>
-                                            <c:forEach var="o" items="${order}">
-                                                <c:set var="tt" value="${tt+1}"/>
-                                                <tr>
-                                                    <td>${tt}</td>
-                                                    <td>${pDAO.getProductByID(o.getProduct_id()).getName()}</td>
-                                                    <td>${o.getQuantity()}</td>
-                                                    <td>${(pDAO.getProductByID(o.getProduct_id()).getPrice()*o.getQuantity())}</td>
-                                                </tr>
-                                            </c:forEach>
+                                                <c:forEach var="orderDetail" items="${orderDetails}">
+                                                    <c:set var="tt" value="${tt+1}"/>
+                                                    <tr>
+                                                        <td>${tt}</td>
+                                                        <td>${orderDetail.orderID}</td>
+                                                        <td><a href="productUpdate?pid=${orderDetail.productID}">${pDAO.getProductByID(orderDetail.getProductID()).getName()}</a></td>
+                                                        <td>${orderDetail.quantity}</td>
+                                                        <td><fmt:formatNumber value="${orderDetail.unitPrice}" pattern="#,##0.#"/></td>
+                                                    </tr>
+                                                </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>
@@ -91,12 +100,12 @@
                         <div class="bg-secondary rounded-top p-4">
                             <div class="row">
                                 <div class="col-12 col-sm-6 text-center text-sm-start">
-                                    &copy; <a href="#">Your Site Name</a>, All Right Reserved. 
+                                    &copy; <a href="#">GAS STORE</a>, All Right Reserved. 
                                 </div>
                                 <div class="col-12 col-sm-6 text-center text-sm-end">
                                     <!--/*** This template is free as long as you keep the footer author?s credit link/attribution link/backlink. If you'd like to use the template without the footer author?s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                                    Designed By <a href="https://htmlcodex.com">HTML Codex</a>
-                                    <br>Distributed By: <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
+                                    Designed By <a href="https://gitlab.com/asusrogg14/swp391-laptopshop">SWP - GROUP 6</a>
+                                    <br>Distributed By: <a href="https://gitlab.com/asusrogg14/swp391-laptopshop" target="_blank">ALL members</a>
                                 </div>
                             </div>
                         </div>

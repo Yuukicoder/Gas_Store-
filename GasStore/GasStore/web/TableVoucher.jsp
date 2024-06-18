@@ -65,75 +65,93 @@
                 <div class="container-fluid pt-4 px-4">
                     <div class="row g-4">
                         <div class="">
-                            <div class="bg-secondary rounded h-100 p-4">
-                                <h6 class="mb-4">Add Voucher</h6>
-                                <form action="tableVoucher" method="POST" onsubmit="return validateForm()">
+                            <div class="bg-secondary rounded h-99 p-4" >
+                                <h6 class="mb-4">Add Disocunt</h6>
+                                <form action="discountTable" method="POST" onsubmit="return validateForm()">
                                     <div class="left-side">
                                         <div class="col-md-6">
-                                            <label class="form-label">Voucher Name</label>
-                                            <input type="text" class="form-control col-4" name="name">
+                                            <label class="form-label">Discount Name</label>
+                                            <input type="text" class="form-control col-4" name="name" required>
                                         </div>
 
                                         <div class="col-md-6">
-                                            <label class="form-label">Start </label>
-                                            <input type="date" class="form-control col-3" name="start">
+                                            <label class="form-label">Start Date</label>
+                                            <input type="date" class="form-control col-3" name="start" required>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label">End </label>
-                                            <input type="date" class="form-control col-3" name="end">
+                                            <label class="form-label">End Date</label>
+                                            <input type="date" class="form-control col-3" name="end" required>
                                         </div>
-
-                                        <div class="col-md-6">
-                                            <label class="form-label">Discount</label>
-                                            <input type="number" class="form-control col-3" name="discount">
-                                        </div>
-
+                                        
                                         <div class="col-md-6">
                                             <label class="form-label">Quantity </label>
-                                            <input type="number" class="form-control col-3" name="quantity">
+                                            <input type="number" class="form-control col-3" name="quantity" step="1" required>
                                         </div>
-                                        <div style="margin-top: 15px;color: red" id="error-messages"></div>
-
-                                        <button type="submit" class="btn btn-primary">Add new voucher</button>
+                                        <div style="margin-top: 15px;color: red" id="error-messages">
+                                            <c:if test="${not empty errorMessage}">
+                                                <p>${errorMessage}</p>
+                                            </c:if>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" style="margin-bottom: 20px">Add new discount</button>
 
                                     </div>
                                     <div class="right-side">
                                         <div class="col-md-6">
-                                            <label class="form-label">Voucher Code</label>
-                                            <input type="text" class="form-control col-4" id="code-input" name="code">
+                                            <label class="form-label">Discount Type</label>
+                                            <select id="discountType" class="form-control col-3" name="discountType" required onchange="checkDiscountType()">
+                                                <option value="" disabled selected>Select Discount Type</option>
+                                                <option value="PERCENT">PERCENT</option>
+                                                <option value="FIXED">FIXED</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Discount Amount</label>
+                                            <input type="number" class="form-control col-3" step="1" name="discountAmount" id="discountAmount" required disabled>
+                                        </div>
+                                        <div class="col-md-6" style="margin-bottom: 20px">
+                                            <label class="form-label">Discount Code</label>
+                                            <input type="text" class="form-control col-4" id="code-input" name="code" required>
                                         </div>
                                         <a class="btn btn-primary" onclick="generateCode()">Create Code</a>
                                     </div>
-
                                 </form>
                             </div>
                             <div class="bg-secondary text-center rounded p-4">
-                                <div class="d-flex align-items-center justify-content-between mb-4">
-                                    <h6 class="mb-0">All Product</h6>
+                                <div class="d-flex align-items-center justify-content-center mb-4" style="width: 100%; text-align: center;">
+                                    <h6 class="mb-0">All Discount</h6>
                                 </div>
                                 <div class="table-responsive">
                                     <table id="categoryTable"
                                            class="table text-start align-middle table-bordered table-hover mb-0">
                                         <thead>
                                             <tr class="text-white">
-                                                <th scope="col">Voucher name</th>
-                                                <th scope="col">Voucher Code</th>
-                                                <th scope="col">Quantity Available</th>
-                                                <th scope="col">Discount</th>
-                                                <th scope="col">Start</th>
-                                                <th scope="col">End</th>
-                                                <th scope="col"></th>
+                                                <th scope="col" >Discount name</th>
+                                                <th scope="col" style="text-align: center">Discount Code</th>
+                                                <th scope="col" style="text-align: center">Quantity Available</th>
+                                                <th scope="col" style="text-align: center">Discount Type</th>
+                                                <th scope="col" style="text-align: center">Discount Amount</th>
+                                                <th scope="col" style="text-align: center">Start</th>
+                                                <th scope="col" style="text-align: center">End</th>
+                                                <th scope="col" style="text-align: center"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <c:forEach var="v" items="${voucher}">
+                                            <c:forEach var="d" items="${discount}">
                                                 <tr>
-                                                    <td class="voucherName">${v.getName()}</td>
-                                                    <td>${v.getVoucherCode()}</td>
-                                                    <td>${v.getQuantity()}</td>
-                                                    <td>${v.getDiscount()}%</td>
-                                                    <td>${v.getStart()}</td>
-                                                    <td>${v.getEnd()}</td>
+                                                    <td class="discountName" >${d.getName()}</td>
+                                                    <td style="text-align: center">${d.getDiscountCode()}</td>
+                                                    <td style="text-align: center">${d.getQuantity()}</td>
+                                                    <td style="text-align: center">${d.getDiscountType()}</td>
+                                                    <td style="text-align: center">${d.getDiscountAmount()}</td>
+                                                    <td style="text-align: center">${d.getStartDate()}</td>
+                                                    <td style="text-align: center">${d.getEndDate()}</td>
+                                                    <td style="text-align: center">
+                                                        <a href="#" class="btn btn-danger btn-sm"
+                                                            onclick="confirmDelete('${d.getDiscountID()}')"
+                                                        >
+                                                            Delete
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                             </c:forEach>
                                         </tbody>
@@ -144,7 +162,6 @@
 
                         </div>
                     </div>
-
                 </div>
                 <!-- Content End -->
 
@@ -167,99 +184,133 @@
         <!-- Template Javascript -->
         <script src="admin/js/main.js"></script>
         <script>
-                            function generateCode() {
-                                var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                                var codeLength = 10;
-                                var generatedCode = '';
+        function generateCode() {
+            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var codeLength = 10;
+            var generatedCode = '';
 
-                                for (var i = 0; i < codeLength; i++) {
-                                    var randomIndex = Math.floor(Math.random() * characters.length);
-                                    generatedCode += characters.charAt(randomIndex);
-                                }
+            for (var i = 0; i < codeLength; i++) {
+                var randomIndex = Math.floor(Math.random() * characters.length);
+                generatedCode += characters.charAt(randomIndex);
+            }
 
-                                document.getElementById('code-input').value = generatedCode;
-                            }
+            document.getElementById('code-input').value = generatedCode;
+        }
 
-                            var voucherNames = document.getElementsByClassName('voucherName');
-                            Array.from(voucherNames).forEach(function (element) {
-                                element.addEventListener('click', function () {
-                                    // Lấy giá trị voucher name được click
-                                    var voucherName = element.textContent;
+        var discountNames = document.getElementsByClassName('discountName');
+        Array.from(discountNames).forEach(function (element) {
+            element.addEventListener('click', function () {
+                var discountName = element.textContent;
+                window.location.href = 'discountDetail?discountName=' + encodeURIComponent(discountName);
+            });
+        });
 
-                                    // Điều hướng tới trang khác với tham số voucherName
-                                    window.location.href = 'voucherdetail?voucherName=' + encodeURIComponent(voucherName);
-                                });
-                            });
+        function validateForm() {
+            // Lấy giá trị từ các ô input
+            var voucherName = document.getElementsByName("name")[0].value;
+            var startDate = document.getElementsByName("start")[0].value;
+            var endDate = document.getElementsByName("end")[0].value;
+            var discount = document.getElementsByName("discountAmount")[0].value;
+            var quantity = document.getElementsByName("quantity")[0].value;
+            var Code = document.getElementsByName("code")[0].value;
+            var discountType = document.getElementsByName("discountType")[0].value;
+            var errorDiv = document.getElementById("error-messages");
+            errorDiv.innerHTML = ""; 
 
-                            function validateForm() {
-                                // Lấy giá trị từ các ô input
-                                var voucherName = document.getElementsByName("name")[0].value;
-                                var startDate = document.getElementsByName("start")[0].value;
-                                var endDate = document.getElementsByName("end")[0].value;
-                                var discount = document.getElementsByName("discount")[0].value;
-                                var quantity = document.getElementsByName("quantity")[0].value;
-                                var Code = document.getElementsByName("code")[0].value;
+            if (voucherName === "") {
+                displayError("Discount Name is required");
+                return false; 
+            }
 
-                                // Kiểm tra và hiển thị lỗi (nếu có) dưới từng ô
-                                var errorDiv = document.getElementById("error-messages");
-                                errorDiv.innerHTML = ""; // Xóa các thông báo lỗi trước đó (nếu có)
+            if (startDate === "") {
+                displayError("Start Date is required");
+                return false; 
+            } else {
+                var currentDate = new Date().toISOString().split("T")[0];
+                if (startDate < currentDate) {
+                    displayError("Start Date must be a future date");
+                    return false; 
+                }
+            }
 
-                                if (voucherName === "") {
-                                    displayError("Voucher Name is required");
-                                    return false; // Ngăn chặn gửi form khi có lỗi
-                                }
+            if (endDate === "") {
+                displayError("End Date is required");
+                return false; 
+            } else {
+                if (endDate < startDate) {
+                    displayError("End Date must be after Start Date");
+                    return false; 
+                }
+            }
 
-                                if (startDate === "") {
-                                    displayError("Start Date is required");
-                                    return false; // Ngăn chặn gửi form khi có lỗi
-                                } else {
-                                    var currentDate = new Date().toISOString().split("T")[0];
-                                    if (startDate < currentDate) {
-                                        displayError("Start Date must be a future date");
-                                        return false; // Ngăn chặn gửi form khi có lỗi
-                                    }
-                                }
+            if (discount === "") {
+                displayError("Discount is required");
+                return false; 
+            } else if (isNaN(discount) || discount < 0) {
+                displayError("Discount must be a non-negative number");
+                return false;
+            }
+            if (discountType === "PERCENT") {
+                if (discount === "" || isNaN(discount) || discount < 0 || discount > 100) {
+                    displayError("Discount Amount must be between 0 and 100 for PERCENT type");
+                    return false;
+                }
+            } else if (discountType === "FIXED") {
+                if (discount === "" || isNaN(discount) || discount <= 0) {
+                    displayError("Discount Amount must be greater than 0 for FIXED type");
+                    return false;
+                }
+            } else {
+                displayError("Please select Discount Type");
+                return false;
+            }
+         
+            if (quantity === "") {
+                displayError("Quantity is required");
+                return false; 
+            } else if (isNaN(quantity) || quantity <= 0) {
+                displayError("Quantity must be a positive number");
+                return false; 
+            }
+            if (Code === "") {
+                displayError("Code is required");
+                return false;
+            return true; 
+        }
+    }
 
-                                if (endDate === "") {
-                                    displayError("End Date is required");
-                                    return false; // Ngăn chặn gửi form khi có lỗi
-                                } else {
-                                    if (endDate < startDate) {
-                                        displayError("End Date must be after Start Date");
-                                        return false; // Ngăn chặn gửi form khi có lỗi
-                                    }
-                                }
+        function displayError(errorMessage) {
+            var errorDiv = document.getElementById("error-messages");
+            var errorText = document.createElement("p");
+            errorText.innerText = errorMessage;
+            errorDiv.appendChild(errorText);
+        }
+        
+        function checkDiscountType() {
+            var discountType = document.getElementById("discountType").value;
+            var discountAmountInput = document.getElementById("discountAmount");
 
-                                if (discount === "") {
-                                    displayError("Discount is required");
-                                    return false; // Ngăn chặn gửi form khi có lỗi
-                                } else if (isNaN(discount) || discount < 0) {
-                                    displayError("Discount must be a non-negative number");
-                                    return false; // Ngăn chặn gửi form khi có lỗi
-                                }
-
-                                if (quantity === "") {
-                                    displayError("Quantity is required");
-                                    return false; // Ngăn chặn gửi form khi có lỗi
-                                } else if (isNaN(quantity) || quantity <= 0) {
-                                    displayError("Quantity must be a positive number");
-                                    return false; // Ngăn chặn gửi form khi có lỗi
-                                }
-                                if (Code === "") {
-                                    displayError("Code is required");
-                                    return false; // Ngăn chặn gửi form khi có lỗi
-                                } 
-
-                                // Nếu không có lỗi, có thể tiếp tục xử lý form và gửi yêu cầu POST
-                                return true; // Cho phép gửi form đi
-                            }
-
-                            function displayError(errorMessage) {
-                                var errorDiv = document.getElementById("error-messages");
-                                var errorText = document.createElement("p");
-                                errorText.innerText = errorMessage;
-                                errorDiv.appendChild(errorText);
-                            }
+            if (discountType === "") {
+                discountAmountInput.value = "";
+                discountAmountInput.disabled = true;
+                alert("Please select Discount Type first.");
+            } else {
+                discountAmountInput.disabled = false;
+            }
+            
+            if (discountType === "PERCENT") {
+                discountAmountInput.placeholder = "Enter %";
+            } else if (discountType === "FIXED") {
+                discountAmountInput.placeholder = "Enter VNĐ";
+            }
+        }
+        
+        function confirmDelete(discountID) {
+            if (confirm('Are you sure you want to delete this discount?')) {
+                window.location.href = 'deleteDiscount?discountID=' + discountID;
+            }
+        }
+        
         </script>
     </body>
 
