@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,6 +31,13 @@
 
         <!-- Template Stylesheet -->
         <link href="admin/css/style.css" rel="stylesheet">
+        
+            <style>
+                /* CSS style for center aligning content in table cells */
+                .table th,td {
+                    text-align: center;
+                }
+            </style>
     </head>
 
     <body>
@@ -57,9 +65,9 @@
                                     <h6 class="mb-0">All Order</h6>
 
                                 </div>
-                                <form action="searchOr" method="post">
+                                <form action="searchOrder" method="get">
                                     <div class="input-group">
-                                        <input type="text"  placeholder="Search for order" name="txt">
+                                        <input type="text"  placeholder="Search for order" name="search">
                                         <div class="input-group-append">
                                             <button type="submit" class="btn btn-primary">
                                                 <i class="fa fa-search"></i>
@@ -68,66 +76,92 @@
                                     </div>
                                 </form>
                                 <div class="table-responsive">
-                                    <table id="categoryTable" class="table text-start align-middle table-bordered table-hover mb-0">
+                                    <table id="categoryTable" class="table text-start align-middle table-bordered table-hover mb-0" style="text-align: center">
                                         <thead>
                                             <tr class="text-white">
                                                 <th scope="col">No</th>
                                                 <th scope="col">Order ID</th>
                                                 <th scope="col">Order Date</th>
                                                 <th scope="col">Customer</th>
+                                                <th scope="col" style="text-align: right">Total Price (VND)</th>
                                                 <th scope="col">Status</th>
-                                                <th scope="col"></th>
+                                                <th scope="col">
+                                                    <form method="get" action="orderTable">
+                                                        <select name="numPage" onchange="this.form.submit()">
+                                                            <option value="5" ${numPage == '5' ? 'selected' : ''}>5</option>
+                                                            <option value="10" ${numPage == '10' ? 'selected' : ''}>10</option>
+                                                            <option value="20" ${numPage == '20' ? 'selected' : ''}>20</option>
+                                                            <option value="50" ${numPage == '50' ? 'selected' : ''}>50</option>
+                                                            <option value="all" ${numPage == 'all' ? 'selected' : ''}>All</option>
+                                                        </select>
+                                                        <input type="hidden" name="indexPage" value="${tag}" />
+                                                        <input type="hidden" name="action" value="${action}" />
+                                                        
+                                                    </form>
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <c:set var="tt" value="0"/>
-                                            <c:forEach var="la" items="${ListOrder}">
-                                                <c:set var="tt" value="${tt+1}"/>
+                                            <c:set var="index" value="0" />
+                                            <c:forEach items="${listOrder}" var="entry">
                                                 <tr>
-                                                    <td>${tt}</td>
-                                                    <td>${la.getOrderID()}</td>
-                                                    <td>${la.getOrderDate()}</td>
-                                                    <td>${la.getFullname()}</td>
+                                                    <td>${index + 1}</td>
+                                                    <td>${entry.key.orderID}</td>
+                                                    <td>${entry.key.orderDate}</td>
+                                                    <td>${entry.value.userName}</td>
+                                                    <td style="text-align: right"><fmt:formatNumber value="${entry.key.totalMoney}" pattern="#,##0.#"/></td>
                                                     <td class="col-md-3">
-                                                        <c:if test="${la.getStatus() != 4 && la.getStatus() != 3}">
+                                                        <c:if test="${entry.key.status != 4 && entry.key.status != 3}">
                                                             <select class="form-select form-select-sm col-md-3" aria-label=".form-select-sm example" onchange="handleOptionChange(this)">
-                                                                <c:if test="${la.getStatus() == 0}">
+                                                                <c:if test="${entry.key.status == 0}">
                                                                     <option>Waiting for progressing</option>
-                                                                    <option value="1" name="${la.getOrderID()}">Confirmed and packed</option>
-                                                                    <option value="2" name="${la.getOrderID()}">Being transported</option>
-                                                                    <option value="3" name="${la.getOrderID()}">Delivered</option>
-                                                                    <option value="4" name="${la.getOrderID()}">Cancel order</option>
+                                                                    <option value="1" name="${entry.key.orderID}">Confirmed and packed</option>
+                                                                    <option value="2" name="${entry.key.orderID}">Being transported</option>
+                                                                    <option value="3" name="${entry.key.orderID}">Delivered</option>
+                                                                    <option value="4" name="${entry.key.orderID}">Cancel order</option>
                                                                 </c:if>
-                                                                <c:if test="${la.getStatus() == 1}">
+                                                                <c:if test="${entry.key.status == 1}">
                                                                     <option>Confirmed and packed</option>
-                                                                    <option value="0" name="${la.getOrderID()}">Waiting for progressing</option>
-                                                                    <option value="2" name="${la.getOrderID()}">Being transported</option>
-                                                                    <option value="3" name="${la.getOrderID()}">Delivered</option>
-                                                                    <option value="4" name="${la.getOrderID()}">Cancel order</option>
+                                                                    <option value="2" name="${entry.key.orderID}">Being transported</option>
+                                                                    <option value="3" name="${entry.key.orderID}">Delivered</option>
+                                                                    <option value="4" name="${entry.key.orderID}">Cancel order</option>
                                                                 </c:if>
-                                                                <c:if test="${la.getStatus() == 2}">
+                                                                <c:if test="${entry.key.status == 2}">
                                                                     <option>Being transported</option>
-                                                                    <option value="0" name="${la.getOrderID()}">Waiting for progressing</option>
-                                                                    <option value="1" name="${la.getOrderID()}">Confirmed and packed</option>
-                                                                    <option value="3" name="${la.getOrderID()}">Delivered</option>
-                                                                    <option value="4" name="${la.getOrderID()}">Cancel order</option>
+                                                                    <option value="3" name="${entry.key.orderID}">Delivered</option>
+                                                                    <option value="4" name="${entry.key.orderID}">Cancel order</option>
                                                                 </c:if>
                                                             </select>
                                                         </c:if>
-                                                        <c:if test="${la.getStatus() == 3}">
+                                                        <c:if test="${entry.key.status == 3}">
                                                             <p style="color: green">Delivered</p>
                                                         </c:if>
-                                                        <c:if test="${la.getStatus() == 4}">
-                                                            <p>This order has been cancel</p>
+                                                        <c:if test="${entry.key.status == 4}">
+                                                            <p style="color: red">This order has been cancel</p>
                                                         </c:if>
                                                     </td>
-                                                    <td><a class="btn btn-sm btn-primary" href="detailOrder?id=${la.getOrderID()}">Detail</a></td>       
+                                                    <td><a class="btn btn-sm btn-primary" href="orderDetail?id=${entry.key.orderID}">Detail</a></td>       
                                                 </tr>
+                                                <c:set var="index" value="${index + 1}" />
                                             </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>
-                                <div id="pagination"></div>
+                                <div id="pagination">
+                                    <nav style="float: right;margin-top: 25px; color: black" aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            <c:if test="${tag > 1}">
+                                                <li  class="page-item"><a style="color: black"  class="page-link" href="orderTable?indexPage=${tag-1}&amp;numPage=${numPage != null ? numPage : '5'}"">Previous</a></li>
+                                            </c:if>
+                                            <c:forEach begin="1" end="${endPage}" var="i">
+                                                <li style="color: black"  class="page-item ${tag == i ?"active":"" || page1 == i ?"active":""  } "><a style="color: black"  class="page-link" href="orderTable?indexPage=${i}&amp;numPage=${numPage != null ? numPage : '5'}">${i}</a></li>
+                                            </c:forEach>
+                                            <c:if test="${tag<endPage}">
+                                                <li class="page-item"><a style="color: black"  class="page-link" href="orderTable?indexPage=${tag+1}&amp;numPage=${numPage != null ? numPage : '5'}">Next</a></li>
+                                            </c:if>
+                                        </ul>
+                                    </nav> 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -171,21 +205,21 @@
             <!-- Template Javascript -->
             <script src="admin/js/main.js"></script>
             <script>
-                                                                function handleOptionChange(selectElement) {
-                                                                    var selectedOption = selectElement.value;
-                                                                    var name = selectElement.options[selectElement.selectedIndex].getAttribute('name');
-                                                                    if (selectedOption === "0") {
-                                                                        window.location.href = "change?id=" + name + "&status=0";
-                                                                    } else if (selectedOption === "1") {
-                                                                        window.location.href = "change?id=" + name + "&status=1";
-                                                                    } else if (selectedOption === "2") {
-                                                                        window.location.href = "change?id=" + name + "&status=2";
-                                                                    } else if (selectedOption === "3") {
-                                                                        window.location.href = "change?id=" + name + "&status=3";
-                                                                    } else if (selectedOption === "4") {
-                                                                        window.location.href = "change?id=" + name + "&status=4";
-                                                                    }
-                                                                }
+            function handleOptionChange(selectElement) {
+                var selectedOption = selectElement.value;
+                var name = selectElement.options[selectElement.selectedIndex].getAttribute('name');
+                if (selectedOption === "0") {
+                    window.location.href = "changeStatus?id=" + name + "&status=0";
+                } else if (selectedOption === "1") {
+                    window.location.href = "changeStatus?id=" + name + "&status=1";
+                } else if (selectedOption === "2") {
+                    window.location.href = "changeStatus?id=" + name + "&status=2";
+                } else if (selectedOption === "3") {
+                    window.location.href = "changeStatus?id=" + name + "&status=3";
+                } else if (selectedOption === "4") {
+                    window.location.href = "changeStatus?id=" + name + "&status=4";
+                }
+            }
             </script>
     </body>
 

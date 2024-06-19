@@ -72,7 +72,7 @@
                     <h5 class="text-secondary text-uppercase mb-4">Get In Touch</h5>
                     <p class="mb-4">Welcome to Gas Store- Convenient Energy, Comfortable Living.</p>
                     <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Residential land Hoa Lac, Km29, ĐCT08, Thach Hoa, Thach That, Ha Noi</p>
-                    <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>https://gitlab.com/asusrogg14/swp391-laptopshop</p>
+                    <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>https://github.com/Yuukicoder/Gas_Store-</p>
                     <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+012 345 67890</p>
                 </div>
                 <div class="col-lg-8 col-md-12">

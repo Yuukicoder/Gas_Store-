@@ -8,24 +8,29 @@ package DTO;
  *
  * @author msi
  */
-public class OrderDetail extends ProductDTO {
-
-    //OrderDetailID ProductID OrderID Quantity UnitPrice DateCreated DateModified OrderDetailStatus
+public class OrderDetail {
     private int orderDetailID;
-    private int product_id;
-    private int order_id;
+    private int orderID;
+    private int productID;
     private int quantity;
-    private double oprice;
+    private double unitPrice;
 
     public OrderDetail() {
     }
-
-    public OrderDetail(int orderDetailID, int product_id, int order_id, int quantity, double oprice, int status) {
-        this.orderDetailID = orderDetailID;
-        this.product_id = product_id;
-        this.order_id = order_id;
+    
+    public OrderDetail(int orderID, int productID, int quantity, double unitPrice) {
+        this.orderID = orderID;
+        this.productID = productID;
         this.quantity = quantity;
-        this.oprice = oprice;
+        this.unitPrice = unitPrice;
+    }
+
+    public OrderDetail(int orderDetailID, int orderID, int productID, int quantity, double unitPrice) {
+        this.orderDetailID = orderDetailID;
+        this.orderID = orderID;
+        this.productID = productID;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
     }
 
     public int getOrderDetailID() {
@@ -35,21 +40,23 @@ public class OrderDetail extends ProductDTO {
     public void setOrderDetailID(int orderDetailID) {
         this.orderDetailID = orderDetailID;
     }
+    
+    
 
-    public int getProduct_id() {
-        return product_id;
+    public int getOrderID() {
+        return orderID;
     }
 
-    public void setProduct_id(int product_id) {
-        this.product_id = product_id;
+    public void setOrderID(int orderID) {
+        this.orderID = orderID;
     }
 
-    public int getOrder_id() {
-        return order_id;
+    public int getProductID() {
+        return productID;
     }
 
-    public void setOrder_id(int order_id) {
-        this.order_id = order_id;
+    public void setProductID(int productID) {
+        this.productID = productID;
     }
 
     public int getQuantity() {
@@ -60,12 +67,20 @@ public class OrderDetail extends ProductDTO {
         this.quantity = quantity;
     }
 
-    public double getOprice() {
-        return oprice;
+    public double getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setOprice(double oprice) {
-        this.oprice = oprice;
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
     }
+
+    @Override
+    public String toString() {
+        return "OrderDetail{" + "orderID=" + orderID + ", productID=" + productID + ", quantity=" + quantity + ", unitPrice=" + unitPrice + '}';
+    }
+    
+    
+    
 
 }
