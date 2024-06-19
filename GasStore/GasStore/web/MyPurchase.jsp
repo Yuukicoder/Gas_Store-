@@ -29,6 +29,41 @@
 
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+         <style>
+            #special-link {
+                border-bottom: 2px solid red;
+            }
+
+            .navigation {
+                background-color: #FFFFFF;
+                border-bottom: 1px solid #e0e0e0;
+                padding: 20px;
+                width: 92%;
+                margin-bottom: 20px
+            }
+
+            .navigation .row .col-2.text-center {
+                padding: 0 15px;
+            }
+
+            .navigation .row .col-2.text-center a.nav-link {
+                color: #333;
+                text-decoration: none;
+                font-weight: 500;
+                display: block;
+                transition: color 0.3s ease;
+            }
+
+            .navigation .row .col-2.text-center.active a.nav-link {
+                color: #ff4500;
+            }
+
+            .navigation .row .col-2.text-center a.nav-link:hover {
+                color: #ff4500;
+            }
+
+        </style>
+
     </head>
 
     <body>
@@ -78,46 +113,13 @@
             </div>
         </div>
 
-        <style>
-            #special-link {
-                border-bottom: 2px solid red;
-            }
-
-            .navigation {
-                background-color: #FFFFFF;
-                border-bottom: 1px solid #e0e0e0;
-                padding: 20px;
-                width: 92%;
-                margin-bottom: 20px
-            }
-
-            .navigation .row .col-2.text-center {
-                padding: 0 15px;
-            }
-
-            .navigation .row .col-2.text-center a.nav-link {
-                color: #333;
-                text-decoration: none;
-                font-weight: 500;
-                display: block;
-                transition: color 0.3s ease;
-            }
-
-            .navigation .row .col-2.text-center.active a.nav-link {
-                color: #ff4500;
-            }
-
-            .navigation .row .col-2.text-center a.nav-link:hover {
-                color: #ff4500;
-            }
-
-        </style>
+ 
 
 
         <!-- Cart Start -->
         <div class="container-fluid">
             <c:set var="tt" value="0"/>
-            <c:forEach items="${purchase}" var="p">
+            <%--<c:forEach items="$purchase}" var="p">--%>
                 <c:set var="tt" value="${tt+1}"/>
                 <div class="row px-xl-5 ">
                     <div class="col-12">
@@ -127,7 +129,7 @@
                                 <span>|</span>
                                 <span style="font-weight: bold;color: #7A9D54">Waiting for progressing</span>
                                 <span>|</span>
-                                <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getAccountID()}" style="color: #BF9742">Order tracking</a></span>
+                                <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getCustomerID()}" style="color: #BF9742">Order tracking</a></span>
                                 <span>|</span>
                                 <span><a href="#" onclick="showMess(${p.orderID})" style="color: #BDCDD6">Cancel</a></span>
                             </c:if>
@@ -135,57 +137,57 @@
                                 <span>|</span>
                                 <span style="font-weight: bold;color: #7A9D54">Confirmed and packed</span>
                                 <span>|</span>
-                                <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getAccountID()}" style="color: #BF9742">Order tracking</a></span>                       
+                                <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getCustomerID()}" style="color: #BF9742">Order tracking</a></span>                       
                             </c:if>
                             <c:if test="${p.status == 2}">
                                 <span>|</span>
                                 <span style="font-weight: bold;color: #7A9D54">Being transported</span>
                                 <span>|</span>
-                                <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getAccountID()}" style="color: #BF9742">Order tracking</a></span>
+                                <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getCustomerID()}" style="color: #BF9742">Order tracking</a></span>
 
                             </c:if>
                             <c:if test="${p.status == 3}">
                                 <span>|</span>
                                 <span style="font-weight: bold;color: #4FC0D0">Delivered</span>
                                 <span>|</span>
-                                <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getAccountID()}" style="color: #BF9742">Order tracking</a></span>
+                                <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getCustomerID()}" style="color: #BF9742">Order tracking</a></span>
 
                             </c:if>
                             <c:if test="${p.status == 4}">
                                 <span>|</span>
                                 <span style="font-weight: bold;color: red">Canceled</span>
                                 <span>|</span>
-                                <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getAccountID()}" style="color: #BF9742">Order tracking</a></span>                      
+                                <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getCustomerID()}" style="color: #BF9742">Order tracking</a></span>                      
                             </c:if>
 
                         </div>
                         <hr><!-- comment -->
                         <table class="table table-light table-borderless table-hover text-center mb-0">
                             <tbody class="align-middle">
-                                <c:forEach var="k" items="${odDAO.getOrderDetailByID(p.getOrderID())}">
+                                <c:forEach var="k" items="${odDAO}">
                                     <tr>
                                         <td class="align-middle"><img style="width: 80px" class="img-fluid" src="images/Product/${pDAO.getProductByID(k.getProduct_id()).getImage()}" alt="Image"></td> 
-                                        <td class="align-middle">${pDAO.getProductByID(k.getProduct_id()).getName()}</td>
-                                        <td class="align-middle">x ${k.getQuantity()}</td>
-                                        <td class="align-middle">${(pDAO.getProductByID(k.getProduct_id()).getPrice()*k.getQuantity())}$</td> 
+                                        <!--<td class="align-middle">$pDAO.getProductByID(k.getProduct_id()).getName()}</td>-->
+                                        <td class="align-middle"> ${k.getTotalMoney()}</td>
+                                        <!--<td class="align-middle">$(pDAO.getProductByID(k.getProduct_id()).getPrice()*k.getQuantity())}$</td>--> 
                                     </tr>
                                 </c:forEach>
 
 
                             </tbody>
                         </table>
-                        <div class="right-side" style="margin-right: 5.5rem;
+<!--                        <div class="right-side" style="margin-right: 5.5rem;
                              margin-top: 1rem; text-align: right;">
                             <span style="margin-right: 1rem">
                                 <button class="btn btn-link btn-detail" data-toggle="modal" data-target="#orderModal${tt}" style="background: black;
                                         border-radius: 10px;"> Feedback</button>
                             </span>
-                                <span style="font-weight: bold">Total: ${p.totalPrice}</span>
-                        </div>
+                                <span style="font-weight: bold">Total: $p.totalPrice</span>
+                        </div>-->
                     </div>
 
                 </div>
-            </c:forEach>
+            <%--</c:forEach>--%>
         </div>
 
 

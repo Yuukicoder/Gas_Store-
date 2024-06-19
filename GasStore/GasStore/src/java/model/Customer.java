@@ -84,6 +84,19 @@ public class Customer {
         this.email = email;
     }
 
+    public Customer(int customerID, String userName, String password, String image, String firstName, String lastName, String address, String phone, String email) {
+        this.customerID = customerID;
+        this.userName = userName;
+        this.password = password;
+//        this.lastLogin = lastLogin;
+        this.image = image;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+    }
+    
     public Customer(int customerID, String userName, String password, Date created, Date lastLogin, boolean status, boolean gender, String image, String firstName, String lastName, String address, String phone, int totalMoney, boolean isCustomer, String email) {
         this.customerID = customerID;
         this.userName = userName;
@@ -119,7 +132,7 @@ public class Customer {
     }
 
     public String getFullName() {
-        return firstName + " " + lastName;
+        return getFirstName() + " " + getLastName();
     }
 
     public String getUserName() {

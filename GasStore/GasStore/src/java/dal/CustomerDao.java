@@ -271,7 +271,7 @@ public class CustomerDao extends DBContext {
 
                 Customer em = new Customer(rs.getInt("customerID"), rs.getString("userName"),
                         rs.getString("password"), rs.getString("image"),rs.getString("firstName"),
-                        rs.getString("lastName"),
+                        rs.getString("lastName"),rs.getString("address"),
                          rs.getString("phone"), rs.getString("email"));
                 return em;
             }
@@ -314,27 +314,25 @@ public class CustomerDao extends DBContext {
         }
     }
 
-    public void updateUser(Customer customer) {
-        String sql = "update Customer set userName = ? ,password = ?, firstName = ?, lastName = ?, phone = ?, email = ?,image = ? where customerID = ?";
-        try {
-
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//        
-            preparedStatement.setString(1, customer.getUserName());
-            preparedStatement.setString(2, customer.getPassword());
-
-            preparedStatement.setString(3, customer.getFirstName());
-            preparedStatement.setString(4, customer.getLastName());
-
-            preparedStatement.setString(5, customer.getPhone());
-            preparedStatement.setString(6, customer.getEmail());
-             preparedStatement.setString(7, customer.getImage());
-            preparedStatement.setInt(8, customer.getCustomerID());
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+public void updateUser(Customer customer) {
+    String sql = "UPDATE Customer SET userName = ?, password = ?, firstName = ?, lastName = ?, phone = ?, email = ?, image = ?, address = ? WHERE customerID = ?";
+    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        preparedStatement.setString(1, customer.getUserName());
+        preparedStatement.setString(2, customer.getPassword());
+        preparedStatement.setString(3, customer.getFirstName());
+        preparedStatement.setString(4, customer.getLastName());
+        preparedStatement.setString(5, customer.getPhone());
+        preparedStatement.setString(6, customer.getEmail());
+        preparedStatement.setString(7, customer.getImage());
+        preparedStatement.setString(8, customer.getAddress());
+        preparedStatement.setInt(9, customer.getCustomerID());
+        
+        preparedStatement.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
+
 
     public void insertCustomer(Customer customer) {
         try {
@@ -531,8 +529,10 @@ public class CustomerDao extends DBContext {
                 cus.setFirstName(rs.getString("firstName"));
                 cus.setLastName(rs.getString("lastName"));
                 cus.setPhone(rs.getString("phone"));
+                cus.setAddress(rs.getString("address"));
                 cus.setEmail(rs.getString("email"));
-                cus.setIsCustomer(rs.getBoolean("isCustomer"));
+               
+//                cus.setIsCustomer(rs.getBoolean("isCustomer"));
                 return cus;
             }
         } catch (SQLException ex) {
@@ -590,8 +590,8 @@ public class CustomerDao extends DBContext {
     }
       public static void main(String[] args) {
        CustomerDao cus = new CustomerDao();
-        
-        Administrator cu = cus.getAdminByID(1);
-        System.out.println(cu.getImg());
+//        Customer c = new Customer(1,"anhducokok")
+        Customer c = cus.checkuserandPass("anhducokok", "Qua3CCUdJoXNHnIq6rQW/tVqu1M=");
+          System.out.println(c.getImage());
     }
 }

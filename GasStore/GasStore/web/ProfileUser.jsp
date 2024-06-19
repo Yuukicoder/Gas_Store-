@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@include file="component/topbar.jsp" %>
+<%@include file="component/navbar.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,7 +49,7 @@
                 cursor: pointer;
             }
 
-           
+
             #profileImage:hover + #imageOverlay,
             #imageOverlay:hover {
                 display: flex;
@@ -131,24 +133,38 @@
     </head>
 
     <body>
-        <%@include file="component/topbar.jsp" %>
-        <%@include file="component/navbar.jsp" %>
+
         <div class="container rounded bg-white mt-3 mb-5">
-            <form action="UserProfile?aid=${account.getCustomerID()}" method="post" id="formUpdate" onsubmit="return ValidateProfileForm()">
+            <form action="UserProfile" method="post" id="formUpdate" onsubmit="return ValidateProfileForm()" enctype="multipart/form-data">
                 <div class="row">
-                    <div class="col-md-3 border-right">
+                    <div class="col-md-3 col-lg-4 col-6 col-sm-12 border-right">
+                        <input type="text" name="aimg" value="${sessionScope.account.getImage()}" hidden>
+
                         <div class="d-flex flex-column align-items-center text-center p-3 py-5 position-relative">
-                            <img id="profileImage" class="rounded-circle mt-5" width="180px" src="${sessionScope.account.getImage()}">
+                            <img id="profileImage" class="mt-5 rounded-circle" width="50%;" src="${sessionScope.account.getImage()}">
+
                             <div id="imageOverlay" class="image-overlay">
                                 <span class="edit-icon">&#9998;</span> <!-- Unicode for a pen icon -->
                             </div>
-                            <input type="file" id="imageUpload" class="d-none" accept="image/*">
-                            <span class="font-weight-bold">${sessionScope.account.getUserName()}</span>
+                            <input type="file" name="pimg" id="imageUpload" class="d-none" >
+                           
+                                    <span class="font-weight-bold">${sessionScope.account.getUserName()}</span>
                             <span class="text-black-50">${sessionScope.account.getFullName()}</span>
                         </div>
+                        <div class="col-md-12">
+                            <div class="p-3 center">
+
+
+                                <button class="border px-3 p-1 add-experience" onclick="openPasswordModal()" type="button">
+                                    <i class="fa fa-edit"></i>&nbsp;Change Password
+                                </button>
+                            </div>
+                            <br>
+                        </div>
+
                     </div>
 
-                    <div class="col-md-5 border-right">
+                    <div class="col-md-3 col-lg-4 col-6 col-sm-12  border-right">
                         <div class="p-3 py-5">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h4 class="text-right">Profile Settings</h4>
@@ -157,23 +173,23 @@
                             <div class="row mt-3">
                                 <div class="col-md-12">
                                     <label class="labels">User Name</label>
-                                    <input type="text" class="form-control"  value="${requestScope.account.getUserName()}" name="user" id="uname">
+                                    <input type="text" class="form-control" value="${sessionScope.account.getUserName()}" name="user" id="uname">
                                 </div>
                                 <div class="col-md-12">
                                     <label class="labels">Full name</label>
-                                    <input type="text" class="form-control" value="${requestScope.account.getFullName()}" name="name" id="ufullname">
+                                    <input type="text" class="form-control" value="${sessionScope.account.getFullName()}" name="name" id="ufullname">
                                 </div>
                                 <div class="col-md-12">
                                     <label class="labels">Mobile Number</label>
-                                    <input type="text" class="form-control"  value="${requestScope.account.getPhone()}" name="mobile" id="uphone">
+                                    <input type="text" class="form-control" value="${sessionScope.account.getPhone()}" name="mobile" id="uphone">
                                 </div>
                                 <div class="col-md-12">
                                     <label class="labels">Email</label>
-                                    <input type="text" class="form-control"  value="${requestScope.account.getEmail()}" name="email" id="uemail">
+                                    <input type="text" class="form-control" value="${sessionScope.account.getEmail()}" name="email" id="uemail">
                                 </div>
                                 <div class="col-md-12">
                                     <label class="labels">Address</label>
-                                    <input type="text" class="form-control"  value="${requestScope.account.getAddress()}" name="address" id="uaddress">
+                                    <input type="text" class="form-control" value="${sessionScope.account.getAddress()}" name="address" id="uaddress">
                                 </div>
                             </div>
                             <div class="mt-5 text-center">
@@ -181,17 +197,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="p-3 py-5">
-                            <div class="d-flex justify-content-between align-items-center experience">
-                                <span>Password</span>
-                                <button class="border px-3 p-1 add-experience" onclick="openPasswordModal()" type="button">
-                                    <i class="fa fa-edit"></i>&nbsp;Change Password
-                                </button>
-                            </div>
-                            <br>
-                        </div>
-                    </div>
+
                 </div>
             </form>
         </div>

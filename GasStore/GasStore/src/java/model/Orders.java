@@ -16,7 +16,7 @@ public class Orders {
     private int trackingNumber;
     private int totalMoney;
     private Date orderDate;
-    private Date shipperDate;
+    private Date shippedDate;
     private Date requiredDate;
     private String shipAddress;
     private int status;
@@ -24,13 +24,13 @@ public class Orders {
     private String payment;
     private String notes;
 
-    public Orders(int orderID, int customerID, int trackingNumber, int totalMoney, Date orderDate, Date shipperDate, Date requiredDate, String shipAddress, int status, int process, String payment, String notes) {
+    public Orders(int orderID, int customerID, int trackingNumber, int totalMoney, Date orderDate, Date shippedDate, Date requiredDate, String shipAddress, int status, int process, String payment, String notes) {
         this.orderID = orderID;
         this.customerID = customerID;
         this.trackingNumber = trackingNumber;
         this.totalMoney = totalMoney;
         this.orderDate = orderDate;
-        this.shipperDate = shipperDate;
+        this.shippedDate = shippedDate;
         this.requiredDate = requiredDate;
         this.shipAddress = shipAddress;
         this.status = status;
@@ -79,13 +79,15 @@ public class Orders {
         this.orderDate = orderDate;
     }
 
-    public Date getShipperDate() {
-        return shipperDate;
+    public Date getShippedDate() {
+        return shippedDate;
     }
 
-    public void setShipperDate(Date shipperDate) {
-        this.shipperDate = shipperDate;
+    public void setShippedDate(Date shippedDate) {
+        this.shippedDate = shippedDate;
     }
+
+    
 
     public Date getRequiredDate() {
         return requiredDate;

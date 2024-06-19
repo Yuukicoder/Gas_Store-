@@ -54,7 +54,7 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-content" id="myDropdown">
                                     <a class="dropdown-item" href="mypurchase">My Purchase</a>
-                                    <a class="dropdown-item" href="UserProfile?aid=${account.getCustomerID()}">Profile</a>
+                                    <a class="dropdown-item" href="UserProfile">Profile</a>
                                     <a class="dropdown-item" href="logout">Logout</a>
                                 </div>
                             </div>

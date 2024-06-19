@@ -9,6 +9,7 @@ import DAO.OrderDAO;
 import DAO.OrderDetailDAO;
 import DAO.ProductDAO;
 import DTO.AccountDTO;
+import dal.OrdersDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,6 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import model.Orders;
 
 /**
  *
@@ -45,34 +48,26 @@ public class MyPurschaseServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        AccountDTO account = (AccountDTO) session.getAttribute("account");
-        OrderDAO odao = new OrderDAO();
-        OrderDetailDAO odDAO = new OrderDetailDAO();
-        ProductDAO pDAO = new ProductDAO();
-        FeedbackDAO fdao = new FeedbackDAO();
+//        HttpSession session = request.getSession();
+//        AccountDTO account = (AccountDTO) session.getAttribute("account");
+//        OrderDAO odao = new OrderDAO();
+//        OrderDetailDAO odDAO = new OrderDetailDAO();
+//        ProductDAO pDAO = new ProductDAO();
+//        FeedbackDAO fdao = new FeedbackDAO();
+        OrdersDao ord  = new OrdersDao();
+        List<Orders> li = ord.getAllByID(1);
         
-        request.setAttribute("odDAO", odDAO);
-        request.setAttribute("pDAO", pDAO);
-        request.setAttribute("fdao", fdao);
-        request.setAttribute("purchase", odao.myPurchase(account.getAccountID()));
+        request.setAttribute("odDAO", li);
+//        request.setAttribute("pDAO", pDAO);
+//        request.setAttribute("fdao", fdao);
+//        request.setAttribute("purchase", odao.myPurchase(account.getAccountID()));
         request.getRequestDispatcher("MyPurchase.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        AccountDTO account = (AccountDTO) session.getAttribute("account");
-        OrderDAO odao = new OrderDAO();
-        OrderDetailDAO odDAO = new OrderDetailDAO();
-        ProductDAO pDAO = new ProductDAO();
-        FeedbackDAO fdao = new FeedbackDAO();
-        request.setAttribute("odDAO", odDAO);
-        request.setAttribute("pDAO", pDAO);
-          request.setAttribute("fdao", fdao);
-        request.setAttribute("purchase", odao.myPurchase(account.getAccountID()));
-        request.getRequestDispatcher("MyPurchase.jsp").forward(request, response);
+       processRequest(request, response);
     }
 
     @Override

@@ -82,6 +82,7 @@ public class LoginServlet2 extends HttpServlet {
                 request.getRequestDispatcher("login.jsp").forward(request, response);
             } else {
                 session.setAttribute("account", customer);
+                session.setAttribute("customerID", customer.getCustomerID());
                 response.sendRedirect("home");
                 return;
             }
