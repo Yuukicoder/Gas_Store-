@@ -209,13 +209,6 @@ public class VoucherDAO extends DBcontext {
                 v.setVoucherCode(rs.getString("VoucherCode"));
                 v.setStart(rs.getString("DateStart"));
                 return v;
-//      [VoucherID]
-//      ,[Name]
-//      ,[VoucherCode]
-//      ,[DateStart]
-//      ,[DateEnd]
-//      ,[Quantity]
-//      ,[Discount]
             }
         } catch (Exception e) {
             e.printStackTrace();

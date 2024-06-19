@@ -7,6 +7,7 @@ package DAO;
 import DTO.AccountDTO;
 import DTO.Cart;
 import DTO.ItemDTO;
+import DTO.Order;
 import DTO.OrderDTO;
 import DTO.OrderDetail;
 import java.sql.PreparedStatement;
@@ -15,7 +16,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import DTO.Customer;
 
 /**
  *
@@ -149,6 +152,107 @@ public class OrderDAO extends DBcontext {
         }
         return lo;
     }
+    
+    
+    public LinkedHashMap<Order, Customer> listOrderAdminHome(int number) {
+        String sql = "SELECT TOP " + number + " od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, " +
+                     "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes " +
+                     "FROM [Order] od " +
+                     "JOIN Customer c ON c.customerID = od.customerID " +
+                     "ORDER BY od.orderID DESC";
+
+        LinkedHashMap<Order, Customer> orderMap = new LinkedHashMap<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Order ord = new Order();
+
+                ord.setOrderID(rs.getInt("orderID"));
+                ord.setCustomerID(rs.getInt("customerID"));
+                ord.setTrackingNumber(rs.getInt("trackingNumber"));
+                ord.setTotalMoney(rs.getDouble("totalMoney"));
+                ord.setOrderDate(rs.getString("orderDate"));
+                ord.setShipAddress(rs.getString("shipAddress"));
+                ord.setStatus(rs.getInt("status"));
+                ord.setShipVia(rs.getInt("shipVia"));
+                ord.setPayment(rs.getString("payment"));
+                ord.setNotes(rs.getString("notes"));
+                CustomerDAO customerDAO = new CustomerDAO();
+                Customer cust = customerDAO.getCustomerByID(rs.getInt("customerID"));
+                orderMap.put(ord, cust);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); 
+        }
+        return orderMap;
+    }
+    
+    public LinkedHashMap<Order, Customer> pagingOrder(int pageNumber, int pageSize) {
+        LinkedHashMap<Order, Customer> orderMap = new LinkedHashMap<>();
+        String sql = "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, " +
+                     "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes " +
+                     "FROM [Order] od " +
+                     "JOIN Customer c ON c.customerID = od.customerID " +
+                     "ORDER BY od.orderID DESC " +
+                     "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            int startIndex = (pageNumber - 1) * pageSize;
+
+            ps.setInt(1, startIndex);
+            ps.setInt(2, pageSize == Integer.MAX_VALUE ? Integer.MAX_VALUE : pageSize);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Order ord = new Order();
+
+                ord.setOrderID(rs.getInt("orderID"));
+                ord.setCustomerID(rs.getInt("customerID"));
+                ord.setTrackingNumber(rs.getInt("trackingNumber"));
+                ord.setTotalMoney(rs.getDouble("totalMoney"));
+                ord.setOrderDate(rs.getString("orderDate"));
+                ord.setShipAddress(rs.getString("shipAddress"));
+                ord.setStatus(rs.getInt("status"));
+                ord.setShipVia(rs.getInt("shipVia"));
+                ord.setPayment(rs.getString("payment"));
+                ord.setNotes(rs.getString("notes"));
+
+                CustomerDAO customerDAO = new CustomerDAO();
+                Customer cust = customerDAO.getCustomerByID(rs.getInt("customerID"));
+
+                orderMap.put(ord, cust);
+            }
+
+            return orderMap;
+
+        } catch (SQLException e) {
+            System.out.println("SQL Exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    
+    public int countAllOrders() {
+        int totalCount = 0;
+        String sql = "SELECT COUNT(*) AS totalOrders FROM [Order]";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                totalCount = rs.getInt("totalOrders");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalCount;
+    }
+
+
 
     public double todaySale() {
         // Lấy ngày hiện tại
@@ -202,10 +306,10 @@ public class OrderDAO extends DBcontext {
             while (rs.next()) {
                 OrderDetail o = new OrderDetail();
                 o.setOrderDetailID(rs.getInt(1));
-                o.setOrder_id(rs.getInt(2));
-                o.setName(rs.getString(3));
+                o.setOrderID(rs.getInt(2));
+//                o.setName(rs.getString(3));
                 o.setQuantity(rs.getInt(4));
-                o.setOprice(rs.getDouble(5));
+                o.setUnitPrice(rs.getDouble(5));
                 lod.add(o);
             }
         } catch (Exception e) {
@@ -216,8 +320,8 @@ public class OrderDAO extends DBcontext {
     String date = curDate.toString();
 
     public void changeStatusOrder(int id, int status) {
-        String selectAccountIDQuery = "SELECT AccountID FROM Orders WHERE OrderID = ?";
-        String sql = "UPDATE Orders SET Status = ? WHERE OrderID = ?";
+        String selectAccountIDQuery = "SELECT customerID FROM [Order] WHERE orderID = ?";
+        String sql = "UPDATE [Order] SET status = ? WHERE orderID = ?";
         String insertOrderHistoryQuery = "INSERT INTO OrderHistory VALUES (?, ?, ?, ?)";
 
         try {
@@ -225,7 +329,7 @@ public class OrderDAO extends DBcontext {
             selectAccountIDStatement.setInt(1, id);
             ResultSet resultSet = selectAccountIDStatement.executeQuery();
             if (resultSet.next()) {
-                int accountID = resultSet.getInt("AccountID");
+                int customerID = resultSet.getInt("customerID");
 
                 PreparedStatement ps = connection.prepareStatement(sql);
                 ps.setInt(1, status);
@@ -235,18 +339,16 @@ public class OrderDAO extends DBcontext {
                 try {
                     PreparedStatement insertOrderHistoryStatement = connection.prepareStatement(insertOrderHistoryQuery);
                     insertOrderHistoryStatement.setInt(1, id);
-                    insertOrderHistoryStatement.setInt(2, accountID);
+                    insertOrderHistoryStatement.setInt(2, customerID);
                     insertOrderHistoryStatement.setInt(3, status);
                     insertOrderHistoryStatement.setString(4, date);
                     insertOrderHistoryStatement.executeUpdate();
                 } catch (Exception e) {
-                    // Handle the exception appropriately
+                    System.out.println(e);
                 }
-            } else {
-                // Handle the case where no matching OrderID is found
-            }
+            } 
         } catch (Exception e) {
-            // Handle the exception appropriately
+            System.out.println(e);
         }
     }
 
@@ -506,33 +608,137 @@ public class OrderDAO extends DBcontext {
         }
         return null;
     }
-     public List<OrderDTO> searchOrder(String txtSearch) {
-        String sql = " SELECT o.OrderID, a.Fullname, o.TotalPrice, o.OrderDate,o.Address,o.Status \n"
-                + " FROM Orders o JOIN Account a ON a.AccountID = o.AccountID WHERE  a.Fullname like ? \n"
-                + "ORDER BY o.OrderID DESC";
-        ArrayList<OrderDTO> lo = new ArrayList<>();
+    public LinkedHashMap<Order, Customer> searchOrders(String search) {
+        String cleanedSearch = search.trim().replaceAll("\\s+", " ").toLowerCase();
+        String[] searchTerms = cleanedSearch.split(" ");
+
+        // Xây dựng câu lệnh SQL động
+        StringBuilder sqlBuilder = new StringBuilder(
+            "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, " +
+            "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes " +
+            "FROM [Order] od " +
+            "JOIN Customer c ON c.customerID = od.customerID " +
+            "WHERE "
+        );
+
+        for (int i = 0; i < searchTerms.length; i++) {
+            if (i > 0) {
+                sqlBuilder.append(" OR ");
+            }
+            sqlBuilder.append("(")
+                      .append("LOWER(od.orderID) LIKE ? ")
+                      .append("OR LOWER(c.username) LIKE ? ")
+                      .append(")");
+        }
+
+        sqlBuilder.append(" ORDER BY od.orderID DESC");
+        String sql = sqlBuilder.toString();
+
+        LinkedHashMap<Order, Customer> orderMap = new LinkedHashMap<>();
+
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, "%" + txtSearch + "%");
+            int paramIndex = 1;
+            for (String term : searchTerms) {
+                String searchPattern = "%" + term + "%";
+                ps.setString(paramIndex++, searchPattern);
+                ps.setString(paramIndex++, searchPattern);
+            }
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                OrderDTO order = new OrderDTO();
-                order.setOrderID(rs.getInt(1));
-                order.setFullname(rs.getString(2));
-                order.setTotalPrice(rs.getDouble(3));
-                order.setOrderDate(rs.getString(4));
-                order.setAddress(rs.getString(5));
-                order.setStatus(rs.getInt(6));
-                lo.add(order);
+                Order ord = new Order();
+
+                ord.setOrderID(rs.getInt("orderID"));
+                ord.setCustomerID(rs.getInt("customerID"));
+                ord.setTrackingNumber(rs.getInt("trackingNumber"));
+                ord.setTotalMoney(rs.getDouble("totalMoney"));
+                ord.setOrderDate(rs.getString("orderDate"));
+                ord.setShipAddress(rs.getString("shipAddress"));
+                ord.setStatus(rs.getInt("status"));
+                ord.setShipVia(rs.getInt("shipVia"));
+                ord.setPayment(rs.getString("payment"));
+                ord.setNotes(rs.getString("notes"));
+
+                CustomerDAO customerDAO = new CustomerDAO();
+                Customer cust = customerDAO.getCustomerByID(rs.getInt("customerID"));
+                orderMap.put(ord, cust);
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
-        return lo;
+        return orderMap;
     }
+    
+    public LinkedHashMap<Order, Customer> searchOrdersPaging(String search, int pageIndex, int pageSize) {
+        String cleanedSearch = search.trim().replaceAll("\\s+", " ").toLowerCase();
+        String[] searchTerms = cleanedSearch.split(" ");
+
+        // Xây dựng câu lệnh SQL động
+        StringBuilder sqlBuilder = new StringBuilder(
+            "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, " +
+            "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes " +
+            "FROM [Order] od " +
+            "JOIN Customer c ON c.customerID = od.customerID " +
+            "WHERE "
+        );
+
+        for (int i = 0; i < searchTerms.length; i++) {
+            if (i > 0) {
+                sqlBuilder.append(" OR ");
+            }
+            sqlBuilder.append("(")
+                      .append("LOWER(od.orderID) LIKE ? ")
+                      .append("OR LOWER(c.username) LIKE ? ")
+                      .append(")");
+        }
+
+        sqlBuilder.append(" ORDER BY od.orderID DESC");
+        String sql = sqlBuilder.toString();
+
+        LinkedHashMap<Order, Customer> orderMap = new LinkedHashMap<>();
+
+        try {
+            int offset = (pageIndex - 1) * pageSize;
+            sql += " OFFSET " + offset + " ROWS FETCH NEXT " + pageSize + " ROWS ONLY";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+            int paramIndex = 1;
+            for (String term : searchTerms) {
+                String searchPattern = "%" + term + "%";
+                ps.setString(paramIndex++, searchPattern);
+                ps.setString(paramIndex++, searchPattern);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Order ord = new Order();
+
+                ord.setOrderID(rs.getInt("orderID"));
+                ord.setCustomerID(rs.getInt("customerID"));
+                ord.setTrackingNumber(rs.getInt("trackingNumber"));
+                ord.setTotalMoney(rs.getDouble("totalMoney"));
+                ord.setOrderDate(rs.getString("orderDate"));
+                ord.setShipAddress(rs.getString("shipAddress"));
+                ord.setStatus(rs.getInt("status"));
+                ord.setShipVia(rs.getInt("shipVia"));
+                ord.setPayment(rs.getString("payment"));
+                ord.setNotes(rs.getString("notes"));
+
+                CustomerDAO customerDAO = new CustomerDAO();
+                Customer cust = customerDAO.getCustomerByID(rs.getInt("customerID"));
+                orderMap.put(ord, cust);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return orderMap;
+    }
+
     public static void main(String[] args) {
         OrderDAO dao = new OrderDAO();
-       OrderDTO o = dao.getPurchaseByID("29");
-        System.out.println(o.getTotalPrice());
+        System.out.println(dao.searchOrders("duc").size());
+        
     }
 
 }

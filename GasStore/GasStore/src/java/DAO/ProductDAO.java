@@ -86,36 +86,7 @@ public class ProductDAO extends DBcontext{
         }
         return null;
     }
-     public List<Product> getListProductByID(String id) {
-        String sql = "SELECT * FROM Product WHERE supplierID = ?";
-        List<Product> list = new ArrayList<>();
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.setInt(1,Integer.parseInt(id));
-            ResultSet rs = st.executeQuery();
-            if (rs.next()) {
-                Product product = new Product();
-            product.setProductID(rs.getInt("productID"));
-            product.setCode(rs.getString("code"));
-            product.setName(rs.getString("name"));
-            product.setKeywords(rs.getString("keywords"));
-            product.setShortDescription(rs.getString("shortDescription"));
-            product.setDescription(rs.getString("description"));
-            product.setCategoryID(rs.getInt("categoryID"));
-            product.setSupplierID(rs.getInt("supplierID"));
-            product.setIsActive(rs.getBoolean("isActive"));
-            product.setUnitPrice(rs.getFloat("unitPrice"));
-            product.setImage(rs.getString("image"));
-            product.setStockQuantity(rs.getInt("stockQuantity"));
-            product.setUnitOnOrders(rs.getInt("unitOnOrders"));
-            product.setCreatedDate(rs.getString("createdDate"));
-            product.setCreatedBy(rs.getInt("createdBy"));
-                list.add(product);
-            }
-        } catch (Exception e) {
-        }
-        return list;
-    }
+   
 public List<Product> getProductByCategory(int id) {
     String sql = "SELECT p.productID, p.code, p.name, p.keywords, p.shortDescription, p.description, "
                + "p.categoryID, p.supplierID, p.isActive, p.unitPrice, p.image, p.stockQuantity, "
@@ -565,10 +536,9 @@ public LinkedHashMap<Product, String> getSearchProduct(String searchKey, String 
     
     public static void main(String[] args) {
         ProductDAO p = new ProductDAO();
-        List<Product> li = p.getListProductByID("2");
-        System.out.println(li);
-        for(Product l: li){
-            System.out.println(l.getName());
+         List<Product> list = p.getProductByCategory(2);
+         for (Product product : list) {
+             System.out.println(product.toString());
         }
     }
 }
