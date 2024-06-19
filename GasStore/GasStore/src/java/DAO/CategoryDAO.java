@@ -221,6 +221,9 @@ public class CategoryDAO extends DBcontext {
         return null;
     }
 
-
+    public static void main(String[] args) {
+        CategoryDAO cDAO = new CategoryDAO();
+        System.out.println(cDAO.getCategoryByID(1).getName());
+    }
 
 }

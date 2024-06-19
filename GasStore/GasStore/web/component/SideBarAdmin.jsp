@@ -27,13 +27,11 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Manager</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="ManageUser" class="dropdown-item">Manage User</a>
-                            <a href="ManageStaff" class="dropdown-item">Staff Account</a>
-                            <a href="ManageSupplier" class="dropdown-item">Supplier Account</a>
+                            <a href="ManageAccount.jsp" class="dropdown-item">Account</a>
                             <a href="manageCate" class="dropdown-item">Category</a>
                             <a href="productManage" class="dropdown-item">Product</a>
-                            <a href="tableOrder" class="dropdown-item">Order</a>
-                            <a href="tableVoucher" class="dropdown-item">Voucher</a>
+                            <a href="orderTable" class="dropdown-item">Order</a>
+                            <a href="discountTable" class="dropdown-item">Discount</a>
                             <a href="tableFeedback" class="dropdown-item">Feedback</a>
                             <a href="postDashboard" class="dropdown-item">Post</a>
                         </div>

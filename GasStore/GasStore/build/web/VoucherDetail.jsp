@@ -1,3 +1,4 @@
+<%@page import="DTO.Discount"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -66,6 +67,10 @@
         <%@include file="component/SideBarAdmin.jsp" %>
 
         <!-- Content Start -->
+        <%
+            // Lấy đối tượng discount từ requestScope
+            Discount discount = (Discount) request.getAttribute("discount");
+        %>
         <div class="content">
             <%@include file="component/navbarAdmin.jsp" %>
             <!-- Blank Start -->
@@ -74,37 +79,43 @@
                     <div class="row g-4">
                         <div class="">
                             <div class="bg-secondary rounded h-100 p-4">
-                                <h1 class="mb-4">Voucher Detail </h1>
-                                <form action="voucherdetail" method="POST" onsubmit="return validateForm();">
+                                <h1 class="mb-4">Discount Detail</h1>
+                                <form action="discountDetail" method="POST" onsubmit="return validateForm();">
                                     <div class="left-side">
-
                                         <div class="col-md-6">
-                                            <label class="form-label">Voucher Name</label>
-                                            <input type="text" class="form-control col-4" name="name"  value="${requestScope.voucher.getName()}" id="name">
+                                            <label class="form-label">Discount Name</label>
+                                            <input type="text" class="form-control col-4" name="name"  value="${requestScope.discount.getName()}" id="name" required>
                                         </div>
 
                                         <div class="col-md-6">
-                                            <label class="form-label">Start </label>
-                                            <input type="date" class="form-control col-3" name="start"  value="${requestScope.voucher.getStart()}">
+                                            <label class="form-label">Start Date</label>
+                                            <input type="date" class="form-control col-3" name="start"  value="${requestScope.discount.getStartDate()}" required>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label">End </label>
-                                            <input type="date" class="form-control col-3" name="end"   value="${requestScope.voucher.getEnd()}">
+                                            <label class="form-label">End Date</label>
+                                            <input type="date" class="form-control col-3" name="end"  value="${requestScope.discount.getEndDate()}" required>
                                         </div>
                                         <div class="col-md-6">  
-                                            <label class="form-label">Discount</label>
-                                           
-                                            <input type="number" class="form-control col-3" name="discount"   value="${requestScope.voucher.getDiscount()}">
-
+                                            <label class="form-label">Discount Type</label>
+                                            <select id="discountType" class="form-control col-3" name="discountType" required onchange="checkDiscountType()">
+                                                <option value="PERCENT" <%= (discount != null && discount.getDiscountType().equals("PERCENT")) ? "selected" : "" %>>PERCENT</option>
+                                                <option value="FIXED" <%= (discount != null && discount.getDiscountType().equals("FIXED")) ? "selected" : "" %>>FIXED</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">  
+                                            <label class="form-label">Discount Amount</label>
+                                            <input type="number" class="form-control col-3" name="discountAmount"   value="${requestScope.discount.getDiscountAmount()}" id="discountAmount" required>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Quantity </label>
-                                            <input type="number"  value="${requestScope.voucher.getQuantity()}" class="form-control col-3" name="quantity" >
+                                            <input type="number"  value="${requestScope.discount.getQuantity()}" class="form-control col-3" name="quantity" step="1" min="1" required>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label">Voucher Code</label>
-                                            <input type="text"  value="${requestScope.voucher.getVoucherCode()}" class="form-control col-4" id="code-input" name="code" readonly>                                        </div>
-                                        <button type="submit" id ="updateBtn" class="btn btn-primary" style="margin-top: 30px">Update Changes</button> 
+                                            <label class="form-label">Discount Code</label>
+                                            <input type="text"  value="${requestScope.discount.getDiscountCode()}" class="form-control col-4" id="code-input" name="code" readonly >                                        
+                                        </div>
+                                        <input type="hidden" name="currentName" value="${discount.name}">
+                                        <button type="submit" id="updateBtn" class="btn btn-primary" style="margin-top: 30px">Update Changes</button> 
                                     </div>
 
                                     <div class="bg-secondary text-center rounded p-4">
@@ -113,6 +124,11 @@
                                         </div>
 
                                         <div id="pagination"></div>
+                                    </div>
+                                    <div style="margin-top: 15px;color: red" id="error-messages">
+                                        <c:if test="${not empty errorMessage}">
+                                            <p>${errorMessage}</p>
+                                        </c:if>
                                     </div>
                                 </form>
                             </div> 
@@ -141,18 +157,89 @@
         <!-- Template Javascript -->
         <script src="admin/js/main.js"></script>
 
-    <script>
+        <script>
+            function validateForm() {
+                // Lấy giá trị từ các ô input
+                var discountName = document.getElementsByName("name")[0].value;
+                var startDate = document.getElementsByName("start")[0].value;
+                var endDate = document.getElementsByName("end")[0].value;
+                var discount = document.getElementsByName("discountAmount")[0].value;
+                var quantity = document.getElementsByName("quantity")[0].value;
+                var code = document.getElementsByName("code")[0].value;
+                var discountType = document.getElementsByName("discountType")[0].value;
+                var errorDiv = document.getElementById("error-messages");
+                errorDiv.innerHTML = ""; 
 
-        function validateForm() {
-            var name = document.getElementById("name").value;
-        
-            if (name === "") {
-                alert("Vouchername  cannot be null");
-                return false;
+                if (discountName === "") {
+                    displayError("Discount Name is required");
+                    return false; 
+                }
+
+                if (startDate === "") {
+                    displayError("Start Date is required");
+                    return false; 
+                } else {
+                    var currentDate = new Date().toISOString().split("T")[0];
+                    if (startDate < currentDate) {
+                        displayError("Start Date must be a future date");
+                        return false; 
+                    }
+                }
+
+                if (endDate === "") {
+                    displayError("End Date is required");
+                    return false; 
+                } else {
+                    if (endDate < startDate) {
+                        displayError("End Date must be after the Start Date");
+                        return false; 
+                    }
+                }
+
+                if (discount === "") {
+                    displayError("Discount Amount is required");
+                    return false; 
+                } else if (discountType === "PERCENT" && (discount <= 0 || discount > 100)) {
+                    displayError("Percentage Discount must be between 1 and 100");
+                    return false; 
+                } else if (discountType === "FIXED" && discount <= 0) {
+                    displayError("Fixed Discount must be a positive number");
+                    return false; 
+                }
+
+                if (quantity === "") {
+                    displayError("Quantity is required");
+                    return false; 
+                } else if (quantity <= 0) {
+                    displayError("Quantity must be a positive number");
+                    return false; 
+                }
+
+                if (code === "") {
+                    displayError("Discount Code is required");
+                    return false; 
+                }
+
+                return true;
             }
-            return true;
-        }
-    </script>
-</body>
 
+            function displayError(message) {
+                var errorDiv = document.getElementById("error-messages");
+                errorDiv.innerHTML = message;
+            }
+
+            function checkDiscountType() {
+                var discountType = document.getElementById("discountType").value;
+                var discountAmountInput = document.getElementById("discountAmount");
+
+                if (discountType === "PERCENT") {
+                    discountAmountInput.min = 1;
+                    discountAmountInput.max = 100;
+                } else {
+                    discountAmountInput.removeAttribute("max");
+                }
+            }
+        </script>
+
+    </body>
 </html>

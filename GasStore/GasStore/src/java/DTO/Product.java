@@ -4,6 +4,9 @@
  */
 package DTO;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 /**
  *
  * @author dell456
@@ -164,6 +167,11 @@ public class Product {
 
     public void setCreatedBy(int createdBy) {
         this.createdBy = createdBy;
+    }
+    
+    public String getFormattedPrice() {
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+        return numberFormat.format(this.unitPrice);
     }
 
     @Override
