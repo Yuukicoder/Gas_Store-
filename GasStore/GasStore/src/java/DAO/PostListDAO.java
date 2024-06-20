@@ -14,8 +14,8 @@ public class PostListDAO extends DBcontext {
 
     public ArrayList<PostDTO> getAllPost() {
         String sql = "SELECT p.PostID, p.Title, p.DateCreated, p.DateUpdated, p.Postbanner, p.Context, p.Description, c.Name\n"
-                    + "FROM Post p\n"
-                    + "JOIN PostCategory c ON p.PostCategoryID = c.PostCategoryID";
+                + "FROM Post p\n"
+                + "JOIN PostCategory c ON p.PostCategoryID = c.PostCategoryID";
         ArrayList<PostDTO> postDTOs = new ArrayList<>();
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -89,14 +89,14 @@ public class PostListDAO extends DBcontext {
         ArrayList<PostDTO> postDTOs = new ArrayList<>();
         if (num == 0) {
             sql = "SELECT TOP(6) p.PostID, p.Title, p.DateCreated, p.DateUpdated, p.Postbanner, p.Context, p.Description, c.Name\n"
-                + "FROM Post p\n"
-                + "JOIN PostCategory c ON p.PostCategoryID = c.PostCategoryID\n"
-                + "ORDER BY DateCreated DESC";
+                    + "FROM Post p\n"
+                    + "JOIN PostCategory c ON p.PostCategoryID = c.PostCategoryID\n"
+                    + "ORDER BY DateCreated DESC";
         } else {
             sql = "SELECT p.PostID, p.Title, p.DateCreated, p.DateUpdated, p.Postbanner, p.Context, p.Description, c.Name\n"
-                + "FROM Post p\n"
-                + "JOIN PostCategory c ON p.PostCategoryID = c.PostCategoryID\n"
-                + "WHERE c.PostCategoryID = ? ORDER BY DateCreated DESC";
+                    + "FROM Post p\n"
+                    + "JOIN PostCategory c ON p.PostCategoryID = c.PostCategoryID\n"
+                    + "WHERE c.PostCategoryID = ? ORDER BY DateCreated DESC";
         }
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -124,11 +124,24 @@ public class PostListDAO extends DBcontext {
     }
 
     public ArrayList<PostDTO> getPostSearch(String searchKey) {
-        String sql = "SELECT * FROM Post WHERE Title LIKE N'%' + ? + '%'";
         ArrayList<PostDTO> postDTOs = new ArrayList<>();
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, searchKey);
+        StringBuilder queryBuilder = new StringBuilder();
+
+        String[] keywords = searchKey.trim().replaceAll("\\s+", " ").split(" ");
+
+        queryBuilder.append("SELECT * FROM Post WHERE ");
+
+        for (int i = 0; i < keywords.length; i++) {
+            queryBuilder.append("Title LIKE N'%").append(keywords[i]).append("%'");
+            if (i < keywords.length - 1) {
+                queryBuilder.append(" OR ");
+            }
+        }
+        queryBuilder.append(";");
+
+        String sql = queryBuilder.toString();
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 PostDTO postDTO = new PostDTO();
@@ -141,11 +154,11 @@ public class PostListDAO extends DBcontext {
                 postDTO.setContext(rs.getString("Context"));
                 postDTOs.add(postDTO);
             }
-            return postDTOs;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
+
+        return postDTOs;
     }
 
     public int addNewPost(PostDTO pdto) {
@@ -159,17 +172,17 @@ public class PostListDAO extends DBcontext {
             return 0;
         }
         String sql = "INSERT INTO [dbo].[Post]\n"
-                    + "           ([administratorID],\n"
-                    + "            [Title],\n"
-                    + "            [DateCreated],\n"
-                    + "            [DateUpdated],\n"
-                    + "            [Postbanner],\n"
-                    + "            [Context],\n"
-                    + "            [Description],\n"
-                    + "            [PostCategoryID],\n"
-                    + "            [updatedBy])\n"
-                    + "     VALUES\n"
-                    + "           (?,?,FORMAT(GETDATE(), 'yyyy-MM-dd'),FORMAT(GETDATE(), 'yyyy-MM-dd'),?,?,?,?,?)";
+                + "           ([administratorID],\n"
+                + "            [Title],\n"
+                + "            [DateCreated],\n"
+                + "            [DateUpdated],\n"
+                + "            [Postbanner],\n"
+                + "            [Context],\n"
+                + "            [Description],\n"
+                + "            [PostCategoryID],\n"
+                + "            [updatedBy])\n"
+                + "     VALUES\n"
+                + "           (?,?,FORMAT(GETDATE(), 'yyyy-MM-dd'),FORMAT(GETDATE(), 'yyyy-MM-dd'),?,?,?,?,?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, pdto.getAdministratorID());
@@ -202,11 +215,11 @@ public class PostListDAO extends DBcontext {
 
     public ArrayList<PostDTO> pagingPostWithCondition(int pcateID, int indexPage) {
         String sql = "SELECT p.PostID, p.Title, p.DateCreated, p.DateUpdated, p.Postbanner, p.Context, p.Description, c.Name\n"
-                    + "FROM Post p\n"
-                    + "JOIN PostCategory c ON p.PostCategoryID = c.PostCategoryID\n"
-                    + "WHERE p.PostCategoryID = ?\n"
-                    + "ORDER BY p.DateCreated DESC\n"
-                    + "OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+                + "FROM Post p\n"
+                + "JOIN PostCategory c ON p.PostCategoryID = c.PostCategoryID\n"
+                + "WHERE p.PostCategoryID = ?\n"
+                + "ORDER BY p.DateCreated DESC\n"
+                + "OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
         ArrayList<PostDTO> postDTOs = new ArrayList<>();
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -233,10 +246,10 @@ public class PostListDAO extends DBcontext {
 
     public ArrayList<PostDTO> pagingPost(int indexPage) {
         String sql = "SELECT p.PostID, p.Title, p.DateCreated, p.DateUpdated, p.Postbanner, p.Context, p.Description, c.Name\n"
-                    + "FROM Post p\n"
-                    + "JOIN PostCategory c ON p.PostCategoryID = c.PostCategoryID\n"
-                    + "ORDER BY p.DateCreated DESC\n"
-                    + "OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+                + "FROM Post p\n"
+                + "JOIN PostCategory c ON p.PostCategoryID = c.PostCategoryID\n"
+                + "ORDER BY p.DateCreated DESC\n"
+                + "OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
         ArrayList<PostDTO> postDTOs = new ArrayList<>();
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -262,7 +275,7 @@ public class PostListDAO extends DBcontext {
 
     public static void main(String[] args) {
         PostListDAO postListDAO = new PostListDAO();
-        
+
         // Create a new PostDTO instance with sample data
         PostDTO newPost = new PostDTO();
         newPost.setAdministratorID(1);  // Sample administrator ID
@@ -272,10 +285,10 @@ public class PostListDAO extends DBcontext {
         newPost.setDescription("This is a sample description.");
         newPost.setPostCate("test");  // Ensure this category exists in your PostCategory table
         newPost.setUpdatedBy(1);  // Sample updater ID
-        
+
         // Add the new post
         int result = postListDAO.addNewPost(newPost);
-        
+
         if (result > 0) {
             System.out.println("Post added successfully!");
         } else {

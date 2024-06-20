@@ -102,7 +102,7 @@ public class PostListController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String searchKey = request.getParameter("search");
+        String searchKey = request.getParameter("search").trim();
         System.out.println(searchKey);
         ArrayList<PostDTO> postDTOs = new ArrayList<>();
         PostListDAO pldao = new PostListDAO();

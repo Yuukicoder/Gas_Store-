@@ -1,54 +1,40 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package ProjectController.Product;
 
-import DTO.ProductDTO;
+import DTO.Product;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- *
- * @author PC
- */
 public class SortProductByPriceLogic {
-    public List<ProductDTO> sortPrice(List<ProductDTO> list, String mode) {
-        if (mode == "Descending") {
-            
-            // Sắp xếp theo giá giảm dần
-            Collections.sort(list, new Comparator<ProductDTO>() {
+    public List<Product> sortPrice(List<Product> list, String mode) {
+        if ("Descending".equalsIgnoreCase(mode)) {
+            Collections.sort(list, new Comparator<Product>() {
                 @Override
-                public int compare(ProductDTO p1, ProductDTO p2) {
-                    return Double.compare(p2.getPrice(), p1.getPrice());
+                public int compare(Product p1, Product p2) {
+                    return Double.compare(p2.getUnitPrice(), p1.getUnitPrice());
                 }
             });
-        } else if (mode == "Ascending") {
-            
-            // Sắp xếp theo giá tăng dần
-            Collections.sort(list, new Comparator<ProductDTO>() {
+        } else if ("Ascending".equalsIgnoreCase(mode)) {
+            Collections.sort(list, new Comparator<Product>() {
                 @Override
-                public int compare(ProductDTO p1, ProductDTO p2) {
-                    return Double.compare(p1.getPrice(), p2.getPrice());
+                public int compare(Product p1, Product p2) {
+                    return Double.compare(p1.getUnitPrice(), p2.getUnitPrice());
                 }
             });
         }
         return list;
     }
 
-    public List<ProductDTO> filterByPrice(List<ProductDTO> list, double p) {
-        List<ProductDTO> filteredList = new ArrayList<>();
+    public List<Product> filterByPrice(List<Product> list, double p) {
+        List<Product> filteredList = new ArrayList<>();
 
-        for (ProductDTO i : list) {
-
-            if (i.getPrice() >= (p - 100) && i.getPrice() <= p) {
+        for (Product i : list) {
+            if (i.getUnitPrice() >= (p - 100) && i.getUnitPrice() <= p) {
                 filteredList.add(i);
             }
         }
 
         return filteredList;
     }
-    
 }

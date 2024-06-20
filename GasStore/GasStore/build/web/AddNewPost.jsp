@@ -1,9 +1,3 @@
-<%-- 
-    Document   : EditPost
-    Created on : Jul 9, 2023, 3:17:13 PM
-    Author     : 1234
---%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -12,6 +6,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <script src="ckeditor/ckeditor.js"></script>
+        <script src="./tinymce/tinymce.min.js"></script>
+        <script src="./js/tinymceConfig.js"></script>
+        
         <!-- Favicon -->
         <link href="img/favicon.ico" rel="icon">
 
@@ -49,39 +46,33 @@
             <!-- Content Start -->
             <div class="content">
                 <%@include file="component/navbarAdmin.jsp" %>
-                <form action="AddPost" method="post" enctype="multipart/form-data"onsubmit="return validate_Form()">
-
+                <form action="AddPost" method="post" enctype="multipart/form-data" onsubmit="return validate_Form()">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="left-side">
                                     <label class="form-label" style="color: #E57C23">Title</label>
-                                    <textarea id="w3review" name="title" rows="4" cols="50" class="form-control col-3" ></textarea>
+                                    <textarea id="w3review" name="title" rows="4" cols="50" class="form-control col-3"></textarea>
                                     <label class="form-label" style="color: #E57C23">Category</label>
                                     <select name="category" id="category" class="form-control col-4">
                                         <c:forEach items="${requestScope.postCategoryDTOs}" var="c">
                                             <option value="${c.getName()}">${c.getName()}</option>
-                                        </c:forEach>                                     
+                                        </c:forEach>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="right-side">
                                     <label class="form-label" style="color: #E57C23">Banner</label>
-
                                     <input type="file" value="" id="img" class="form-control col-3" name="banner" style="width: 80%; margin-bottom: .5rem; margin-top: .5rem">
                                 </div>
                             </div>
                         </div>
                         <label class="form-label" style="color: #E57C23">Content</label>
-
-                        <textarea id="content" name="content" rows="5" cols="80" ></textarea>
-                        <script>
-                            CKEDITOR.replace('content');
-                        </script>
-                        <button type="submit"   class="btn btn-primary" style="margin-top: 30px" value="imageAdd" name="update">Add  Post</button> 
+                        <textarea id="content" name="content" rows="5" cols="80"></textarea>
+                        
+                        <button type="submit" class="btn btn-primary" style="margin-top: 30px" value="imageAdd" name="update">Add Post</button>
                     </div>
-
                 </form>
                 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -92,46 +83,42 @@
                 <script src="admin/lib/tempusdominus/js/moment.min.js"></script>
                 <script src="admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
                 <script src="admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-                <!-- Template Javascript -->
                 <script src="admin/js/main.js"></script>
 
-
                 <script>
-                            function validate_Form() {
-                                var title = document.getElementById("w3review").value;
-                                var banner = document.getElementById("img").value;
-                                var description = document.getElementById("content").value;
-                              
-                                // Kiểm tra  không chứa ký tự đặc biệt
-                                var specialCharRegex = /[!@#$%^&*{}|<>]/;
+                    function validate_Form() {
+                        var title = document.getElementById("w3review").value;
+                        var banner = document.getElementById("img").value;
+                        var description = document.getElementById("content").value;
 
-                                if (title === ""|| description === "") {
-                                    alert("Please complete full informaton !!!");
-                                    return false;
-                                }
-                                if (specialCharRegex.test(title)) {
-                                    alert("Title cannot contain special characters!");
-                                    return false;
-                                }
-                                if (title.trim().length === 0 || title.trim().length <=6) {
-                                    alert("Title must not empty and longer than 6 characters!");
-                                    return false;
-                                }
-                                if (banner === "") {
-                                    alert("Please choose image to add post !");
-                                    return false;
-                                }
-                                if (description.trim().length <20) {
-                                    alert("Content must have more than 20 character !!!");
-                                    return false;
-                                }
+                        // Kiểm tra không chứa ký tự đặc biệt
+                        var specialCharRegex = /[!@#$%^&*{}|<>]/;
 
-                                return true;
+                        if (title === "" || description === "") {
+                            alert("Please complete full informaton !!!");
+                            return false;
+                        }
+                        if (specialCharRegex.test(title)) {
+                            alert("Title cannot contain special characters!");
+                            return false;
+                        }
+                        if (title.trim().length === 0 || title.trim().length <= 6) {
+                            alert("Title must not empty and longer than 6 characters!");
+                            return false;
+                        }
+                        if (banner === "") {
+                            alert("Please choose image to add post !");
+                            return false;
+                        }
+                        if (description.trim().length < 20) {
+                            alert("Content must have more than 20 character !!!");
+                            return false;
+                        }
 
-                            }
-
-
+                        return true;
+                    }
                 </script>
-
-                </body>
-                </html>
+            </div>
+        </div>
+    </body>
+</html>

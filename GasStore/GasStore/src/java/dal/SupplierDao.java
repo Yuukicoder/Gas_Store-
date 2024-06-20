@@ -220,6 +220,25 @@ public class SupplierDao extends DBContext {
         }
         return list;
     }
+    
+    public Supplier getSupplierById(int supplierId) {
+        Supplier supplier = null;
+        try {
+            String strSelect = "Select * from Supplier where supplierId = ?";
+            stm = connection.prepareStatement(strSelect);
+            stm.setInt(1, supplierId);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                supplier = new Supplier(rs.getInt("supplierId"),
+                        rs.getString("companyName"), rs.getBoolean("status"),
+                        rs.getDate("createdDate"), rs.getString("email"),
+                        rs.getString("phone"), rs.getString("homePage"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return supplier;
+    }
     public static void main(String[] args) {
         SupplierDao sus = new SupplierDao();
         List<Supplier> li = sus.getAll();

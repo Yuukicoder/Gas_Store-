@@ -533,6 +533,46 @@ public LinkedHashMap<Product, String> getSearchProduct(String searchKey, String 
 
     return productCMap;
 }
+
+public List<Product> filterProductsBySupplierAndPrice(Integer supplierID, Integer priceRange) {
+    List<Product> filteredProducts = new ArrayList<>();
+    String sql = "SELECT * FROM Product WHERE 1=1";
+
+    if (supplierID != null) {
+        sql += " AND SupplierID = " + supplierID;
+    }
+    if (priceRange != null) {
+        sql += " AND UnitPrice <= " + priceRange;
+    }
+
+    try (PreparedStatement ps = connection.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            Product product = new Product();
+            product.setProductID(rs.getInt("productID"));
+            product.setCode(rs.getString("code"));
+            product.setName(rs.getString("name"));
+            product.setKeywords(rs.getString("keywords"));
+            product.setShortDescription(rs.getString("shortDescription"));
+            product.setDescription(rs.getString("description"));
+            product.setCategoryID(rs.getInt("categoryID"));
+            product.setSupplierID(rs.getInt("supplierID"));
+            product.setIsActive(rs.getBoolean("isActive"));
+            product.setUnitPrice(rs.getFloat("unitPrice"));
+            product.setImage(rs.getString("image"));
+            product.setStockQuantity(rs.getInt("stockQuantity"));
+            product.setUnitOnOrders(rs.getInt("unitOnOrders"));
+            product.setCreatedDate(rs.getString("createdDate"));
+            product.setCreatedBy(rs.getInt("createdBy"));
+            filteredProducts.add(product);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return filteredProducts;
+}
     
     public static void main(String[] args) {
         ProductDAO p = new ProductDAO();
