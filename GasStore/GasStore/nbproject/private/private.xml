@@ -3,14 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Workspace/FPT-Chuyên%20Ngành/Kì%205/SWP391/2/Gas_Store-/GasStore/GasStore/src/java/ProjectController/LoginServlet2.java</file>
-            <file>file:/D:/Workspace/FPT-Chuyên%20Ngành/Kì%205/SWP391/2/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Account/UserProfile.java</file>
-            <file>file:/D:/Workspace/FPT-Chuyên%20Ngành/Kì%205/SWP391/2/Gas_Store-/GasStore/GasStore/src/java/Controller/AdminAccountServlet/InsertAccountServlet.java</file>
-            <file>file:/D:/Workspace/FPT-Chuyên%20Ngành/Kì%205/SWP391/2/Gas_Store-/GasStore/GasStore/src/java/model/Customer.java</file>
-            <file>file:/D:/Workspace/FPT-Chuyên%20Ngành/Kì%205/SWP391/2/Gas_Store-/GasStore/GasStore/src/java/model/Orders.java</file>
-            <file>file:/D:/Workspace/FPT-Chuyên%20Ngành/Kì%205/SWP391/2/Gas_Store-/GasStore/GasStore/web/ProfileUser.jsp</file>
-            <file>file:/D:/Workspace/FPT-Chuyên%20Ngành/Kì%205/SWP391/2/Gas_Store-/GasStore/GasStore/web/component/topbar.jsp</file>
-            <file>file:/D:/Workspace/FPT-Chuyên%20Ngành/Kì%205/SWP391/2/Gas_Store-/GasStore/GasStore/src/java/dal/CustomerDao.java</file>
+            <file>file:/D:/SWP391/project6/Gas_Store-/GasStore/GasStore/web/PostList.jsp</file>
+            <file>file:/D:/SWP391/project6/Gas_Store-/GasStore/GasStore/web/PostSearch.jsp</file>
+            <file>file:/D:/SWP391/project6/Gas_Store-/GasStore/GasStore/web/OrderTracking.jsp</file>
+            <file>file:/D:/SWP391/project6/Gas_Store-/GasStore/GasStore/web/postDetail.jsp</file>
         </group>
     </open-files>
 </project-private>

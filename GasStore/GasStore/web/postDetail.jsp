@@ -89,12 +89,12 @@
                         <div class="sidebar">
                             <div class="widget">
                                 <h2 class="widget-title">New Post</h2>
-                                <div class="trend-videos">
+                                <div class="trend-videos">v 
                                     <c:forEach items="${requestScope.pdtos}" var="c">
                                         <div class="blog-box">
                                             <div class="post-media">
                                                 <a href="tech-single.html" title="">
-                                                    <img src="images/Post/${c.getPostImg()}" alt="" class="img-fluid">
+                                                    <img src="images/Post/${c.getPostbanner()}" alt="" class="img-fluid">
                                                     <div class="hovereffect">
                                                         <span class="videohover"></span>
                                                     </div><!-- end hover -->

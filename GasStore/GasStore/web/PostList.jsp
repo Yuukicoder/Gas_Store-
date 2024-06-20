@@ -169,7 +169,7 @@
                         <div class="blog-box">
                             <!-- img -->
                             <div class="blog-img">
-                                <img src="images/Post/${c.getPostImg()}"
+                                <img src="images/Post/${c.getPostbanner()}"
                                      alt="">
                             </div>
                             <!-- text -->

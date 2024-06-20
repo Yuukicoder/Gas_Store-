@@ -8,6 +8,7 @@ import DAO.AccountDAO;
 import DTO.AccountDTO;
 import GMAIL.Gmail;
 import GMAIL.Randompassword;
+import dal.CustomerDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import model.Customer;
 
 /**
  *
@@ -63,8 +65,8 @@ public class Forgotpass extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String gamil_raw = request.getParameter("gmail");
-        AccountDAO aO = new AccountDAO();
-
+        CustomerDao aO = new CustomerDao();
+        
         request.getRequestDispatcher("Forgotpass.jsp").forward(request, response);
     }
 
@@ -80,9 +82,9 @@ public class Forgotpass extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String gamil_raw = request.getParameter("mail");
-        AccountDAO aO = new AccountDAO();
+        CustomerDao aO = new CustomerDao();
 
-        ArrayList<AccountDTO> adtoList = aO.getlistcheckgmail(gamil_raw);
+        ArrayList<Customer> adtoList = aO.getListCheckGmail(gamil_raw);
 
         if (gamil_raw.isEmpty()) {
             request.setAttribute("err", "Please enter full information!");
@@ -106,15 +108,18 @@ public class Forgotpass extends HttpServlet {
                     + "<body>\n"
                     + "\n"
                     + "<h1>Your password is :" + randomString + " </h1>\n"
-                    + "<p>Log in  <a href=\"http://localhost:9999/swp391-laptopshop/login\">Here</a></p>\n"
+                    + "<p>Log in  <a href=\"http://localhost:8080/GasStore2/login\">Here</a></p>\n"
                     + "\n"
                     + "</body>\n"
                     + "</html>",gamil_raw);
 
-            AccountDAO aO1 = new AccountDAO();
-            aO1.getgmailupdate(randomString, gamil_raw);
-
-            response.sendRedirect("signin.jsp");
+            CustomerDao aO1 = new CustomerDao();
+            aO1.getgmailupdate(Controller.MaHoa.toSHA1(randomString), gamil_raw);
+            request.setAttribute("err", "New password just sent to your email!");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            response.sendRedirect("login.jsp");
+            
+            
 
         }
 
