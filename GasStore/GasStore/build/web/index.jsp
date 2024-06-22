@@ -7,7 +7,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>GasStore</title>
+        <title>LaptopShop</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="Free HTML Templates" name="keywords">
         <meta content="Free HTML Templates" name="description">
@@ -150,7 +150,7 @@
                         <c:forEach items="${sessionScope.product}" var="p">
                             <div class="card-product">           
                                 <div class="product-img">
-                                    <img src="images/Product/${p.getImage()}" alt="Your Image">
+                                    <img src="images/Product/${p.getPostbanner()}" alt="Your Image">
                                     <div class="overlay-product">
                                         <a href="detailProduct?id=${p.getProductID()}"><i class="bx bx-search"></i></a>
                                     </div>

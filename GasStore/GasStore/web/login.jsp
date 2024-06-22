@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="login.css">
     <title>LOGIN</title>
     <script>
-        function signup() {
-            window.location.href = "signup";
+        function forgotBtn() {
+            window.location.href = "forgotpass";
         }
     </script>
 </head>
@@ -19,13 +19,16 @@
 
     <div class="container" id="container">
         <div class="form-container sign-up">
-            <form action="changepass" method="POST">
-                <h1>Change Password</h1>    
+            <form action="signup" method="POST">
+                <h1>Sign Up</h1>    
                 <input type="text" id="username-input1" class="form-control" placeholder="Username" required autofocus="" name="user">
-                <input type="password" id="password-field1" class="form-control" placeholder="Old Password" required autofocus="" name="pass">
-                <input type="password" id="new-password" class="form-control" placeholder="New Password" required autofocus="" name="newPassword">
-                <input type="password" id="confirm-password" class="form-control" placeholder="Confirm New Password" required autofocus="" name="confirmPassword">
-                <button class="btn btn-primary btn-block" type="submit"><i class="fas fa-user-plus"></i> Change Password</button>
+                <input type="password" id="password-field1" class="form-control" placeholder="Password" required autofocus="" name="pass">
+                <input type="password" id="repass" class="form-control" placeholder="Repeat Password" required autofocus="" name="repass">
+                <input type="text" id="firstname" class="form-control" placeholder="First Name" required autofocus="" name="firstname">
+                <input type="text" id="lastname" class="form-control" placeholder="Last Name" required autofocus="" name="lastname">
+                <input type="email" id="email" class="form-control" placeholder="Email" required autofocus="" name="email">
+                <input type="tel" id="phone" class="form-control" placeholder="Phone Number" required autofocus="" name="phone">
+                <button class="btn btn-primary btn-block" type="submit"><i class="fas fa-user-plus"></i> Sign Up</button>
             </form>
         </div>
 
@@ -34,18 +37,14 @@
                 <h1>Đăng Nhập</h1>
                 <div class="social-icons">
                     <a href="https://accounts.google.com/o/oauth2/auth?scope=profile%20email&redirect_uri=http://localhost:8888/GasStore2/LoginGoogleServlet&response_type=code&client_id=1038400586522-1g779ncgmua1fqbnblc92t35mjn7nf9c.apps.googleusercontent.com&approval_prompt=force" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-                                        <a href="https://www.facebook.com/v20.0/dialog/oauth?client_id=898071928705250&redirect_uri=http://localhost:8888/GasStore2/LoginFaceBookServlet" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
-
+                    <a href="https://www.facebook.com/v20.0/dialog/oauth?client_id=898071928705250&redirect_uri=http://localhost:8888/GasStore2/LoginFaceBookServlet" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
                 </div>
-               
-<!--                <span>Hoặc username password</span>-->
                 <div style="color: red;"><b>${mess}</b></div>
                 <input type="text" id="username-input" class="form-control" placeholder="Username" required="" autofocus="" name="username">
                 <input type="password" id="password-field" class="form-control" placeholder="Password" required="" name="password">
-
                 <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Sign in</button>
                 <hr>
-                <button class="btn btn-success btn-block" type="button" onclick="signup()">Sign Up</button>
+                <button class="btn btn-success btn-block" type="button" onclick="forgotBtn()">Forgot Password</button>
                 <hr>
             </form>
         </div>
@@ -59,8 +58,8 @@
                 </div>
                 <div class="toggle-panel toggle-right">
                     <h1>Hello, Friend!</h1>
-                    <p>Nếu bạn có một trí não hay quên, hãy đổi mật khẩu dễ nhớ</p>
-                    <button class="hidden" id="register">Change Password</button>
+                    <p>Nếu bạn chưa có tài khoản hãy đăng ký</p>
+                    <button class="hidden" id="register">Sign Up</button>
                 </div>
             </div>
         </div>
