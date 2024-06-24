@@ -11,24 +11,6 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        <style>
-            .dropdown-content {
-                display: none;
-                position: absolute;
-                background-color: #f9f9f9;
-                min-width: 160px;
-                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-                z-index: 1;
-            }
-            .dropdown-content a {
-                color: black;
-                padding: 12px 16px;
-                text-decoration: none;
-                display: block;
-            }
-            .dropdown-content a:hover {background-color: #f1f1f1;}
-            .show {display: block;}
-        </style>
     </head>
     <body>
         <div class="container-fluid">
@@ -46,16 +28,12 @@
                     </c:if>
                     <c:if test="${account != null}">
                         <div class="d-inline-flex align-items-center">
-                            <div class="btn-group dropdown">
-                                <button type="button" class="btn btn-sm btn-light dropdown-toggle dropbtn" onclick="toggleDropdown()">
-                                    <img src="${sessionScope.account.getImage()}" width="10%" height="" alt="avatar"/>
-                                    
-                                    ${sessionScope.account.getFullName()}
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-right dropdown-content" id="myDropdown">
-                                    <a class="dropdown-item" href="mypurchase">My Purchase</a>
-                                    <a class="dropdown-item" href="UserProfile">Profile</a>
-                                    <a class="dropdown-item" href="logout">Logout</a>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">${account.getFullname()}</button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <button class="dropdown-item" type="button"><a href="mypurchase">My Purchase</a></button>
+                                    <button class="dropdown-item" type="button"><a href="UserProfile?aid=${account.getAccountID()}">Profile</a></button>
+                                    <button class="dropdown-item" type="button"><a href="logout">Logout</a></button>
                                 </div>
                             </div>
                         </div>
@@ -72,20 +50,20 @@
                     </div>
                 </div>
             </div>
-
-            <!-- logo trang chu -->
+            
+<!--            logo trang chu-->
             <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
                 <div class="col-lg-4">
                     <a href="home" class="text-decoration-none">
                         <a href="index.jsp"><img src="img/Gas_Store.png" alt="logo" width="100px"></a>
                     </a>
                 </div>
-
-                <!-- Thanh search -->
+                
+<!--                Thanh search-->
                 <div class="col-lg-4 col-6 text-left">
                     <form action="search">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search for products" name="key">
+                            <input type="text" class="form-control" placeholder="Search for products" name="key" value="${key}">
                             <div class="input-group-append">
                                 <span class="input-group-text bg-transparent text-primary">
                                     <i class="fa fa-search"></i>
@@ -94,24 +72,11 @@
                         </div>
                     </form>
                 </div>
+<!--                <div class="col-lg-4 col-6 text-right">
+                    <p class="m-0" style="color: black">Hotline</p>
+                    <h5 class="m-0">+84 377 043 903</h5>
+                </div>-->
             </div>
         </div>
-        <script>
-            function toggleDropdown() {
-                document.getElementById("myDropdown").classList.toggle("show");
-            }
-
-            window.onclick = function(event) {
-                if (!event.target.matches('.dropbtn')) {
-                    var dropdowns = document.getElementsByClassName("dropdown-content");
-                    for (var i = 0; i < dropdowns.length; i++) {
-                        var openDropdown = dropdowns[i];
-                        if (openDropdown.classList.contains('show')) {
-                            openDropdown.classList.remove('show');
-                        }
-                    }
-                }
-            }
-        </script>
     </body>
 </html>

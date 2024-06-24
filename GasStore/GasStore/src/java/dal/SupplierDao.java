@@ -18,14 +18,13 @@ import model.Supplier;
  * @author vip2021
  */
 public class SupplierDao extends DBContext {
-     PreparedStatement stm;
+
+    PreparedStatement stm;
     ResultSet rs;
     List<Supplier> list;
     List<Administrator> li;
 
     // Admin DAO
- 
-
     // Admin DAO
     public List<Supplier> getAll() {
 
@@ -47,13 +46,14 @@ public class SupplierDao extends DBContext {
         }
         return list;
     }
-     public List<Supplier> getAllAdminByName(String name) {
-         
+
+    public List<Supplier> getAllAdminByName(String name) {
+
         list = new ArrayList<>();
-         String[] chars = name.trim().toLowerCase().split(" ");
-        
+        String[] chars = name.trim().toLowerCase().split(" ");
+
         // Construct the SQL query dynamically
-           // Split the input string based on spaces
+        // Split the input string based on spaces
         String[] parts = name.trim().toLowerCase().split("\\s+");
 
         // Construct the SQL query dynamically
@@ -77,13 +77,13 @@ public class SupplierDao extends DBContext {
             try (ResultSet rs = stm.executeQuery()) {
                 while (rs.next()) {
                     Supplier supplier = new Supplier(
-                        rs.getInt("supplierId"),
-                        rs.getString("companyName"),
-                        rs.getBoolean("status"),
-                        rs.getDate("createdDate"),
-                        rs.getString("email"),
-                        rs.getString("phone"),
-                        rs.getString("homePage")
+                            rs.getInt("supplierId"),
+                            rs.getString("companyName"),
+                            rs.getBoolean("status"),
+                            rs.getDate("createdDate"),
+                            rs.getString("email"),
+                            rs.getString("phone"),
+                            rs.getString("homePage")
                     );
                     list.add(supplier);
                 }
@@ -131,7 +131,7 @@ public class SupplierDao extends DBContext {
     }
 
     public void deleteSupplier(String id) {
-        String query = "delete from Supplier\n" 
+        String query = "delete from Supplier\n"
                 + "where supplierId = ?";
         try {
 
@@ -176,14 +176,14 @@ public class SupplierDao extends DBContext {
             preparedStatement.setString(3, s.getPhone());
             preparedStatement.setString(4, s.getHomePage());
 
-
             // Execute the query
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error inserting customer: " + e.getMessage());
         }
     }
-  public int getTotal() {
+
+    public int getTotal() {
         int count = 0;
         try {
             String query = "SELECT COUNT(*) AS total FROM Supplier";
@@ -220,7 +220,7 @@ public class SupplierDao extends DBContext {
         }
         return list;
     }
-    
+
     public Supplier getSupplierById(int supplierId) {
         Supplier supplier = null;
         try {
@@ -239,10 +239,11 @@ public class SupplierDao extends DBContext {
         }
         return supplier;
     }
+
     public static void main(String[] args) {
         SupplierDao sus = new SupplierDao();
         List<Supplier> li = sus.getAll();
-        for(Supplier l: li){
+        for (Supplier l : li) {
             System.out.println(l.getCompanyName());
         }
     }

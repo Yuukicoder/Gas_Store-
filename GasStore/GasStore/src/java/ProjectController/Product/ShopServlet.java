@@ -25,7 +25,18 @@ public class ShopServlet extends HttpServlet {
         ProductDAO productDAO = new ProductDAO();
         SupplierDao supDAO = new SupplierDao();
 
-        List<Product> products = productDAO.getAllProduct();
+        //Filter theo ID - Vu anh
+        String cateId = request.getParameter("cateid");
+        List<Product> products ;
+        System.out.println("shopServlet: cateId " + cateId);
+        if(cateId == null){
+            System.out.println("ShopServlet: CateId is null");
+            products = productDAO.getAllProduct();
+        }else{
+            products = productDAO.getProductByCategory(Integer.parseInt(cateId));
+        }   
+        //------------------------
+        
         Map<Integer, String> supplierMap = new HashMap<>();
 
         for (Product product : products) {
@@ -48,8 +59,12 @@ public class ShopServlet extends HttpServlet {
         request.setAttribute("maxPage", Math.ceil(products.size() / pageSize));
         request.setAttribute("product", paginatedProducts);
         request.setAttribute("currentPage", pageNumber);
-        request.setAttribute("cate", cdao.getAllCategory());
+        request.setAttribute("cate", cdao.getAllCategory());       
         request.setAttribute("suppliers", supplierMap);
+        
+        //Filter theo ID - Vu anh
+        System.out.println("Shop: " + cateId);
+        request.setAttribute("cateid", cateId);
 
         request.getRequestDispatcher("shop.jsp").forward(request, response);
     }

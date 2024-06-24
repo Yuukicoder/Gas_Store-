@@ -2,8 +2,9 @@
 <%@page import="DTO.*" %> 
 <%@page import="DAO.*" %> 
 <%@page import="java.util.*" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
     <head>
         <meta charset="utf-8">
@@ -31,7 +32,7 @@
         <link rel="stylesheet" href="css/productCard.css">
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <style>
-            
+
         </style>
     </head>
     <%
@@ -56,7 +57,7 @@
                         </ol>
                         <div class="carousel-inner">
                             <div class="carousel-item position-relative active" style="height: 430px;">
-                                <img class="position-absolute w-100 h-100" src="images/Post/${pdto.getPostImg()}"
+                                <img class="position-absolute w-100 h-100" src="images/news/${pdto.getPostbanner()}"
                                      style="object-fit: cover;">
                                 <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                     <div class="p-3" style="max-width: 700px;">
@@ -75,7 +76,7 @@
                             <c:forEach items="${requestScope.post}" var="c" varStatus="status">
                                 <c:if test="${status.index > 0}">
                                     <div class="carousel-item position-relative" style="height: 430px;">
-                                        <img class="position-absolute w-100 h-100" src="images/Post/${c.getPostImg()}"
+                                        <img class="position-absolute w-100 h-100" src="images/news/${c.getPostbanner()}"
                                              style="object-fit: cover;">
                                         <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                             <div class="p-3" style="max-width: 700px;">
@@ -141,42 +142,47 @@
 
 
         <!-- Products Start -->
-        <div class="container-fluid pt-5 pb-3">
-            <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">New Products</span></h2>
-            <div class="row px-xl-5">
+        <c:forEach items="${topSell}" var="map">
+            <c:set var="categoryName" value="${map.key}" />
+            <c:set var="productList" value="${map.value}" />
+            <div class="container-fluid pt-5 pb-3">
+                <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">SẢN PHẨM ${categoryName} BÁN CHẠY</span></h2>
+                <div class="row px-xl-5">
 
-                <section id="list-product">
-                    <div class="product">              
-                        <c:forEach items="${sessionScope.product}" var="p">
-                            <div class="card-product">           
-                                <div class="product-img">
-                                    <img src="images/Product/${p.getPostbanner()}" alt="Your Image">
-                                    <div class="overlay-product">
-                                        <a href="detailProduct?id=${p.getProductID()}"><i class="bx bx-search"></i></a>
-                                    </div>
-                                </div>
-                                <div class="product-detail">        
-                                    <div class="intro">
-                                        <div class="intro-name"><a href="detailProduct?id=${p.getProductID()}">${p.getName()}</a></div>                    
-                                    </div>
-                                    <div class="component-product">
-                                        <p><i class='bx bxs-hdd'></i>  SSD ${p.getStorage()} </p>
-                                        <p><i class='bx bxs-microchip'></i>  Ram ${p.getRam()} </p>
-                                        <p><i class='bx bx-chip' ></i>  CPU ${p.getCpu()}</p>
-                                        <p><i class='bx bx-desktop'></i>  VGA ${p.getVga()}</p>
-                                    </div>             
-                                    <div class="button-product">
-                                        <div class="price"> $ ${p.getPrice()}</div> 
-                                        <button class="cart btnn" onclick="location.href = 'detailProduct?id=${p.getProductID()}'">Buy Now</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </c:forEach>
-                    </div>
-                </section>
+                    <section id="list-product">
+                        <div class="product">              
+                            <c:forEach items="${productList}" var="p">
+                                <div class="card-product">           
+                                    <div class="product-img">
+                                                <img src="${p.getImage()}" alt="Your Image">
+                                                <div class="overlay-product">
+                                                    <a href="productDetail?id=${p.getProductID()}"><i class="bx bx-search"></i></a>
+                                                </div>
+                                            </div>
+                                            <div    class="product-detail">        
+                                                <div class="intro">
+                                                    <div class="intro-name"><a href="productDetail?id=${p.getProductID()}">${p.getName()}</a></div>                    
+                                                </div>
+                                                <div class="component-product">
+                                                    <p><i class='bx bxs-hdd'></i>  Short Description ${p.getShortDescription()} </p>
+                                                    
+                                                    <p><i class='bx bx-chip' ></i>  Available ${p.getStockQuantity()}</p>
+                                                    <p><i class='bx bx-chip' ></i>  Sold ${p.getUnitOnOrders()}</p>
+                                                </div>             
+                                                <div class="button-product">
+                                                    <div class="price"> $ ${p.getUnitPrice()}</div> 
+                                                        <a class="cart btnn" href = "productDetail?id=${p.getProductID()}">Buy Now</a>
 
+                                                </div>
+                                            </div>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </section>
+
+                </div>
             </div>
-        </div>
+        </c:forEach>
         <!-- Products End -->
 
 
@@ -232,11 +238,11 @@
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
         <script type="text/javascript">
-                                            function buy(id) {
-                                                var m = document.f.num.value;
-                                                document.f.action = "buy?id=" + id + "&num=" + m;
-                                                document.f.submit();
-                                            }
+                                                function buy(id) {
+                                                    var m = document.f.num.value;
+                                                    document.f.action = "buy?id=" + id + "&num=" + m;
+                                                    document.f.submit();
+                                                }
         </script>
     </body>
 
