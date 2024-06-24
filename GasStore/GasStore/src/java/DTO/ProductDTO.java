@@ -3,61 +3,79 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package DTO;
+import java.sql.Date;
 
 /**
  *
  * @author msi
  */
 public class ProductDTO {
-
-    //ProductID	CategoryID	Name	QuantityAvailable		RamCapacity	StorageCapacity	CpuBrand	VgaBrand
-    private int productID;
-    private int categoryID;
+    
+    private int productId;
+    private String code;
     private String name;
-    private String image;
-    private int quantity;
-    private double price;
-    private String ram;
-    private String storage;
-    private String cpu;
-    private String vga;
-    private int Status;
+    private String keywords;
+    private String shortDescription;
     private String description;
-    private int sold;
+    private int categoryId;
+    private int supplierId;
+    private int isActive;
+    private double unitPrice;
+    private String image;
+    private int stockQuantity;
+    private int unitOnOrders;
+    private Date createdDate;
+    private int createdBy;
+   
+//    private int productID;
+//    private int categoryID;
+//    private String name;
+//    private String image;
+//    private int quantity;
+//    private double price;
+//    private String ram;
+//    private String storage;
+//    private String cpu;
+//    private String vga;
+//    private int Status;
+//    private String description;
+//    private int sold;
 
     public ProductDTO() {
     }
 
-    public ProductDTO(int productID, int categoryID, String name, String image, int quantity, double price, String ram, String storage, String cpu, String vga, int Status, String description, int sold) {
-        this.productID = productID;
-        this.categoryID = categoryID;
+    public ProductDTO(int productId, String code, String name, String keywords, String shortDescription, String description, int categoryId, int supplierId, int isActive, double unitPrice, String image, int stockQuantity, int unitOnOrders, Date createdDate, int createdBy) {
+        this.productId = productId;
+        this.code = code;
         this.name = name;
-        this.image = image;
-        this.quantity = quantity;
-        this.price = price;
-        this.ram = ram;
-        this.storage = storage;
-        this.cpu = cpu;
-        this.vga = vga;
-        this.Status = Status;
+        this.keywords = keywords;
+        this.shortDescription = shortDescription;
         this.description = description;
-        this.sold = sold;
+        this.categoryId = categoryId;
+        this.supplierId = supplierId;
+        this.isActive = isActive;
+        this.unitPrice = unitPrice;
+        this.image = image;
+        this.stockQuantity = stockQuantity;
+        this.unitOnOrders = unitOnOrders;
+        this.createdDate = createdDate;
+        this.createdBy = createdBy;
     }
 
-    public int getProductID() {
-        return productID;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setProductID(int productID) {
-        this.productID = productID;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
-    public int getCategoryID() {
-        return categoryID;
+    public String getCode() {
+        return code;
     }
 
-    public void setCategoryID(int categoryID) {
-        this.categoryID = categoryID;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {
@@ -68,68 +86,20 @@ public class ProductDTO {
         this.name = name;
     }
 
-    public String getImage() {
-        return image;
+    public String getKeywords() {
+        return keywords;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public String getShortDescription() {
+        return shortDescription;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getRam() {
-        return ram;
-    }
-
-    public void setRam(String ram) {
-        this.ram = ram;
-    }
-
-    public String getStorage() {
-        return storage;
-    }
-
-    public void setStorage(String storage) {
-        this.storage = storage;
-    }
-
-    public String getCpu() {
-        return cpu;
-    }
-
-    public void setCpu(String cpu) {
-        this.cpu = cpu;
-    }
-
-    public String getVga() {
-        return vga;
-    }
-
-    public void setVga(String vga) {
-        this.vga = vga;
-    }
-
-    public int getStatus() {
-        return Status;
-    }
-
-    public void setStatus(int Status) {
-        this.Status = Status;
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
     }
 
     public String getDescription() {
@@ -140,20 +110,79 @@ public class ProductDTO {
         this.description = description;
     }
 
-    public int getSold() {
-        return sold;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setSold(int sold) {
-        this.sold = sold;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
-    @Override
-    public String toString() {
-        return "ProductDTO{" + "productID=" + productID + ", categoryID=" + categoryID + ", name=" + name + ", image=" + image + ", quantity=" + quantity + ", price=" + price + ", ram=" + ram + ", storage=" + storage + ", cpu=" + cpu + ", vga=" + vga + ", Status=" + Status + ", description=" + description + ", sold=" + sold + '}';
+    public int getSupplierId() {
+        return supplierId;
     }
 
-    
+    public void setSupplierId(int supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public int getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(int isActive) {
+        this.isActive = isActive;
+    }
+
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public int getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public void setStockQuantity(int stockQuantity) {
+        this.stockQuantity = stockQuantity;
+    }
+
+    public int getUnitOnOrders() {
+        return unitOnOrders;
+    }
+
+    public void setUnitOnOrders(int unitOnOrders) {
+        this.unitOnOrders = unitOnOrders;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public int getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(int createdBy) {
+        this.createdBy = createdBy;
+    }
+
+  
    
 
 }

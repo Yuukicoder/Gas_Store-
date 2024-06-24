@@ -82,13 +82,13 @@ public class Cart {
     public double getTotalMoney() {
         double t = 0;
         for (ItemDTO i : items) {
-            t += (i.getQuantity() * i.getProduct().getPrice());
+            t += (i.getQuantity() * i.getProduct().getUnitPrice());
         }
         return t;
     }
 
-    private ProductDTO getProductById(int id, List<ProductDTO> list) {
-        for (ProductDTO i : list) {
+    private Product getProductById(int id, List<Product> list) {
+        for (Product i : list) {
             if (i.getProductID() == id) {
                 return i;
             }
@@ -96,7 +96,7 @@ public class Cart {
         return null;
     }
 
-    public Cart(String savedStringFromCookie, List<ProductDTO> list) {
+    public Cart(String savedStringFromCookie, List<Product> list) {
         items = new ArrayList<>();
         try {
             if (savedStringFromCookie != null && savedStringFromCookie.length() != 0) {
@@ -105,8 +105,8 @@ public class Cart {
                     String[] n = i.split(":");
                     int id = Integer.parseInt(n[0]);
                     int quantity = Integer.parseInt(n[1]);
-                    ProductDTO p = getProductById(id, list);
-                    ItemDTO t = new ItemDTO(p, quantity, p.getPrice() * 2);
+                    Product p = getProductById(id, list);
+                    ItemDTO t = new ItemDTO(p, quantity, p.getUnitPrice() * 2);
                     addItem(t);
                 }
             }

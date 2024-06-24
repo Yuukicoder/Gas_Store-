@@ -10,24 +10,24 @@ package DTO;
  */
 public class ItemDTO {
 
-    private ProductDTO product;
+    private Product product;
     private int quantity;
     private double total;
 
     public ItemDTO() {
     }
 
-    public ItemDTO(ProductDTO product, int quantity, double total) {
+    public ItemDTO(Product product, int quantity, double total) {
         this.product = product;
         this.quantity = quantity;
         this.total = total;
     }
 
-    public ProductDTO getProduct() {
+    public Product getProduct() {
         return product;
     }
 
-    public void setProduct(ProductDTO product) {
+    public void setProduct(Product product) {
         this.product = product;
     }
 
