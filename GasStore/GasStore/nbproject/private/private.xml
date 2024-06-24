@@ -3,10 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/SWP391/project6/Gas_Store-/GasStore/GasStore/web/Forgotpass.jsp</file>
-            <file>file:/D:/SWP391/project6/Gas_Store-/GasStore/GasStore/src/java/GMAIL/Randompassword.java</file>
-            <file>file:/D:/SWP391/project6/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Forgotpass.java</file>
-            <file>file:/D:/SWP391/project6/Gas_Store-/GasStore/GasStore/src/java/GMAIL/Gmail.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/dal/DBContext.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DTO/ItemDTO.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Voucher/VoucherDetailServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DTO/ProductDTO.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Voucher/listVoucherCart.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DTO/Cart.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DAO/ProductDAO.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/component/navbar.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Voucher/VoucherServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/EditCategory.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Cart/CartServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DAO/DBcontext.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/cart.jsp</file>
         </group>
     </open-files>
 </project-private>
