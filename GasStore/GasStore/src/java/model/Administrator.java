@@ -33,13 +33,14 @@ public class Administrator {
         this.isActive = isActive;
     }
 
-    public Administrator(int administratorID, String userName, String password, int roleID, String email, String img) {
+    public Administrator(int administratorID, String userName, String password, int roleID, String email, String img,boolean isActive) {
         this.administratorID = administratorID;
         this.userName = userName;
         this.password = password;
         this.roleID = roleID;
         this.email = email;
         this.img = img;
+        this.isActive = isActive;
     }
 
    

@@ -59,7 +59,7 @@
                         </div>
                         <div class="row">
                             <!-- Manage User Card -->
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <a href="ManageUser" class="text-decoration-none">
                                     <div class="card bg-secondary text-center text-white rounded p-4">
                                         <h2 class="mb-0">Manage User</h2>
@@ -68,7 +68,7 @@
                             </div>
 
                             <!-- Manage Admin Card -->
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <a href="ManageStaff" class="text-decoration-none">
                                     <div class="card bg-secondary text-center text-white rounded p-4">
                                         <h2 class="mb-0">Manage Admin</h2>
@@ -77,13 +77,7 @@
                             </div>
 
                             <!-- Manage Supplier Card -->
-                            <div class="col-md-4">
-                                <a href="ManageSupplier" class="text-decoration-none">
-                                    <div class="card bg-secondary text-center text-white rounded p-4">
-                                        <h2 class="mb-0">Manage Supplier</h2>
-                                    </div>
-                                </a>
-                            </div>
+                           
                         </div>
                     </div>
                 </div>

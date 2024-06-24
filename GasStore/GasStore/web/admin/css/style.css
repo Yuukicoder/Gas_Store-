@@ -196,7 +196,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--dark);
+    background: var(--light);
     border-radius: 40px;
 }
 
@@ -206,7 +206,7 @@
 
 .content .navbar .dropdown-item:hover,
 .content .navbar .dropdown-item.active {
-    background: var(--dark);
+    background: var(--light);
 }
 
 .content .navbar .dropdown-toggle::after {

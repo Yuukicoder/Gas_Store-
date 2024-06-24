@@ -1,3 +1,9 @@
+<%-- 
+    Document   : InsertAdmin
+    Created on : May 27, 2024, 10:59:57 AM
+    Author     : vip2021
+--%>
+
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
@@ -73,6 +79,14 @@
             #productTable tr:hover td {
                 color: #000;
             }
+            /* Basic reset for margin and padding */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            /* Style for the image container */
             .image-container {
                 display: flex;
                 flex-direction: column;
@@ -82,11 +96,15 @@
 
             .image-container img {
                 width: 100%;
-                max-width: 10rem; /* Maximum width as specified */
+                max-width: 20rem; /* Maximum width as specified */
                 height: auto; /* Maintain aspect ratio */
                 border: 1px solid #ddd; /* Optional border for better visuals */
                 border-radius: 0.25rem; /* Slightly rounded corners */
                 box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Optional shadow */
+            }
+
+            .mt-1 {
+                margin-top: 1rem; /* Ensuring margin-top is consistent */
             }
 
         </style>
@@ -94,6 +112,7 @@
     </head>
 
     <body>
+
 
         <div class="container-fluid position-relative d-flex p-0">
             <!-- Spinner Start -->
@@ -112,96 +131,81 @@
                 <%@include file="component/navbarAdmin.jsp" %>
                 <!-- Navbar End -->
 
-                <!-- Blank Start -->
                 <div class="container-fluid pt-4 px-4">
                     <div class="bg-secondary text-center rounded p-4">
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            <h2 class="mb-0">All Employee</h2>
-                        </div>
-                        <div class="container-fluid pt-4 px-4">
-                            <div class="bg-secondary text-center rounded p-4">
-                                <div class="row">
-                                    <div class="col-lg-8 col-8 text-left m-3">
-                                        <div class="col-lg-10 col-10">
-                                            <form action="ManageStaff" method="post">
-                                                <div class="input-group mb-3">
-                                                    <input type="text" class="form-control bg-dark border-0" placeholder="Search for account" name="search">
-                                                    <div class="input-group-append">
-                                                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                                                    </div>
-                                                </div>
-                                        
-                                        </form>
+                        <h2 class="font-weight-bold mb-4">Insert New Account</h2>
+                        <form action="create-admin" method="post">
+                            <input type="hidden" value="${detail.administratorID}" name="accountID">
+                            <div class="row">
+                                <div class="col-lg-6 col-12 col-md-6 col-sm-12">
+                                    <div class="image-container">
+                                        <input type="file" name="pimg"  class="form-control">
+                                         <input type="text" name="timg" value="${detail.img}" class="form-control" hidden>
+                                        <div class="mt-1">
+                                            <img src="images/User/${detail.img}" alt="User Image"/>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-4 col-md-4 m-3 text-right">
+                                </div>
 
-                                        <a href="create-admin" class="btn btn-primary">Add new Employee</a>
+                                <div class="col-lg-6 col-12 col-md-6 col-sm-12">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="username" name="admin_name" value="${detail.userName}" placeholder="Username">
+                                                <label for="username">Username</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="password" class="form-control" id="password" name="passWord" value="${detail.password}" placeholder="Password" <c:if test="${not empty detail.password}">readonly</c:if>>
+                                                    <label for="password">Password</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input type="email" class="form-control" id="email" name="aemail" value="${detail.email}" placeholder="Email">
+                                                <label for="email">Email</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <select name="active" class="form-control">
+                                                    <option value="true" ${detail.isActive ? 'selected' : ''}>Yes</option>
+                                                    <option value="false" ${!detail.isActive ? 'selected' : ''}>No</option>
+                                                </select>
+                                                <label for="active">isActive</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <select name="roleid" class="form-control">
+                                                    <c:forEach items="${requestScope.rdata}" var="r">
+                                                        <option value="${r.roleID}" <c:if test="${detail.roleID == r.roleID}">selected</c:if>>${r.name}</option>
+                                                    </c:forEach>
+                                                    <option value="3" <c:if test="${detail.roleID == 3}">selected</c:if>>Customer</option>
+                                                </select>
+                                                <label for="role">Role</label> 
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                           
-
-
-
-                            <div class="table-responsive">
-                                <table id="productTable" class="table text-start align-middle table-bordered table-hover mb-0">
-                                    <thead>
-                                        <tr class="text-white">
-                                            <th scope="col">Avatar</th>
-                                            <th scope="col">Username</th>
-                                            <th scope="col">Role</th>
-                                            <th scope="col">Email</th>
-                                            <th scope="col">Active</th>
-
-                                            <th scope="col">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach items="${requestScope.adata}" var="l">
-                                            <tr>
-                                                <td><div class="image-container"><img class="width: 50%;" src="images/User/${l.getImg()}" alt="alt"/></div></td>
-                                                <td>${l.getUserName()}</td>
-                                                <td>${l.getName()}</td>
-                                                <td>${l.getEmail()}</td>
-
-                                                <td>${l.isIsActive()}</td>
-                                                <td>
-                                                    <a href="create-admin?atype=0&aid=${l.getAdministratorID()}" class="update-button">Update</a><br>
-                                                    <a href="ManageStaff?atype=1&aid=${l.getAdministratorID()}">Delete</a>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="row">
-                                <div class="pagination ">
-                                    <c:if test="${pageNum > 1}">
-                                        <a href="?pageNum=${pageNum-1}">Previous</a>
-                                    </c:if>
-                                    Page ${pageNum} of ${totalPage}
-                                    <c:if test="${pageNum < totalPage}">
-                                        <a href="?pageNum=${pageNum+1}">Next</a>
-                                    </c:if>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary w-100" name="btnInUp">Insert/Update</button>
                                 </div>
-
                             </div>
-                        </div>
-
-
-
+                        </form>
                     </div>
                 </div>
+
                 <div class="m-3 mt-4">
-                    <a href="adminHome" class="btn btn-primary">Back to Manage Account</a>
+                    <a href="ManageStaff" class="btn btn-primary">Back to Manage Account</a>
                 </div>
             </div>
+            <!-- Main Content End -->
 
-            <!-- Main Content End --><a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+            <!-- Content End -->
+            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
         </div>
-        <!-- Content End -->
-
-
 
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -214,22 +218,5 @@
         <script src="admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
         <script src="admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
         <script src="admin/js/main.js"></script>
-        <script>
-            $(document).ready(function () {
-                $('.insert-div').hide(); // Hide the insert div initially
-
-                $('#toggleInsert').click(function (e) {
-                    e.preventDefault();
-                    $('.insert-div').toggle();
-                });
-
-                $('.update-button').click(function () {
-                    if ($('.insert-div').is(':hidden')) {
-                        $('.insert-div').show();
-                    }
-                });
-            });
-        </script>
     </body>
-
 </html>

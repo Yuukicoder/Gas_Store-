@@ -74,15 +74,31 @@
     </servlet>
     <servlet>
         <servlet-name>SupplierManageServlet</servlet-name>
-        <servlet-class>Controller.SupplierManageServlet</servlet-class>
+        <servlet-class>Controller.AdminAccountManageServlet.SupplierManageServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AdminAccountServlet</servlet-name>
-        <servlet-class>Controller.AdminAccountServlet</servlet-class>
+        <servlet-class>Controller.AdminAccountManageServlet.AdminAccountServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AdminManagerServlet</servlet-name>
-        <servlet-class>Controller.AdminManagerServlet</servlet-class>
+        <servlet-class>Controller.AdminAccountManageServlet.AdminManagerServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InsertAdminServlet</servlet-name>
+        <servlet-class>Controller.AdminAccountManageServlet.InsertAdminServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InsertAccountServlet</servlet-name>
+        <servlet-class>Controller.AdminAccountManageServlet.InsertAccountServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ManageServlet</servlet-name>
+        <servlet-class>Controller.AdminAccountManageServlet.ManageServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InsertSupplier</servlet-name>
+        <servlet-class>Controller.AdminAccountManageServlet.InsertSupplier</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
@@ -167,6 +183,22 @@
     <servlet-mapping>
         <servlet-name>AdminManagerServlet</servlet-name>
         <url-pattern>/ManageStaff</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InsertAdminServlet</servlet-name>
+        <url-pattern>/create-admin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InsertAccountServlet</servlet-name>
+        <url-pattern>/insert-account</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageServlet</servlet-name>
+        <url-pattern>/manage-account</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InsertSupplier</servlet-name>
+        <url-pattern>/insert-supplier</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

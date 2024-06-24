@@ -2,23 +2,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller;
+package Controller.AdminAccountManageServlet;
 
-import dal.CustomerDao;
+import DTO.AdminDTO;
+import dal.SupplierDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.Customer;
+import jakarta.servlet.http.HttpSession;
+import model.Supplier;
 
 /**
  *
  * @author vip2021
  */
-public class AdminAccountServlet extends HttpServlet {
+public class InsertSupplier extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,34 +33,26 @@ public class AdminAccountServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String pid = request.getParameter("id");
-        String t = request.getParameter("type");
-        CustomerDao cus = new CustomerDao();
-        int pageNum = request.getParameter("pageNum") != null ? Integer.parseInt(request.getParameter("pageNum")) : 1;
-        int pageSize = 5;
-        List<Customer> li = cus.getPaginatedCustomers(pageNum, pageSize);
-        request.setAttribute("lidata", li);
-
-        
-        int totalCustomers = cus.getTotalCustomers();
-        int totalPages = (int) Math.ceil((double) totalCustomers / pageSize);
-
-       
-        request.setAttribute("pageNum", pageNum);
-        request.setAttribute("totalPages", totalPages);
-
-        if (pid != null && !pid.isEmpty() && t != null && !t.isEmpty()) {
-            if (t.equals("0")) {
-                Customer u = cus.getAllByID(Integer.parseInt(pid));
-                request.setAttribute("detailaccount", u);
+        HttpSession session = request.getSession();
+        AdminDTO account = (AdminDTO) session.getAttribute("account");
+        if (account != null) {
+            if (account.getRoleID() == 1) {
+                String pid = request.getParameter("id");
+                String t = request.getParameter("type");
+                SupplierDao supplierDao = new SupplierDao();
+                if (pid != null && !pid.isEmpty() && t != null && !t.isEmpty()) {
+                    if (t.equals("0")) {
+                        Supplier supplier = supplierDao.getSupplierByID(Integer.parseInt(pid));
+                        request.setAttribute("detail", supplier);
+                    }
+                }
+                request.getRequestDispatcher("InsertSupplier.jsp").forward(request, response);
             } else {
-                cus.deleteAccount(pid);
-                response.sendRedirect("ManageUser");
-                return;
+                response.sendRedirect("403.jsp");
             }
+        } else {
+            response.sendRedirect("403.jsp");
         }
-        request.getRequestDispatcher("TableAccount.jsp").forward(request, response);
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -88,26 +81,17 @@ public class AdminAccountServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        CustomerDao cus = new CustomerDao();
-        String s = request.getParameter("search");
+        SupplierDao sus = new SupplierDao();
         String uid = request.getParameter("account_id");
         String name = request.getParameter("username");
-        String pass = request.getParameter("password");
-        String first = request.getParameter("first_name");
-        String last = request.getParameter("last_name");
-        String mail = request.getParameter("email");
-        String phone = request.getParameter("phone_number");
-        Customer newCustomer = new Customer(uid != null && !uid.isEmpty() ? Integer.parseInt(uid) : 0, name,
-                pass, first, last, phone, mail);
-        if (uid != null && !uid.isEmpty()) {
-            cus.updateUser(newCustomer);
-        } else {
-            if (cus.isUsernameAvailable(name) && cus.isEmailAvailable(mail)) {
-
-                cus.insertCustomer(newCustomer);
-            }
-        }
-        response.sendRedirect("ManageUser");
+        String smail = request.getParameter("email");
+//        
+//        String mail = request.getParameter("email");
+        String phone = request.getParameter("phone");
+        String home = request.getParameter("HomePage");
+        Supplier newSup = new Supplier(!uid.isEmpty() ? Integer.parseInt(uid) : 0, name, smail, phone, home);
+        sus.insertSupplier(newSup);
+        response.sendRedirect("ManageSupplier");
     }
 
     /**

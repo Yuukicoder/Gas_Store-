@@ -29,10 +29,10 @@
                     <c:if test="${account != null}">
                         <div class="d-inline-flex align-items-center">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">${account.getFullname()}</button>
+                                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown"></button>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <button class="dropdown-item" type="button"><a href="mypurchase">My Purchase</a></button>
-                                    <button class="dropdown-item" type="button"><a href="UserProfile?aid=${account.getAccountID()}">Profile</a></button>
+                                    <button class="dropdown-item" type="button"><a href="">My Purchase</a></button>
+                                    <button class="dropdown-item" type="button"><a href="">Profile</a></button>
                                     <button class="dropdown-item" type="button"><a href="logout">Logout</a></button>
                                 </div>
                             </div>
