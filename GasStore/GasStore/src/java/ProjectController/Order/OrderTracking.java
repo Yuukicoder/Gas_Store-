@@ -12,7 +12,10 @@ import DAO.OrderHistoryDAO;
 import DAO.ProductDAO;
 import DTO.AccountDTO;
 import DTO.OrderDTO;
+import DTO.OrderDetail;
 import DTO.OrderHistoryDTO;
+import dal.CustomerDao;
+import dal.OrdersDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -22,6 +25,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import model.Customer;
+import model.Orders;
 
 /**
  *
@@ -42,7 +47,7 @@ public class OrderTracking extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -68,25 +73,41 @@ public class OrderTracking extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+
+            // Get customer from session
+            CustomerDao cust = new CustomerDao();
+            Customer cus = (Customer) session.getAttribute("account");
+            if (cus == null) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
+            Customer uss = cust.getAllByID(cus.getCustomerID());
         String orderid_raw = request.getParameter("orderid");
         String acountid_raw = request.getParameter("acountid");
         OrderHistoryDAO aO = new OrderHistoryDAO();
         OrderDAO odao = new OrderDAO();
+        OrdersDao ord = new OrdersDao();
+        
         ProductDAO pDAO = new ProductDAO();
         OrderDetailDAO odDAO = new OrderDetailDAO();
         FeedbackDAO fdao = new FeedbackDAO();
-
-        request.setAttribute("purchase", odao.myPurchaseTracking(acountid_raw, orderid_raw));
+        List<Orders> orderList = ord.getAllByID(Integer.parseInt(acountid_raw));
+        Orders or = ord.getByID(Integer.parseInt(orderid_raw));
+        request.setAttribute("purchase", orderList);
         request.setAttribute("purchase_detail", odao.getPurchaseByID(orderid_raw));
         request.setAttribute("orderid", orderid_raw);
-
+        request.setAttribute("ordao", or);
         request.setAttribute("pDAO", pDAO);
         request.setAttribute("odDAO", odDAO);
         request.setAttribute("pDAO", pDAO);
         request.setAttribute("fdao", fdao);
+        request.setAttribute("custo", uss);
 
         List<OrderHistoryDTO> orderlist = aO.getAllOrderHistory(orderid_raw, acountid_raw);
-        request.setAttribute("ordertracking", orderlist);
+        List<OrderDetail> listDetail = odDAO.getOrderDetailByID(Integer.parseInt(orderid_raw));
+        request.setAttribute("ordertracking", listDetail);
+        request.setAttribute("odDAO", listDetail);
         request.getRequestDispatcher("OrderTracking.jsp").forward(request, response);
     }
 

@@ -74,15 +74,15 @@
     </servlet>
     <servlet>
         <servlet-name>SupplierManageServlet</servlet-name>
-        <servlet-class>Controller.AdminAccountServlet.SupplierManageServlet</servlet-class>
+        <servlet-class>Controller.AdminAccountManageServlet.SupplierManageServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AdminAccountServlet</servlet-name>
-        <servlet-class>Controller.AdminAccountServlet.AdminAccountServlet</servlet-class>
+        <servlet-class>Controller.AdminAccountManageServlet.AdminAccountServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AdminManagerServlet</servlet-name>
-        <servlet-class>Controller.AdminAccountServlet.AdminManagerServlet</servlet-class>
+        <servlet-class>Controller.AdminAccountManageServlet.AdminManagerServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LoginGoogleServlet</servlet-name>
@@ -94,15 +94,19 @@
     </servlet>
     <servlet>
         <servlet-name>InsertAdminServlet</servlet-name>
-        <servlet-class>Controller.AdminAccountServlet.InsertAdminServlet</servlet-class>
+        <servlet-class>Controller.AdminAccountManageServlet.InsertAdminServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>InsertAccountServlet</servlet-name>
-        <servlet-class>Controller.AdminAccountServlet.InsertAccountServlet</servlet-class>
+        <servlet-class>Controller.AdminAccountManageServlet.InsertAccountServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>InsertSupplierServlet</servlet-name>
-        <servlet-class>Controller.AdminAccountServlet.InsertSupplierServlet</servlet-class>
+        <servlet-class>Controller.AdminAccountManageServlet.InsertSupplierServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CancelOrderServlet</servlet-name>
+        <servlet-class>ProjectController.Order.CancelOrderServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
@@ -211,6 +215,10 @@
     <servlet-mapping>
         <servlet-name>InsertSupplierServlet</servlet-name>
         <url-pattern>/insert-supplier</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CancelOrderServlet</servlet-name>
+        <url-pattern>/CancelOrder</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

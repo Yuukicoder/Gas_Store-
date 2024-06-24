@@ -26,7 +26,7 @@ import DTO.Customer;
  */
 public class OrderDAO extends DBcontext {
 
-    public void addOrder(AccountDTO a, Cart cart, String address, double voucher, double voucher1 , String name , String phone) {
+    public void addOrder(AccountDTO a, Cart cart, String address, double voucher, double voucher1, String name, String phone) {
         LocalDate curDate = LocalDate.now();
         String date = curDate.toString();
         try {
@@ -152,14 +152,13 @@ public class OrderDAO extends DBcontext {
         }
         return lo;
     }
-    
-    
+
     public LinkedHashMap<Order, Customer> listOrderAdminHome(int number) {
-        String sql = "SELECT TOP " + number + " od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, " +
-                     "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes " +
-                     "FROM [Order] od " +
-                     "JOIN Customer c ON c.customerID = od.customerID " +
-                     "ORDER BY od.orderID DESC";
+        String sql = "SELECT TOP " + number + " od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, "
+                + "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes "
+                + "FROM [Order] od "
+                + "JOIN Customer c ON c.customerID = od.customerID "
+                + "ORDER BY od.orderID DESC";
 
         LinkedHashMap<Order, Customer> orderMap = new LinkedHashMap<>();
 
@@ -184,19 +183,19 @@ public class OrderDAO extends DBcontext {
                 orderMap.put(ord, cust);
             }
         } catch (Exception e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
         return orderMap;
     }
-    
+
     public LinkedHashMap<Order, Customer> pagingOrder(int pageNumber, int pageSize) {
         LinkedHashMap<Order, Customer> orderMap = new LinkedHashMap<>();
-        String sql = "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, " +
-                     "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes " +
-                     "FROM [Order] od " +
-                     "JOIN Customer c ON c.customerID = od.customerID " +
-                     "ORDER BY od.orderID DESC " +
-                     "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        String sql = "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, "
+                + "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes "
+                + "FROM [Order] od "
+                + "JOIN Customer c ON c.customerID = od.customerID "
+                + "ORDER BY od.orderID DESC "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -236,7 +235,7 @@ public class OrderDAO extends DBcontext {
 
         return null;
     }
-    
+
     public int countAllOrders() {
         int totalCount = 0;
         String sql = "SELECT COUNT(*) AS totalOrders FROM [Order]";
@@ -251,8 +250,6 @@ public class OrderDAO extends DBcontext {
         }
         return totalCount;
     }
-
-
 
     public double todaySale() {
         // Lấy ngày hiện tại
@@ -272,24 +269,29 @@ public class OrderDAO extends DBcontext {
         return value;
     }
 
-    public List<OrderDTO> myPurchase(int id) {
-        String sql = "SELECT o.OrderID, a.Fullname, o.TotalPrice, o.OrderDate,o.Address,o.Status FROM Orders o JOIN Account a ON a.AccountID = o.AccountID WHERE a.AccountID = ? ORDER BY o.OrderID DESC";
-        List<OrderDTO> lo = new ArrayList<>();
+    public List<Order> myPurchase(int id) {
+        String sql = "SELECT o.OrderID, o.OrderDate, c.customerID, o.totalMoney, o.Status, c.customerID \n"
+                + "                FROM [Order] o \n"
+                + "               JOIN Customer c ON c.customerID = o.customerID\n"
+                + "                WHERE c.customerID = ?\n"
+                + "                ORDER BY o.OrderID DESC";
+        List<Order> lo = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                OrderDTO o = new OrderDTO();
-                o.setOrderID(rs.getInt(1));
-                o.setFullname(rs.getString(2));
-                o.setTotalPrice(rs.getDouble(3));
-                o.setOrderDate(rs.getString(4));
-                o.setAddress(rs.getString(5));
-                o.setStatus(rs.getInt(6));
-                lo.add(o);
+                Order ord = new Order();
+                ord.setOrderID(rs.getInt("orderID"));
+                ord.setOrderDate(rs.getString("orderDate"));
+//                ord.setC(rs.getString("Fullname"));
+                ord.setTotalMoney(rs.getDouble("totalMoney"));
+                ord.setStatus(rs.getInt("status"));
+                ord.setCustomerID(rs.getInt("customerID"));
+                lo.add(ord);
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return lo;
     }
@@ -346,13 +348,24 @@ public class OrderDAO extends DBcontext {
                 } catch (Exception e) {
                     System.out.println(e);
                 }
-            } 
+            }
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
+    public void changeStatusOrder1(int id, int status) {
+        String sql = "UPDATE [Order] SET status = ? WHERE orderID = ?";
 
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, status);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public float getIncomeToday() {
         String sql = "SELECT SUM(TotalPrice) AS total_amount\n"
@@ -389,10 +402,10 @@ public class OrderDAO extends DBcontext {
         }
         return 0;
     }
-    
+
     public int getTotalOrdersDelivered() {
-        String sql = "SELECT COUNT(OrderID) AS OrderCount\n" +
-"                FROM Orders where Orders.Status = 3";
+        String sql = "SELECT COUNT(OrderID) AS OrderCount\n"
+                + "                FROM Orders where Orders.Status = 3";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -406,10 +419,10 @@ public class OrderDAO extends DBcontext {
         }
         return 0;
     }
-    
-     public int getTotalOrdersCancled() {
-        String sql = "SELECT COUNT(OrderID) AS OrderCount\n" +
-"                FROM Orders where Orders.Status = 4";
+
+    public int getTotalOrdersCancled() {
+        String sql = "SELECT COUNT(OrderID) AS OrderCount\n"
+                + "                FROM Orders where Orders.Status = 4";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -423,7 +436,6 @@ public class OrderDAO extends DBcontext {
         }
         return 0;
     }
-    
 
     //xóa list = 4 
     public void getListOrder4(String oid) {
@@ -439,49 +451,57 @@ public class OrderDAO extends DBcontext {
     }
 
     // list = 0 
-    public List<OrderDTO> myPurchase1(int id) {
-        String sql = " SELECT o.OrderID, a.Fullname, o.TotalPrice, o.OrderDate,o.Address,o.Status \n"
-                + " FROM Orders o JOIN Account a ON a.AccountID = o.AccountID WHERE a.AccountID = ? and o.Status=0  ORDER BY o.OrderID DESC";
-        List<OrderDTO> lo = new ArrayList<>();
+    public List<Order> myPurchase1(int id) {
+        String sql = " SELECT o.OrderID, o.OrderDate, c.customerID, o.totalMoney, o.Status, c.customerID \n"
+                + " FROM [Order] o \n"
+                + "               JOIN Customer c ON c.customerID = o.customerID\n"
+                + "                WHERE c.customerID = ? and o.status = 1 \n"
+                + "                ORDER BY o.OrderID DESC";
+        List<Order> lo = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                OrderDTO o = new OrderDTO();
-                o.setOrderID(rs.getInt(1));
-                o.setFullname(rs.getString(2));
-                o.setTotalPrice(rs.getDouble(3));
-                o.setOrderDate(rs.getString(4));
-                o.setAddress(rs.getString(5));
-                o.setStatus(rs.getInt(6));
-                lo.add(o);
+                Order ord = new Order();
+                ord.setOrderID(rs.getInt("orderID"));
+                ord.setOrderDate(rs.getString("orderDate"));
+//                ord.setC(rs.getString("Fullname"));
+                ord.setTotalMoney(rs.getDouble("totalMoney"));
+                ord.setStatus(rs.getInt("status"));
+                ord.setCustomerID(rs.getInt("customerID"));
+                lo.add(ord);
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return lo;
     }
 
     // list = 1
-    public List<OrderDTO> myPurchase2(int id) {
-        String sql = " SELECT o.OrderID, a.Fullname, o.TotalPrice, o.OrderDate,o.Address,o.Status \n"
-                + " FROM Orders o JOIN Account a ON a.AccountID = o.AccountID WHERE a.AccountID = ? and o.Status=1  ORDER BY o.OrderID DESC";
-        List<OrderDTO> lo = new ArrayList<>();
+    public List<Order> myPurchase2(int id) {
+        String sql = " SELECT o.OrderID, o.OrderDate, c.customerID, o.totalMoney, o.Status, c.customerID \n"
+                + " FROM [Order] o \n"
+                + "               JOIN Customer c ON c.customerID = o.customerID\n"
+                + "                WHERE c.customerID = ? and o.status = 2 \n"
+                + "                ORDER BY o.OrderID DESC";
+        List<Order> lo = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                OrderDTO o = new OrderDTO();
-                o.setOrderID(rs.getInt(1));
-                o.setFullname(rs.getString(2));
-                o.setTotalPrice(rs.getDouble(3));
-                o.setOrderDate(rs.getString(4));
-                o.setAddress(rs.getString(5));
-                o.setStatus(rs.getInt(6));
-                lo.add(o);
+                Order ord = new Order();
+                ord.setOrderID(rs.getInt("orderID"));
+                ord.setOrderDate(rs.getString("orderDate"));
+//                ord.setC(rs.getString("Fullname"));
+                ord.setTotalMoney(rs.getDouble("totalMoney"));
+                ord.setStatus(rs.getInt("status"));
+                ord.setCustomerID(rs.getInt("customerID"));
+                lo.add(ord);
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return lo;
     }
@@ -583,11 +603,12 @@ public class OrderDAO extends DBcontext {
         return lo;
     }
 
-     public OrderDTO getPurchaseByID(String orderid_raw) {
-        String sql = "select AccountID,TotalPrice,OrderDate,Address,Status,VoucherCode,Phone,Name  from Orders where OrderID = ?";
+    public OrderDTO getPurchaseByID(String orderid_raw) {
+        String sql = "select AccountID,TotalPrice,OrderDate,Address,Status,VoucherCode,Phone,Name  from Orders "
+                + "where OrderID = ?";
         try {
             OrderDTO odto = new OrderDTO();
-            int orderid= Integer.parseInt(orderid_raw);
+            int orderid = Integer.parseInt(orderid_raw);
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, orderid);
             ResultSet rs = ps.executeQuery();
@@ -600,7 +621,7 @@ public class OrderDAO extends DBcontext {
                 odto.setPhoneorder(rs.getString("Phone"));
                 odto.setName1(rs.getString("Name"));
                 odto.setVoucherCode(rs.getDouble("VoucherCode"));
-            
+
             }
             return odto;
         } catch (SQLException e) {
@@ -608,17 +629,18 @@ public class OrderDAO extends DBcontext {
         }
         return null;
     }
+
     public LinkedHashMap<Order, Customer> searchOrders(String search) {
         String cleanedSearch = search.trim().replaceAll("\\s+", " ").toLowerCase();
         String[] searchTerms = cleanedSearch.split(" ");
 
         // Xây dựng câu lệnh SQL động
         StringBuilder sqlBuilder = new StringBuilder(
-            "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, " +
-            "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes " +
-            "FROM [Order] od " +
-            "JOIN Customer c ON c.customerID = od.customerID " +
-            "WHERE "
+                "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, "
+                + "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes "
+                + "FROM [Order] od "
+                + "JOIN Customer c ON c.customerID = od.customerID "
+                + "WHERE "
         );
 
         for (int i = 0; i < searchTerms.length; i++) {
@@ -626,9 +648,9 @@ public class OrderDAO extends DBcontext {
                 sqlBuilder.append(" OR ");
             }
             sqlBuilder.append("(")
-                      .append("LOWER(od.orderID) LIKE ? ")
-                      .append("OR LOWER(c.username) LIKE ? ")
-                      .append(")");
+                    .append("LOWER(od.orderID) LIKE ? ")
+                    .append("OR LOWER(c.username) LIKE ? ")
+                    .append(")");
         }
 
         sqlBuilder.append(" ORDER BY od.orderID DESC");
@@ -669,18 +691,18 @@ public class OrderDAO extends DBcontext {
         }
         return orderMap;
     }
-    
+
     public LinkedHashMap<Order, Customer> searchOrdersPaging(String search, int pageIndex, int pageSize) {
         String cleanedSearch = search.trim().replaceAll("\\s+", " ").toLowerCase();
         String[] searchTerms = cleanedSearch.split(" ");
 
         // Xây dựng câu lệnh SQL động
         StringBuilder sqlBuilder = new StringBuilder(
-            "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, " +
-            "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes " +
-            "FROM [Order] od " +
-            "JOIN Customer c ON c.customerID = od.customerID " +
-            "WHERE "
+                "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, "
+                + "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes "
+                + "FROM [Order] od "
+                + "JOIN Customer c ON c.customerID = od.customerID "
+                + "WHERE "
         );
 
         for (int i = 0; i < searchTerms.length; i++) {
@@ -688,9 +710,9 @@ public class OrderDAO extends DBcontext {
                 sqlBuilder.append(" OR ");
             }
             sqlBuilder.append("(")
-                      .append("LOWER(od.orderID) LIKE ? ")
-                      .append("OR LOWER(c.username) LIKE ? ")
-                      .append(")");
+                    .append("LOWER(od.orderID) LIKE ? ")
+                    .append("OR LOWER(c.username) LIKE ? ")
+                    .append(")");
         }
 
         sqlBuilder.append(" ORDER BY od.orderID DESC");
@@ -737,8 +759,11 @@ public class OrderDAO extends DBcontext {
 
     public static void main(String[] args) {
         OrderDAO dao = new OrderDAO();
-        System.out.println(dao.searchOrders("duc").size());
-        
+        List<Order> li = dao.myPurchase1(1);
+        for (Order l : li) {
+            System.out.println(l.getStatus());
+        }
+
     }
 
 }

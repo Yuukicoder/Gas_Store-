@@ -24,7 +24,6 @@ import model.Customer;
  */
 public class CustomerDao extends DBContext {
 
-   
     PreparedStatement stm;
     ResultSet rs;
     List<Customer> list;
@@ -52,26 +51,96 @@ public class CustomerDao extends DBContext {
         }
         return li;
     }
-        public List<Administrator> getAllAdminByName(String name) {
 
-        li = new ArrayList<>();
-        try {
-            String strSelect = "Select *  from Administrator\n"
-                    + "left join Role on Administrator.roleID = Role.roleID where userName like ?";
-            stm = connection.prepareStatement(strSelect);
-            stm.setString(1, "%"+name.toLowerCase().trim()+"%");
-            rs = stm.executeQuery();
-            while (rs.next()) {
+    public List<Administrator> getAllAdminByName(String name) {
+        List<Administrator> li = new ArrayList<>();
+        String[] parts = name.trim().toLowerCase().split("\\s+");
 
-                Administrator em = new Administrator(rs.getInt("administratorID"),
-                        rs.getString("userName"), rs.getString("password"),
-                        rs.getInt("roleID"), rs.getString("email"),
-                        rs.getString("img"), rs.getString("name"), rs.getBoolean("isActive"));
-                li.add(em);
+        // Construct the SQL query dynamically for word search
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM Administrator ")
+                .append("LEFT JOIN Role ON Administrator.roleID = Role.roleID WHERE ");
+        for (int i = 0; i < parts.length; i++) {
+            queryBuilder.append("(userName LIKE ? OR email LIKE ? OR name LIKE ?)");
+            if (i < parts.length - 1) {
+                queryBuilder.append(" OR ");
+            }
+        }
+
+        boolean hasResults = false;
+
+        try (PreparedStatement stm = connection.prepareStatement(queryBuilder.toString())) {
+            // Set the parameters for each part
+            for (int i = 0; i < parts.length; i++) {
+                String searchPattern = "%" + parts[i] + "%";
+                stm.setString(i * 3 + 1, searchPattern);
+                stm.setString(i * 3 + 2, searchPattern);
+                stm.setString(i * 3 + 3, searchPattern);
+            }
+
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    Administrator em = new Administrator(
+                            rs.getInt("administratorID"),
+                            rs.getString("userName"),
+                            rs.getString("password"),
+                            rs.getInt("roleID"),
+                            rs.getString("email"),
+                            rs.getString("img"),
+                            rs.getString("name"),
+                            rs.getBoolean("isActive")
+                    );
+                    li.add(em);
+                    hasResults = true;
+                }
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
+
+        // If no results are found, perform search by individual letters
+        if (!hasResults) {
+            li.clear();
+            parts = name.trim().toLowerCase().split(""); // Split by individual letters
+
+            // Construct the SQL query dynamically for letter search
+            queryBuilder = new StringBuilder("SELECT * FROM Administrator ")
+                    .append("LEFT JOIN Role ON Administrator.roleID = Role.roleID WHERE ");
+            for (int i = 0; i < parts.length; i++) {
+                queryBuilder.append("(userName LIKE ? OR email LIKE ? OR name LIKE ?)");
+                if (i < parts.length - 1) {
+                    queryBuilder.append(" OR ");
+                }
+            }
+
+            try (PreparedStatement stm = connection.prepareStatement(queryBuilder.toString())) {
+                // Set the parameters for each part
+                for (int i = 0; i < parts.length; i++) {
+                    String searchPattern = "%" + parts[i] + "%";
+                    stm.setString(i * 3 + 1, searchPattern);
+                    stm.setString(i * 3 + 2, searchPattern);
+                    stm.setString(i * 3 + 3, searchPattern);
+                }
+
+                try (ResultSet rs = stm.executeQuery()) {
+                    while (rs.next()) {
+                        Administrator em = new Administrator(
+                                rs.getInt("administratorID"),
+                                rs.getString("userName"),
+                                rs.getString("password"),
+                                rs.getInt("roleID"),
+                                rs.getString("email"),
+                                rs.getString("img"),
+                                rs.getString("name"),
+                                rs.getBoolean("isActive")
+                        );
+                        li.add(em);
+                    }
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+
         return li;
     }
 
@@ -151,7 +220,7 @@ public class CustomerDao extends DBContext {
             preparedStatement.setInt(4, admin.getRoleID());
 
             preparedStatement.setString(5, admin.getEmail());
-             preparedStatement.setString(6, admin.getImg());
+            preparedStatement.setString(6, admin.getImg());
 
             // Execute the query
             preparedStatement.executeUpdate();
@@ -204,6 +273,7 @@ public class CustomerDao extends DBContext {
         }
         return li;
     }
+
     public List<Administrator> SearchPaginatedAdmin(int pageNum, int pageSize, String tname) {
         li = new ArrayList<>();
         try {
@@ -219,7 +289,7 @@ public class CustomerDao extends DBContext {
             int endRow = startRow + pageSize - 1;
             stm.setInt(1, startRow);
             stm.setInt(2, endRow);
-            stm.setString(3,"%"+tname+"%");
+            stm.setString(3, "%" + tname + "%");
             rs = stm.executeQuery();
             while (rs.next()) {
 
@@ -234,6 +304,7 @@ public class CustomerDao extends DBContext {
         }
         return li;
     }
+
     /**
      * CustomerDao
      *
@@ -248,7 +319,7 @@ public class CustomerDao extends DBContext {
             while (rs.next()) {
 
                 Customer em = new Customer(rs.getInt("customerID"),
-                        rs.getString("userName"), rs.getString("password"),rs.getString("image"),
+                        rs.getString("userName"), rs.getString("password"), rs.getString("image"),
                         rs.getString("firstName"), rs.getString("lastName"),
                         rs.getString("phone"), rs.getString("email"));
                 list.add(em);
@@ -258,7 +329,6 @@ public class CustomerDao extends DBContext {
         }
         return list;
     }
-    
 
     public Customer getAllByID(int id) {
         list = new ArrayList<>();
@@ -270,9 +340,9 @@ public class CustomerDao extends DBContext {
             while (rs.next()) {
 
                 Customer em = new Customer(rs.getInt("customerID"), rs.getString("userName"),
-                        rs.getString("password"), rs.getString("image"),rs.getString("firstName"),
-                        rs.getString("lastName"),rs.getString("address"),
-                         rs.getString("phone"), rs.getString("email"));
+                        rs.getString("password"), rs.getString("image"), rs.getString("firstName"),
+                        rs.getString("lastName"), rs.getString("address"),
+                        rs.getString("phone"), rs.getString("email"));
                 return em;
             }
         } catch (SQLException e) {
@@ -291,9 +361,9 @@ public class CustomerDao extends DBContext {
             while (rs.next()) {
 
                 Customer em = new Customer(rs.getInt("customerID"), rs.getString("userName"),
-                        rs.getString("password"),rs.getString("image"), rs.getString("firstName"),
+                        rs.getString("password"), rs.getString("image"), rs.getString("firstName"),
                         rs.getString("lastName"),
-                         rs.getString("phone"), rs.getString("email"));
+                        rs.getString("phone"), rs.getString("email"));
                 list.add(em);
             }
         } catch (SQLException e) {
@@ -314,25 +384,24 @@ public class CustomerDao extends DBContext {
         }
     }
 
-public void updateUser(Customer customer) {
-    String sql = "UPDATE Customer SET userName = ?, password = ?, firstName = ?, lastName = ?, phone = ?, email = ?, image = ?, address = ? WHERE customerID = ?";
-    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-        preparedStatement.setString(1, customer.getUserName());
-        preparedStatement.setString(2, customer.getPassword());
-        preparedStatement.setString(3, customer.getFirstName());
-        preparedStatement.setString(4, customer.getLastName());
-        preparedStatement.setString(5, customer.getPhone());
-        preparedStatement.setString(6, customer.getEmail());
-        preparedStatement.setString(7, customer.getImage());
-        preparedStatement.setString(8, customer.getAddress());
-        preparedStatement.setInt(9, customer.getCustomerID());
-        
-        preparedStatement.executeUpdate();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
+    public void updateUser(Customer customer) {
+        String sql = "UPDATE Customer SET userName = ?, password = ?, firstName = ?, lastName = ?, phone = ?, email = ?, image = ?, address = ? WHERE customerID = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, customer.getUserName());
+            preparedStatement.setString(2, customer.getPassword());
+            preparedStatement.setString(3, customer.getFirstName());
+            preparedStatement.setString(4, customer.getLastName());
+            preparedStatement.setString(5, customer.getPhone());
+            preparedStatement.setString(6, customer.getEmail());
+            preparedStatement.setString(7, customer.getImage());
+            preparedStatement.setString(8, customer.getAddress());
+            preparedStatement.setInt(9, customer.getCustomerID());
 
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void insertCustomer(Customer customer) {
         try {
@@ -371,7 +440,7 @@ public void updateUser(Customer customer) {
             rs = stm.executeQuery();
             while (rs.next()) {
                 Customer em = new Customer(rs.getInt("customerID"), rs.getString("userName"),
-                        rs.getString("password"), rs.getString("image"),rs.getString("firstName"),
+                        rs.getString("password"), rs.getString("image"), rs.getString("firstName"),
                         rs.getString("lastName"),
                         rs.getString("phone"), rs.getString("email"));
                 list.add(em);
@@ -381,6 +450,7 @@ public void updateUser(Customer customer) {
         }
         return list;
     }
+
     public List<Customer> SearchPaginatedCustomers(int pageNum, int pageSize, String tname) {
         list = new ArrayList<>();
         try {
@@ -390,13 +460,13 @@ public void updateUser(Customer customer) {
             int endRow = startRow + pageSize - 1;
             stm.setInt(1, startRow);
             stm.setInt(2, endRow);
-            stm.setString(3, "%"+tname+"%");
+            stm.setString(3, "%" + tname + "%");
             rs = stm.executeQuery();
             while (rs.next()) {
                 Customer em = new Customer(rs.getInt("customerID"), rs.getString("userName"),
-                        rs.getString("password"), rs.getString("image"),rs.getString("firstName"),
+                        rs.getString("password"), rs.getString("image"), rs.getString("firstName"),
                         rs.getString("lastName"),
-                         rs.getString("phone"), rs.getString("email"));
+                        rs.getString("phone"), rs.getString("email"));
                 list.add(em);
             }
         } catch (SQLException e) {
@@ -434,7 +504,8 @@ public void updateUser(Customer customer) {
         }
         return false;
     }
-      public boolean isAdminAvailable(String username) {
+
+    public boolean isAdminAvailable(String username) {
         String sql = "SELECT COUNT(*) AS count FROM Administrator WHERE userName = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, username);
@@ -464,7 +535,8 @@ public void updateUser(Customer customer) {
         }
         return false;
     }
-     public boolean isEmailAdmin(String email) {
+
+    public boolean isEmailAdmin(String email) {
         String sql = "SELECT COUNT(*) AS count FROM Administrator WHERE email = ? ";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, email);
@@ -478,6 +550,7 @@ public void updateUser(Customer customer) {
         }
         return false;
     }
+
     public Customer checkgmail(String Email) {
         String sql = "SELECT [email]\n"
                 + "  FROM [dbo].[Customer] where email = ?";
@@ -531,7 +604,7 @@ public void updateUser(Customer customer) {
                 cus.setPhone(rs.getString("phone"));
                 cus.setAddress(rs.getString("address"));
                 cus.setEmail(rs.getString("email"));
-               
+
 //                cus.setIsCustomer(rs.getBoolean("isCustomer"));
                 return cus;
             }
@@ -588,10 +661,11 @@ public void updateUser(Customer customer) {
         }
         return null;
     }
-      public static void main(String[] args) {
-       CustomerDao cus = new CustomerDao();
+
+    public static void main(String[] args) {
+        CustomerDao cus = new CustomerDao();
 //        Customer c = new Customer(1,"anhducokok")
         Customer c = cus.checkuserandPass("anhducokok", "Qua3CCUdJoXNHnIq6rQW/tVqu1M=");
-          System.out.println(c.getImage());
+        System.out.println(c.getImage());
     }
 }

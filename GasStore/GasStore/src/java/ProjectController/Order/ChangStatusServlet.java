@@ -1,32 +1,25 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
+
 package ProjectController.Order;
-import DAO.FeedbackDAO;
+
 import DAO.OrderDAO;
-import DAO.OrderDetailDAO;
-import DAO.ProductDAO;
-import DTO.AccountDTO;
-import DTO.Order;
-import DTO.OrderDetail;
-import dal.OrdersDao;
+import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import model.Customer;
-import model.Orders;
 
 /**
  *
- * @author phung
+ * @author vip2021
  */
-@WebServlet(name="ToPay", urlPatterns={"/topay"})
-public class ToPay extends HttpServlet {
+@WebServlet(name="ChangStatusServlet", urlPatterns={"/changestatus1"})
+public class ChangStatusServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -43,10 +36,10 @@ public class ToPay extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ToPay</title>");  
+            out.println("<title>Servlet ChangStatusServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ToPay at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ChangStatusServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,33 +56,15 @@ public class ToPay extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        
-        HttpSession session = request.getSession();
-       Customer cus = (Customer) session.getAttribute("account");
-        if (cus == null) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
+        int tid = Integer.parseInt(request.getParameter("pid"));
+        int sttatus = Integer.parseInt(request.getParameter("sstatus"));
+
+        // Assuming you have a method in OrderDAO to handle status change
         OrderDAO odao = new OrderDAO();
-        OrderDetailDAO odDAO = new OrderDetailDAO();
-        ProductDAO pDAO = new ProductDAO();
-        FeedbackDAO fdao = new FeedbackDAO();
-        
-        List<Order> purchaseList = odao.myPurchase1(cus.getCustomerID());
-        Map<Integer, List<OrderDetail>> orderDetailsMap = new HashMap<>();
-        
-        for (Order order : purchaseList) {
-            List<OrderDetail> orderDetails = odDAO.getOrderDetailByID(order.getOrderID());
-            orderDetailsMap.put(order.getOrderID(), orderDetails);
-        }
-        
-        request.setAttribute("odDAO", odDAO);
-        request.setAttribute("pDAO", pDAO);
-        request.setAttribute("fdao", fdao);
-        request.setAttribute("purchase", purchaseList);
-        request.setAttribute("orderDetailsMap", orderDetailsMap);
-  
-        request.getRequestDispatcher("ToPay.jsp").forward(request, response);
+        odao.changeStatusOrder1(tid, sttatus);
+
+        // Redirect to tableOrder servlet or JSP after status change
+        response.sendRedirect("mypurchase");
     } 
 
     /** 

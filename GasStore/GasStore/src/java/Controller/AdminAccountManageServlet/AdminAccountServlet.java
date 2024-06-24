@@ -1,4 +1,4 @@
-package Controller.AdminAccountServlet;
+package Controller.AdminAccountManageServlet;
 
 import Controller.MaHoa;
 import static Controller.MaHoa.toSHA1;

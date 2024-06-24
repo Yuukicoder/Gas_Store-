@@ -106,17 +106,7 @@
             .mt-1 {
                 margin-top: 1rem; /* Ensuring margin-top is consistent */
             }
-            img {
-                display: block;
-                margin: 0 auto;
-                width: 50%; /* Adjust as needed */
-            }
-            img.thumbnail {
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                padding: 5px;
-                width: 150px; /* Adjust as needed */
-            }
+
         </style>
 
     </head>
@@ -148,12 +138,13 @@
                             <input type="hidden" value="${detail.administratorID}" name="accountID">
                             <div class="row">
                                 <div class="col-lg-6 col-12 col-md-6 col-sm-12">
-
                                     <div class="image-container">
-                                        <input type="file" name="pimg"  class="form-control">
-                                        <input type="text" name="timg" value="${detail.img}" class="form-control" hidden>
-                                        <div class="mt-1" style="width:30%;">
-                                            <img style="width: 100%;" src="${detail.img}" alt="User Image"/>
+                                        <input type="file" name="pimg"  class="form-control" accept="image/*">
+                                         <input type="text" name="timg" value="${detail.img}" class="form-control" hidden>
+                                        <div class="d-flex flex-column align-items-center text-center p-3 py-5 position-relative">
+                             
+                                             <img id="profileImage" class="mt-5" width="50%;" src="${detail.img}">
+
                                         </div>
                                     </div>
                                 </div>
@@ -191,9 +182,18 @@
                                             <div class="form-floating">
                                                 <select name="roleid" class="form-control">
                                                     <c:forEach items="${requestScope.rdata}" var="r">
-                                                        <option value="${r.roleID}" <c:if test="${detail.roleID == r.roleID}">selected</c:if>>${r.name}</option>
+                                                        <option value="${r.roleID}" 
+                                                                <c:if test="${detail.roleID == r.roleID}">
+                                                                    selected
+                                                                </c:if>>
+                                                            ${r.name}
+                                                        </option>
                                                     </c:forEach>
-                                                    <option value="3" <c:if test="${detail.roleID == 3}">selected</c:if>>Customer</option>
+                                                    <option value="3" 
+                                                            <c:if test="${detail.roleID == 3}">
+                                                                selected</c:if>>
+                                                        Customer
+                                                    </option>
                                                 </select>
                                                 <label for="role">Role</label> 
                                             </div>
@@ -203,6 +203,8 @@
                                 <div class="col-12">
                                     <button type="submit" class="btn btn-primary w-100" name="btnInUp">Insert/Update</button>
                                 </div>
+                                                ${sessionScope.pass};
+                                                ${sessionScope.name};
                             </div>
                         </form>
                     </div>
@@ -229,13 +231,36 @@
         <script src="admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
         <script src="admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
         <script src="admin/js/main.js"></script>
-        <script>
-            const pictureURL = document.querySelector('.image-name');
-            function changePicture() {
-                document.querySelector('#image').src = pictureURL.value;
+        <script type="text/javascript">
+        // Check if alertMessage attribute is set and display the alert
+        <% if (request.getAttribute("alertMessage") != null) { %>
+            window.onload = function() {
+                alert("<%= request.getAttribute("alertMessage") %>");
+                window.location.href = "ManageStaff"; // Redirect to ManageStaff after alert
             }
-            pictureURL.addEventListener("input", changePicture)
-        </script>
+        <% } %>
+    </script>
+    <script>
+        document.getElementById('profileImage').addEventListener('click', function () {
+                this.classList.toggle('blur');
+                document.getElementById('imageOverlay').style.display = 'flex';
+            });
 
+            document.getElementById('imageOverlay').addEventListener('click', function () {
+                document.getElementById('imageUpload').click();
+            });
+    document.getElementById('imageUpload').addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('profileImage').src = e.target.result;
+                        document.getElementById('profileImage').classList.remove('blur');
+                        document.getElementById('imageOverlay').style.display = 'none';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+      </script>      
     </body>
 </html>

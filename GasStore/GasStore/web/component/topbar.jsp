@@ -48,7 +48,7 @@
                         <div class="d-inline-flex align-items-center">
                             <div class="btn-group dropdown">
                                 <button type="button" class="btn btn-sm btn-light dropdown-toggle dropbtn" onclick="toggleDropdown()">
-                                    <img src="${sessionScope.account.getImage()}" width="10%" height="" alt="avatar"/>
+                                    <img src="${sessionScope.account.getImage()}" width="10%" height="" alt="avatar" class="rounded-circle"/>
                                     
                                     ${sessionScope.account.getFullName()}
                                 </button>

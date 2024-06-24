@@ -146,7 +146,7 @@
                             <div id="imageOverlay" class="image-overlay">
                                 <span class="edit-icon">&#9998;</span> <!-- Unicode for a pen icon -->
                             </div>
-                            <input type="file" name="pimg" id="imageUpload" class="d-none" >
+                            <input type="file" name="pimg" id="imageUpload" class="d-none" accept="image/*" >
                            
                                     <span class="font-weight-bold">${sessionScope.account.getUserName()}</span>
                             <span class="text-black-50">${sessionScope.account.getFullName()}</span>

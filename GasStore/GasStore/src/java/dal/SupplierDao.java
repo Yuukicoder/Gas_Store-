@@ -18,14 +18,13 @@ import model.Supplier;
  * @author vip2021
  */
 public class SupplierDao extends DBContext {
-     PreparedStatement stm;
+
+    PreparedStatement stm;
     ResultSet rs;
     List<Supplier> list;
     List<Administrator> li;
 
     // Admin DAO
- 
-
     // Admin DAO
     public List<Supplier> getAll() {
 
@@ -47,16 +46,12 @@ public class SupplierDao extends DBContext {
         }
         return list;
     }
-     public List<Supplier> getAllAdminByName(String name) {
-         
-        list = new ArrayList<>();
-         String[] chars = name.trim().toLowerCase().split(" ");
-        
-        // Construct the SQL query dynamically
-           // Split the input string based on spaces
+
+    public List<Supplier> getAllAdminByName(String name) {
+        List<Supplier> list = new ArrayList<>();
         String[] parts = name.trim().toLowerCase().split("\\s+");
 
-        // Construct the SQL query dynamically
+        // Construct the SQL query dynamically for word search
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM Supplier WHERE ");
         for (int i = 0; i < parts.length; i++) {
             queryBuilder.append("(companyName LIKE ? OR email LIKE ? OR homePage LIKE ?)");
@@ -64,6 +59,8 @@ public class SupplierDao extends DBContext {
                 queryBuilder.append(" OR ");
             }
         }
+
+        boolean hasResults = false;
 
         try (PreparedStatement stm = connection.prepareStatement(queryBuilder.toString())) {
             // Set the parameters for each part
@@ -77,23 +74,67 @@ public class SupplierDao extends DBContext {
             try (ResultSet rs = stm.executeQuery()) {
                 while (rs.next()) {
                     Supplier supplier = new Supplier(
-                        rs.getInt("supplierId"),
-                        rs.getString("companyName"),
-                        rs.getBoolean("status"),
-                        rs.getDate("createdDate"),
-                        rs.getString("email"),
-                        rs.getString("phone"),
-                        rs.getString("homePage")
+                            rs.getInt("supplierId"),
+                            rs.getString("companyName"),
+                            rs.getBoolean("status"),
+                            rs.getDate("createdDate"),
+                            rs.getString("email"),
+                            rs.getString("phone"),
+                            rs.getString("homePage")
                     );
                     list.add(supplier);
+                    hasResults = true;
                 }
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
+
+        // If no results are found, perform search by individual letters
+        if (!hasResults) {
+            list.clear();
+            parts = name.trim().toLowerCase().split(""); // Split by individual letters
+
+            // Construct the SQL query dynamically for letter search
+            queryBuilder = new StringBuilder("SELECT * FROM Supplier WHERE ");
+            for (int i = 0; i < parts.length; i++) {
+                queryBuilder.append("(companyName LIKE ? OR email LIKE ? OR homePage LIKE ?)");
+                if (i < parts.length - 1) {
+                    queryBuilder.append(" OR ");
+                }
+            }
+
+            try (PreparedStatement stm = connection.prepareStatement(queryBuilder.toString())) {
+                // Set the parameters for each part
+                for (int i = 0; i < parts.length; i++) {
+                    String searchPattern = "%" + parts[i] + "%";
+                    stm.setString(i * 3 + 1, searchPattern);
+                    stm.setString(i * 3 + 2, searchPattern);
+                    stm.setString(i * 3 + 3, searchPattern);
+                }
+
+                try (ResultSet rs = stm.executeQuery()) {
+                    while (rs.next()) {
+                        Supplier supplier = new Supplier(
+                                rs.getInt("supplierId"),
+                                rs.getString("companyName"),
+                                rs.getBoolean("status"),
+                                rs.getDate("createdDate"),
+                                rs.getString("email"),
+                                rs.getString("phone"),
+                                rs.getString("homePage")
+                        );
+                        list.add(supplier);
+                    }
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+
         return list;
     }
-
+    
     public int getTotalSupplier() {
         int count = 0;
         try {
@@ -131,7 +172,7 @@ public class SupplierDao extends DBContext {
     }
 
     public void deleteSupplier(String id) {
-        String query = "delete from Supplier\n" 
+        String query = "delete from Supplier\n"
                 + "where supplierId = ?";
         try {
 
@@ -176,14 +217,14 @@ public class SupplierDao extends DBContext {
             preparedStatement.setString(3, s.getPhone());
             preparedStatement.setString(4, s.getHomePage());
 
-
             // Execute the query
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error inserting customer: " + e.getMessage());
         }
     }
-  public int getTotal() {
+
+    public int getTotal() {
         int count = 0;
         try {
             String query = "SELECT COUNT(*) AS total FROM Supplier";
@@ -220,10 +261,11 @@ public class SupplierDao extends DBContext {
         }
         return list;
     }
+
     public static void main(String[] args) {
         SupplierDao sus = new SupplierDao();
         List<Supplier> li = sus.getAll();
-        for(Supplier l: li){
+        for (Supplier l : li) {
             System.out.println(l.getCompanyName());
         }
     }

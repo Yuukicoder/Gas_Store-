@@ -1,4 +1,4 @@
-package Controller.AdminAccountServlet;
+package Controller.AdminAccountManageServlet;
 
 import DTO.AdminDTO;
 import dal.SupplierDao;

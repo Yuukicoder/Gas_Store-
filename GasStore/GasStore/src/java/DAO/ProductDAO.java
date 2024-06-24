@@ -536,9 +536,10 @@ public LinkedHashMap<Product, String> getSearchProduct(String searchKey, String 
     
     public static void main(String[] args) {
         ProductDAO p = new ProductDAO();
-         List<Product> list = p.getProductByCategory(2);
-         for (Product product : list) {
-             System.out.println(product.toString());
-        }
+//         List<Product> list = p.getProductByCategory(2);
+//         for (Product product : list) {
+//             System.out.println(product.toString());
+//        }
+         System.out.println(p.getProductByID(1).getImage());
     }
 }

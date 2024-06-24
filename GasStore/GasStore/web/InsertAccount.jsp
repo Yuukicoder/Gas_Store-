@@ -37,14 +37,14 @@
                     display: none;
                 }
             </style>-->
-        <script>
-            window.onload = function () {
-                var errorMessage = '<c:out value="${error}" />';
-                if (errorMessage) {
-                    alert(errorMessage);
-                }
+      <script>
+        window.onload = function() {
+            var errorMessage = '<c:out value="${error}" />';
+            if (errorMessage) {
+                alert(errorMessage);
             }
-        </script>
+        }
+    </script>
     </head>
 
     <body>
@@ -72,51 +72,51 @@
                         <div class=" pt-4 insert-div col-lg-12">
                             <div class="bg-secondary text-center rounded p-4">
                                 <c:if test="${empty detailaccount.customerID}">
-                                    <h2 class="font-weight-bold mb-4">Insert New Account</h2>
+                                <h2 class="font-weight-bold mb-4">Insert New Account</h2>
                                 </c:if>
                                 <c:if test="${not empty detailaccount.customerID}">
-                                    <h2 class="font-weight-bold mb-4">View Account</h2>
+                                <h2 class="font-weight-bold mb-4">View Account</h2>
                                 </c:if>
-
+                                
                                 <form action="insert-account" method="post">
                                     <input type="hidden" value="${detailaccount.customerID}" name="account_id">
                                     <!--`         <div class="row">-->
                                     <div class="row g-3">
-
+                                        
                                         <div class="row g-3 col-lg-12 col-md-12">
                                             <div class="col-md-6">
                                                 <div class="form-floating">
                                                     <input type="text" class="form-control" id="username" name="username" value="${detailaccount.userName}" placeholder="Username" <c:if test="${not empty detailaccount.userName}">readonly</c:if>>
-                                                        <label for="username">Username</label>
-                                                    </div>
+                                                    <label for="username">Username</label>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <input type="password" class="form-control" id="password" name="password" value="${detailaccount.password}" placeholder="Password" <c:if test="${not empty detailaccount.password}">readonly</c:if>>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input type="password" class="form-control" id="password" name="password" value="${detailaccount.password}" placeholder="Password" <c:if test="${not empty detailaccount.password}">readonly</c:if>>
                                                         <label for="password">Password</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-floating">
                                                         <input type="text" class="form-control" id="first_name" name="first_name" value="${detailaccount.firstName}" placeholder="First Name" <c:if test="${not empty detailaccount.firstName}">readonly</c:if>>
-                                                        <label for="first_name">First Name</label>
-                                                    </div>
+                                                    <label for="first_name">First Name</label>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" id="last_name" name="last_name" value="${detailaccount.lastName}" placeholder="Last Name" <c:if test="${not empty detailaccount.lastName}">readonly</c:if>>
-                                                        <label for="last_name">Last Name</label>
-                                                    </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input type="text" class="form-control" id="last_name" name="last_name" value="${detailaccount.lastName}" placeholder="Last Name" <c:if test="${not empty detailaccount.lastName}">readonly</c:if>>
+                                                    <label for="last_name">Last Name</label>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" id="email" name="email" value="${detailaccount.email}" placeholder="Email" <c:if test="${not empty detailaccount.email}">readonly</c:if>>
-                                                        <label for="email">Email</label>
-                                                    </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input type="text" class="form-control" id="email" name="email" value="${detailaccount.email}" placeholder="Email" <c:if test="${not empty detailaccount.email}">readonly</c:if>>
+                                                    <label for="email">Email</label>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" id="phone_number" name="phone_number" value="${detailaccount.phone}" placeholder="Phone Number" <c:if test="${not empty detailaccount.phone}">readonly</c:if>>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input type="text" class="form-control" id="phone_number" name="phone_number" value="${detailaccount.phone}" placeholder="Phone Number" <c:if test="${not empty detailaccount.phone}">readonly</c:if>>
                                                     <label for="phone_number">Phone Number</label>
                                                 </div>
                                             </div>

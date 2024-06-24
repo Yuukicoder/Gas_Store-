@@ -56,9 +56,32 @@ public class OrderDetailDAO extends DBcontext {
         }
         return t; 
     }
+     public List<OrderDetail> getOrderDetailByID(int orderID, int status) {
+        String sql = "SELECT productID, orderID, quantity, unitPrice FROM OrderDetails WHERE orderID = ? and status = ?";
+        List<OrderDetail> t = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, orderID);
+            ps.setInt(2, status);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setProductID(rs.getInt("productID"));
+                orderDetail.setOrderID(rs.getInt("orderID"));
+                orderDetail.setQuantity(rs.getInt("quantity"));
+                orderDetail.setUnitPrice(rs.getDouble("unitPrice"));
+                t.add(orderDetail) ;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return t; 
+    }
     public static void main(String[] args) {
         OrderDetailDAO dao = new OrderDetailDAO();
-        ProductDAO pDAO = new ProductDAO();
-        System.out.println(dao.getOrderDetailByID(4));
+        List<OrderDetail> li = dao.getOrderDetailByID(11);
+        for(OrderDetail l: li){
+            System.out.println(l.getQuantity());
+        }
     }
 }

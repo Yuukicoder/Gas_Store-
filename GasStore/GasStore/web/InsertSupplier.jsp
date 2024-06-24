@@ -101,10 +101,7 @@
                         </form>
                     </div>
                 </div>
-
-               
-                
-                                <div class="m-4 mt-4">
+                <div class="m-4 mt-4">
                     <a href="ManageSupplier" class="btn btn-primary">Back</a>
                 </div>
             </div>
