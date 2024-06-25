@@ -82,6 +82,10 @@
                                         <option value="Ascending" <% if("Ascending".equals(request.getParameter("sortOrder"))) out.print("selected"); %>>Ascending</option>
                                     </select>
                                 </div>
+
+                                <!--  Filter theo ID - Vu anh  -->
+                                <input type="hidden" name="cateid" id="cateid" value="${cateid}">
+                                
                                 <div class="form-group col">
                                     <input type="submit" id="submit-btn" value="Filter" class="btn btn-warning btn-rounded">
                                 </div>
@@ -106,12 +110,12 @@
                                             <div class="product-img">
                                                 <img src="${p.getImage()}" alt="Your Image">
                                                 <div class="overlay-product">
-                                                    <a href="detailProduct?id=${p.getProductID()}"><i class="bx bx-search"></i></a>
+                                                    <a href="productDetail?id=${p.getProductID()}"><i class="bx bx-search"></i></a>
                                                 </div>
                                             </div>
                                             <div class="product-detail">
                                                 <div class="intro">
-                                                    <div class="intro-name"><a href="detailProduct?id=${p.getProductID()}">${p.getName()}</a></div>
+                                                    <div class="intro-name"><a href="productDetail?id=${p.getProductID()}">${p.getName()}</a></div>
                                                 </div>
                                                 <div class="component-product">
                                                     <p><i class='bx bxs-hdd'></i> Short Description ${p.getShortDescription()}</p>
@@ -121,7 +125,7 @@
                                                 </div>
                                                 <div class="button-product">
                                                     <div class="price"> $ ${p.getUnitPrice()}</div>
-                                                    <a class="cart btnn" href="detailProduct?id=${p.getProductID()}">Buy Now</a>
+                                                    <a class="cart btnn" href="productDetail?id=${p.getProductID()}">Buy Now</a>
                                                 </div>
                                             </div>
                                         </div>

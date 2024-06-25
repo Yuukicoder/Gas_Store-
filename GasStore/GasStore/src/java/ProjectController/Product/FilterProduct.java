@@ -3,6 +3,7 @@ package ProjectController.Product;
 import DAO.CategoryDAO;
 import DAO.ProductDAO;
 import DTO.Product;
+import dal.SupplierDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -10,8 +11,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import model.Supplier;
 
 @WebServlet(name = "FilterProduct", urlPatterns = {"/filterProduct"})
 public class FilterProduct extends HttpServlet {
@@ -52,10 +57,34 @@ public class FilterProduct extends HttpServlet {
                 : null;
 
         String sortOrder = request.getParameter("sortOrder");
+        
+        //Filter theo ID - Vu anh
+        int cateId = 0;
+        try {
+            cateId = Integer.parseInt(request.getParameter("cateid"));
+        } catch (Exception e) {
+            
+        }
+        //------------------------
+        
+        
+        list = productDAO.filterProductsBySupplierPriceCategory(supplierID, priceRange, cateId);
+        
+        SupplierDao supDAO = new SupplierDao();
 
-        list = productDAO.filterProductsBySupplierAndPrice(supplierID, priceRange);
         
-        
+        System.out.println("FilterProductServlet: " + cateId);
+        List<Product> products = productDAO.getAllProduct();
+   
+        //------------------------
+        Map<Integer, String> supplierMap = new HashMap<>();
+
+        for (Product product : products) {
+            if (!supplierMap.containsKey(product.getSupplierID())) {
+                Supplier supplier = supDAO.getSupplierById(product.getSupplierID());
+                supplierMap.put(product.getSupplierID(), supplier.getCompanyName());
+            }
+        }
         
 
         if ("Descending".equalsIgnoreCase(sortOrder)) {
@@ -78,12 +107,16 @@ public class FilterProduct extends HttpServlet {
         request.setAttribute("maxPageLS", Math.ceil(list.size() / pageSize));
         request.setAttribute("currentPageLS", pageNumber);
         request.setAttribute("productsWithCategory", paginatedProducts);
+        request.setAttribute("suppliers", supplierMap);
 
         CategoryDAO cdao = new CategoryDAO();
         request.setAttribute("cate", cdao.getAllCategory());
 
         String queryParams = getFilterQueryParams(request, pageNumber);
         request.setAttribute("paginationQueryParams", queryParams);
+        
+        //Filter theo ID - Vu anh
+        request.setAttribute("cateid", cateId);
 
         request.getRequestDispatcher("shopListCate.jsp").forward(request, response);
     }

@@ -3,19 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/dal/DBContext.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DTO/ItemDTO.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Voucher/VoucherDetailServlet.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DTO/ProductDTO.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Voucher/listVoucherCart.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DTO/Cart.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DAO/ProductDAO.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/component/navbar.jsp</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Voucher/VoucherServlet.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/EditCategory.jsp</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Cart/CartServlet.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DAO/DBcontext.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/cart.jsp</file>
+            <file>file:/D:/FPT/2024/Summer2024/SPW391/Project%2024-6/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Product/ShopServlet.java</file>
+            <file>file:/D:/FPT/2024/Summer2024/SPW391/Project%2024-6/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Product/FilterProduct.java</file>
+            <file>file:/D:/FPT/2024/Summer2024/SPW391/Project%2024-6/Gas_Store-/GasStore/GasStore/src/java/DAO/DBcontext.java</file>
+            <file>file:/D:/FPT/2024/Summer2024/SPW391/Project%2024-6/Gas_Store-/GasStore/GasStore/src/java/dal/DBContext.java</file>
         </group>
     </open-files>
 </project-private>

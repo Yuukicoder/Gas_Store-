@@ -108,7 +108,7 @@ public class OrderDAO extends DBcontext {
                 st2.setInt(1, i.getProduct().getProductID());
                 st2.setInt(2, oid);
                 st2.setInt(3, i.getQuantity());
-                st2.setDouble(4, i.getProduct().getPrice() /*tru di tien discount*/);
+                //st2.setDouble(4, i.getProduct().getPrice() /*tru di tien discount*/);
                 st2.executeUpdate();
             }
         } catch (Exception e) {

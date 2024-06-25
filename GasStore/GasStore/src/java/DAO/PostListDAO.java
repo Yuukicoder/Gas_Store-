@@ -37,6 +37,33 @@ public class PostListDAO extends DBcontext {
         }
         return postDTOs;
     }
+    
+    public ArrayList<PostDTO> getAllPostByGroupID(int id) {
+        String sql = "select *\n"
+                + "from Post\n"
+                + "where PostCategoryID = ?";
+        ArrayList<PostDTO> postDTOs = new ArrayList<>();
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                PostDTO postDTO = new PostDTO();
+                postDTO.setPostID(rs.getInt("PostID"));
+                postDTO.setTitle(rs.getString("Title"));
+                postDTO.setDateCreated(rs.getString("DateCreated"));
+                postDTO.setDateUpdated(rs.getString("DateUpdated"));
+                postDTO.setPostbanner(rs.getString("Postbanner"));
+                postDTO.setDescription(rs.getString("Description"));
+                postDTO.setContext(rs.getString("Context"));
+                postDTO.setPostCate(rs.getString("PostCategoryID"));
+                postDTOs.add(postDTO);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return postDTOs;
+    }
 
     public PostDTO getPostDTOByID(int postID) {
         String sql = "SELECT * FROM Post WHERE PostID = ?";

@@ -78,18 +78,18 @@ public class FeedbackDAO extends DBcontext {
             ResultSet rs = pt.executeQuery();
             while (rs.next()) {
 
-                AccountDTO aO = new AccountDTO();
-                aO.setFullname(rs.getString("Fullname"));
-                FeedbackDTO dTO = new FeedbackDTO();
-                dTO.setFeedBackID(rs.getInt("FeedbackID"));
-                dTO.setDate(rs.getDate("DateCreate"));
-                dTO.setStart(rs.getInt("StarVoted"));
-                dTO.setContext(rs.getString("Context"));
-                ProductDTO productDTO = new OrderDetail();
-                productDTO.setName(rs.getString("Name"));
-                dTO.setAccountDTO(aO);
-                dTO.setProductDTO(productDTO);
-                al.add(dTO);
+//                AccountDTO aO = new AccountDTO();
+//                aO.setFullname(rs.getString("Fullname"));
+//                FeedbackDTO dTO = new FeedbackDTO();
+//                dTO.setFeedBackID(rs.getInt("FeedbackID"));
+//                dTO.setDate(rs.getDate("DateCreate"));
+//                dTO.setStart(rs.getInt("StarVoted"));
+//                dTO.setContext(rs.getString("Context"));
+//                ProductDTO productDTO = new OrderDetail();
+//                productDTO.setName(rs.getString("Name"));
+//                dTO.setAccountDTO(aO);
+//                dTO.setProductDTO(productDTO);
+//                al.add(dTO);
             }
 
         } catch (SQLException e) {
@@ -134,13 +134,13 @@ public class FeedbackDAO extends DBcontext {
                 dTO.setContext(rs.getString("Context"));
                 dTO.setStatus(rs.getBoolean("status"));
 
-                ProductDTO productDTO = new OrderDetail();
-                productDTO.setName(rs.getString("Name"));
-
-                dTO.setAccountDTO(aO);
-                dTO.setProductDTO(productDTO);
-
-                al.add(dTO);
+//                ProductDTO productDTO = new OrderDetail();
+//                productDTO.setName(rs.getString("Name"));
+//
+//                dTO.setAccountDTO(aO);
+//                dTO.setProductDTO(productDTO);
+//
+//                al.add(dTO);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -174,18 +174,18 @@ public class FeedbackDAO extends DBcontext {
             ResultSet rs = pt.executeQuery();
             while (rs.next()) {
 
-                AccountDTO aO = new AccountDTO();
-                aO.setFullname(rs.getString("Fullname"));
-                FeedbackDTO dTO = new FeedbackDTO();
-                dTO.setFeedBackID(rs.getInt("FeedbackID"));
-                dTO.setDate(rs.getDate("DateCreate"));
-                dTO.setStart(rs.getInt("StarVoted"));
-                dTO.setContext(rs.getString("Context"));
-                ProductDTO productDTO = new OrderDetail();
-                productDTO.setName(rs.getString("Name"));
-                dTO.setAccountDTO(aO);
-                dTO.setProductDTO(productDTO);
-                al.add(dTO);
+//                AccountDTO aO = new AccountDTO();
+//                aO.setFullname(rs.getString("Fullname"));
+//                FeedbackDTO dTO = new FeedbackDTO();
+//                dTO.setFeedBackID(rs.getInt("FeedbackID"));
+//                dTO.setDate(rs.getDate("DateCreate"));
+//                dTO.setStart(rs.getInt("StarVoted"));
+//                dTO.setContext(rs.getString("Context"));
+//                ProductDTO productDTO = new OrderDetail();
+//                productDTO.setName(rs.getString("Name"));
+//                dTO.setAccountDTO(aO);
+//                dTO.setProductDTO(productDTO);
+//                al.add(dTO);
             }
 
         } catch (SQLException e) {

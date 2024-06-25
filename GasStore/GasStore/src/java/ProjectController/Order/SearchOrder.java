@@ -36,8 +36,8 @@ public class SearchOrder extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
        String txtSearch=request.getParameter("txt");
         OrderDAO dao=new OrderDAO();
-        List<OrderDTO> list=dao.searchOrder(txtSearch);
-        request.setAttribute("ListOrder", list);
+        //List<OrderDTO> list=dao.searchOrder(txtSearch);
+        //request.setAttribute("ListOrder", list);
         request.getRequestDispatcher("TableOrder.jsp").forward(request, response);
     }
 
