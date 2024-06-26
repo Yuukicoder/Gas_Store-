@@ -4,12 +4,20 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/dal/DBContext.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/component/topbar.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Product/ProductDetails.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/Controller/ProductDetailServlet.java</file>
             <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Product/DetailProductServlet.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DAO/DBcontext.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Cart/ProcessServlet.java</file>
             <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/checkout.jsp</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/cart.jsp</file>
             <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/LoginServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/shop.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/component/navbar.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/component/topbar.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Cart/CartServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DAO/DBcontext.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/detail.jsp</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Cart/BuyServlet.java</file>
+            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/cart.jsp</file>
             <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/HomeServlet.java</file>
         </group>
     </open-files>

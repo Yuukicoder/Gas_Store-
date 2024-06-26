@@ -77,7 +77,7 @@
                                     <td class="align-middle">${tt}</td>
                                     <td class="align-middle">${i.product.name}</td>
                                     <td class="align-middle"><img class="img-fluid" src="images/Product/${i.product.image}" alt="Image"></td> 
-                                    <td class="align-middle">$${i.product.price}</td> 
+                                    <td class="align-middle">$${i.product.unitPrice}</td> 
 
                                     <td class="align-middle">
                                         <div class="input-group quantity mx-auto" style="width: 100px;">
@@ -94,7 +94,7 @@
                                     </td>
 
                                     <td class="align-middle">
-                                        $<fmt:formatNumber pattern="##.#" value="${(i.product.price*i.quantity)}"/>
+                                        $<fmt:formatNumber pattern="##.#" value="${(i.product.unitPrice*i.quantity)}"/>
                                     </td>
 
                                     <td class="align-middle">

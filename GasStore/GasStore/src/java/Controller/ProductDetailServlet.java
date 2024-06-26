@@ -33,7 +33,7 @@ public class ProductDetailServlet extends HttpServlet{
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {/
+        try {
             String id_raw = request.getParameter("id");
             int id = Integer.parseInt(id_raw);
             CategoryDAO categoryDAO = new CategoryDAO();
