@@ -2,6 +2,7 @@ package ProjectController.Account;
 
 import DAO.AccountDAO;
 import DTO.AccountDTO;
+import DTO.Customer;
 import dal.CustomerDao;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -12,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
-import model.Customer;
+//import model.Customer;
 
 /**
  *

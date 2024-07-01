@@ -8,8 +8,9 @@ import DAO.IndividualVoucherDAO;
 import DAO.OrderDAO;
 import DAO.ProductDAO;
 import DAO.VoucherDAO;
-import DTO.AccountDTO;
+//import DTO.AccountDTO;
 import DTO.Cart;
+import DTO.Customer;
 import DTO.Product;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -135,7 +136,8 @@ public class LastCheckOutServlet extends HttpServlet {
         Cart cart = new Cart(txt, list);
 
         HttpSession session = request.getSession();
-        AccountDTO account = (AccountDTO) session.getAttribute("account");
+//        AccountDTO account = (AccountDTO) session.getAttribute("account");
+           Customer account = (Customer) session.getAttribute("account");
         if (account == null) {
             response.sendRedirect("login ");
         } else {

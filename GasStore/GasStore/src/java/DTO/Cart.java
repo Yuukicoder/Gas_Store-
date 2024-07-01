@@ -66,7 +66,8 @@ public class Cart {
         int newQuantity = selectedItem.getQuantity() + quantity;
         
         if (newQuantity < 1) {
-              this.removeItem(productId);
+//              this.removeItem(productId);
+                selectedItem.setQuantity(1);
         } else {
             selectedItem.setQuantity(newQuantity);
             items.set(selectedItemIndex, selectedItem);
@@ -96,22 +97,46 @@ public class Cart {
         return null;
     }
 
+//    public Cart(String savedStringFromCookie, List<Product> list) {
+//        items = new ArrayList<>();
+//        try {
+//            if (savedStringFromCookie != null && savedStringFromCookie.length() != 0) {
+//                String[] s = savedStringFromCookie.split("/");//thay / cho dau ,
+//                for (String i : s) {
+//                    String[] n = i.split(":");
+//                    int id = Integer.parseInt(n[0]);
+//                    int quantity = Integer.parseInt(n[1]);
+//                    Product p = getProductById(id, list);
+//                    ItemDTO t = new ItemDTO(p, quantity, p.getUnitPrice() * 2);
+//                    addItem(t);
+//                }
+//            }
+//        } catch (NumberFormatException e) {
+//
+//        }
+//    }
     public Cart(String savedStringFromCookie, List<Product> list) {
-        items = new ArrayList<>();
-        try {
-            if (savedStringFromCookie != null && savedStringFromCookie.length() != 0) {
-                String[] s = savedStringFromCookie.split("/");//thay / cho dau ,
-                for (String i : s) {
-                    String[] n = i.split(":");
+    items = new ArrayList<>();
+    try {
+        if (savedStringFromCookie != null && savedStringFromCookie.length() != 0) {
+            String[] s = savedStringFromCookie.split("/");//thay / cho dau ,
+            for (String i : s) {
+                String[] n = i.split(":");
+                if (n.length == 2) { // Kiểm tra xem mảng con có đủ phần tử hay không
                     int id = Integer.parseInt(n[0]);
                     int quantity = Integer.parseInt(n[1]);
                     Product p = getProductById(id, list);
-                    ItemDTO t = new ItemDTO(p, quantity, p.getUnitPrice() * 2);
-                    addItem(t);
+                    if (p != null) { // Kiểm tra xem sản phẩm có tồn tại hay không
+                        ItemDTO t = new ItemDTO(p, quantity, p.getUnitPrice() * 2);
+                        addItem(t);
+                    }
                 }
             }
-        } catch (NumberFormatException e) {
-
         }
+    } catch (NumberFormatException e) {
+        // Xử lý ngoại lệ nếu có
+        e.printStackTrace();
     }
+}
+
 }

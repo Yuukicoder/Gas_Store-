@@ -4,7 +4,8 @@
  */
 
 package Controller;
-import model.Customer;
+//import model.Customer;
+import DTO.Customer;
 import dal.CustomerDao;
 import java.io.IOException;
 import java.io.PrintWriter;

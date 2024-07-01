@@ -4,7 +4,8 @@
  */
 package DAO;
 
-import DTO.AccountDTO;
+//import DTO.AccountDTO;
+import DTO.Customer;
 import DTO.Cart;
 import DTO.ItemDTO;
 import DTO.Order;
@@ -18,7 +19,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import DTO.Customer;
+//import DTO.Customer;
 
 /**
  *
@@ -26,14 +27,14 @@ import DTO.Customer;
  */
 public class OrderDAO extends DBcontext {
 
-    public void addOrder(AccountDTO a, Cart cart, String address, double voucher, double voucher1 , String name , String phone) {
+    public void addOrder(Customer a, Cart cart, String address, double voucher, double voucher1 , String name , String phone) {
         LocalDate curDate = LocalDate.now();
         String date = curDate.toString();
         try {
             // Thực hiện câu lệnh INSERT INTO ORDERS
             String sql = "INSERT INTO ORDERS VALUES (?,?,?,?,?,?,?,?)";
             PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            st.setInt(1, a.getAccountID());
+            st.setInt(1, a.getCustomerID());
             st.setDouble(2, cart.getTotalMoney() - (cart.getTotalMoney() * voucher1) + 10);
             st.setString(3, date);
             st.setString(4, address);
@@ -56,7 +57,7 @@ public class OrderDAO extends DBcontext {
                 String insertOrderHistoryQuery = "INSERT INTO OrderHistory VALUES (?, ?, ?, ?)";
                 PreparedStatement insertOrderHistoryStatement = connection.prepareStatement(insertOrderHistoryQuery);
                 insertOrderHistoryStatement.setInt(1, orderID);
-                insertOrderHistoryStatement.setInt(2, a.getAccountID());
+                insertOrderHistoryStatement.setInt(2, a.getCustomerID());
                 insertOrderHistoryStatement.setInt(3, 0);
                 insertOrderHistoryStatement.setString(4, date);
                 insertOrderHistoryStatement.executeUpdate();
