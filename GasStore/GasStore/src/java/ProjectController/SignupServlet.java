@@ -6,6 +6,7 @@ package ProjectController;
 
 
 import Controller.MaHoa;
+import DTO.Customer;
 import dal.CustomerDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -15,7 +16,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import model.Customer;
+//import model.Customer;
 
 /**
  *

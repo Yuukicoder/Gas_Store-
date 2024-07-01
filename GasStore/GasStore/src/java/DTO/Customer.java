@@ -48,6 +48,94 @@ public class Customer {
         this.isCustomer = isCustomer;
     }
 
+    public Customer(int customerID) {
+        this.customerID = customerID;
+    }
+
+    public Customer(int customerID, String userName, String password, String firstName, String lastName, String phone, String email) {
+        this.customerID = customerID;
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.email = email;
+    }
+
+public Customer(String userName, String password, String email) {
+      
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+    }
+    
+
+    public Customer(int customerID, String userName, String password, String image, String firstName, String lastName, String phone, String email) {
+        this.customerID = customerID;
+        this.userName = userName;
+        this.password = password;
+//        this.status = status;
+//        this.gender = gender;
+        this.image = image;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.email = email;
+    }
+    
+    public Customer(String userName, String password, String firstName, String lastName,boolean isCustomer, String phone, String email) {
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.isCustomer = isCustomer;
+        this.email = email;
+    }
+
+    public Customer(int customerID, String userName, String password, String firstName, String lastName, boolean isCustomer, String phone, String email) {
+        this.customerID = customerID;
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.isCustomer = isCustomer;
+        this.email = email;
+    }
+
+    public Customer(int customerID, String userName, String password, String image, String firstName, String lastName, String address, String phone, String email) {
+        this.customerID = customerID;
+        this.userName = userName;
+        this.password = password;
+//        this.lastLogin = lastLogin;
+        this.image = image;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+    }
+    
+    public Customer(int customerID, String userName, String password, Date created, Date lastLogin, boolean status, boolean gender, String image, String firstName, String lastName, String address, String phone, int totalMoney, boolean isCustomer, String email) {
+        this.customerID = customerID;
+        this.userName = userName;
+        this.password = password;
+        this.created = created;
+        this.lastLogin = lastLogin;
+        this.status = status;
+        this.gender = gender;
+        this.image = image;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.phone = phone;
+        this.totalMoney = totalMoney;
+        this.isCustomer = isCustomer;
+        this.email = email;
+    }
+    
+
     public int getCustomerID() {
         return customerID;
     }
@@ -115,7 +203,9 @@ public class Customer {
     public String getFirstName() {
         return firstName;
     }
-
+ public String getFullName() {
+        return getFirstName() + " " + getLastName();
+    }
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }

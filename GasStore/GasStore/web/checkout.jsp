@@ -80,10 +80,10 @@
                                 <h6 class="mb-3">Products</h6>
                                 <c:set var="o" value="${requestScope.cart}"/>
                                 <c:forEach items="${o.items}" var="i">
-                                    <div class="d-flex justify-content-between">
-                                        <p>${i.product.name}</p>
+                                    <div class="d-flex justify-content-between" style="color: gray">
+                                        <p >${i.product.name}</p>
                                         <p>${i.quantity}</p>
-                                        <p>${(i.product.price)*(i.quantity)}</p>
+                                        <p>${(i.product.unitPrice)*(i.quantity)}</p>
                                     </div>
                                 </c:forEach>
 
@@ -91,7 +91,7 @@
                             <div class="border-bottom pt-3 pb-2">
                                 <div class="d-flex justify-content-between mb-3">
                                     <h6>Subtotal</h6>
-                                    <h6>$${o.totalMoney}</h6>
+                                    <h6>${o.totalMoney} VND</h6>
                                 </div>
                                 <div class="d-flex justify-content-between mb-3">
                                     <h6>Voucher</h6>               
@@ -113,21 +113,21 @@
                                         <h5>$${o.totalMoney-(((o.totalMoney)*requestScope.vocherid)/100)+10}</h5>
                                     </c:if>
                                     <c:if test="${requestScope.vocherid == 0}" >
-                                        <h5>$${(o.totalMoney)+10}</h5>
+                                        <h5>${(o.totalMoney)+10} VND</h5>
                                         <c:set value="0" var="tongtienvoucher" />
                                     </c:if>
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-5">
+                        <div class="mb-5" style="color: gray">
                             <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Payment</span></h5>
                             <div class="bg-light p-30">
-                                <!--                            <div class="form-group">
+                                                            <div class="form-group">
                                                                 <div class="custom-control custom-radio">
-                                                                    <input type="radio" class="custom-control-input" name="payment" id="paypal">
-                                                                    <label class="custom-control-label" for="paypal">Paypal</label>
+                                                                    <input type="radio" class="custom-control-input" name="payment" id="vnpay">
+                                                                    <label class="custom-control-label" for="vnpay">Vnpay</label>
                                                                 </div>
-                                                            </div>-->
+                                                            </div>
                                 <div class="form-group">
                                     <div class="custom-control custom-radio">
                                         <input type="radio" class="custom-control-input" name="payment" id="directcheck">

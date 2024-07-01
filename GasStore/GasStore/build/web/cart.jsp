@@ -61,7 +61,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Name</th>
-                                <th>Image</th>
+<!--                                <th>Image</th>-->
                                 <th>Price</th>
                                 <th>Quantity</th>
                                 <th>Total</th>
@@ -76,8 +76,8 @@
                                 <tr>
                                     <td class="align-middle">${tt}</td>
                                     <td class="align-middle">${i.product.name}</td>
-                                    <td class="align-middle"><img class="img-fluid" src="images/Product/${i.product.image}" alt="Image"></td> 
-                                    <td class="align-middle">$${i.product.unitPrice}</td> 
+                                    <!--<td class="align-middle"><img class="img-fluid" src="images/Product/${i.product.image}" alt="Image"></td>--> 
+                                    <td class="align-middle">${i.product.unitPrice} VND</td> 
 
                                     <td class="align-middle">
                                         <div class="input-group quantity mx-auto" style="width: 100px;">
@@ -94,7 +94,7 @@
                                     </td>
 
                                     <td class="align-middle">
-                                        $<fmt:formatNumber pattern="##.#" value="${(i.product.unitPrice*i.quantity)}"/>
+                                        <fmt:formatNumber pattern="##.#" value="${(i.product.unitPrice*i.quantity)}"/> VND
                                     </td>
 
                                     <td class="align-middle">
@@ -134,7 +134,7 @@
                         <div class="border-bottom pb-2">
                             <div class="d-flex justify-content-between mb-3">
                                 <h6>Subtotal</h6>
-                                <h6>$${o.totalMoney}</h6>
+                                <h6>${o.totalMoney} VND</h6>
                             </div>
                             <div class="d-flex justify-content-between mb-3">
                                 <h6>Voucher</h6>
@@ -162,7 +162,7 @@
                                     <h5>$${(o.totalMoney)-(((o.totalMoney)*discountValue)/100) +10}</h5>
                                 </c:if>
                                 <c:if test="${discountValue == null}" >
-                                    <h5>$${(o.totalMoney +10)}</h5>
+                                    <h5>${(o.totalMoney +10)} VND</h5>
                                 </c:if>
 
                             </div>

@@ -6,6 +6,7 @@ package ProjectController;
 
 import DAO.AccountDAO;
 import DTO.AccountDTO;
+import DTO.Customer;
 import GMAIL.Gmail;
 import GMAIL.Randompassword;
 import dal.CustomerDao;
@@ -17,7 +18,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import model.Customer;
+//import model.Customer;
+
 
 /**
  *
