@@ -141,7 +141,7 @@ public class LastCheckOutServlet extends HttpServlet {
         if (account == null) {
             response.sendRedirect("login ");
         } else {
-            ord.addOrder(account, cart, address, tongtienvoucher, totalVoucherDouble, nameacount,phone);
+            ord.addOrder(account, cart, address, totalVoucherDouble, nameacount);
             ord.addOrderDetail(cart, ord.getLastOrderID());
             ord.updateQuantity(cart);
             request.setAttribute("cart", cart);

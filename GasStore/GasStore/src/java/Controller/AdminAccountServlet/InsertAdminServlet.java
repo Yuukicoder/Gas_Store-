@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Random;
 import java.security.SecureRandom;
 import model.Administrator;
-import model.Customer;
+import DTO.Customer;
 import model.Role;
 
 @MultipartConfig(

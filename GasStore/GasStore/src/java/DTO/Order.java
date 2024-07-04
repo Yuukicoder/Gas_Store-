@@ -36,6 +36,16 @@ public class Order {
         this.notes = notes;
     }
 
+    public Order(int orderID, int customerID, double totalMoney, String orderDate, String shipAddress, int status, String notes) {
+        this.orderID = orderID;
+        this.customerID = customerID;
+        this.totalMoney = totalMoney;
+        this.orderDate = orderDate;
+        this.shipAddress = shipAddress;
+        this.status = status;
+        this.notes = notes;
+    }
+
     public int getOrderID() {
         return orderID;
     }
