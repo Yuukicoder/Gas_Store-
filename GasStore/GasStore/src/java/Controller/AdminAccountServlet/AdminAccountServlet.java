@@ -3,6 +3,7 @@ package Controller.AdminAccountServlet;
 import Controller.MaHoa;
 import static Controller.MaHoa.toSHA1;
 import DTO.AdminDTO;
+import DTO.Customer;
 import dal.CustomerDao;
 import dal.RoleDao;
 import java.io.IOException;
@@ -18,7 +19,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
-import model.Customer;
+import DTO.Customer;
+
 import model.Role;
 import model.Administrator;
 
