@@ -39,6 +39,7 @@ public class OrderTableServlet extends HttpServlet{
             OrderDAO orderDAO = new OrderDAO();
             LinkedHashMap<Order, Customer> orderMap = new LinkedHashMap<>();
             String numPage_raw = request.getParameter("numPage");
+            double totalRevenue = orderDAO.getRevenue();
             try {
                 int indexPage = 0;
                 if (request.getParameter("indexPage") == null) {
@@ -64,6 +65,7 @@ public class OrderTableServlet extends HttpServlet{
                 int numOrder = orderDAO.countAllOrders();
                 int endPage = isAll ? 1 : (numOrder / numPage + (numOrder % numPage == 0 ? 0 : 1));
 
+                request.setAttribute("totalRevenue", totalRevenue);
                 request.setAttribute("endPage", endPage);
                 request.setAttribute("tag", indexPage);
                 request.setAttribute("msg", message);

@@ -45,7 +45,7 @@ public class SearchOrderServlet extends HttpServlet{
             String numPage_raw = request.getParameter("numPage");
             LinkedHashMap<Order, Customer> allSearchOrder = orderDAO.searchOrders(searchKey);
             LinkedHashMap<Order, Customer> orderMap = new LinkedHashMap<>();
-
+            double totalRevenue = orderDAO.getRevenue();
             try {
                 int indexPage = 1;
                 if (indexPage_raw != null) {
@@ -71,6 +71,7 @@ public class SearchOrderServlet extends HttpServlet{
                 int orderCount = allSearchOrder.size();
                 int endPage = isAll ? 1 : (orderCount / numPage + (orderCount % numPage == 0 ? 0 : 1));
 
+                request.setAttribute("totalRevenue", totalRevenue);
                 request.setAttribute("endPage", endPage);
                 request.setAttribute("search", searchKey);
                 request.setAttribute("tag", indexPage);

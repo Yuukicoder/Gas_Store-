@@ -110,10 +110,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
         session.removeAttribute("msg");
         List<Product> productDTOs = new ArrayList<>();
         ProductDAO productDAO = new ProductDAO();
-
         LinkedHashMap<Product, String> productCmap = new LinkedHashMap<>();
-
-      
         String action = request.getParameter("action");
         String indexPage_raw = request.getParameter("indexPage");
         String numPage_raw = request.getParameter("numPage");

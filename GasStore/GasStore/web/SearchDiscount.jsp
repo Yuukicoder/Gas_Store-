@@ -5,7 +5,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Discount Table</title>
+        <title>Discount Search</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -91,7 +91,7 @@
                     <div class="row g-4">
                         <div class="">
                             <div class="bg-secondary text-center rounded p-4">
-                                 <h3 style="color: #E57C23">${msg}</h3>
+                                <h3 style="color: #E57C23">${msg}</h3>
                                 <div class="d-flex align-items-center justify-content-between mb-4">
                                     <div class="bg-secondary rounded h-100 p-4">
                                         <h5 ><a href="discountTable">All Discount</a></h5>
@@ -108,72 +108,90 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="table-responsive">
-                                    <table id="categoryTable"
-                                           class="table text-start align-middle table-bordered table-hover mb-0">
-                                        <thead>
-                                            <tr class="text-white">
-                                                <th scope="col" >Discount name</th>
-                                                <th scope="col" style="text-align: center">Discount Code</th>
-                                                <th scope="col" style="text-align: center">Quantity Available</th>
-                                                <th scope="col" style="text-align: center">Discount Type</th>
-                                                <th scope="col" style="text-align: center">Discount Amount</th>
-                                                <th scope="col" style="text-align: center">Start</th>
-                                                <th scope="col" style="text-align: center">End</th>
-                                                <th scope="col" style="text-align: center">
-                                                    <form method="get" action="discountTable">
-                                                        <select name="numPage" onchange="this.form.submit()">
-                                                            <option value="5" ${numPage == '5' ? 'selected' : ''}>5</option>
-                                                            <option value="10" ${numPage == '10' ? 'selected' : ''}>10</option>
-                                                            <option value="20" ${numPage == '20' ? 'selected' : ''}>20</option>
-                                                            <option value="50" ${numPage == '50' ? 'selected' : ''}>50</option>
-                                                            <option value="all" ${numPage == 'all' ? 'selected' : ''}>All</option>
-                                                        </select>
-                                                        <input type="hidden" name="indexPage" value="${tag}" />
-                                                        <input type="hidden" name="action" value="${action}" />
-                                                    </form>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="d" items="${discount}">
-                                                <tr>
-                                                    <td class="discountName" >${d.getName()}</td>
-                                                    <td style="text-align: center">${d.getDiscountCode()}</td>
-                                                    <td style="text-align: center">${d.getQuantity()}</td>
-                                                    <td style="text-align: center">${d.getDiscountType()}</td>
-                                                    <td style="text-align: center">${d.getDiscountAmount()}</td>
-                                                    <td style="text-align: center">${d.getStartDate()}</td>
-                                                    <td style="text-align: center">${d.getEndDate()}</td>
-                                                    <td style="text-align: center">
-                                                        <a href="#" class="btn btn-danger btn-sm"
-                                                            onclick="confirmDelete('${d.getDiscountID()}')"
-                                                        >
-                                                            Delete
-                                                        </a>
-                                                    </td>
+                                <c:if test="${size < 1}">
+                                    <div class="blog-heading">
+                                        <span>What's thing we have today?</span>
+                                        <h3>Oops! No information</h3>
+                                    </div>
+                                </c:if>
+                                <c:if test="${size > 0}">
+                                    <div class="table-responsive">
+                                        <table id="categoryTable"
+                                               class="table text-start align-middle table-bordered table-hover mb-0">
+                                            <thead>
+                                                <tr class="text-white">
+                                                    <th scope="col" >Discount name</th>
+                                                    <th scope="col" style="text-align: center">Discount Code</th>
+                                                    <th scope="col" style="text-align: center">Quantity Available</th>
+                                                    <th scope="col" style="text-align: center">Discount Type</th>
+                                                    <th scope="col" style="text-align: center">Discount Amount</th>
+                                                    <th scope="col" style="text-align: center">Start</th>
+                                                    <th scope="col" style="text-align: center">End</th>
+                                                    <th scope="col" style="text-align: center">
+                                                        <form method="post" action="discountTable">
+                                                            <select name="numPage" onchange="this.form.submit()">
+                                                                <option value="5" ${numPage == '5' ? 'selected' : ''}>5</option>
+                                                                <option value="10" ${numPage == '10' ? 'selected' : ''}>10</option>
+                                                                <option value="20" ${numPage == '20' ? 'selected' : ''}>20</option>
+                                                                <option value="50" ${numPage == '50' ? 'selected' : ''}>50</option>
+                                                                <option value="all" ${numPage == 'all' ? 'selected' : ''}>All</option>
+                                                            </select>
+                                                            <input type="hidden" name="indexPage" value="${tag}" />
+                                                            <input type="hidden" name="action" value="${action}" />
+                                                            <input type="hidden" name="search" value="${search}" />
+                                                        </form>
+                                                    </th>
                                                 </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach var="d" items="${discount}">
+                                                    <tr>
+                                                        <td class="discountName" >${d.getName()}</td>
+                                                        <td style="text-align: center">${d.getDiscountCode()}</td>
+                                                        <td style="text-align: center">${d.getQuantity()}</td>
+                                                        <td style="text-align: center">${d.getDiscountType()}</td>
+                                                        <td style="text-align: center">${d.getDiscountAmount()}</td>
+                                                        <td style="text-align: center">${d.getStartDate()}</td>
+                                                        <td style="text-align: center">${d.getEndDate()}</td>
+                                                        <td style="text-align: center">
+                                                            <a href="#" class="btn btn-danger btn-sm"
+                                                                onclick="confirmDelete('${d.getDiscountID()}')"
+                                                            >
+                                                                Delete
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </c:if>
                                 <div id="pagination">
                                     <nav style="float: right;margin-top: 25px; color: black" aria-label="Page navigation example">
+                                        <form id="paginationForm" action="discountTable" method="post">
+                                            <input type="hidden" name="indexPage" id="indexPage">
+                                            <input type="hidden" name="search" value="${search}">
+                                            <input type="hidden" name="numPage" value="${numPage != null ? numPage : '5'}">
+                                        </form>
+
                                         <ul class="pagination">
                                             <c:if test="${tag > 1}">
-                                                <li  class="page-item"><a style="color: black"  class="page-link" href="discountTable?indexPage=${tag-1}&amp;numPage=${numPage != null ? numPage : '5'}"">Previous</a></li>
+                                                <li class="page-item">
+                                                    <a style="color: black" class="page-link" href="#" onclick="submitForm(${tag - 1})">Previous</a>
+                                                </li>
                                             </c:if>
                                             <c:forEach begin="1" end="${endPage}" var="i">
-                                                <li style="color: black"  class="page-item ${tag == i ?"active":"" || page1 == i ?"active":""  } "><a style="color: black"  class="page-link" href="discountTable?indexPage=${i}&amp;numPage=${numPage != null ? numPage : '5'}">${i}</a></li>
+                                                <li style="color: black" class="page-item ${tag == i ? 'active' : ''}">
+                                                    <a style="color: black" class="page-link" href="#" onclick="submitForm(${i})">${i}</a>
+                                                </li>
                                             </c:forEach>
-                                            <c:if test="${tag<endPage}">
-                                                <li class="page-item"><a style="color: black"  class="page-link" href="discountTable?indexPage=${tag+1}&amp;numPage=${numPage != null ? numPage : '5'}">Next</a></li>
+                                            <c:if test="${tag < endPage}">
+                                                <li class="page-item">
+                                                    <a style="color: black" class="page-link" href="#" onclick="submitForm(${tag + 1})">Next</a>
+                                                </li>
                                             </c:if>
                                         </ul>
                                     </nav>
-                                </div>
-                                <div class="text-center mt-4">
-                                    <a href="VoucherDetail.jsp" class="btn btn-primary">Add Discount</a>
                                 </div>
                             </div>
 
@@ -201,6 +219,11 @@
         <!-- Template Javascript -->
         <script src="admin/js/main.js"></script>
         <script>
+        function submitForm(indexPage) {
+            document.getElementById("indexPage").value = indexPage;
+            document.getElementById("paginationForm").submit();
+        }
+        
         function generateCode() {
             var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             var codeLength = 10;

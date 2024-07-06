@@ -11,7 +11,11 @@ public class DBcontext {
     public DBcontext() {
         try {
             String username = "sa";
+<<<<<<< Updated upstream
             String password = "123456";
+=======
+            String password = "123";
+>>>>>>> Stashed changes
             String url = "jdbc:sqlserver://localhost:1433;databaseName=Gas_Management";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, username, password);

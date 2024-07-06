@@ -644,6 +644,8 @@ public class OrderDAO extends DBcontext {
             sqlBuilder.append("(")
                       .append("LOWER(od.orderID) LIKE ? ")
                       .append("OR LOWER(c.username) LIKE ? ")
+                      .append("OR LOWER(c.email) LIKE ? ")
+                      .append("OR LOWER(c.phone) LIKE ? ")
                       .append(")");
         }
 
@@ -657,6 +659,8 @@ public class OrderDAO extends DBcontext {
             int paramIndex = 1;
             for (String term : searchTerms) {
                 String searchPattern = "%" + term + "%";
+                ps.setString(paramIndex++, searchPattern);
+                ps.setString(paramIndex++, searchPattern);
                 ps.setString(paramIndex++, searchPattern);
                 ps.setString(paramIndex++, searchPattern);
             }
@@ -706,6 +710,8 @@ public class OrderDAO extends DBcontext {
             sqlBuilder.append("(")
                       .append("LOWER(od.orderID) LIKE ? ")
                       .append("OR LOWER(c.username) LIKE ? ")
+                      .append("OR LOWER(c.email) LIKE ? ")
+                      .append("OR LOWER(c.phone) LIKE ? ")
                       .append(")");
         }
 
@@ -722,6 +728,8 @@ public class OrderDAO extends DBcontext {
             int paramIndex = 1;
             for (String term : searchTerms) {
                 String searchPattern = "%" + term + "%";
+                ps.setString(paramIndex++, searchPattern);
+                ps.setString(paramIndex++, searchPattern);
                 ps.setString(paramIndex++, searchPattern);
                 ps.setString(paramIndex++, searchPattern);
             }
@@ -749,6 +757,57 @@ public class OrderDAO extends DBcontext {
             e.printStackTrace();
         }
         return orderMap;
+    }
+    
+    public double getRevenue() {
+        double totalRevenue = 0.0;
+
+        String sql = "SELECT SUM(totalMoney) AS totalRevenue " +
+                     "FROM [Order] " +
+                     "WHERE status != 4";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                totalRevenue = rs.getDouble("totalRevenue");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return totalRevenue;
+    }
+    
+    public Order getOrderByID(int orderID) {
+        Order order = null;
+
+        String sql = "SELECT * FROM [Order] WHERE orderID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, orderID);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int customerId = rs.getInt("customerID");
+                int trackingNumber = rs.getInt("trackingNumber");
+                double totalMoney = rs.getDouble("totalMoney");
+                String orderDate = rs.getString("orderDate");
+                String shipAddress = rs.getString("shipAddress");
+                int status = rs.getInt("status");
+                int shipVia = rs.getInt("shipVia");
+                String payment = rs.getString("payment");
+                String notes = rs.getString("notes");
+
+                order = new Order(orderID, customerId, trackingNumber, totalMoney, orderDate,
+                                 shipAddress, status, shipVia, payment, notes);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return order;
     }
 
 

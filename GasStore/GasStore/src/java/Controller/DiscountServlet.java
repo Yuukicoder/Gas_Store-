@@ -15,6 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -27,54 +29,98 @@ public class DiscountServlet extends HttpServlet{
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
-        if(account!=null){
-            String name = request.getParameter("name").toUpperCase();
-            String start = request.getParameter("start");
-            String end = request.getParameter("end");
-            int discountAmount = Integer.parseInt(request.getParameter("discountAmount"));
-            String discountType = request.getParameter("discountType");
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
-            String code = request.getParameter("code").toUpperCase();
+        if (account != null) {
             DiscountDAO discountDAO = new DiscountDAO();
-            boolean isNameExists = discountDAO.isNameExists(name);
-            boolean isCodeExists = discountDAO.isCodeExists(code);
-            if (isNameExists || isCodeExists) {
-                String errorMessage = "";
-                if (isNameExists) {
-                    errorMessage += "Discount name already exists. ";
+            String searchKey = request.getParameter("search");
+            String indexPage_raw = request.getParameter("indexPage");
+            String numPage_raw = request.getParameter("numPage");
+            List<Discount> allSearchDiscounts = discountDAO.getSearchDiscount(searchKey);
+            List<Discount> pagedDiscounts = null;
+            
+            try {
+                int indexPage = 1;
+                if (indexPage_raw != null) {
+                    indexPage = Integer.parseInt(indexPage_raw);
                 }
-                if (isCodeExists) {
-                    errorMessage += "Discount code already exists.";
+
+                int numPage = 5;
+                boolean isAll = false;
+                if (numPage_raw != null) {
+                    if (numPage_raw.equals("all")) {
+                        isAll = true;
+                    } else {
+                        numPage = Integer.parseInt(numPage_raw);
+                    }
                 }
-                request.setAttribute("errorMessage", errorMessage);
-                request.setAttribute("discount", discountDAO.listDiscount());
-                request.getRequestDispatcher("TableVoucher.jsp").forward(request, response);
-            } else {
-                discountDAO.addDiscount(name, code, start, end, discountAmount, discountType, quantity);
-                response.sendRedirect("discountTable");
+
+                if (isAll) {
+                    pagedDiscounts = discountDAO.searchDiscountsPaging(indexPage, Integer.MAX_VALUE, searchKey);
+                } else {
+                    pagedDiscounts = discountDAO.searchDiscountsPaging(indexPage, numPage, searchKey);
+                }
+
+                int discountCount = allSearchDiscounts.size();
+                int endPage = isAll ? 1 : (discountCount / numPage + (discountCount % numPage == 0 ? 0 : 1));
+                
+                request.setAttribute("endPage", endPage);
+                request.setAttribute("search", searchKey);
+                request.setAttribute("tag", indexPage);
+                request.setAttribute("size", discountCount);
+                request.setAttribute("discount", pagedDiscounts);
+                request.setAttribute("numPage", numPage_raw);
+                request.getRequestDispatcher("SearchDiscount.jsp").forward(request, response);
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }else{
+        } else {
             response.sendRedirect("403.jsp");
-        }
+        }        
     }
+    
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if(account!=null){
-            String action = request.getParameter("action");
-            if (action == null) {
-                DiscountDAO discountDAO = new DiscountDAO();
-                request.setAttribute("discount", discountDAO.listDiscount());
+            List<Discount> discountDTOs = new ArrayList<>();
+            DiscountDAO discountDAO = new DiscountDAO();
+            String indexPage_raw = request.getParameter("indexPage");
+            String numPage_raw = request.getParameter("numPage");
+
+            try {
+                int indexPage = (indexPage_raw == null) ? 1 : Integer.parseInt(indexPage_raw);
+                int numPage = 5; 
+                boolean isAll = false;
+
+                if (numPage_raw != null) {
+                    if (numPage_raw.equals("all")) {
+                        isAll = true;
+                    } else {
+                        numPage = Integer.parseInt(numPage_raw);
+                    }
+                }
+
+                List<Discount> discount;
+                if (isAll) {
+                    discount = discountDAO.pagingDiscount(indexPage, Integer.MAX_VALUE); 
+                } else {
+                    discount = discountDAO.pagingDiscount(indexPage, numPage);
+                }
+
+                discountDTOs = discountDAO.listDiscount();
+                int numDiscounts = discountDTOs.size();
+                int endPage = isAll ? 1 : (numDiscounts / numPage + (numDiscounts % numPage == 0 ? 0 : 1));
+
+                request.setAttribute("endPage", endPage);
+                request.setAttribute("tag", indexPage);
+                request.setAttribute("discount", discount);
+                request.setAttribute("numPage", numPage_raw);
                 request.getRequestDispatcher("TableVoucher.jsp").forward(request, response);
-            }else if (action.equals("detail")) {
-                response.setContentType("text/html;charset=UTF-8");
-                String name = request.getParameter("voucherName").trim();
-                DiscountDAO discountDAO = new DiscountDAO();
-                Discount d = discountDAO.getDataByName(name);
-                request.setAttribute("v", d);
-                request.getRequestDispatcher("VoucherDetail.jsp").forward(request, response);
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }else{
             response.sendRedirect("403.jsp");

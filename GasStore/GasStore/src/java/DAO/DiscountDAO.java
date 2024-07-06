@@ -4,11 +4,14 @@
  */
 package DAO;
 
+import DTO.Customer;
 import DTO.Discount;
 import com.oracle.wls.shaded.org.apache.xalan.lib.ExsltDatetime;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -69,6 +72,125 @@ public class DiscountDAO extends DBcontext{
         } catch (Exception e) {
         }
         return listDiscount;
+    }
+    
+    public List<Discount> pagingDiscount(int index, int numPage) {
+        List<Discount> discountList = new ArrayList<>();
+        String sql = "SELECT [discountID]\n"
+                + "      ,[name]\n"
+                + "      ,[discountCode]\n"
+                + "      ,[startDate]\n"
+                + "      ,[endDate]\n"
+                + "      ,[discountAmount]\n"
+                + "      ,[discountType]\n"
+                + "      ,[quantity]\n"
+                + "  FROM Discount\n"
+                + "  ORDER BY discountID DESC\n"
+                + "  OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            DiscountDAO discountDAO = new DiscountDAO();
+            st.setInt(1, (index - 1) * numPage);
+            st.setInt(2, numPage);
+
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                String name = rs.getString("name");
+                Discount discount = discountDAO.getDataByName(name);
+                discountList.add(discount);
+            }
+        } catch (Exception e) {
+            System.out.println("SQL Exception: " + e.getMessage());
+        }
+
+        return discountList;
+    }
+    
+    public List<Discount> searchDiscountsPaging(int index, int numPage, String search) {
+        List<Discount> discountList = new ArrayList<>();
+        StringBuilder queryBuilder = new StringBuilder();
+        DiscountDAO discountDAO = new DiscountDAO();
+        // Remove extra spaces and split the search query into words
+        String[] keywords = search.trim().replaceAll("\\s+", " ").split(" ");
+
+        queryBuilder.append("SELECT discountID, name, discountCode, startDate, endDate, discountAmount, discountType, quantity ")
+                    .append("FROM Discount WHERE ");
+
+        // Build the dynamic SQL query for each keyword
+        for (int i = 0; i < keywords.length; i++) {
+            queryBuilder.append("(name LIKE ? OR discountCode LIKE ?) ");
+            if (i < keywords.length - 1) {
+                queryBuilder.append("OR ");
+            }
+        }
+
+        queryBuilder.append("ORDER BY discountID DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+        String sql = queryBuilder.toString();
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            for (int i = 0; i < keywords.length; i++) {
+                st.setString(i * 2 + 1, "%" + keywords[i] + "%");
+                st.setString(i * 2 + 2, "%" + keywords[i] + "%");
+            }
+
+            // Set the pagination parameters
+            st.setInt(keywords.length * 2 + 1, (index - 1) * numPage);
+            st.setInt(keywords.length * 2 + 2, numPage == Integer.MAX_VALUE ? Integer.MAX_VALUE : numPage);
+
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                String name = rs.getString("name");
+                Discount discount = discountDAO.getDataByName(name);
+                discountList.add(discount);
+            }
+        } catch (Exception e) {
+            System.out.println("SQL Exception: " + e.getMessage());
+        }
+
+        return discountList;
+    }
+    
+    public List<Discount> getSearchDiscount(String searchKey) {
+        List<Discount> discountList = new ArrayList<>();
+        StringBuilder queryBuilder = new StringBuilder();
+        DiscountDAO discountDAO = new DiscountDAO();
+        // Remove extra spaces and split the search key into words
+        String[] keywords = searchKey.trim().replaceAll("\\s+", " ").split(" ");
+
+        queryBuilder.append("SELECT discountID, name, discountCode, startDate, endDate, discountAmount, discountType, quantity ")
+                    .append("FROM Discount WHERE ");
+
+        for (int i = 0; i < keywords.length; i++) {
+            queryBuilder.append("(name LIKE ? OR discountCode LIKE ?) ");
+            if (i < keywords.length - 1) {
+                queryBuilder.append("OR ");
+            }
+        }
+
+        queryBuilder.append("ORDER BY discountID DESC");
+
+        String sql = queryBuilder.toString();
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            // Set the keyword parameters
+            for (int i = 0; i < keywords.length; i++) {
+                st.setString(i * 2 + 1, "%" + keywords[i] + "%");
+                st.setString(i * 2 + 2, "%" + keywords[i] + "%");
+            }
+
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                String name = rs.getString("name");
+                Discount discount = discountDAO.getDataByName(name);
+                discountList.add(discount);
+            }
+        } catch (Exception e) {
+            System.out.println("SQL Exception: " + e.getMessage());
+        }
+
+        return discountList;
     }
     
     public Discount getDataByName(String name) {
@@ -164,9 +286,114 @@ public class DiscountDAO extends DBcontext{
         }
     }
     
+    public List<Customer> findCustomersBySpending(double minSpending) {
+        List<Customer> customers = new ArrayList<>();
+        CustomerDAO customerDAO = new CustomerDAO();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            // Tính thời điểm 30 ngày gần đây
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_MONTH, -30);
+            Date thirtyDaysAgo = calendar.getTime();
+            String sql = "SELECT c.customerID, c.firstName, c.lastName, SUM(o.totalMoney) AS totalSpending " +
+                         "FROM Customer c " +
+                         "JOIN [Order] o ON c.customerID = o.customerID " +
+                         "WHERE o.orderDate >= ? " +
+                         "  AND o.orderDate <= ? " +
+                         "  AND o.status = 3 " +
+                         "GROUP BY c.customerID, c.firstName, c.lastName " +
+                         "HAVING SUM(o.totalMoney) > ?";
+            statement = connection.prepareStatement(sql);
+            statement.setTimestamp(1, new java.sql.Timestamp(thirtyDaysAgo.getTime()));
+            statement.setTimestamp(2, new java.sql.Timestamp(new Date().getTime())); // Lấy ngày hiện tại
+            statement.setDouble(3, minSpending);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int customerId = resultSet.getInt("customerID");
+                Customer customer = customerDAO.getCustomerByID(customerId);
+                customers.add(customer);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error while fetching customers by spending: " + e.getMessage());
+        } 
+        return customers;
+    }
+    
+    public List<Customer> findLoyalCustomers(int number) {
+        List<Customer> loyalCustomers = new ArrayList<>();
+        CustomerDAO customerDAO = new CustomerDAO();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            // Tính thời điểm 30 ngày gần đây
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_MONTH, -30);
+            Date thirtyDaysAgo = calendar.getTime();
+            String query = "SELECT TOP (?) * " +
+                           "FROM Customer c " +
+                           "WHERE EXISTS (" +
+                           "    SELECT 1 " +
+                           "    FROM [Order] o " +
+                           "    WHERE o.customerID = c.customerID " +
+                           "      AND o.orderDate >= ? " +
+                           "      AND o.orderDate <= ? " +
+                           "      AND o.status = 3 " +
+                           ") " +
+                           "ORDER BY c.created";
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, number);
+            statement.setTimestamp(2, new java.sql.Timestamp(thirtyDaysAgo.getTime()));
+            statement.setTimestamp(3, new java.sql.Timestamp(new Date().getTime())); // Lấy ngày hiện tại
+
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int customerId = resultSet.getInt("customerID");
+                Customer customer = customerDAO.getCustomerByID(customerId);
+                loyalCustomers.add(customer);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error while fetching loyal customers: " + e.getMessage());
+        } 
+        return loyalCustomers;
+    }
+    
+    public List<Customer> findNewCustomers() {
+        List<Customer> newCustomers = new ArrayList<>();
+        CustomerDAO customerDAO = new CustomerDAO();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            // Tính thời điểm 30 ngày gần đây
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_MONTH, -30);
+            Date thirtyDaysAgo = calendar.getTime();
+
+            String query = "SELECT * " +
+                           "FROM Customer " +
+                           "WHERE created >= ? ";
+            statement = connection.prepareStatement(query);
+            statement.setTimestamp(1, new java.sql.Timestamp(thirtyDaysAgo.getTime()));
+
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int customerId = resultSet.getInt("customerID");
+                Customer customer = customerDAO.getCustomerByID(customerId);
+                newCustomers.add(customer);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error while fetching new customers: " + e.getMessage());
+        }
+        return newCustomers;
+    }
     
     public static void main(String[] args) {
         DiscountDAO discountDAO = new DiscountDAO();
-        System.out.println(discountDAO.isNameExists("hhhh"));
+        System.out.println(discountDAO.findCustomersBySpending(500000));
     }
 }

@@ -75,6 +75,9 @@ public class OrderDetail {
         this.unitPrice = unitPrice;
     }
 
+    public double getTotalPrice() {
+        return unitPrice * quantity;
+    }
     @Override
     public String toString() {
         return "OrderDetail{" + "orderID=" + orderID + ", productID=" + productID + ", quantity=" + quantity + ", unitPrice=" + unitPrice + '}';
