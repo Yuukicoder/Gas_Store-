@@ -74,6 +74,7 @@ public class CartServlet extends HttpServlet {
         }
         Cart cart = new Cart(txt, list);
         request.setAttribute("cart", cart);
+       
         request.getRequestDispatcher("cart.jsp").forward(request, response);
     }
 

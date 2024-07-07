@@ -33,10 +33,10 @@
                 <c:if test="${not empty acc}">
                     <div class="d-inline-flex align-items-center">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">${acc.getFullname()}</button>
+                            <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">${acc.getUserName()}</button>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <button class="dropdown-item" type="button"><a href="mypurchase">My Purchase</a></button>
-                                <button class="dropdown-item" type="button"><a href="UserProfile?aid=${acc.getAccountID()}">Profile</a></button>
+                                <button class="dropdown-item" type="button"><a href="UserProfile?aid=${acc.getCustomerID()}">Profile</a></button>
                                 <button class="dropdown-item" type="button"><a href="logout">Logout</a></button>
                             </div>
                         </div>
