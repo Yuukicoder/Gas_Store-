@@ -31,7 +31,7 @@ public class BuyServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -71,7 +71,9 @@ public class BuyServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         ProductDAO d = new ProductDAO();
+
         List<Product> list = d.getAllProduct();
         Cookie[] arr = request.getCookies();
         String txt = "";
@@ -86,15 +88,39 @@ public class BuyServlet extends HttpServlet {
         }
         String num = request.getParameter("num");
         String id = request.getParameter("id");
-        if (txt.isEmpty()) {
-            txt = id + ":" + num;
+        int requestedQuantity = Integer.parseInt(num);
+        Product product = d.getProductByID(Integer.parseInt(id));
+        if (product != null) {
+            int currentStock = product.getStockQuantity();
+            if (requestedQuantity <= 0){
+                response.sendRedirect("productDetail?id="+id+"error=invalid_quantity");
+            }
+            if (requestedQuantity <= currentStock) {
+                // Cập nhật số lượng tồn kho mới
+                int newStock = currentStock - requestedQuantity;
+                product.setStockQuantity(newStock);
+                d.updateProduct2(product);
+
+                // Cập nhật giỏ hàng trong cookie
+                if (txt.isEmpty()) {
+                    txt = id + ":" + num;
+                } else {
+                    txt = txt + "/" + id + ":" + num;
+                }
+                Cookie c = new Cookie("cart", txt);
+                c.setMaxAge(2 * 24 * 60 * 60);
+                response.addCookie(c);
+
+                // Chuyển hướng về trang chi tiết sản phẩm
+                response.sendRedirect("productDetail?id=" + id);
+            } else {
+                // Xử lý khi số lượng yêu cầu vượt quá số lượng tồn kho
+                response.sendRedirect("productDetail?id=" + id + "&error=insufficient_stock");
+            }
         } else {
-            txt = txt + "/" + id + ":" + num;//thay / cho dau ,
+            // Xử lý khi không tìm thấy sản phẩm
+            response.sendRedirect("shop?error=product_not_found");
         }
-        Cookie c = new Cookie("cart", txt);
-        c.setMaxAge(2 * 24 * 60 * 60);
-        response.addCookie(c);
-        response.sendRedirect("productDetail?id=" + id);//thay cai duoi
     }
 
     /**

@@ -155,7 +155,7 @@ public class CustomerDao extends DBContext {
         return list;
     }
 
-    public Customer getAllByID(int id) {
+   public Customer getAllByID(int id) {
         list = new ArrayList<>();
         try {
             String strSelect = "select * from Customer where customerID = ?";
@@ -165,9 +165,9 @@ public class CustomerDao extends DBContext {
             while (rs.next()) {
 
                 Customer em = new Customer(rs.getInt("customerID"), rs.getString("userName"),
-                        rs.getString("password"), rs.getString("firstName"),
-                        rs.getString("lastName"),
-                        rs.getBoolean("isCustomer"), rs.getString("phone"), rs.getString("email"));
+                        rs.getString("password"), rs.getString("image"), rs.getString("firstName"),
+                        rs.getString("lastName"), rs.getString("address"),
+                        rs.getString("phone"), rs.getString("email"));
                 return em;
             }
         } catch (SQLException e) {
@@ -441,6 +441,7 @@ public class CustomerDao extends DBContext {
         }
         return null;
     }
+        
     
 public static void main(String[] args) {
     CustomerDao customerDao = new CustomerDao();
