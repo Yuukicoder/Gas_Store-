@@ -77,7 +77,10 @@
                                     <td class="align-middle">${tt}</td>
                                     <td class="align-middle">${i.product.name}</td>
                                     <!--<td class="align-middle"><img class="img-fluid" src="images/Product/${i.product.image}" alt="Image"></td>--> 
-                                    <td class="align-middle">${i.product.unitPrice} VND</td> 
+                                    <td class="align-middle">
+    <fmt:formatNumber value="${i.product.unitPrice}" type="currency" currencySymbol="VND" />
+</td>
+
 
                                     <td class="align-middle">
                                         <div class="input-group quantity mx-auto" style="width: 100px;">
@@ -94,8 +97,9 @@
                                     </td>
 
                                     <td class="align-middle">
-                                        <fmt:formatNumber pattern="##.#" value="${(i.product.unitPrice*i.quantity)}"/> VND
-                                    </td>
+    <fmt:formatNumber value="${i.product.unitPrice * i.quantity}" type="currency" currencySymbol="VND" />
+</td>
+
 
                                     <td class="align-middle">
                                         <form action="process" method="post">
@@ -134,7 +138,8 @@
                         <div class="border-bottom pb-2">
                             <div class="d-flex justify-content-between mb-3">
                                 <h6>Subtotal</h6>
-                                <h6>${o.totalMoney} VND</h6>
+                                <h6><fmt:formatNumber value="${o.totalMoney}" type="currency" currencySymbol="VND" /></h6>
+
                             </div>
                             <div class="d-flex justify-content-between mb-3">
                                 <h6>Voucher</h6>
@@ -151,18 +156,19 @@
                             </div>
                            <div class="d-flex justify-content-between mb-3">
                                 <h6>Ship</h6>
-                                <h6>10.0</h6>
+                                <h6><fmt:formatNumber value="10000" type="currency" currencySymbol="VND" /></h6>
+
                             </div>
                         </div>
                         <div class="pt-2">
 
                             <div class="d-flex justify-content-between mt-2">
                                 <h5>Total</h5>
-                                <c:if test="${discountValue != null}" >
-                                    <h5>$${(o.totalMoney)-(((o.totalMoney)*discountValue)/100) +10}</h5>
+                               <c:if test="${discountValue != null}">
+                                    <h5><fmt:formatNumber value="${(o.totalMoney - ((o.totalMoney * discountValue) / 100) + 10)}" type="currency" currencySymbol="VND" /></h5>
                                 </c:if>
-                                <c:if test="${discountValue == null}" >
-                                    <h5>${(o.totalMoney +10)} VND</h5>
+                                <c:if test="${discountValue == null}">
+                                    <h5><fmt:formatNumber value="${(o.totalMoney + 10000)}" type="currency" currencySymbol="VND" /></h5>
                                 </c:if>
 
                             </div>

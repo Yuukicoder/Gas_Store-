@@ -48,7 +48,7 @@ public class CustomerDAO extends DBcontext{
     
     public static void main(String[] args) {
         CustomerDAO cDAO = new CustomerDAO();
-        System.out.println(cDAO.getCustomerByID(10).toString());
+        System.out.println(cDAO.getCustomerByID(1).toString());
     }
     
 }

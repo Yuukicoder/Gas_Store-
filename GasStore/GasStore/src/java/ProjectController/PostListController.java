@@ -4,6 +4,7 @@ import DAO.AccountDAO;
 import DAO.PostCategoryDAO;
 import DAO.PostListDAO;
 import DTO.AccountDTO;
+import DTO.Customer;
 import DTO.PostCategoryDTO;
 import DTO.PostDTO;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class PostListController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        AccountDTO account = (AccountDTO) session.getAttribute("account");
+        Customer account = (Customer) session.getAttribute("account");
         String num_raw = request.getParameter("num");
         ArrayList<PostDTO> postDTOs = new ArrayList<>();
         PostCategoryDAO postCategoryDAO = new PostCategoryDAO();
