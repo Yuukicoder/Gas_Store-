@@ -1,7 +1,15 @@
 package Controller.AdminAccountServlet;
 
+/*
+
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 import Controller.MaHoa;
+import static Controller.MaHoa.toSHA1;
 import DTO.AdminDTO;
+import GMAIL.Gmail;
+import GMAIL.Randompassword;
 import dal.CustomerDao;
 import dal.RoleDao;
 import java.io.IOException;
@@ -20,9 +28,14 @@ import java.util.List;
 import java.util.Random;
 import java.security.SecureRandom;
 import model.Administrator;
-import model.Customer;
+import DTO.Customer;
 import model.Role;
 
+/**
+ *
+ *
+ * @author vip2021
+ */
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 2, // 2MB
         maxFileSize = 1024 * 1024 * 10, // 10MB
@@ -30,6 +43,20 @@ import model.Role;
 )
 public class InsertAdminServlet extends HttpServlet {
 
+    /**
+     *
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     *
+     * methods.
+     *
+     * @param request servlet request
+     *
+     * @param response servlet response
+     *
+     * @throws ServletException if a servlet-specific error occurs
+     *
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -37,15 +64,21 @@ public class InsertAdminServlet extends HttpServlet {
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
             if (account.getRoleID() == 1) {
+//List User
+// response.sendRedirect("ManageAccount.jsp");
+
                 CustomerDao cus = new CustomerDao();
                 RoleDao ro = new RoleDao();
                 List<Role> rli = ro.getAll();
                 request.setAttribute("rdata", rli);
                 String pid = request.getParameter("aid");
                 String tp = request.getParameter("atype");
-                if (pid != null && !pid.isEmpty() && tp != null && !tp.isEmpty() && tp.equals("0")) {
-                    Administrator u = cus.getAdminByID(Integer.parseInt(pid));
-                    request.setAttribute("detail", u);
+                if (pid != null && !pid.isEmpty() && tp != null && !tp.isEmpty()) {
+                    if (tp.equals("0")) {
+                        Administrator u = cus.getAdminByID(Integer.parseInt(pid));
+                        request.setAttribute("detail", u);
+
+                    }
                 }
                 request.getRequestDispatcher("InsertAdmin.jsp").forward(request, response);
             } else {
@@ -56,16 +89,38 @@ public class InsertAdminServlet extends HttpServlet {
         }
     }
 
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     *
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
+    /**
+     *
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     *
+     * @param response servlet response
+     *
+     * @throws ServletException if a servlet-specific error occurs
+     *
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
+// Other form fields
         CustomerDao cus = new CustomerDao();
         String adid = request.getParameter("accountID");
         String aname = request.getParameter("admin_name");
@@ -76,47 +131,114 @@ public class InsertAdminServlet extends HttpServlet {
 
         int roleID = Integer.parseInt(arole);
         Part p = request.getPart("pimg");
-        String image = p.getSubmittedFileName();
-        String mage = request.getParameter("timg");
-        String fileName = !image.isEmpty() && isImageFile(image) ? image : mage;
+        String uploadedFileName = p.getSubmittedFileName();
+        String existingFileName = request.getParameter("timg");
 
-        if (!fileName.isEmpty()) {
-            String path = getServletContext().getRealPath("");
-            p.write(path + File.separator + fileName);
+        String fileName = existingFileName; // Default to existing image
+
+        if (uploadedFileName != null && !uploadedFileName.isEmpty()) {
+            if (isImageFile(uploadedFileName)) {
+                // Save the new image file
+                fileName = uploadedFileName;
+                String path = getServletContext().getRealPath("");
+                File fileSaveDir = new File(path);
+                if (!fileSaveDir.exists()) {
+                    fileSaveDir.mkdirs();
+                }
+                p.write(path + File.separator + fileName);
+            }
         }
-
-        if (!fileName.isEmpty() && !isImageFile(fileName)) {
-            request.setAttribute("errorMessage", "The file you uploaded is not a valid image.");
-            request.getRequestDispatcher("InsertAdmin.jsp").forward(request, response);
-            return;
-        }
-
+// Handling other form data
         if (roleID == 3) {
+            if (apass == null || apass.isEmpty()) {
+                        Gmail gmail = new Gmail();
+                        //goi ham random
+                        Randompassword randompassword = new Randompassword();
+                        apass = randompassword.generateRandomString();
+
+                        gmail.sendEmail(
+                                "<!DOCTYPE html>\n"
+                                + "<html>\n"
+                                + "<head>\n"
+                                + "<title>Page Title</title>\n"
+                                + "</head>\n"
+                                + "<body>\n"
+                                + "\n"+ "<h1>Your username is :" + aname + " </h1>\n"
+                                + "<h1>Your password is :" + apass + " </h1>\n"
+                                + "<p>Log in  <a href=\"http://localhost:8088/GasStore2/login\">Here</a></p>\n"
+                                + "\n"
+                                + "</body>\n"
+                                + "</html>", amail);
+                    }
             Customer em = new Customer(aname, apass, amail);
             cus.insertCustomer(em);
             if (adid != null && !adid.isEmpty()) {
                 cus.deleteStaff(adid);
             }
             response.sendRedirect("ManageUser");
+            return;
         } else if (roleID == 1 || roleID == 2) {
+
             if (adid != null && !adid.isEmpty()) {
+
                 Administrator newAdmin = new Administrator(
-                        Integer.parseInt(adid), aname, apass, roleID, amail, fileName, Boolean.parseBoolean(ac)
+                        adid != null && !adid.isEmpty() ? Integer.parseInt(adid) : 0, aname,
+                        apass, roleID,
+                        amail, !fileName.isEmpty() && isImageFile(fileName) ? fileName : "anno.jpg",
+                        Boolean.parseBoolean(ac)
                 );
                 cus.updateStaff(newAdmin);
             } else {
-                if (apass == null || apass.isEmpty()) {
-                    apass = generateRandomPassword();
+
+                if (cus.isAdminAvailable(aname) && cus.isEmailAdmin(amail)) {
+                    if (apass == null || apass.isEmpty()) {
+                        Gmail gmail = new Gmail();
+                        //goi ham random
+                        Randompassword randompassword = new Randompassword();
+                        apass = randompassword.generateRandomString();
+
+                        gmail.sendEmail(
+                                "<!DOCTYPE html>\n"
+                                + "<html>\n"
+                                + "<head>\n"
+                                + "<title>Page Title</title>\n"
+                                + "</head>\n"
+                                + "<body>\n"
+                                + "\n"
+                                + "<h1>Your password is :" + apass + " </h1>\n"
+                                + "<p>Log in  <a href=\"http://localhost:8088/GasStore2/login\">Here</a></p>\n"
+                                + "\n"
+                                + "</body>\n"
+                                + "</html>", amail);
+                    }
+
+                    Administrator newAdmin = new Administrator(
+                            adid != null && !adid.isEmpty() ? Integer.parseInt(adid) : 0,
+                            aname,
+                            toSHA1(apass), // Assuming toSHA1() method is used to hash the password
+                            roleID,
+                            amail,
+                            !fileName.isEmpty() && isImageFile(fileName) ? fileName : "anno.jpg",
+                            Boolean.parseBoolean(ac)
+                    );
+                    cus.insertStaff(newAdmin);
+                    request.setAttribute("alertMessage", "Admin account created successfully. Username: " + aname + ", Password: " + apass);
+                    request.getRequestDispatcher("InsertAdmin.jsp").forward(request, response);
+                    return;
+                } else {
+                    
+                    request.setAttribute("err", "Account name or email is available");
+                    
+                  request.getRequestDispatcher("InsertAdmin.jsp").forward(request, response);
+                    return;
+                    
                 }
-                Administrator newAdmin = new Administrator(
-                        0, aname, apass, roleID, amail, !fileName.isEmpty() ? fileName : "anno.jpg", Boolean.parseBoolean(ac)
-                );
-                cus.insertStaff(newAdmin);
             }
             response.sendRedirect("ManageStaff");
+            return;
         }
-    }
 
+    }
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+<>?";
     private static final int PASSWORD_LENGTH = 10;
     private static final Random RANDOM = new SecureRandom();
@@ -146,13 +268,19 @@ public class InsertAdminServlet extends HttpServlet {
         }
         int lastIndexOfDot = fileName.lastIndexOf('.');
         if (lastIndexOfDot == -1) {
-            return "";
+            return ""; // No extension found
         }
         return fileName.substring(lastIndexOfDot + 1);
     }
 
+    /**
+     *
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
     @Override
     public String getServletInfo() {
         return "Short description";
-    }
+    }// </editor-fold>
 }

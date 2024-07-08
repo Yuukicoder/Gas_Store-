@@ -165,9 +165,9 @@ public class CustomerDao extends DBContext {
             while (rs.next()) {
 
                 Customer em = new Customer(rs.getInt("customerID"), rs.getString("userName"),
-                        rs.getString("password"), rs.getString("firstName"),
-                        rs.getString("lastName"),
-                        rs.getBoolean("isCustomer"), rs.getString("phone"), rs.getString("email"));
+                        rs.getString("password"), rs.getString("image"), rs.getString("firstName"),
+                        rs.getString("lastName"), rs.getString("address"),
+                        rs.getString("phone"), rs.getString("email"));
                 return em;
             }
         } catch (SQLException e) {
@@ -340,11 +340,14 @@ public class CustomerDao extends DBContext {
                 cus.setCustomerID(rs.getInt("customerID"));
                 cus.setUserName(rs.getString("userName"));
                 cus.setPassword(rs.getString("password"));
+                cus.setImage(rs.getString("image"));
                 cus.setFirstName(rs.getString("firstName"));
                 cus.setLastName(rs.getString("lastName"));
                 cus.setPhone(rs.getString("phone"));
+                cus.setAddress(rs.getString("address"));
                 cus.setEmail(rs.getString("email"));
-                cus.setIsCustomer(rs.getBoolean("isCustomer"));
+
+//                cus.setIsCustomer(rs.getBoolean("isCustomer"));
                 return cus;
             }
         } catch (SQLException ex) {
@@ -400,8 +403,7 @@ public class CustomerDao extends DBContext {
         }
         return null;
     }
-    
-        
+
     public ArrayList<Customer> getListCheckGmail(String email) {
         ArrayList<Customer> customerList = new ArrayList<>();
         String sql = "SELECT * FROM Customer WHERE email = ?";
@@ -425,8 +427,8 @@ public class CustomerDao extends DBContext {
         }
         return customerList;
     }
-    
-        public Customer getgmailupdate(String pass, String gmail) {
+
+    public Customer getgmailupdate(String pass, String gmail) {
         String sql = "UPDATE [dbo].[Customer]\n"
                 + "   SET [password] = ?\n"
                 + " WHERE [email]  = ?";
@@ -441,37 +443,465 @@ public class CustomerDao extends DBContext {
         }
         return null;
     }
-    
-public static void main(String[] args) {
-    CustomerDao customerDao = new CustomerDao();
 
-    // Define an email and new password to test with
-    String testEmail = "haquocminhduc@gmail.com";
-    String newPassword = "newPassword123";
+    List<model.Customer> lists;
 
-    // Call the getgmailupdate function to update the password for the test email
-    customerDao.getgmailupdate(newPassword, testEmail);
+    // Admin DAO
+    public List<Administrator> getAllAdminByName(String name) {
+        List<Administrator> li = new ArrayList<>();
+        String[] parts = name.trim().toLowerCase().split("\\s+");
 
-    // Call the getListCheckGmail function with the test email to verify the update
-    ArrayList<Customer> customers = customerDao.getListCheckGmail(testEmail);
+        // Construct the SQL query dynamically for word search
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM Administrator ")
+                .append("LEFT JOIN Role ON Administrator.roleID = Role.roleID WHERE ");
+        for (int i = 0; i < parts.length; i++) {
+            queryBuilder.append("(userName LIKE ? OR email LIKE ? OR name LIKE ?)");
+            if (i < parts.length - 1) {
+                queryBuilder.append(" OR ");
+            }
+        }
 
-    // Print out the results
-    if (customers.isEmpty()) {
-        System.out.println("No customers found with the email: " + testEmail);
-    } else {
-        System.out.println("Customers found with the email: " + testEmail);
-        for (Customer customer : customers) {
-            System.out.println("Customer ID: " + customer.getCustomerID());
-            System.out.println("Username: " + customer.getUserName());
-            System.out.println("First Name: " + customer.getFirstName());
-            System.out.println("Last Name: " + customer.getLastName());
-            System.out.println("Phone: " + customer.getPhone());
-            System.out.println("Email: " + customer.getEmail());
-            // Print out the password to verify the update
-            System.out.println("Password: " + customer.getPassword());
-            System.out.println("---------------------------");
+        boolean hasResults = false;
+
+        try (PreparedStatement stm = connection.prepareStatement(queryBuilder.toString())) {
+            // Set the parameters for each part
+            for (int i = 0; i < parts.length; i++) {
+                String searchPattern = "%" + parts[i] + "%";
+                stm.setString(i * 3 + 1, searchPattern);
+                stm.setString(i * 3 + 2, searchPattern);
+                stm.setString(i * 3 + 3, searchPattern);
+            }
+
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    Administrator em = new Administrator(
+                            rs.getInt("administratorID"),
+                            rs.getString("userName"),
+                            rs.getString("password"),
+                            rs.getInt("roleID"),
+                            rs.getString("email"),
+                            rs.getString("img"),
+                            rs.getString("name"),
+                            rs.getBoolean("isActive")
+                    );
+                    li.add(em);
+                    hasResults = true;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        // If no results are found, perform search by individual letters
+        if (!hasResults) {
+            li.clear();
+            parts = name.trim().toLowerCase().split(""); // Split by individual letters
+
+            // Construct the SQL query dynamically for letter search
+            queryBuilder = new StringBuilder("SELECT * FROM Administrator ")
+                    .append("LEFT JOIN Role ON Administrator.roleID = Role.roleID WHERE ");
+            for (int i = 0; i < parts.length; i++) {
+                queryBuilder.append("(userName LIKE ? OR email LIKE ? OR name LIKE ?)");
+                if (i < parts.length - 1) {
+                    queryBuilder.append(" OR ");
+                }
+            }
+
+            try (PreparedStatement stm = connection.prepareStatement(queryBuilder.toString())) {
+                // Set the parameters for each part
+                for (int i = 0; i < parts.length; i++) {
+                    String searchPattern = "%" + parts[i] + "%";
+                    stm.setString(i * 3 + 1, searchPattern);
+                    stm.setString(i * 3 + 2, searchPattern);
+                    stm.setString(i * 3 + 3, searchPattern);
+                }
+
+                try (ResultSet rs = stm.executeQuery()) {
+                    while (rs.next()) {
+                        Administrator em = new Administrator(
+                                rs.getInt("administratorID"),
+                                rs.getString("userName"),
+                                rs.getString("password"),
+                                rs.getInt("roleID"),
+                                rs.getString("email"),
+                                rs.getString("img"),
+                                rs.getString("name"),
+                                rs.getBoolean("isActive")
+                        );
+                        li.add(em);
+                    }
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+
+        return li;
+    }
+
+    public int getTotalAdmin() {
+        int count = 0;
+        try {
+            String query = "SELECT COUNT(*) AS total FROM Administrator";
+            stm = connection.prepareStatement(query);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return count;
+    }
+
+    public List<Administrator> getPaginatedAdmin(int pageNum, int pageSize) {
+        li = new ArrayList<>();
+        try {
+            String strSelect = "WITH tempTable AS (\n"
+                    + "    SELECT ROW_NUMBER() OVER (ORDER BY administratorID) AS rownum, *\n"
+                    + "    FROM Administrator\n"
+                    + ")\n"
+                    + "SELECT * FROM  tempTable\n"
+                    + "LEFT JOIN Role ON tempTable.roleID = Role.roleID\n"
+                    + "where tempTable.rownum between ? and ?";
+            stm = connection.prepareStatement(strSelect);
+            int startRow = (pageNum - 1) * pageSize + 1;
+            int endRow = startRow + pageSize - 1;
+            stm.setInt(1, startRow);
+            stm.setInt(2, endRow);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+
+                Administrator em = new Administrator(rs.getInt("administratorID"),
+                        rs.getString("userName"), rs.getString("password"),
+                        rs.getInt("roleID"), rs.getString("email"),
+                        rs.getString("img"), rs.getString("name"), rs.getBoolean("isActive"));
+                li.add(em);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return li;
+    }
+
+    public List<Administrator> SearchPaginatedAdmin(int pageNum, int pageSize, String tname) {
+        List<Administrator> li = new ArrayList<>();
+        String[] parts = tname.trim().toLowerCase().split("\\s+");
+
+        // Construct the SQL query dynamically for word search
+        StringBuilder queryBuilder = new StringBuilder("WITH tempTable AS (")
+                .append("SELECT ROW_NUMBER() OVER (ORDER BY administratorID) AS rownum, * ")
+                .append("FROM Administrator) ")
+                .append("SELECT * FROM tempTable ")
+                .append("LEFT JOIN Role ON tempTable.roleID = Role.roleID WHERE ");
+        for (int i = 0; i < parts.length; i++) {
+            queryBuilder.append("(userName LIKE ? OR email LIKE ? OR name LIKE ?)");
+            if (i < parts.length - 1) {
+                queryBuilder.append(" OR ");
+            }
+        }
+        queryBuilder.append(" AND tempTable.rownum BETWEEN ? AND ?");
+
+        boolean hasResults = false;
+
+        try (PreparedStatement stm = connection.prepareStatement(queryBuilder.toString())) {
+            // Set the parameters for each part
+            int paramIndex = 1;
+            for (String part : parts) {
+                String searchPattern = "%" + part + "%";
+                stm.setString(paramIndex++, searchPattern);
+                stm.setString(paramIndex++, searchPattern);
+                stm.setString(paramIndex++, searchPattern);
+            }
+            int startRow = (pageNum - 1) * pageSize + 1;
+            int endRow = startRow + pageSize - 1;
+            stm.setInt(paramIndex++, startRow);
+            stm.setInt(paramIndex, endRow);
+
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    Administrator em = new Administrator(
+                            rs.getInt("administratorID"),
+                            rs.getString("userName"),
+                            rs.getString("password"),
+                            rs.getInt("roleID"),
+                            rs.getString("email"),
+                            rs.getString("img"),
+                            rs.getString("name"),
+                            rs.getBoolean("isActive")
+                    );
+                    li.add(em);
+                    hasResults = true;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        // If no results are found, perform search by individual letters
+        if (!hasResults) {
+            li.clear();
+            parts = tname.trim().toLowerCase().split(""); // Split by individual letters
+
+            // Construct the SQL query dynamically for letter search
+            queryBuilder = new StringBuilder("WITH tempTable AS (")
+                    .append("SELECT ROW_NUMBER() OVER (ORDER BY administratorID) AS rownum, * ")
+                    .append("FROM Administrator) ")
+                    .append("SELECT * FROM tempTable ")
+                    .append("LEFT JOIN Role ON tempTable.roleID = Role.roleID WHERE ");
+            for (int i = 0; i < parts.length; i++) {
+                queryBuilder.append("(userName LIKE ? OR email LIKE ? OR name LIKE ?)");
+                if (i < parts.length - 1) {
+                    queryBuilder.append(" OR ");
+                }
+            }
+            queryBuilder.append(" AND tempTable.rownum BETWEEN ? AND ?");
+
+            try (PreparedStatement stm = connection.prepareStatement(queryBuilder.toString())) {
+                // Set the parameters for each part
+                int paramIndex = 1;
+                for (String part : parts) {
+                    String searchPattern = "%" + part + "%";
+                    stm.setString(paramIndex++, searchPattern);
+                    stm.setString(paramIndex++, searchPattern);
+                    stm.setString(paramIndex++, searchPattern);
+                }
+                int startRow = (pageNum - 1) * pageSize + 1;
+                int endRow = startRow + pageSize - 1;
+                stm.setInt(paramIndex++, startRow);
+                stm.setInt(paramIndex, endRow);
+
+                try (ResultSet rs = stm.executeQuery()) {
+                    while (rs.next()) {
+                        Administrator em = new Administrator(
+                                rs.getInt("administratorID"),
+                                rs.getString("userName"),
+                                rs.getString("password"),
+                                rs.getInt("roleID"),
+                                rs.getString("email"),
+                                rs.getString("img"),
+                                rs.getString("name"),
+                                rs.getBoolean("isActive")
+                        );
+                        li.add(em);
+                    }
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+
+        return li;
+    }
+
+    /**
+     * CustomerDao
+     *
+     * @return list
+     */
+    public void updateUser(model.Customer customer) {
+        String sql = "UPDATE Customer SET userName = ?, password = ?, firstName = ?, lastName = ?, phone = ?, email = ?, image = ?, address = ? WHERE customerID = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, customer.getUserName());
+            preparedStatement.setString(2, customer.getPassword());
+            preparedStatement.setString(3, customer.getFirstName());
+            preparedStatement.setString(4, customer.getLastName());
+            preparedStatement.setString(5, customer.getPhone());
+            preparedStatement.setString(6, customer.getEmail());
+            preparedStatement.setString(7, customer.getImage());
+            preparedStatement.setString(8, customer.getAddress());
+            preparedStatement.setInt(9, customer.getCustomerID());
+
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-}
+
+    public void insertCustomer(model.Customer customer) {
+        try {
+            String sql = "INSERT INTO Customer (userName, password, firstName, lastName, phone, email) "
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//            Timestamp createdTimestamp = Timestamp.valueOf(LocalDateTime.now());
+            // Set values for parameters
+            preparedStatement.setString(1, customer.getUserName());
+            preparedStatement.setString(2, customer.getPassword());
+//            preparedStatement.setString(3, customer.getImage());
+
+            preparedStatement.setString(3, customer.getFirstName());
+            preparedStatement.setString(4, customer.getLastName());
+
+            preparedStatement.setString(5, customer.getPhone());
+
+            preparedStatement.setString(6, customer.getEmail());
+
+            // Execute the query
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error inserting customer: " + e.getMessage());
+        }
+    }
+
+    public List<model.Customer> SearchPaginatedCustomers(int pageNum, int pageSize, String tname) {
+        lists = new ArrayList<>();
+        try {
+            String strSelect = "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY customerID) AS rownum FROM Customer) AS temp WHERE rownum BETWEEN ? AND ? and userName like ?";
+            stm = connection.prepareStatement(strSelect);
+            int startRow = (pageNum - 1) * pageSize + 1;
+            int endRow = startRow + pageSize - 1;
+            stm.setInt(1, startRow);
+            stm.setInt(2, endRow);
+            stm.setString(3, "%" + tname + "%");
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                model.Customer em = new model.Customer(rs.getInt("customerID"), rs.getString("userName"),
+                        rs.getString("password"), rs.getString("image"), rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("phone"), rs.getString("email"));
+                lists.add(em);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return lists;
+    }
+
+    public boolean isUsernameAvailable(String username) {
+        String sql = "SELECT COUNT(*) AS count FROM Customer WHERE userName = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count") == 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking username availability: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean isUsernameAvailable2(String username, int id) {
+        String sql = "SELECT COUNT(*) AS count FROM Customer WHERE userName = ? AND customerID != ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setInt(2, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count") == 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking username availability: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean isAdminAvailable(String username) {
+        String sql = "SELECT COUNT(*) AS count FROM Administrator WHERE userName = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count") == 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking username availability: " + e.getMessage());
+        }
+        return false;
+    }
+
+    // Helper method to check if email is available
+    public boolean isEmailAvailable(String email) {
+        String sql = "SELECT COUNT(*) AS count FROM Customer WHERE email = ? ";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count") == 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking email availability: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean isEmailAvailable2(String email, int id) {
+        String sql = "SELECT COUNT(*) AS count FROM Customer WHERE email = ? AND customerID != ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.setInt(2, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count") == 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking email availability: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean isEmailAdmin(String email) {
+        String sql = "SELECT COUNT(*) AS count FROM Administrator WHERE email = ? ";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count") == 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking email availability: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public void updatePassword2(int id, String newPassword) {
+        String sql = "UPDATE [Customer] SET password = ? WHERE customerID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, newPassword);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void main(String[] args) {
+        CustomerDao customerDao = new CustomerDao();
+
+        // Define an email and new password to test with
+        String testEmail = "haquocminhduc@gmail.com";
+        String newPassword = "newPassword123";
+
+        // Call the getgmailupdate function to update the password for the test email
+        customerDao.getgmailupdate(newPassword, testEmail);
+
+        // Call the getListCheckGmail function with the test email to verify the update
+        ArrayList<Customer> customers = customerDao.getListCheckGmail(testEmail);
+
+        // Print out the results
+        if (customers.isEmpty()) {
+            System.out.println("No customers found with the email: " + testEmail);
+        } else {
+            System.out.println("Customers found with the email: " + testEmail);
+            for (Customer customer : customers) {
+                System.out.println("Customer ID: " + customer.getCustomerID());
+                System.out.println("Username: " + customer.getUserName());
+                System.out.println("First Name: " + customer.getFirstName());
+                System.out.println("Last Name: " + customer.getLastName());
+                System.out.println("Phone: " + customer.getPhone());
+                System.out.println("Email: " + customer.getEmail());
+                // Print out the password to verify the update
+                System.out.println("Password: " + customer.getPassword());
+                System.out.println("---------------------------");
+            }
+        }
+    }
 
 }

@@ -30,137 +30,6 @@
 
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
-    </head>
-
-    <body>
-        <%@include file="component/topbar.jsp" %>
-        <%@include file="component/navbar.jsp" %>
-
-
-        <!-- Breadcrumb Start -->
-        <div class="container-fluid">
-            <div class="row px-xl-5">
-                <div class="col-12">
-                    <nav class="breadcrumb bg-light mb-30">
-                        <a class="breadcrumb-item text-dark" href="home">Home</a>
-                        <a class="breadcrumb-item text-dark" href="shop">Shop</a>
-                        <a class="breadcrumb-item text-dark" href="mypurchase">My purchase</a>
-                        <span class="breadcrumb-item active">Order Tracking</span>
-                    </nav>
-                </div>
-            </div>
-        </div>
-        <!-- Breadcrumb End -->
-
-
-        <div class="container-fluid navigation">
-            <div class="row shop-tracking-status">
-                <div class="col-md-12">
-                    <div class="well">
-                        <h4>Order Tracking</h4>
-
-
-                        <div style="  display: inline-block;
-                             vertical-align: top;
-                             width: 20%; /* Độ rộng của container */
-                             margin: 20px; /* Khoảng cách giữa các container */">
-                            <ul class="list-group">
-                                <h5> Address</h5>
-                                <h6> <i class='bx bx-user'></i>  ${purchase_detail.getName1()}</h6>
-                                <p> <i class='bx bx-phone' ></i>  ${purchase_detail.getPhoneorder()}</p>
-                                <p><i class='bx bx-map' ></i>  ${purchase_detail.getAddress()}</p>
-                            </ul>
-                        </div>
-
-                        <div style="  display: inline-block;
-                             vertical-align: top;
-                             width: 60%; /* Độ rộng của container */
-                             margin: 20px; /* Khoảng cách giữa các container */">
-                            <ul class="list-group">
-                                <c:forEach items="${requestScope.ordertracking}" var="a">
-                                    <li class="list-group-item">
-                                        <span class="prefix">
-                                            ${a.date}
-                                        </span>
-                                        <span>:</span>
-                                        <span class="label label-success">
-                                            <c:if test="${a.status == 0}">
-                                                Waiting for progressing
-                                            </c:if>
-                                            <c:if test="${a.status == 1}">
-                                                Confirmed and packed
-                                            </c:if>
-                                            <c:if test="${a.status == 2}">
-                                                Being transported
-                                            </c:if>
-                                            <c:if test="${a.status == 3}">
-                                                Delivered
-                                            </c:if>
-                                            <c:if test="${a.status == 4}">
-                                                Order has been cancel
-                                            </c:if>
-                                        </span>
-                                    </li>
-                                </c:forEach>
-                            </ul>
-                        </div>
-
-
-                        <div class="order-status">
-
-                            <div class="order-status-timeline">
-                                <!-- class names: c0 c1 c2 c3 and c4 -->
-                                <c:forEach  items="${requestScope.purchase}" var="c">
-                                    <c:if test="${c.status == 0}">
-                                        <div class="order-status-timeline-completion c0"></div>   
-                                    </c:if>
-                                    <c:if test="${c.status == 1}">
-                                        <div class="order-status-timeline-completion c1"></div>   
-                                    </c:if>
-                                    <c:if test="${c.status == 2}">
-                                        <div class="order-status-timeline-completion c2"></div>   
-                                    </c:if>
-                                    <c:if test="${c.status == 3}">
-                                        <div class="order-status-timeline-completion c4"></div>   
-                                    </c:if>
-
-
-
-                                </c:forEach>
-
-                            </div>
-
-                            <div class="image-order-status image-order-status-new active img-circle">
-                                <span class="status">Accepted</span>
-                                <div class="icon"></div>
-                            </div>
-                            <div class="image-order-status image-order-status-active active img-circle">
-                                <span class="status">In progress</span>
-                                <div class="icon"></div>
-                            </div>
-                            <div class="image-order-status image-order-status-intransit active img-circle">
-                                <span class="status">Shipped</span>
-                                <div class="icon"></div>
-                            </div>
-                            <div class="image-order-status image-order-status-delivered active img-circle">
-                                <span class="status">Delivered</span>
-                                <div class="icon"></div>
-                            </div>
-                            <div class="image-order-status image-order-status-completed active img-circle">
-                                <span class="status">Completed</span>
-                                <div class="icon"></div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!--            <div class="container-fluid">
-                         
-                        </div>-->
-        </div>
-
         <style>
             #special-link {
                 border-bottom: 2px solid red;
@@ -193,57 +62,117 @@
             .navigation .row .col-2.text-center a.nav-link:hover {
                 color: #ff4500;
             }
+            .cancel-link {
+                display: inline-block;
+                padding: 6px 12px;
+                color: #BDCDD6;
+                text-decoration: none;
+                background-color: transparent;
+                border: 1px solid #BDCDD6;
+                border-radius: 4px;
+                transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+            }
 
+            .cancel-link:hover {
+                background-color: #BDCDD6;
+                color: white;
+                border-color: #BDCDD6;
+            }
+
+            .cancel-link:focus {
+                outline: none;
+            }
+
+            .cancel-link:active {
+                background-color: #9FB3C8;
+                border-color: #9FB3C8;
+                color: white;
+            }
+            
         </style>
+    </head>
 
+    <body>
+        <%@include file="component/topbar.jsp" %>
+        <%@include file="component/navbar.jsp" %>
 
-        <!-- Cart Start -->
+        <!-- Breadcrumb Start -->
         <div class="container-fluid">
-            <div class="row px-xl-5 ">
+            <div class="row px-xl-5">
                 <div class="col-12">
-                    <h4 class="thead-dark">Your order</h4>
-                    <table class="table table-light table-borderless table-hover text-center mb-0">
-                        <tbody class="align-middle">
-                            <c:set var="totalAmount" value="0.0" />
+                    <nav class="breadcrumb bg-light mb-30">
+                        <a class="breadcrumb-item text-dark" href="home">Home</a>
+                        <a class="breadcrumb-item text-dark" href="shop">Shop</a>
+                        <a class="breadcrumb-item text-dark" href="mypurchase">My purchase</a>
+                        <span class="breadcrumb-item active">Order Tracking</span>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- Breadcrumb End -->
 
-                            <c:forEach var="k" items="${odDAO.getOrderDetailByID(orderid)}">
-                                <tr>
-                                    <td class="align-middle"><img style="width: 80px" class="img-fluid" src="images/Product/${pDAO.getProductByID(k.getProduct_id()).getImage()}" alt="Image"></td> 
-                                    <td class="align-middle">${pDAO.getProductByID(k.getProduct_id()).getName()}</td>
-                                    <td class="align-middle">x ${k.getQuantity()}</td>
-                                    <td class="align-middle">${(pDAO.getProductByID(k.getProduct_id()).getPrice())}$</td> 
-                                </tr>
-                                <c:set var="totalAmount" value="${totalAmount + (pDAO.getProductByID(k.getProduct_id()).getPrice() * k.getQuantity())}" />
+        <div class="container-fluid navigation">
+            <div class="row shop-tracking-status">
+                <div class="col-md-12">
+                    <div class="well">
+                        <h4 style="font-size: 25px;">Order Tracking</h4>
 
-                            </c:forEach>
-                        </tbody>
-                    </table>
-                    <div >
-                        <table class="table table-bordered custom-table ">
-                            <thead>
+                        <div style="display: inline-block; vertical-align: top; width: 20%; margin: 20px;">
+                            <ul class="list-group">
+                                <h5 style="font-size: 25px;"> Address</h5>
+                                <h6 class="mt-1 mb-2" style="color: grey; font-size: 25px;"><i class='bx bx-user'></i> ${sessionScope.account.getUserName()}</h6>
+                                <p class="mb-1 mt-1" style="color: grey; font-size: 25px;"><i class='bx bx-phone'></i> ${sessionScope.account.getPhone()}</p>
+                                <p class="mt-1" style="color: grey; font-size: 25px;"><i class='bx bx-user'></i> ${sessionScope.account.getAddress()}</p>
+                            </ul>
+                        </div>
+                        <c:if test="${ordao.status != 4}">
+                            <div class="order-status">
+                                <div class="order-status-timeline">
+                                    <!--class names: c0 c1 c2 c3 and c4--> 
 
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="align-right" colspan="100">Merchandise Subtotal</td>
-                                    <td class="small-text align-right" colspan="1">${totalAmount}$</td>
-                                </tr>
-                                <tr>
-                                    <td class="align-right" colspan="100">Shipping Fee</td>
-                                    <td class="small-text align-right" colspan="1">10$</td>
-                                </tr>
-                                <tr>
-                                    <td class="align-right" colspan="100">Shopee Voucher Applied</td>
-                                    <c:set var="voucherAmount" value="${Double.parseDouble(purchase_detail.getVoucherCode())}" />
-                                    <c:set var="subtotal" value="${Double.parseDouble(totalAmount)}" />
 
-                                    <td class="small-text align-right" colspan="1">- ${purchase_detail.getVoucherCode()} $</td></tr>
-                                <tr>
-                                    <td  class="align-right" colspan="100">Order Total</td>
-                                    <td style="color: red ; font-size: 25px" class="small-text align-right" colspan="1">${purchase_detail.getTotalPrice()} $</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    <c:if test="${ordao.status == 0}">
+                                        <div class="order-status-timeline-completion c0"></div>   
+                                    </c:if>
+                                    <c:if test="${ordao.status == 1}">
+                                        <div class="order-status-timeline-completion c1"></div>   
+                                    </c:if>
+                                    <c:if test="${ordao.status == 2}">
+                                        <div class="order-status-timeline-completion c2"></div>   
+                                    </c:if>
+                                    <c:if test="${ordao.status == 3}">
+                                        <div class="order-status-timeline-completion c4"></div>   
+                                    </c:if>
+
+                                </div>
+
+                                <div class="image-order-status image-order-status-new active img-circle">
+                                    <span class="status">Accepted</span>
+                                    <div class="icon"></div>
+                                </div>
+                                <div class="image-order-status image-order-status-active active img-circle">
+                                    <span class="status">Packed</span>
+                                    <div class="icon"></div>
+                                </div>
+                                <div class="image-order-status image-order-status-intransit active img-circle">
+                                    <span class="status">Shipped</span>
+                                    <div class="icon"></div>
+                                </div>
+                                <div class="image-order-status image-order-status-delivered active img-circle">
+                                    <span class="status">Delivered</span>
+                                    <div class="icon"></div>
+                                </div>
+                                <div class="image-order-status image-order-status-completed active img-circle">
+                                    <span class="status">Completed</span>
+                                    <div class="icon"></div>
+                                </div>
+
+                            </div>
+                            <span>
+                                <a href="#" onclick="cancelOrder(${ordao.orderID})" class="cancel-link">Cancel</a>
+                            </span>
+                        </c:if>
+
                     </div>
 
 
@@ -251,15 +180,65 @@
             </div>
         </div>
 
+        <!-- Cart Start -->
+        <div class="container-fluid">
+            <div class="row px-xl-5">
+                <div class="col-12">
+                    <h4 class="thead-dark">Your <c:if test="${ordao.status == 4}"> Previous </c:if>order</h4>
+                        <table class="table table-light table-borderless table-hover text-center mb-0">
+                            <tbody class="align-middle">
+                            <c:set var="totalAmount" value="0.0" />
+                            <c:forEach var="k" items="${odDAO}">
+                                <tr>
+                                    <td class="align-middle">
+                                        <img style="width: 80px" class="img-fluid" src="${pDAO.getProductByID(k.productID).getImage()}" alt="Image"></td>
 
+                                    <td class="align-middle">${pDAO.getProductByID(k.productID).name}</td>
+                                    <td class="align-middle">x ${k.getQuantity()}</td>
+                                    <td class="align-middle">${pDAO.getProductByID(k.productID).unitPrice}₫</td> 
+                                </tr>
+                                <c:set var="totalAmount" value="${totalAmount + (pDAO.getProductByID(k.productID).unitPrice * k.quantity)}" />
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                    <div>
+                        <table class="table table-bordered custom-table">
+                            <tbody>
+                                <tr>
+                                    <td class="align-right" colspan="100"> Total Order Amount </td>
+                                    <td class="small-text align-right" colspan="1">${totalAmount}₫</td>
+                                </tr>
+                                <tr>
+                                    <td class="align-right" colspan="100">Shipping Fee</td>
+                                    <td class="small-text align-right" colspan="1">100.000₫</td>
+                                </tr>
+                                <tr>
+                                    <td class="align-right" colspan="100">Shopee Voucher Applied</td>
+                                    <td class="small-text align-right" colspan="1">
+                                        0 ₫
 
+                                </tr>
+                                <tr>
+                                    <td class="align-right" colspan="100">Order Total</td>
+                                    <td style="color: red; font-size: 25px" class="small-text align-right" colspan="1">${ordao.totalMoney} $</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Cart End -->
+
         <%@include file="component/footer.jsp" %>
+
         <!-- Back to Top -->
         <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
-
         <!-- JavaScript Libraries -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <script src="lib/easing/easing.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
         <script src="lib/easing/easing.min.js"></script>
@@ -435,6 +414,14 @@
             }
 
         </style>
+        <script>
+                                function cancelOrder(orderId) {
+                                    var option = confirm('Are you sure to cancel this order?');
+                                    if (option === true) {
+                                        window.location.href = 'changestatus1?pid=' + orderId + '&sstatus=4';
+                                    }
+                                }
+        </script>
     </body>
 
 </html>

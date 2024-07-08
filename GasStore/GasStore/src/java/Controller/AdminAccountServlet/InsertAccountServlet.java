@@ -8,6 +8,7 @@ package Controller.AdminAccountServlet;
 import static Controller.MaHoa.toSHA1;
 import DTO.AdminDTO;
 import dal.CustomerDao;
+import dal.RoleDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,14 +16,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.Customer;
+import java.util.List;
+import DTO.Customer;
+import model.Role;
 
 /**
  *
  * @author vip2021
  */
 public class InsertAccountServlet extends HttpServlet {
-     
+   
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -78,35 +81,45 @@ public class InsertAccountServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+@Override
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        CustomerDao cus = new CustomerDao();
-//        String s = request.getParameter("search");
-        String uid = request.getParameter("account_id");
-        String name = request.getParameter("username");
-        String pass = request.getParameter("password");
-        String first = request.getParameter("first_name");
-        String last = request.getParameter("last_name");
-        String mail = request.getParameter("email");
-        String phone = request.getParameter("phone_number");
-//        String uimage = request.getParameter("uimg");
-        
-        if (uid != null && !uid.isEmpty()) {
-            Customer newCustomer = new Customer(uid != null && !uid.isEmpty() ? Integer.parseInt(uid) : 0, name,
-                pass, first, last, phone, mail);
-            cus.updateUser(newCustomer);
-            response.sendRedirect("ManageUser");
-            return;
-        } else {
-            Customer newCustomer = new Customer(uid != null && !uid.isEmpty() ? Integer.parseInt(uid) : 0, name,
-                toSHA1(pass), first, last, phone, mail);
-            cus.insertCustomer(newCustomer);
-            response.sendRedirect("ManageUser");
-            return;
-        }
-//        response.sendRedirect("ManageUser");
+    CustomerDao cus = new CustomerDao();
+    String uid = request.getParameter("account_id");
+    String name = request.getParameter("username");
+    String pass = request.getParameter("password");
+    String first = request.getParameter("first_name");
+    String last = request.getParameter("last_name");
+    String mail = request.getParameter("email");
+    String phone = request.getParameter("phone_number");
+
+    // Check if username or email is available
+    boolean isUsernameAvailable = cus.isUsernameAvailable(name);
+    boolean isEmailAvailable = cus.isEmailAvailable(mail);
+
+    if (!isUsernameAvailable) {
+        request.setAttribute("error", "Username is already taken");
+        request.getRequestDispatcher("ManageUser").forward(request, response);
+        return;
     }
+
+    if (!isEmailAvailable) {
+        request.setAttribute("error", "Email is already registered");
+        request.getRequestDispatcher("ManageUser").forward(request, response);
+        return;
+    }
+
+    if (uid != null && !uid.isEmpty()) {
+        Customer newCustomer = new Customer(Integer.parseInt(uid), name, pass, first, last, phone, mail);
+        cus.updateUser(newCustomer);
+        response.sendRedirect("ManageUser");
+    } else {
+        Customer newCustomer = new Customer(0, name, toSHA1(pass), first, last, phone, mail);
+        cus.insertCustomer(newCustomer);
+        response.sendRedirect("ManageUser");
+    }
+}
+
 
     /** 
      * Returns a short description of the servlet.
@@ -116,4 +129,5 @@ public class InsertAccountServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }

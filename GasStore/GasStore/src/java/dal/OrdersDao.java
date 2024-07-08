@@ -44,11 +44,13 @@ public class OrdersDao extends DBContext{
         }
         return list;
     }
+     
+    
      public List<Orders> getAllByID(int id) {
 
         list = new ArrayList<>();
         try {
-            String strSelect = "Select * from  [Order] where customerID = ?";
+            String strSelect = "Select * from  [Order] where customerID = ? order by orderDate DESC";
             stm = connection.prepareStatement(strSelect);
             stm.setInt(1, id);
             rs = stm.executeQuery();
@@ -64,6 +66,50 @@ public class OrdersDao extends DBContext{
             System.out.println(e);
         }
         return list;
+    }
+     public List<Orders> getAllByID(int id, int status) {
+
+        list = new ArrayList<>();
+        try {
+            String strSelect = "Select * from  [Order] where customerID = ? and status = ?";
+            stm = connection.prepareStatement(strSelect);
+            stm.setInt(1, id);
+            stm.setInt(2, status);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+
+                Orders em = new Orders(rs.getInt("orderID"),rs.getInt("customerID"),rs.getInt("trackingNumber"),
+                rs.getInt("totalMoney"),rs.getDate("orderDate"),rs.getDate("shippedDate"),
+                        rs.getDate("requiredDate"),rs.getString("shipAddress"),rs.getInt("status"),
+                        rs.getInt("process"),rs.getString("payment"),rs.getString("notes"));
+                list.add(em);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+      public Orders getByID(int id) {
+
+        list = new ArrayList<>();
+        try {
+            String strSelect = "Select * from  [Order] where orderID = ?";
+            stm = connection.prepareStatement(strSelect);
+            stm.setInt(1, id);
+            
+            rs = stm.executeQuery();
+            while (rs.next()) {
+
+                Orders em = new Orders(rs.getInt("orderID"),rs.getInt("customerID"),rs.getInt("trackingNumber"),
+                rs.getInt("totalMoney"),rs.getDate("orderDate"),rs.getDate("shippedDate"),
+                        rs.getDate("requiredDate"),rs.getString("shipAddress"),rs.getInt("status"),
+                        rs.getInt("process"),rs.getString("payment"),rs.getString("notes"));
+                return em;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
     }
      public static void main(String[] args) {
         OrdersDao o = new OrdersDao();

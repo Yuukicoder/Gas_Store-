@@ -138,7 +138,7 @@
             <form action="UserProfile" method="post" id="formUpdate" onsubmit="return ValidateProfileForm()" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-3 col-lg-4 col-6 col-sm-12 border-right">
-                        <input type="text" name="aimg" value="${sessionScope.account.getImage()}" hidden>
+                        <input type="text" name="aimg" value="${acc.getImage()}" hidden>
 
                         <div class="d-flex flex-column align-items-center text-center p-3 py-5 position-relative">
                             <img id="profileImage" class="mt-5 rounded-circle" width="50%;" src="${sessionScope.account.getImage()}">
@@ -146,7 +146,7 @@
                             <div id="imageOverlay" class="image-overlay">
                                 <span class="edit-icon">&#9998;</span> <!-- Unicode for a pen icon -->
                             </div>
-                            <input type="file" name="pimg" id="imageUpload" class="d-none" >
+                            <input type="file" name="pimg" id="imageUpload" class="d-none" accept="image/*" >
                            
                                     <span class="font-weight-bold">${sessionScope.account.getUserName()}</span>
                             <span class="text-black-50">${sessionScope.account.getFullName()}</span>
@@ -155,8 +155,10 @@
                             <div class="p-3 center">
 
 
-                                <button class="border px-3 p-1 add-experience" onclick="openPasswordModal()" type="button">
+                                <button class="border px-3 p-1 add-experience"  type="button">
+                                    <a href="change-pass">
                                     <i class="fa fa-edit"></i>&nbsp;Change Password
+                                    </a>
                                 </button>
                             </div>
                             <br>
@@ -169,7 +171,9 @@
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h4 class="text-right">Profile Settings</h4>
                             </div>
-
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                            <p class="text-right text-danger">${requestScope.err}</p>
+                            </div>
                             <div class="row mt-3">
                                 <div class="col-md-12">
                                     <label class="labels">User Name</label>
@@ -193,7 +197,7 @@
                                 </div>
                             </div>
                             <div class="mt-5 text-center">
-                                <button class="btn btn-primary profile-button" type="submit" onclick="confirmSave()" name="update" value="profile">Save Profile</button>
+                                <button class="btn btn-primary profile-button" type="submit"  name="update" value="profile">Save Profile</button>
                             </div>
                         </div>
                     </div>
@@ -210,7 +214,7 @@
                         <h4 class="text-right">Change Password</h4>
                     </div>
 
-                    <form action="UserProfile?aid=${account.getCustomerID()}" method="post" id="formUpdate" onsubmit="return savePassword();">
+                    <form action="UserProfile" method="post" id="formUpdate" onsubmit="return savePassword();">
                         <div class="row mt-3">
                             <div class="col-md-12">
                                 <label class="labels">Enter old password</label>
@@ -247,7 +251,7 @@
         <%@include file="component/footer.jsp" %>
 
         <script>
-            var passAcc = '<%= request.getAttribute("passAcc") %>';
+            var passAcc = '<%= request.getAttribute("pass") %>';
         </script>
 
         <script>
@@ -274,7 +278,7 @@
                 var oldpass = document.getElementsByName('oldpass')[0].value;
                 var reEnteredPassword = document.getElementsByName('repass')[0].value;
                 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
-                if (oldpass === passAcc) {
+                if (toSHA1(oldpass) === passAcc) {
                     if (passwordRegex.test(newPassword)) {
                         if (newPassword === reEnteredPassword) {
                             var result = confirm("Are you sure you want to update password?");
@@ -368,28 +372,42 @@
 
         </script>
         <script>
-            document.getElementById('profileImage').addEventListener('click', function () {
-                this.classList.toggle('blur');
-                document.getElementById('imageOverlay').style.display = 'flex';
-            });
+    document.getElementById('profileImage').addEventListener('click', function () {
+        this.classList.toggle('blur');
+        document.getElementById('imageOverlay').style.display = 'flex';
+    });
 
-            document.getElementById('imageOverlay').addEventListener('click', function () {
-                document.getElementById('imageUpload').click();
-            });
+    document.getElementById('imageOverlay').addEventListener('click', function () {
+        document.getElementById('imageUpload').click();
+    });
 
-            document.getElementById('imageUpload').addEventListener('change', function (event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        document.getElementById('profileImage').src = e.target.result;
-                        document.getElementById('profileImage').classList.remove('blur');
-                        document.getElementById('imageOverlay').style.display = 'none';
-                    }
-                    reader.readAsDataURL(file);
-                }
-            });
-        </script>
+    document.getElementById('imageUpload').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            // Check file type
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Please select a valid image file (JPEG, PNG, GIF)');
+                return;
+            }
+            
+            // Check file size (5MB limit)
+            const maxSize = 5 * 1024 * 1024;
+            if (file.size > maxSize) {
+                alert('File size exceeds 5MB limit');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('profileImage').src = e.target.result;
+                document.getElementById('profileImage').classList.remove('blur');
+                document.getElementById('imageOverlay').style.display = 'none';
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
 
     </body>
 </html>

@@ -1,7 +1,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+            <%@ page pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
         <meta charset="utf-8">
         <title>DarkPan - Bootstrap 5 Admin Template</title>
@@ -15,11 +16,12 @@
         <!-- Google Web Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet"> 
 
         <!-- Icon Font Stylesheet -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
         <!-- Libraries Stylesheet -->
         <link href="admin/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
@@ -40,58 +42,17 @@
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>
-            <!-- Sidebar Start -->
-            <%@include file="component/SideBarAdmin.jsp" %>
-            <!-- Sidebar End -->
+            <!-- Spinner End -->
+
+
+           <%@include file="component/SideBarAdmin.jsp" %>
 
             <!-- Content Start -->
             <div class="content">
-                <!-- Navbar Start -->
                 <%@include file="component/navbarAdmin.jsp" %>
-                <!-- Navbar End -->
-                <div class="container-fluid pt-4 px-4 insert-div">
-                    <div class="bg-secondary text-center rounded p-4">
-                        <c:if test="${empty detail.supplierId}">
-                            <h2 class="font-weight-bold mb-4">Insert New Supplier Account</h2>
-                        </c:if>
-                        <c:if test="${not empty detail.supplierId}">
-                            <h2 class="font-weight-bold mb-4">View Supplier Account</h2>
-                        </c:if>
-                        <form action="insert-supplier" method="post">
-                            <input type="hidden" value="${detail.supplierId}" name="account_id">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="username" name="username" value="${detail.companyName}" placeholder="Company Name" readonly>
-                                        <label for="username">Company Name</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="email" name="email" value="${detail.email}" placeholder="Email" readonly>
-                                        <label for="password">Email</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="phone" name="phone" value="${detail.phone}" placeholder="Phone" readonly>
-                                        <label for="first_name">Phone</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="last_name" name="HomePage" value="${detail.homePage}" placeholder="HomePage" readonly>
-                                        <label for="last_name">Home Page</label>
-                                    </div>
-                                </div>
-                                
-                                
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="container-fluid pt-4 px-4">
-                    
+                <!-- Blank Start -->
+             <div class="container-fluid pt-4 px-4">
+                    <div class="container-fluid pt-4 px-4">
                         <div class="row g-4">
                             <div class="col-sm-12 col-xl-6
                                  ">
@@ -103,7 +64,7 @@
 
                                     <div class="bg-secondary rounded h-100 p-4">
 
-                                        <h5 ><a href="productManage">All Product </a></h5>
+                                        <h5 ><a href="supplier-product?action=show">All Product </a></h5>
                                     </div>
                                     <form action="supplier-product?action=show" method="post">
                                         <div class="input-group">
@@ -174,51 +135,104 @@
                                             border-radius: 5px; margin-top: 25px"><a href="productManage?action=hide" style="color: white"> Hide Product</a>
                                     </button>-->
 
-                                    
+                                    <nav style="float: right;margin-top: 25px; color: black" aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            <c:if test="${tag > 1}">
+                                                <li  class="page-item"><a style="color: black"  class="page-link" href="supplier-product?indexPage=${tag-1}&amp;action=show"">Previous</a></li>
+                                                </c:if>
+                                                <c:forEach begin="1" end="${endPage}" var="i">
+                                                <li style="color: black"  class="page-item ${tag == i ?"active":"" || page1 == i ?"active":""  } "><a style="color: black"  class="page-link" href="supplier-product?indexPage=${i}&amp;action=show">${i}</a></li>
+                                                </c:forEach>
+                                                <c:if test="${tag<endPage}">
+                                                <li class="page-item"><a style="color: black"  class="page-link" href="supplier-product?indexPage=${tag+1}&amp;action=show">Next</a></li>
+                                                </c:if>
+                                        </ul>
+                                    </nav>
+
                                 </div>
 
                                 <div id="pagination"></div>
                             </div>
                         </div>
-                    
+                    </div>
                     <!-- Blank End -->
                     <!--Modal-->
                     <!-- Footer Start -->
 
                     <!-- Footer End -->
                 </div>
+                <!-- Content End -->
 
-                <!-- Footer Start -->
-                <div class="container-fluid pt-4 px-4">
-                    <div class="bg-secondary text-center rounded p-4">
-                        <div class="text-center">
-                            &copy; <a href="#">GasStore</a>, All Right Reserved.
-                            <!-- Designed By <a href="https://htmlcodex.com">HTML Codex</a> -->
-                        </div>
-                    </div>
-                </div>
-                <!-- Footer End -->
-                <div class="m-4 mt-4">
-                    <a href="ManageSupplier" class="btn btn-primary">Back</a>
-                </div>
+
+                <!-- Back to Top -->
+                <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
             </div>
-            <!-- Content End -->
-            <!-- Back to Top -->
-            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-        </div>
 
-        <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="admin/lib/chart/chart.min.js"></script>
-        <script src="admin/lib/easing/easing.min.js"></script>
-        <script src="admin/lib/waypoints/waypoints.min.js"></script>
-        <script src="admin/lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="admin/lib/tempusdominus/js/moment.min.js"></script>
-        <script src="admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
-        <script src="admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+            <!-- JavaScript Libraries -->
+            <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="admin/lib/chart/chart.min.js"></script>
+            <script src="admin/lib/easing/easing.min.js"></script>
+            <script src="admin/lib/waypoints/waypoints.min.js"></script>
+            <script src="admin/lib/owlcarousel/owl.carousel.min.js"></script>
+            <script src="admin/lib/tempusdominus/js/moment.min.js"></script>
+            <script src="admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
+            <script src="admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-        <!-- Template Javascript -->
-        <script src="admin/js/main.js"></script>
+            <!-- Template Javascript -->
+            <script src="admin/js/main.js"></script>
+            <script>
+                                                            function changeColor(element) {
+                                                                var paginationLinks = document.querySelectorAll(".pagination a");
+                                                                for (var i = 0; i < paginationLinks.length; i++) {
+                                                                    paginationLinks[i].classList.remove("active");
+                                                                }
+                                                                element.classList.add("active");
+                                                            }
+            </script>
+            <script>
+                function showMess(id) {
+                    var option = confirm('Are you sure to hide?');
+                    if (option === true) {
+                        window.location.href = 'productDeactive?action=hide&id=' + id;
+                    }
+                }
+
+                function submitForm(indexPage) {
+                    document.getElementById("indexPage").value = indexPage;
+                    document.getElementById("paginationForm").submit();
+                }
+            </script>
+
+
+            <style>
+                #productTable {
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+
+                #productTable td, #productTable th {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                }
+
+                #productTable tr:nth-child(even){
+                    background-color: #f2f2f2;
+                }
+
+                #productTable tr:hover {
+                    background-color: #ddd;
+                }
+
+                #productTable th {
+                    padding-top: 12px;
+                    padding-bottom: 12px;
+                    text-align: left;
+                    background-color: #22A699;
+                    color: white;
+                }
+            </style>
+
     </body>
+
 </html>

@@ -512,6 +512,73 @@ public class ProductDAO extends DBcontext {
         return 0;
     }
 
+    public LinkedHashMap<Product, String> pagingProduct2(String action, int index, int numPage, int id) {
+        LinkedHashMap<Product, String> productCMap = new LinkedHashMap<>();
+        String sql = "";
+        if (action.equals("hide")) {
+            // Assuming isActive 'false' means hide
+            sql = "SELECT c.name, p.productID FROM Product p JOIN Category c ON p.categoryID = c.categoryID "
+                    + "WHERE p.isActive = 0 and p.supplierId = ?  ORDER BY p.productID DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        } else {
+            // Assuming isActive 'true' means show
+            sql = "SELECT c.name, p.productID FROM Product p JOIN Category c ON p.categoryID = c.categoryID "
+                    + "WHERE p.isActive = 1 and p.supplierId = ?  ORDER BY p.productID DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        }
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            st.setInt(2, (index - 1) * numPage);
+            st.setInt(3, numPage == Integer.MAX_VALUE ? Integer.MAX_VALUE : numPage); // Fetch all if numPage is Integer.MAX_VALUE
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                int productId = rs.getInt("productID");
+                String categoryName = rs.getString("name");
+
+                // Fetch the full product details
+                Product product = getProductByID(productId); // Assuming this method fetches all product details
+                if (product != null) {
+                    productCMap.put(product, categoryName);
+                }
+            }
+            return productCMap;
+        } catch (SQLException e) {
+            System.out.println("SQL Exception: " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    public List<Product> getAllProductBySupplier(int id) {
+        String sql = "SELECT * FROM Product WHERE isActive = 1";
+        List<Product> lp = new ArrayList<>();
+        try {
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                Product product = new Product();
+                product.setProductID(rs.getInt("productID"));
+                product.setCode(rs.getString("code"));
+                product.setName(rs.getString("name"));
+                product.setKeywords(rs.getString("keywords"));
+                product.setShortDescription(rs.getString("shortDescription"));
+                product.setDescription(rs.getString("description"));
+                product.setCategoryID(rs.getInt("categoryID"));
+                product.setSupplierID(rs.getInt("supplierID"));
+                product.setIsActive(rs.getBoolean("isActive"));
+                product.setUnitPrice(rs.getFloat("unitPrice"));
+                product.setImage(rs.getString("image"));
+                product.setStockQuantity(rs.getInt("stockQuantity"));
+                product.setUnitOnOrders(rs.getInt("unitOnOrders"));
+                product.setCreatedDate(rs.getString("createdDate"));
+                product.setCreatedBy(rs.getInt("createdBy"));
+                lp.add(product);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();  // Consider logging the exception
+        }
+        return lp;
+    }
+
     public List<Product> getAllProductHide() {
         String sql = "SELECT * FROM Product where isActive = 0";
         List<Product> lp = new ArrayList<>();
@@ -592,7 +659,7 @@ public class ProductDAO extends DBcontext {
             sql += " AND UnitPrice <= " + priceRange;
         }
         //Filter theo ID - Vu anh
-        if(cateId != 0){
+        if (cateId != 0) {
             sql += "AND categoryID = " + cateId;
         }
 

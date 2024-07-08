@@ -118,7 +118,7 @@
                                         </div>
                                         <div class="col-lg-6 col-6 col-md-6 m-3 text-right">
 
-                                            <a href="insert-supplier" class="btn btn-primary">Add new Supplier </a>
+                                            <a href="add-supplier" class="btn btn-primary">Add new Supplier </a>
 
                                         </div>
                                     </div>
@@ -142,9 +142,9 @@
                                                     <td>${k.getSupplierId()}</td>
                                                     <td>${k.getCompanyName()}</td>
                                                     <td>${k.getEmail()}</td>
-                                                    <td>${k.getHomePage()}</td>
+                                                    <td><a href="${k.getHomePage()}">${k.getHomePage()}</a></td>
                                                     <td>
-                                                        <a href="insert-supplier?type=0&id=${k.getSupplierId()}" class="update-button">Update</a><br>
+                                                        <a href="insert-supplier?type=0&id=${k.getSupplierId()}" class="update-button">View</a><br>
                                                         <a href="ManageSupplier?type=1&id=${k.getSupplierId()}">Delete</a>
                                                     </td>
                                                 </tr>

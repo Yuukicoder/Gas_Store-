@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import model.Administrator;
 import model.Customer;
@@ -104,21 +105,41 @@ public class AdminManagerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         CustomerDao cus = new CustomerDao();
-        String s = request.getParameter("search");
-        if (!s.isEmpty()) {
-            List<Administrator> li = cus.getAllAdminByName(s);
-            request.setAttribute("adata", li);
-        } else {
-            int pageNum = request.getParameter("pageNum") != null ? Integer.parseInt(request.getParameter("pageNum")) : 1;
-            int size = 5;
-            int totalNumberAdmin = cus.getTotalAdmin();
-            int totalPage = (int) Math.ceil((double) totalNumberAdmin / size);
-            List<Administrator> li = cus.getPaginatedAdmin(pageNum, size);
-            request.setAttribute("adata", li);
-            request.setAttribute("pageNum", pageNum);
-            request.setAttribute("totalPage", totalPage);
+        int pageNum = 1;
+        int size = 5;
+
+        // Retrieve and parse page number from the request parameter
+        String pageNumStr = request.getParameter("pageNum");
+        if (pageNumStr != null && !pageNumStr.isEmpty()) {
+            try {
+                pageNum = Integer.parseInt(pageNumStr);
+            } catch (NumberFormatException e) {
+                // Log the exception and set pageNum to default value
+                System.out.println("Invalid pageNum format, defaulting to 1");
+            }
         }
 
+        int totalNumberAdmin = cus.getTotalAdmin();
+        int totalPage = (int) Math.ceil((double) totalNumberAdmin / size);
+
+        // Retrieve the search parameter
+        String s = request.getParameter("search");
+        List<Administrator> li = new ArrayList<>();
+
+        if (s != null && !s.isEmpty()) {
+            // Perform search with pagination if search parameter is not empty
+            li = cus.SearchPaginatedAdmin(pageNum, size, s);
+        } else {
+            // Retrieve paginated administrators without search filter
+            li = cus.getPaginatedAdmin(pageNum, size);
+        }
+
+        // Set attributes for the request
+        request.setAttribute("adata", li);
+        request.setAttribute("pageNum", pageNum);
+        request.setAttribute("totalPage", totalPage);
+
+        // Forward the request to TableAdmin.jsp
         request.getRequestDispatcher("TableAdmin.jsp").forward(request, response);
     }
 

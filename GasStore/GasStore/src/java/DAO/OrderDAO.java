@@ -584,11 +584,12 @@ public class OrderDAO extends DBcontext {
         return lo;
     }
 
-     public OrderDTO getPurchaseByID(String orderid_raw) {
-        String sql = "select AccountID,TotalPrice,OrderDate,Address,Status,VoucherCode,Phone,Name  from Orders where OrderID = ?";
+      public OrderDTO getPurchaseByID(String orderid_raw) {
+        String sql = "select AccountID,TotalPrice,OrderDate,Address,Status,VoucherCode,Phone,Name  from Orders "
+                + "where OrderID = ?";
         try {
             OrderDTO odto = new OrderDTO();
-            int orderid= Integer.parseInt(orderid_raw);
+            int orderid = Integer.parseInt(orderid_raw);
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, orderid);
             ResultSet rs = ps.executeQuery();
@@ -601,7 +602,7 @@ public class OrderDAO extends DBcontext {
                 odto.setPhoneorder(rs.getString("Phone"));
                 odto.setName1(rs.getString("Name"));
                 odto.setVoucherCode(rs.getDouble("VoucherCode"));
-            
+
             }
             return odto;
         } catch (SQLException e) {
