@@ -135,6 +135,8 @@ public Customer(String userName, String password, String email) {
         this.email = email;
     }
     
+   
+    
     
     public int getCustomerID() {
         return customerID;
@@ -203,6 +205,7 @@ public Customer(String userName, String password, String email) {
     public String getFirstName() {
         return firstName;
     }
+   
  public String getFullName() {
         return getFirstName() + " " + getLastName();
     }

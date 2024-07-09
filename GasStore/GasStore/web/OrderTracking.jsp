@@ -120,7 +120,7 @@
                         <div style="display: inline-block; vertical-align: top; width: 20%; margin: 20px;">
                             <ul class="list-group">
                                 <h5 style="font-size: 25px;"> Address</h5>
-                                <h6 class="mt-1 mb-2" style="color: grey; font-size: 25px;"><i class='bx bx-user'></i> ${sessionScope.account.getUserName()}</h6>
+                                <h6 class="mt-1 mb-2" style="color: grey; font-size: 25px;"><i class='bx bx-user'></i> ${sessionScope.account.getFullName()}</h6>
                                 <p class="mb-1 mt-1" style="color: grey; font-size: 25px;"><i class='bx bx-phone'></i> ${sessionScope.account.getPhone()}</p>
                                 <p class="mt-1" style="color: grey; font-size: 25px;"><i class='bx bx-user'></i> ${sessionScope.account.getAddress()}</p>
                             </ul>
@@ -195,9 +195,9 @@
 
                                     <td class="align-middle">${pDAO.getProductByID(k.productID).name}</td>
                                     <td class="align-middle">x ${k.getQuantity()}</td>
-                                    <td class="align-middle">${pDAO.getProductByID(k.productID).unitPrice}₫</td> 
+                                    <td class="align-middle">${pDAO.getProductByID(k.productID).getFormattedTotalMoney()}₫</td> 
                                 </tr>
-                                <c:set var="totalAmount" value="${totalAmount + (pDAO.getProductByID(k.productID).unitPrice * k.quantity)}" />
+                                <c:set var="totalAmount" value="${totalAmount + (pDAO.getProductByID(k.productID).getFormattedTotalMoney() * k.quantity)}" />
                             </c:forEach>
                         </tbody>
                     </table>
@@ -206,11 +206,11 @@
                             <tbody>
                                 <tr>
                                     <td class="align-right" colspan="100"> Total Order Amount </td>
-                                    <td class="small-text align-right" colspan="1">${totalAmount}₫</td>
+                                    <td class="small-text align-right" colspan="1">${ordao.getFormattedTotalMoney()} ₫</td>
                                 </tr>
                                 <tr>
                                     <td class="align-right" colspan="100">Shipping Fee</td>
-                                    <td class="small-text align-right" colspan="1">100.000₫</td>
+                                    <td class="small-text align-right" colspan="1">Free</td>
                                 </tr>
                                 <tr>
                                     <td class="align-right" colspan="100">Shopee Voucher Applied</td>
@@ -220,7 +220,7 @@
                                 </tr>
                                 <tr>
                                     <td class="align-right" colspan="100">Order Total</td>
-                                    <td style="color: red; font-size: 25px" class="small-text align-right" colspan="1">${ordao.totalMoney} $</td>
+                                    <td style="color: red; font-size: 25px" class="small-text align-right" colspan="1">${ordao.getFormattedTotalMoney()} ₫</td>
                                 </tr>
                             </tbody>
                         </table>

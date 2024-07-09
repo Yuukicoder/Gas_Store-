@@ -19,6 +19,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,12 +73,11 @@ public class MyPurschaseServlet extends HttpServlet {
         ProductDAO pDAO = new ProductDAO();
         OrdersDao ord = new OrdersDao();
         List<Orders> orderList;
-        if(status !=-1){
-        // Get the orders for the customer filtered by status
-         orderList = ord.getAllByID(cus.getCustomerID(), status);
-        }
-        else{
-             orderList = ord.getAllByID(cus.getCustomerID());
+        if (status != -1) {
+            // Get the orders for the customer filtered by status
+            orderList = ord.getAllByID(cus.getCustomerID(), status);
+        } else {
+            orderList = ord.getAllByID(cus.getCustomerID());
         }
         // Create a map to hold order details for each order
         Map<Integer, List<OrderDetail>> orderDetailsMap = new HashMap<>();
@@ -89,12 +90,22 @@ public class MyPurschaseServlet extends HttpServlet {
 
         // Set attributes for the request
         request.setAttribute("odDAO", odDAO);
+        request.setAttribute("order", orderList);
         request.setAttribute("pDAO", pDAO);
         request.setAttribute("purchase", orderList);
         request.setAttribute("orderDetailsMap", orderDetailsMap);
 
         // Forward to the JSP page
         request.getRequestDispatcher("MyPurchase.jsp").forward(request, response);
+    }
+
+    public String formatMoney(long money) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        symbols.setDecimalSeparator(',');
+
+        DecimalFormat formatter = new DecimalFormat("###,### VNĐ", symbols);
+        return formatter.format(money);
     }
 
     @Override

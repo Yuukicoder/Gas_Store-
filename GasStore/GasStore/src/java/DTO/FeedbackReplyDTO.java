@@ -14,14 +14,14 @@ public class FeedbackReplyDTO {
     private int id ;
     private String reply;
     private Date date;
-    private AccountDTO accountDTO;
+    private Customer accountDTO;
     private FeedbackDTO dTO;
 
     public FeedbackReplyDTO() {
     }
 
     
-    public FeedbackReplyDTO(int id, String reply, Date date, AccountDTO accountDTO, FeedbackDTO dTO) {
+    public FeedbackReplyDTO(int id, String reply, Date date, Customer accountDTO, FeedbackDTO dTO) {
         this.id = id;
         this.reply = reply;
         this.date = date;
@@ -53,11 +53,11 @@ public class FeedbackReplyDTO {
         this.date = date;
     }
 
-    public AccountDTO getAccountDTO() {
+    public Customer getAccountDTO() {
         return accountDTO;
     }
 
-    public void setAccountDTO(AccountDTO accountDTO) {
+    public void setAccountDTO(Customer accountDTO) {
         this.accountDTO = accountDTO;
     }
 

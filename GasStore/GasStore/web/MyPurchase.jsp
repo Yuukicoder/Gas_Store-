@@ -61,9 +61,37 @@
             .navigation .row .col-2.text-center a.nav-link:hover {
                 color: #ff4500;
             }
-            
+     
+
+.row.px-xl-5-col {
+    background-color: #ffffff; /* Màu nền cho từng order */
+    border: 1px solid #e0e0e0; /* Viền nhẹ */
+    padding: 20px;
+    margin-top: 20px;
+}
+
 
         </style>
+        <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Lấy tất cả các mục trong danh sách bộ lọc
+        var filterItems = document.querySelectorAll('.nav-pills .nav-item .nav-link');
+
+        // Đặt sự kiện click cho từng mục
+        filterItems.forEach(function(item) {
+            item.addEventListener('click', function() {
+                // Xóa lớp active từ tất cả các mục
+                filterItems.forEach(function(item) {
+                    item.classList.remove('active');
+                });
+
+                // Thêm lớp active cho mục được click
+                this.classList.add('active');
+            });
+        });
+    });
+</script>
+
 
     </head>
 
@@ -88,42 +116,67 @@
 
 
         <div class="container-fluid navigation">
-            <div class="row">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-4 text-center">
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Filter By Status
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="mypurchase?status=-1">All</a>
-                                    
-                                    <a class="dropdown-item" href="mypurchase?status=1">Confirmed and packed</a>
-                                    <a class="dropdown-item" href="mypurchase?status=2">Being transported</a>
-                                    <a class="dropdown-item" href="mypurchase?status=3">Delivered</a>
-                                    <a class="dropdown-item" href="mypurchase?status=4">Canceled</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-12">
+            
+                    <ul class="nav nav-pills justify-content-between">
+                        <li class="nav-item">
+                            <a class="nav-link" href="mypurchase?status=-1">All</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="mypurchase?status=1">Confirmed and packed</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="mypurchase?status=2">Being transported</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="mypurchase?status=3">Delivered</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="mypurchase?status=4">Canceled</a>
+                        </li>
+                    </ul>
+                
         </div>
+    </div>
+</div>
+
+<style>
+    .navigation {
+        background-color: #FFFFFF;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 20px;
+        width: 92%;
+        margin-bottom: 20px;
+    }
+
+    .nav-pills .nav-link {
+        color: #333;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .nav-pills .nav-link.active,
+    .nav-pills .nav-link:hover {
+        color: #ff4500;
+        background-color: transparent;
+    }
+</style>
+
 
 
 
 
 
         <!-- Cart Start -->
-        <div class="container-fluid">
+        <div class="container-fluid col-12 col-sm-12 col-lg-12 col-md-12" >
             <c:set var="tt" value="0"/>
             <c:forEach items="${purchase}" var="p">
                 <c:set var="tt" value="${tt+1}"/>
 
-                <div class="row px-xl-5 mt-3">
-                    <div class="col-12">
-                        <div class="thead-dark">
+                <div class="row px-xl-5  pt-2 mt-1" >
+                    <div class="col-12" style="border-style: ridge; background-color: white;">
+                        <div class="thead-dark" >
                             <span class="text-dark">${p.getOrderDate()}</span>
                             <br>
                             <c:if test="${p.status == 0}">
@@ -150,7 +203,7 @@
                                 <span></span>
                                 <span style="font-weight: bold;color: #7A9D54">Being transported</span>
                                 <span>|</span>
-                                <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getCustomerID()}" style="color: #BF9742">Order tracking</a></span>
+                                <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getCustomerID()}" style="color: #BF9742;">Order tracking</a></span>
 
                             </c:if>
                             <c:if test="${p.status == 3}">
@@ -177,7 +230,7 @@
                                     <th>Product Name</th>
                                     <th>Quantity</th>
                                     <th>Unit Price</th>
-                                    <th>Total Price</th>
+                                    <!--<th>Total Price</th>-->
                                 </tr>
                             </thead>
                             <tbody class="align-middle">
@@ -189,9 +242,8 @@
                                         <td class="align-middle"><img style="width: 80px" class="img-fluid" src="${pDAO.getProductByID(o.getProductID()).getImage()}" alt="Image"></td>
                                         <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getName()}</td>
                                         <td class="align-middle">${o.getQuantity()}</td>
-                                        
-                                        <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getUnitPrice()}₫</td>
-                                        <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getUnitPrice()* o.getQuantity() }₫</td>
+
+                                        <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getFormattedTotalMoney()}₫</td>
                                         <!-- Add other columns as needed -->
                                     </tr>
                                 </c:forEach>
@@ -199,19 +251,23 @@
 
                             </tbody>
                         </table>
-                                                <div class="right-side" style="margin-right: 5.5rem;
-                                                     margin-top: 1rem; text-align: right;">
-                                                    <span style="margin-right: 1rem">
-                                                        <button class="btn btn-link btn-detail" data-toggle="modal" data-target="#orderModal${tt}" style="background: black;
-                                                                border-radius: 10px;"> Feedback</button>
-                                                    </span>
-                                                        <span style="font-weight: bold">Total: $p.totalPrice</span>
-                                                </div>
+                                <hr>
+                        <div class="right-side m-2" style="margin-right: 5.5rem;
+                             margin-top: 1rem; text-align: right;margin-bottom: 10px;">
+                            <c:if test="${p.status == 3}">
+                                <span style="margin-right: 1rem">
+                                    <button class="btn btn-link btn-detail btn-warning text-dark" data-toggle="modal" data-target="#orderModal${tt}" 
+                                            border-radius: 10px;"> Feedback</button>
+                                </span>
+                            </c:if>
+                            <span style="font-weight: bold; color: red; ">Total: ${p.getFormattedTotalMoney()} VND</span>
+                        </div>
                     </div>
 
                 </div>
             </c:forEach>
         </div>
+
 
 
 
@@ -227,30 +283,35 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                                                <div class="modal-body">
-                                                    <table class="table table-light table-borderless table-hover text-center mb-0">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Product Name</th>
-                                                                <th>Quantity</th>
-                                                                <th>Price</th>
-                                                                <th>Action</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                        <%--<c:forEach var="k" items="$orderDetailsMap[p.orderID]}">--%>
-                            <tr>
-                                <td>$pDAO.getProductByID(k.productID).getName()}</td>
-                                <td>$k.quantity}</td>
-                                <td>$pDAO.getProductByID(k.productID).getPrice() * k.quantity}</td>
-                        <%--<c:if test="$p.status == 3 && fdao.checkFeedback(p.orderID, k.productID).isEmpty()}">--%>
-                            <td><a href="feedback?productid=$k.productID}&orderid=$p.orderID}">Feedback</a></td>
-                        <%--</c:if>--%>
-                    </tr>
-                        <%--</c:forEach>--%>
-                    </tbody>
-                </table>
-            </div>
+                        <div class="modal-body">
+                            <table class="table table-light table-borderless table-hover text-center mb-0">
+                                <thead>
+
+                                </thead>
+                                <tbody class="align-middle">
+                                    <c:set var="index" value="0"/>
+                                    <c:forEach var="o" items="${orderDetailsMap[p.orderID]}">
+                                        <c:set var="index" value="${index + 1}"/>
+                                        <tr>
+                                            <td>${index}</td>
+                                            <td class="align-middle"><img style="width: 80px" class="img-fluid" src="${pDAO.getProductByID(o.getProductID()).getImage()}" alt="Image"></td>
+                                            <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getName()}</td>
+                                            <td class="align-middle">${o.getQuantity()}</td>
+
+                                            <!--<td class="align-middle">${pDAO.getProductByID(o.getProductID()).getUnitPrice()}₫</td>-->
+                                            <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getUnitPrice()* o.getQuantity() }₫</td>
+                                            <!-- Add other columns as needed -->
+                                            <td><a href="feedback?productid=${o.getProductID()}&orderid=${p.orderID}">Feedback</a></td>
+                                        </tr>
+                                    </c:forEach>
+
+
+                                </tbody>
+                                </tbody>
+
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -275,18 +336,19 @@
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
         <script>
-        // Xử lý sự kiện khi nhấp vào nút "Detail"
-        var btnDetails = document.getElementsByClassName("btn-detail");
-        var modalBody = document.querySelector("#orderModal .modal-body");
+                                    // Xử lý sự kiện khi nhấp vào nút "Detail"
+                                    var btnDetails = document.getElementsByClassName("btn-detail");
+                                    var modalBody = document.querySelector("#orderModal .modal-body");
 
-        for (var i = 0; i < btnDetails.length; i++) {
-            btnDetails[i].addEventListener("click", function () {
-                // Lấy thông tin chi tiết đơn hàng
-                var orderDetail = /* Lấy thông tin chi tiết đơn hàng tương ứng với nút nhấp */;
-                        // Hiển thị thông tin chi tiết đơn hàng trong modal
-                        modalBody.innerHTML = orderDetail;
-            });
-        }
+                                    for (var i = 0; i < btnDetails.length; i++) {
+                                        btnDetails[i].addEventListener("click", function () {
+                                            // Lấy thông tin chi tiết đơn hàng
+                                            var orderDetail = /* Lấy thông tin chi tiết đơn hàng tương ứng với nút nhấp */;
+                                                    // Hiển thị thông tin chi tiết đơn hàng trong modal
+                                                    modalBody.innerHTML = orderDetail;
+                                        });
+                                    }
+                                    
         </script>
         <script>
             function showMess(id) {
@@ -297,13 +359,13 @@
             }
         </script>
         <script>
-    function cancelOrder(orderId) {
-        var option = confirm('Are you sure to cancel this order?');
-        if (option === true) {
-            window.location.href = 'changestatus1?pid=' + orderId + '&sstatus=4';
-        }
-    }
-</script>
+            function cancelOrder(orderId) {
+                var option = confirm('Are you sure to cancel this order?');
+                if (option === true) {
+                    window.location.href = 'changestatus1?pid=' + orderId + '&sstatus=4';
+                }
+            }
+        </script>
 
     </body>
 

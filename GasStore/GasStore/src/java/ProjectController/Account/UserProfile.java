@@ -96,6 +96,7 @@ public class UserProfile extends HttpServlet {
         if (!fileName.isEmpty() ) {
             String path = getServletContext().getRealPath("");
             p.write(path + File.separator + fileName);
+            request.setAttribute("errorrr", "Please select a valid image file (JPEG, PNG, GIF)");
         }
         try {
             if ("profile".equals(button)) {

@@ -19,19 +19,19 @@ public class FeedbackDTO {
     private int orderID;
     private String tilte;
     private String context;
-    private Date date;
+//    private Date date;
     private int start;
     private boolean status;
-    private AccountDTO accountDTO;
+    private Customer accountDTO;
     private FeedbackReplyDTO feedbackReplyDTO;
-    private ProductDTO productDTO;
+    private Product productDTO;
     private int count;
 
-    public ProductDTO getProductDTO() {
+    public Product getProductDTO() {
         return productDTO;
     }
 
-    public void setProductDTO(ProductDTO productDTO) {
+    public void setProductDTO(Product productDTO) {
         this.productDTO = productDTO;
     }
 
@@ -54,11 +54,11 @@ public class FeedbackDTO {
    
 
     
-    public AccountDTO getAccountDTO() {
+    public Customer getAccountDTO() {
         return accountDTO;
     }
 
-    public void setAccountDTO(AccountDTO accountDTO) {
+    public void setAccountDTO(Customer accountDTO) {
         this.accountDTO = accountDTO;
     }
 
@@ -110,13 +110,13 @@ public class FeedbackDTO {
         this.context = context;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
+//    public Date getDate() {
+//        return date;
+//    }
+//
+//    public void setDate(Date date) {
+//        this.date = date;
+//    }
 
     public int getStart() {
         return start;
@@ -128,7 +128,7 @@ public class FeedbackDTO {
 
     @Override
     public String toString() {
-        return "FeedbackDTO{" + "feedBackID=" + feedBackID + ", productID=" + productID + ", orderID=" + orderID + ", tilte=" + tilte + ", context=" + context + ", date=" + date + ", start=" + start + ", status=" + status + ", accountDTO=" + accountDTO + ", feedbackReplyDTO=" + feedbackReplyDTO + ", productDTO=" + productDTO + ", count=" + count + '}';
+        return "FeedbackDTO{" + "feedBackID=" + feedBackID + ", productID=" + productID + ", orderID=" + orderID + ", tilte=" + tilte + ", context=" + context + ", start=" + start + ", status=" + status + ", accountDTO=" + accountDTO + ", feedbackReplyDTO=" + feedbackReplyDTO + ", productDTO=" + productDTO + ", count=" + count + '}';
     }
     
 }

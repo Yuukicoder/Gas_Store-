@@ -5,6 +5,7 @@
 package dal;
 
 import DAO.AccountDAO;
+import DAO.DBcontext;
 import DTO.AccountDTO;
 import DTO.AdminDTO;
 import java.sql.Timestamp;
@@ -23,7 +24,7 @@ import DTO.Customer;
  *
  * @author vip2021
  */
-public class CustomerDao extends DBContext {
+public class CustomerDao extends DBcontext {
 
     PreparedStatement stm;
     ResultSet rs;
@@ -209,52 +210,9 @@ public class CustomerDao extends DBContext {
         }
     }
 
-    public void updateUser(Customer customer) {
-        String sql = "update Customer set userName = ? ,password = ?, firstName = ?, lastName = ?, phone = ?, email = ? where customerID = ?";
-        try {
+   
 
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//        Timestamp createdTimestamp = Timestamp.valueOf(LocalDateTime.now());
-            // Set values for parameters
-            preparedStatement.setString(1, customer.getUserName());
-            preparedStatement.setString(2, customer.getPassword());
-
-            preparedStatement.setString(3, customer.getFirstName());
-            preparedStatement.setString(4, customer.getLastName());
-
-            preparedStatement.setString(5, customer.getPhone());
-            preparedStatement.setString(6, customer.getEmail());
-            preparedStatement.setInt(7, customer.getCustomerID());
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    public void insertCustomer(Customer customer) {
-        try {
-            String sql = "INSERT INTO Customer (userName, password, firstName, lastName, phone, email) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            Timestamp createdTimestamp = Timestamp.valueOf(LocalDateTime.now());
-            // Set values for parameters
-            preparedStatement.setString(1, customer.getUserName());
-            preparedStatement.setString(2, customer.getPassword());
-
-            preparedStatement.setString(3, customer.getFirstName());
-            preparedStatement.setString(4, customer.getLastName());
-
-            preparedStatement.setString(5, customer.getPhone());
-
-            preparedStatement.setString(6, customer.getEmail());
-
-            // Execute the query
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Error inserting customer: " + e.getMessage());
-        }
-    }
-
+   
     public List<Customer> getPaginatedCustomers(int pageNum, int pageSize) {
         list = new ArrayList<>();
         try {
@@ -694,12 +652,8 @@ public class CustomerDao extends DBContext {
         return li;
     }
 
-    /**
-     * CustomerDao
-     *
-     * @return list
-     */
-    public void updateUser(model.Customer customer) {
+ 
+    public void updateUser(Customer customer) {
         String sql = "UPDATE Customer SET userName = ?, password = ?, firstName = ?, lastName = ?, phone = ?, email = ?, image = ?, address = ? WHERE customerID = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, customer.getUserName());
@@ -718,7 +672,7 @@ public class CustomerDao extends DBContext {
         }
     }
 
-    public void insertCustomer(model.Customer customer) {
+    public void insertCustomer(Customer customer) {
         try {
             String sql = "INSERT INTO Customer (userName, password, firstName, lastName, phone, email) "
                     + "VALUES (?, ?, ?, ?, ?, ?)";
@@ -873,35 +827,39 @@ public class CustomerDao extends DBContext {
     }
 
     public static void main(String[] args) {
-        CustomerDao customerDao = new CustomerDao();
-
-        // Define an email and new password to test with
-        String testEmail = "haquocminhduc@gmail.com";
-        String newPassword = "newPassword123";
-
-        // Call the getgmailupdate function to update the password for the test email
-        customerDao.getgmailupdate(newPassword, testEmail);
-
-        // Call the getListCheckGmail function with the test email to verify the update
-        ArrayList<Customer> customers = customerDao.getListCheckGmail(testEmail);
-
-        // Print out the results
-        if (customers.isEmpty()) {
-            System.out.println("No customers found with the email: " + testEmail);
-        } else {
-            System.out.println("Customers found with the email: " + testEmail);
-            for (Customer customer : customers) {
-                System.out.println("Customer ID: " + customer.getCustomerID());
-                System.out.println("Username: " + customer.getUserName());
-                System.out.println("First Name: " + customer.getFirstName());
-                System.out.println("Last Name: " + customer.getLastName());
-                System.out.println("Phone: " + customer.getPhone());
-                System.out.println("Email: " + customer.getEmail());
-                // Print out the password to verify the update
-                System.out.println("Password: " + customer.getPassword());
-                System.out.println("---------------------------");
-            }
-        }
+//        CustomerDao customerDao = new CustomerDao();
+//
+//        // Define an email and new password to test with
+//        String testEmail = "haquocminhduc@gmail.com";
+//        String newPassword = "newPassword123";
+//
+//        // Call the getgmailupdate function to update the password for the test email
+//        customerDao.getgmailupdate(newPassword, testEmail);
+//
+//        // Call the getListCheckGmail function with the test email to verify the update
+//        ArrayList<Customer> customers = customerDao.getListCheckGmail(testEmail);
+//
+//        // Print out the results
+//        if (customers.isEmpty()) {
+//            System.out.println("No customers found with the email: " + testEmail);
+//        } else {
+//            System.out.println("Customers found with the email: " + testEmail);
+//            for (Customer customer : customers) {
+//                System.out.println("Customer ID: " + customer.getCustomerID());
+//                System.out.println("Username: " + customer.getUserName());
+//                System.out.println("First Name: " + customer.getFirstName());
+//                System.out.println("Last Name: " + customer.getLastName());
+//                System.out.println("Phone: " + customer.getPhone());
+//                System.out.println("Email: " + customer.getEmail());
+//                // Print out the password to verify the update
+//                System.out.println("Password: " + customer.getPassword());
+//                System.out.println("---------------------------");
+//            }
+//        }
+        CustomerDao cus = new CustomerDao();
+//        Customer c = new Customer(1,"anhducokok")
+        DTO.Customer c = cus.checkuserandPass("duc", "Qua3CCUdJoXNHnIq6rQW/tVqu1M=");
+        System.out.println(c.getAddress());
     }
 
 }

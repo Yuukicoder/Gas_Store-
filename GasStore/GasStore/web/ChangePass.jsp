@@ -143,7 +143,7 @@
                                 </div>
                                 <div class="mt-5 text-center">
                                     <button class="btn btn-primary profile-button" type="submit" name="update" value="password">Save Password</button>
-                                    <button class="btn btn-secondary profile-button" type="button" onclick="closePasswordModal()">Cancel</button>
+                                    <button class="btn btn-secondary profile-button" ><a href="UserProfile">Cancel</a></button>
                                 </div>
                                 <div class="mt-5 text-center">
                                     <a href="forgotpass">Forget Password?</a>

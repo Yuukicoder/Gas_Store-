@@ -104,6 +104,10 @@
         <servlet-name>InsertSupplierServlet</servlet-name>
         <servlet-class>Controller.AdminAccountServlet.InsertSupplierServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChangePassServlet</servlet-name>
+        <servlet-class>ProjectController.Account.ChangePassServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
         <url-pattern>/signup</url-pattern>
@@ -211,6 +215,10 @@
     <servlet-mapping>
         <servlet-name>InsertSupplierServlet</servlet-name>
         <url-pattern>/insert-supplier</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangePassServlet</servlet-name>
+        <url-pattern>/change-pass</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

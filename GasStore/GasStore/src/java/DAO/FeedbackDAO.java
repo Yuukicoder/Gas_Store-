@@ -5,6 +5,7 @@
 package DAO;
 
 import DTO.AccountDTO;
+import DTO.Customer;
 import DTO.FeedbackDTO;
 import DTO.OrderDetail;
 import DTO.ProductDTO;
@@ -12,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -19,29 +21,29 @@ import java.util.ArrayList;
  */
 public class FeedbackDAO extends DBcontext {
 
-    public void insertfeedback(String orderid, String productID, String tile, String text, String date, String vode) {
+    public void insertfeedback(String orderid, String productID, String tile, String text, String vode) {
         String sql = "	INSERT INTO [dbo].[Feedback]\n"
                 + "           ([OrderID]\n"
                 + "           ,[ProductID]\n"
                 + "           ,[Title]\n"
                 + "           ,[Context]\n"
-                + "           ,[DateCreate]\n"
+                
                 + "           ,[StarVoted])\n"
                 + "     VALUES\n"
                 + "           (?\n"
                 + "           ,?\n"
                 + "           ,?\n"
                 + "           ,?\n"
-                + "           ,?\n"
+                
                 + "           ,?)";
         try ( PreparedStatement pt = connection.prepareStatement(sql)) {
             pt.setString(1, orderid);
             pt.setString(2, productID);
             pt.setString(3, tile);
             pt.setString(4, text);
-            pt.setString(5, date);
-            pt.setString(6, vode);
-            int inster = pt.executeUpdate();
+//            pt.setString(5, date);
+            pt.setString(5, vode);
+            pt.executeUpdate();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -98,55 +100,45 @@ public class FeedbackDAO extends DBcontext {
         return al;
     }
 
-    public ArrayList<FeedbackDTO> getlistfeedback(int index, int statusFilter) {
-        String sql = "SELECT F.ProductID, F.FeedbackID, F.status, A.Email, A.Fullname, F.DateCreate, F.StarVoted, F.Context, P.Name "
-                + "FROM Feedback F "
-                + "JOIN Orders O ON F.OrderID = O.OrderID "
-                + "JOIN Account A ON O.AccountID = A.AccountID "
-                + "JOIN Product P ON P.ProductID = F.ProductID ";
+    public ArrayList<FeedbackDTO> getlistfeedback(int index) {
+    String sql = "SELECT F.ProductID, F.FeedbackID, F.Status, A.Email, A.firstName + ' ' + A.lastName as FullName, F.StarVoted, F.Context, P.Name " +
+                 "FROM Feedback F " +
+                 "JOIN [Order] O ON F.OrderID = O.OrderID " +
+                 "JOIN Customer A ON O.CustomerID = A.CustomerID " +
+                 "JOIN Product P ON P.ProductID = F.ProductID " +
+                 "ORDER BY F.FeedbackID DESC OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
 
-        // Thêm điều kiện lọc theo trạng thái (true hoặc false)
-        if (statusFilter == 0) {
-            sql += "";
-        } else if(statusFilter == 1) {
-            sql += " WHERE F.status = 'true' ";
-        } else if(statusFilter == 2) {
-            sql += " WHERE F.status = 'false' ";
+    ArrayList<FeedbackDTO> feedbackList = new ArrayList<>();
+
+    try (PreparedStatement pt = connection.prepareStatement(sql)) {
+        pt.setInt(1, (index - 1) * 5);
+        ResultSet rs = pt.executeQuery();
+        while (rs.next()) {
+            Customer customer = new Customer();
+            customer.setFirstName(rs.getString("FullName"));
+            customer.setEmail(rs.getString("Email"));
+
+            FeedbackDTO feedbackDTO = new FeedbackDTO();
+            feedbackDTO.setProductID(rs.getInt("ProductID"));
+            feedbackDTO.setFeedBackID(rs.getInt("FeedbackID"));
+            feedbackDTO.setStart(rs.getInt("StarVoted"));
+            feedbackDTO.setContext(rs.getString("Context"));
+            feedbackDTO.setStatus(rs.getBoolean("Status"));
+
+            ProductDTO productDTO = new ProductDTO();
+            productDTO.setName(rs.getString("Name"));
+
+            feedbackDTO.setAccountDTO(customer);
+            feedbackDTO.setProductID(productDTO.getProductId());
+
+            feedbackList.add(feedbackDTO);
         }
-
-        sql += "ORDER BY F.FeedbackID DESC OFFSET ? ROW FETCH NEXT 5 ROW ONLY";
-
-        ArrayList<FeedbackDTO> al = new ArrayList<>();
-
-        try ( PreparedStatement pt = connection.prepareStatement(sql)) {
-            pt.setInt(1, (index - 1) * 5);
-            ResultSet rs = pt.executeQuery();
-            while (rs.next()) {
-                AccountDTO aO = new AccountDTO();
-                aO.setFullname(rs.getString("Fullname"));
-                aO.setEmail(rs.getString("Email"));
-
-                FeedbackDTO dTO = new FeedbackDTO();
-                dTO.setProductID(rs.getInt("ProductID"));
-                dTO.setFeedBackID(rs.getInt("FeedbackID"));
-                dTO.setDate(rs.getDate("DateCreate"));
-                dTO.setStart(rs.getInt("StarVoted"));
-                dTO.setContext(rs.getString("Context"));
-                dTO.setStatus(rs.getBoolean("status"));
-
-//                ProductDTO productDTO = new OrderDetail();
-//                productDTO.setName(rs.getString("Name"));
-//
-//                dTO.setAccountDTO(aO);
-//                dTO.setProductDTO(productDTO);
-//
-//                al.add(dTO);
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return al;
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
     }
+    return feedbackList;
+}
+
 
     public int getCount() {
         String sql = " select count(*) from Feedback";
@@ -216,7 +208,7 @@ public class FeedbackDAO extends DBcontext {
                 + "      ,[OrderID]\n"
                 + "      ,[ProductID]\n"
                 + "     \n"
-                + "  FROM [SWP_Laptop﻿].[dbo].[Feedback]  where OrderID = ? and ProductID = ?";
+                + "  FROM Feedback  where OrderID = ? and ProductID = ?";
         ArrayList<FeedbackDTO> al = new ArrayList<>();
 
         try ( PreparedStatement pt = connection.prepareStatement(sql)) {
@@ -238,7 +230,15 @@ public class FeedbackDAO extends DBcontext {
 
     public static void main(String[] args) {
         FeedbackDAO fdao = new FeedbackDAO();
-        System.out.println(fdao.getListorder(1, 1).toString());
+//        System.out.println(fdao.getListorder(1, 1).toString());
+//        fdao.insertfeedback("7", "2", "abc", "abc", "5");
+        List<FeedbackDTO> fd = fdao.checkfeedback(7,2);
+        if(fd.isEmpty()){
+            System.out.println("YEs");
+        }
+        else{
+            System.out.println("Nooo");
+        }
     }
 
 }

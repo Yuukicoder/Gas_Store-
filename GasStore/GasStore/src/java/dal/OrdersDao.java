@@ -34,9 +34,8 @@ public class OrdersDao extends DBContext{
             while (rs.next()) {
 
                 Orders em = new Orders(rs.getInt("orderID"),rs.getInt("customerID"),rs.getInt("trackingNumber"),
-                rs.getInt("totalMoney"),rs.getDate("orderDate"),rs.getDate("shipperDate"),
-                        rs.getDate("requiredDate"),rs.getString("shipAddress"),rs.getInt("status"),
-                        rs.getInt("process"),rs.getString("payment"),rs.getString("notes"));
+                rs.getInt("totalMoney"),rs.getDate("orderDate"),rs.getString("shipAddress"),rs.getInt("status"),
+                        rs.getInt("shipVia"),rs.getString("payment"),rs.getString("notes"));
                 list.add(em);
             }
         } catch (SQLException e) {
@@ -57,9 +56,8 @@ public class OrdersDao extends DBContext{
             while (rs.next()) {
 
                 Orders em = new Orders(rs.getInt("orderID"),rs.getInt("customerID"),rs.getInt("trackingNumber"),
-                rs.getInt("totalMoney"),rs.getDate("orderDate"),rs.getDate("shippedDate"),
-                        rs.getDate("requiredDate"),rs.getString("shipAddress"),rs.getInt("status"),
-                        rs.getInt("process"),rs.getString("payment"),rs.getString("notes"));
+                rs.getInt("totalMoney"),rs.getDate("orderDate"),rs.getString("shipAddress"),rs.getInt("status"),
+                        rs.getInt("shipVia"),rs.getString("payment"),rs.getString("notes"));
                 list.add(em);
             }
         } catch (SQLException e) {
@@ -79,9 +77,8 @@ public class OrdersDao extends DBContext{
             while (rs.next()) {
 
                 Orders em = new Orders(rs.getInt("orderID"),rs.getInt("customerID"),rs.getInt("trackingNumber"),
-                rs.getInt("totalMoney"),rs.getDate("orderDate"),rs.getDate("shippedDate"),
-                        rs.getDate("requiredDate"),rs.getString("shipAddress"),rs.getInt("status"),
-                        rs.getInt("process"),rs.getString("payment"),rs.getString("notes"));
+                rs.getInt("totalMoney"),rs.getDate("orderDate"),rs.getString("shipAddress"),rs.getInt("status"),
+                        rs.getInt("shipVia"),rs.getString("payment"),rs.getString("notes"));
                 list.add(em);
             }
         } catch (SQLException e) {
@@ -101,9 +98,8 @@ public class OrdersDao extends DBContext{
             while (rs.next()) {
 
                 Orders em = new Orders(rs.getInt("orderID"),rs.getInt("customerID"),rs.getInt("trackingNumber"),
-                rs.getInt("totalMoney"),rs.getDate("orderDate"),rs.getDate("shippedDate"),
-                        rs.getDate("requiredDate"),rs.getString("shipAddress"),rs.getInt("status"),
-                        rs.getInt("process"),rs.getString("payment"),rs.getString("notes"));
+                rs.getInt("totalMoney"),rs.getDate("orderDate"),rs.getString("shipAddress"),rs.getInt("status"),
+                        rs.getInt("shipVia"),rs.getString("payment"),rs.getString("notes"));
                 return em;
             }
         } catch (SQLException e) {
@@ -115,7 +111,7 @@ public class OrdersDao extends DBContext{
         OrdersDao o = new OrdersDao();
         List<Orders> li = o.getAllByID(1);
         for(Orders l: li){
-            System.out.println(l.getOrderID());
+            System.out.println(l.getOrderDate());
         }
     }
 }
