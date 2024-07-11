@@ -80,7 +80,6 @@ public class CategoryDAO extends DBcontext {
             ps.setString(1, code);
             ps.setString(2, name);
             ps.setString(3, des);
-            System.out.println("update in dao: " + des);
             ps.setInt(4, id);
             ps.execute();
         } catch (Exception e) {
@@ -88,15 +87,17 @@ public class CategoryDAO extends DBcontext {
         }
     }
 
-    public void deleteCategory(int id) {
+    public boolean deleteCategory(int id) {
         try {
             String strQSL = "delete from Category where categoryID = ?";
             PreparedStatement ps = connection.prepareStatement(strQSL);
             ps.setInt(1, id);
             ps.execute();
+            return true;
         } catch (Exception e) {
             System.out.println("delete: " + e.getMessage());
         }
+        return false;
     }
     
     public List<Category> pagging(int pageIndex, int pageSize, String search) {

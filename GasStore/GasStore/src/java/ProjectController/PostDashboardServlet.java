@@ -5,10 +5,12 @@
 package ProjectController;
 
 import DAO.AccountDAO;
+import DAO.NotificationDAO;
 import DAO.PostCategoryDAO;
 import DAO.PostListDAO;
 import DTO.AccountDTO;
 import DTO.AdminDTO;
+import DTO.NotificationDTO;
 import DTO.PostCategoryDTO;
 import DTO.PostDTO;
 import java.io.IOException;
@@ -40,7 +42,7 @@ public class PostDashboardServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -54,7 +56,6 @@ public class PostDashboardServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -70,7 +71,12 @@ public class PostDashboardServlet extends HttpServlet {
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
-            if (account.getRoleID()== 1 || account.getRoleID()== 2) {
+            //Reset noti-time on navbar
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
+            if (account.getRoleID() == 1 || account.getRoleID() == 2) {
                 String pcateID_raw = request.getParameter("postCategoryID");
                 String indexPage_raw = request.getParameter("indexPage");
 
@@ -109,8 +115,6 @@ public class PostDashboardServlet extends HttpServlet {
                     PostCategoryDAO postCategoryDAO = new PostCategoryDAO();
                     ArrayList<PostCategoryDTO> postCategoryDTOs = postCategoryDAO.getAllPostCategory();
 
-
-
                     request.setAttribute("endPage", endPage);
                     request.setAttribute("postCategoryDTOs", postCategoryDTOs);
                     request.setAttribute("postDTOs", postDTOs);
@@ -139,7 +143,7 @@ public class PostDashboardServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                String searchKey = request.getParameter("search").trim();
+        String searchKey = request.getParameter("search").trim();
         System.out.println(searchKey);
         ArrayList<PostDTO> postDTOs = new ArrayList<>();
         PostListDAO pldao = new PostListDAO();

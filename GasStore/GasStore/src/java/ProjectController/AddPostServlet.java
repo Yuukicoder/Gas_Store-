@@ -5,10 +5,12 @@
 package ProjectController;
 
 import DAO.AccountDAO;
+import DAO.NotificationDAO;
 import DAO.PostCategoryDAO;
 import DAO.PostListDAO;
 import DTO.AccountDTO;
 import DTO.AdminDTO;
+import DTO.NotificationDTO;
 import DTO.PostCategoryDTO;
 import DTO.PostDTO;
 import java.io.IOException;
@@ -28,9 +30,9 @@ import java.util.ArrayList;
  * @author 1234
  */
 @MultipartConfig(
-    fileSizeThreshold = 1024 * 1024 * 2,  // 2MB
-    maxFileSize = 1024 * 1024 * 10,       // 10MB
-    maxRequestSize = 1024 * 1024 * 50     // 50MB
+        fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50 // 50MB
 )
 public class AddPostServlet extends HttpServlet {
 
@@ -46,7 +48,7 @@ public class AddPostServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -75,7 +77,12 @@ public class AddPostServlet extends HttpServlet {
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
-            if (account.getRoleID()== 1 || account.getRoleID()== 2) {
+            //noti
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
+            if (account.getRoleID() == 1 || account.getRoleID() == 2) {
                 //List User
                 PostCategoryDAO postCategoryDAO = new PostCategoryDAO();
                 ArrayList<PostCategoryDTO> postCategoryDTOs = postCategoryDAO.getAllPostCategory();
@@ -99,42 +106,41 @@ public class AddPostServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    HttpSession session = request.getSession();
-    String content = request.getParameter("content");
-    String title = request.getParameter("title");
-    String category = request.getParameter("category");
-    System.out.println(category);
-    Part banner = request.getPart("banner");
-    String fileBanner = banner.getSubmittedFileName();
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String content = request.getParameter("content");
+        String title = request.getParameter("title");
+        String category = request.getParameter("category");
+        System.out.println(category);
+        Part banner = request.getPart("banner");
+        String fileBanner = banner.getSubmittedFileName();
 
-    String mimeType = getServletContext().getMimeType(fileBanner);
-    if (mimeType == null || !mimeType.startsWith("image/")) {
-        session.setAttribute("msg", "Chỉ được tải lên tệp hình ảnh (JPG, PNG, GIF).");
-        response.sendRedirect("postDashboard");
-        return;
-    }
+        String mimeType = getServletContext().getMimeType(fileBanner);
+        if (mimeType == null || !mimeType.startsWith("image/")) {
+            session.setAttribute("msg", "Chỉ được tải lên tệp hình ảnh (JPG, PNG, GIF).");
+            response.sendRedirect("postDashboard");
+            return;
+        }
 
-    if (content.isEmpty() || title.isEmpty() || fileBanner.isEmpty()) {
-        session.setAttribute("msg", "Add New Post Not Sucess!");
-        response.sendRedirect("postDashboard");
-    } else {
-        PostDTO pdto = new PostDTO(0, 1, title, fileBanner, content, "", category, 1);
-        PostListDAO postListDAO = new PostListDAO();
-        int checkAddPost = postListDAO.addNewPost(pdto);
-        if (checkAddPost != 0) {
-            String path = getServletContext().getRealPath("") + "images/Post";
-            File file = new File(path);
-            banner.write(path + File.separator + fileBanner);
-            session.setAttribute("msg", "Add New Post Sucess!");
+        if (content.isEmpty() || title.isEmpty() || fileBanner.isEmpty()) {
+            session.setAttribute("msg", "Add New Post Not Sucess!");
             response.sendRedirect("postDashboard");
         } else {
-            System.out.println("error server");
+            PostDTO pdto = new PostDTO(0, 1, title, fileBanner, content, "", category, 1);
+            PostListDAO postListDAO = new PostListDAO();
+            int checkAddPost = postListDAO.addNewPost(pdto);
+            if (checkAddPost != 0) {
+                String path = getServletContext().getRealPath("") + "images/Post";
+                File file = new File(path);
+                banner.write(path + File.separator + fileBanner);
+                session.setAttribute("msg", "Add New Post Sucess!");
+                response.sendRedirect("postDashboard");
+            } else {
+                System.out.println("error server");
+            }
         }
     }
-}
-
 
     /**
      * Returns a short description of the servlet.

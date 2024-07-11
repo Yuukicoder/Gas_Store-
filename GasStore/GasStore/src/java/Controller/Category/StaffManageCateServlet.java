@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  *
- * @author Admin
+ * @author vu anh
  */
 @WebServlet(name = "StaffManageCateServlet", urlPatterns = {"/staffManageCate"})
 public class StaffManageCateServlet extends HttpServlet {

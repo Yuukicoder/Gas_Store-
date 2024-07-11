@@ -1,6 +1,7 @@
 package Controller.AdminAccountServlet;
 
 import Controller.MaHoa;
+import DAO.NotificationDAO;
 import DTO.AdminDTO;
 import dal.CustomerDao;
 import dal.RoleDao;
@@ -21,6 +22,8 @@ import java.util.Random;
 import java.security.SecureRandom;
 import model.Administrator;
 import DTO.Customer;
+import DTO.NotificationDTO;
+import java.util.ArrayList;
 import model.Role;
 
 @MultipartConfig(
@@ -36,6 +39,12 @@ public class InsertAdminServlet extends HttpServlet {
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
+            //Reset noti-time on navbar
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
+            
             if (account.getRoleID() == 1) {
                 CustomerDao cus = new CustomerDao();
                 RoleDao ro = new RoleDao();

@@ -1,15 +1,10 @@
 package Controller.AdminAccountServlet;
 
-import Controller.MaHoa;
-import static Controller.MaHoa.toSHA1;
+import DAO.NotificationDAO;
 import DTO.AdminDTO;
-import DTO.Customer;
 import dal.CustomerDao;
 import dal.RoleDao;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -17,12 +12,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.Part;
-import java.io.File;
 import DTO.Customer;
+import DTO.NotificationDTO;
+import java.util.ArrayList;
 
 import model.Role;
-import model.Administrator;
 
 @MultipartConfig
 public class AdminAccountServlet extends HttpServlet {
@@ -33,6 +27,12 @@ public class AdminAccountServlet extends HttpServlet {
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
+            //Reset noti-time on navbar
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
+
             if (account.getRoleID() == 1) {
                 //List User
 
@@ -86,19 +86,20 @@ public class AdminAccountServlet extends HttpServlet {
         CustomerDao cus = new CustomerDao();
         List<Customer> li;
         String s = request.getParameter("search");
-        if(s.isEmpty()){
-        int pageNum = request.getParameter("pageNum") != null ? Integer.parseInt(request.getParameter("pageNum")) : 1;
-        int pageSize = 5;
-        int totalCustomers = cus.getTotalCustomers();
-                int totalPages = (int) Math.ceil((double) totalCustomers / pageSize);
+        if (s.isEmpty()) {
+            int pageNum = request.getParameter("pageNum") != null ? Integer.parseInt(request.getParameter("pageNum")) : 1;
+            int pageSize = 5;
+            int totalCustomers = cus.getTotalCustomers();
+            int totalPages = (int) Math.ceil((double) totalCustomers / pageSize);
 
-                request.setAttribute("pageNum", pageNum);
-                request.setAttribute("totalPages", totalPages);
-         li = cus.getPaginatedCustomers(pageNum, pageSize);
-        }else{
-          li =  cus.getAllByAccount(s) ;
-        
-        }request.setAttribute("lidata", li);
+            request.setAttribute("pageNum", pageNum);
+            request.setAttribute("totalPages", totalPages);
+            li = cus.getPaginatedCustomers(pageNum, pageSize);
+        } else {
+            li = cus.getAllByAccount(s);
+
+        }
+        request.setAttribute("lidata", li);
         request.getRequestDispatcher("TableAccount.jsp").forward(request, response);
     }
 

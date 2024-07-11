@@ -81,7 +81,7 @@
             <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
                 <div class="col-lg-4">
                     <a href="home" class="text-decoration-none">
-                        <a href="index.jsp"><img src="img/Gas_Store.png" alt="logo" width="100px"></a>
+                        <a href="home"><img src="img/Gas_Store.png" alt="logo" width="100px"></a>
                     </a>
                 </div>
 

@@ -5,12 +5,16 @@
 package ProjectController.CheckOut;
 
 import DAO.IndividualVoucherDAO;
+import DAO.NotificationDAO;
+import DAO.NotificationReceiverDAO;
 import DAO.OrderDAO;
 import DAO.ProductDAO;
 import DAO.VoucherDAO;
 //import DTO.AccountDTO;
 import DTO.Cart;
 import DTO.Customer;
+import DTO.NotificationDTO;
+import DTO.NotificationReceiverDTO;
 import DTO.Product;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -21,6 +25,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -42,7 +48,7 @@ public class LastCheckOutServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -56,7 +62,6 @@ public class LastCheckOutServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -121,7 +126,7 @@ public class LastCheckOutServlet extends HttpServlet {
         System.out.println(address);
         String tongtienvoucher1 = request.getParameter("tongtienvoucher");
         Double tongtienvoucher = Double.parseDouble(tongtienvoucher1);
-        
+
         ProductDAO prod = new ProductDAO();
         List<Product> list = prod.getAllProduct();
         Cookie[] arr = request.getCookies();
@@ -137,11 +142,29 @@ public class LastCheckOutServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
 //        AccountDTO account = (AccountDTO) session.getAttribute("account");
-           Customer account = (Customer) session.getAttribute("account");
+        Customer account = (Customer) session.getAttribute("account");
         if (account == null) {
             response.sendRedirect("login ");
         } else {
             ord.addOrder(account, cart, address, totalVoucherDouble, nameacount);
+
+            //Noti
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String currentDateTime = formatter.format(java.sql.Timestamp.valueOf(LocalDateTime.now()));
+
+            NotificationDTO noti = new NotificationDTO();
+            noti.setTitle("New Order place");
+            noti.setContent("<p>Customer " + account.getFullName()+ "</p>\n"
+                    + "<p>Have made a purchase</p>\n"
+                    + "<p>At " + currentDateTime);
+            noti.setDateSend(currentDateTime);
+            noti.setIsRead(0);
+            noti.setIsForAdmins(1);
+
+            NotificationDAO nDAO = new NotificationDAO();
+            nDAO.addNoti(noti);       
+            //
+            
             ord.addOrderDetail(cart, ord.getLastOrderID());
             ord.updateQuantity(cart);
             request.setAttribute("cart", cart);

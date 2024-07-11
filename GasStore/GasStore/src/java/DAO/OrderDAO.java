@@ -16,7 +16,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 //import DTO.Customer;
@@ -26,17 +29,19 @@ import java.util.List;
  * @author msi
  */
 public class OrderDAO extends DBcontext {
-        public static void main(String[] args) {
+
+    public static void main(String[] args) {
         OrderDAO dao = new OrderDAO();
 //        System.out.println(dao.searchOrders("duc").size());
         Customer c = new Customer(2);
 //        
-        
+
         Cart cart = new Cart();
-        dao.addOrder(c, cart, "vin", 0,  "1234");
-        
+        dao.addOrder(c, cart, "vin", 0, "1234");
+
     }
-    public void addOrder(Customer a, Cart cart, String address, double voucher1 , String notes ) {
+
+    public void addOrder(Customer a, Cart cart, String address, double voucher1, String notes) {
         LocalDate curDate = LocalDate.now();
         String date = curDate.toString();
         try {
@@ -51,41 +56,41 @@ public class OrderDAO extends DBcontext {
 //            st.setDouble(6, voucher);
 //            st.setString(7, phone);
 //            st.setString(8, name);
-               st.setInt(1, a.getCustomerID());
-               st.setDouble(2, cart.getTotalMoney() - (cart.getTotalMoney() * voucher1) + 10);
-               st.setString(3,date);
-               st.setString(4, address);
-               st.setInt(5, 0);
-               st.setString(6, notes);
+            st.setInt(1, a.getCustomerID());
+            st.setDouble(2, cart.getTotalMoney() - (cart.getTotalMoney() * voucher1) + 10);
+            st.setString(3, date);
+            st.setString(4, address);
+            st.setInt(5, 0);
+            st.setString(6, notes);
             int rowsAffected = st.executeUpdate();
 //
             if (rowsAffected > 0) {
                 // Lấy id order vừa thêm
-            ResultSet generatedKeys = st.getGeneratedKeys();
-            int orderID = 0;
-            if (generatedKeys.next()) {
-                orderID = generatedKeys.getInt(1);
-            }
+                ResultSet generatedKeys = st.getGeneratedKeys();
+                int orderID = 0;
+                if (generatedKeys.next()) {
+                    orderID = generatedKeys.getInt(1);
+                }
 
-            try {
-                // Thực hiện câu lệnh INSERT INTO OrderHistory
-                String insertOrderHistoryQuery = "INSERT INTO OrderHistory VALUES (?, ?, ?, ?)";
-                PreparedStatement insertOrderHistoryStatement = connection.prepareStatement(insertOrderHistoryQuery);
-                insertOrderHistoryStatement.setInt(1, orderID);
-                insertOrderHistoryStatement.setInt(2, a.getCustomerID());
-                insertOrderHistoryStatement.setInt(3, 0);
-                insertOrderHistoryStatement.setString(4, date);
-                insertOrderHistoryStatement.executeUpdate();
-            } catch (Exception ex) {
-                // Xử lý ngoại lệ khi thực hiện INSERT INTO OrderHistory
-                ex.printStackTrace();
-            }
+                try {
+                    // Thực hiện câu lệnh INSERT INTO OrderHistory
+                    String insertOrderHistoryQuery = "INSERT INTO OrderHistory VALUES (?, ?, ?, ?)";
+                    PreparedStatement insertOrderHistoryStatement = connection.prepareStatement(insertOrderHistoryQuery);
+                    insertOrderHistoryStatement.setInt(1, orderID);
+                    insertOrderHistoryStatement.setInt(2, a.getCustomerID());
+                    insertOrderHistoryStatement.setInt(3, 0);
+                    insertOrderHistoryStatement.setString(4, date);
+                    insertOrderHistoryStatement.executeUpdate();
+                } catch (Exception ex) {
+                    // Xử lý ngoại lệ khi thực hiện INSERT INTO OrderHistory
+                    ex.printStackTrace();
+                }
             } else {
                 System.out.println("Insert into ORDERS failed. No rows affected.");
             }
         } catch (Exception e) {
             // Xử lý ngoại lệ khi thực hiện INSERT INTO ORDERS
-            e.printStackTrace();
+            System.out.println("addOrder: " + e.getMessage());
         }
 
     }
@@ -98,6 +103,8 @@ public class OrderDAO extends DBcontext {
             st.setString(1, oid);
             st.executeUpdate();
         } catch (Exception e) {
+            System.out.println("cancelOrder: " + e.getMessage());
+
         }
     }
 
@@ -111,6 +118,8 @@ public class OrderDAO extends DBcontext {
                 id = rs.getInt(1);
             }
         } catch (Exception e) {
+            System.out.println("getLastOrderID: " + e.getMessage());
+
         }
         return id;
     }
@@ -128,6 +137,8 @@ public class OrderDAO extends DBcontext {
                 st2.executeUpdate();
             }
         } catch (Exception e) {
+            System.out.println("addOrderDetail: " + e.getMessage());
+
         }
 
     }
@@ -142,6 +153,8 @@ public class OrderDAO extends DBcontext {
                 st3.executeUpdate();
             }
         } catch (Exception e) {
+            System.out.println("updateQuantity: " + e.getMessage());
+
         }
     }
 
@@ -165,17 +178,17 @@ public class OrderDAO extends DBcontext {
                 lo.add(ord);
             }
         } catch (Exception e) {
+            System.out.println("listOrderInAdminHome: " + e.getMessage());
         }
         return lo;
     }
-    
-    
+
     public LinkedHashMap<Order, Customer> listOrderAdminHome(int number) {
-        String sql = "SELECT TOP " + number + " od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, " +
-                     "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes " +
-                     "FROM [Order] od " +
-                     "JOIN Customer c ON c.customerID = od.customerID " +
-                     "ORDER BY od.orderID DESC";
+        String sql = "SELECT TOP " + number + " od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, "
+                + "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes "
+                + "FROM [Order] od "
+                + "JOIN Customer c ON c.customerID = od.customerID "
+                + "ORDER BY od.orderID DESC";
 
         LinkedHashMap<Order, Customer> orderMap = new LinkedHashMap<>();
 
@@ -200,19 +213,19 @@ public class OrderDAO extends DBcontext {
                 orderMap.put(ord, cust);
             }
         } catch (Exception e) {
-            e.printStackTrace(); 
+            System.out.println("listOrderAdminHome(LinkedHashMap): " + e.getMessage());
         }
         return orderMap;
     }
-    
+
     public LinkedHashMap<Order, Customer> pagingOrder(int pageNumber, int pageSize) {
         LinkedHashMap<Order, Customer> orderMap = new LinkedHashMap<>();
-        String sql = "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, " +
-                     "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes " +
-                     "FROM [Order] od " +
-                     "JOIN Customer c ON c.customerID = od.customerID " +
-                     "ORDER BY od.orderID DESC " +
-                     "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        String sql = "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, "
+                + "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes "
+                + "FROM [Order] od "
+                + "JOIN Customer c ON c.customerID = od.customerID "
+                + "ORDER BY od.orderID DESC "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -246,13 +259,75 @@ public class OrderDAO extends DBcontext {
             return orderMap;
 
         } catch (SQLException e) {
-            System.out.println("SQL Exception: " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("pagingOrder: " + e.getMessage());
+
         }
 
         return null;
     }
-    
+
+    // Vu anh - Them requiredDate cho shipper + format orderDate 
+    public LinkedHashMap<Order, Customer> pagingShipperOrder(int pageNumber, int pageSize, int sId) {
+        LinkedHashMap<Order, Customer> orderMap = new LinkedHashMap<>();
+        String sql = """
+                     SELECT *
+                     FROM [Order] od 
+                     JOIN Customer c ON c.customerID = od.customerID 
+                     where od.shipVia = ?
+                     ORDER BY od.orderID DESC
+                     OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
+                     """;
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            int startIndex = (pageNumber - 1) * pageSize;
+
+            ps.setInt(1, sId);
+            ps.setInt(2, startIndex);
+            ps.setInt(3, pageSize);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Order ord = new Order();
+
+                ord.setOrderID(rs.getInt("orderID"));
+                ord.setCustomerID(rs.getInt("customerID"));
+                ord.setTrackingNumber(rs.getInt("trackingNumber"));
+                ord.setTotalMoney(rs.getDouble("totalMoney"));
+                ord.setOrderDate(formatDate(rs.getDate("orderDate")));
+                ord.setShipAddress(rs.getString("shipAddress"));
+                ord.setStatus(rs.getInt("status"));
+                ord.setShipVia(rs.getInt("shipVia"));
+                ord.setPayment(rs.getString("payment"));
+                ord.setNotes(rs.getString("notes"));
+
+                CustomerDAO customerDAO = new CustomerDAO();
+                Customer cust = customerDAO.getCustomerByID(rs.getInt("customerID"));
+
+                orderMap.put(ord, cust);
+            }
+            return orderMap;
+
+        } catch (SQLException e) {
+            System.out.println("pagingShipperOrder: " + e.getMessage());
+
+        }
+
+        return null;
+    }
+
+    public String formatDate(Date d) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
+            LocalDate orderDate = d.toLocalDate();
+            return orderDate.format(formatter);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return "NULL";
+    }
+
     public int countAllOrders() {
         int totalCount = 0;
         String sql = "SELECT COUNT(*) AS totalOrders FROM [Order]";
@@ -263,12 +338,28 @@ public class OrderDAO extends DBcontext {
                 totalCount = rs.getInt("totalOrders");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("countAllOrders: " + e.getMessage());
+
         }
         return totalCount;
     }
 
+    public int countAllShipperOrders(int sId) {
+        int totalCount = 0;
+        String sql = "SELECT COUNT(*) AS totalOrders FROM [Order] WHERE shipVia = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, sId);
+            ResultSet rs = ps.executeQuery();
 
+            if (rs.next()) {
+                totalCount = rs.getInt("totalOrders");
+            }
+        } catch (SQLException e) {
+            System.out.println("countAllShipperOrders: " + e.getMessage());
+        }
+        return totalCount;
+    }
 
     public double todaySale() {
         // Lấy ngày hiện tại
@@ -284,6 +375,8 @@ public class OrderDAO extends DBcontext {
                 value = rs.getDouble(1);
             }
         } catch (Exception e) {
+            System.out.println("todaySale: " + e.getMessage());
+
         }
         return value;
     }
@@ -306,6 +399,8 @@ public class OrderDAO extends DBcontext {
                 lo.add(o);
             }
         } catch (Exception e) {
+            System.out.println("myPurchase: " + e.getMessage());
+
         }
         return lo;
     }
@@ -329,6 +424,8 @@ public class OrderDAO extends DBcontext {
                 lod.add(o);
             }
         } catch (Exception e) {
+            System.out.println("orderDetail: " + e.getMessage());
+
         }
         return lod;
     }
@@ -362,13 +459,11 @@ public class OrderDAO extends DBcontext {
                 } catch (Exception e) {
                     System.out.println(e);
                 }
-            } 
+            }
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("changeStatusOrder: " + e.getMessage());
         }
     }
-
-
 
     public float getIncomeToday() {
         String sql = "SELECT SUM(TotalPrice) AS total_amount\n"
@@ -383,7 +478,7 @@ public class OrderDAO extends DBcontext {
             }
             return incomeToday;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("getIncomeToday: " + e.getMessage());
         }
         return 0;
     }
@@ -401,14 +496,14 @@ public class OrderDAO extends DBcontext {
             }
             return orders;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("getOrdersToday: " + e.getMessage());
         }
         return 0;
     }
-    
+
     public int getTotalOrdersDelivered() {
-        String sql = "SELECT COUNT(OrderID) AS OrderCount\n" +
-"                FROM Orders where Orders.Status = 3";
+        String sql = "SELECT COUNT(OrderID) AS OrderCount\n"
+                + "                FROM Orders where Orders.Status = 3";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -418,14 +513,14 @@ public class OrderDAO extends DBcontext {
             }
             return orders;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("getTotalOrdersDelivered: " + e.getMessage());
         }
         return 0;
     }
-    
-     public int getTotalOrdersCancled() {
-        String sql = "SELECT COUNT(OrderID) AS OrderCount\n" +
-"                FROM Orders where Orders.Status = 4";
+
+    public int getTotalOrdersCancled() {
+        String sql = "SELECT COUNT(OrderID) AS OrderCount\n"
+                + "                FROM Orders where Orders.Status = 4";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -435,11 +530,10 @@ public class OrderDAO extends DBcontext {
             }
             return orders;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("getTotalOrdersCancled: " + e.getMessage());
         }
         return 0;
     }
-    
 
     //xóa list = 4 
     public void getListOrder4(String oid) {
@@ -451,6 +545,8 @@ public class OrderDAO extends DBcontext {
             st.setString(1, oid);
             st.executeUpdate();
         } catch (Exception e) {
+            System.out.println("getListOrder4: " + e.getMessage());
+
         }
     }
 
@@ -474,6 +570,8 @@ public class OrderDAO extends DBcontext {
                 lo.add(o);
             }
         } catch (Exception e) {
+            System.out.println("myPurchase1: " + e.getMessage());
+
         }
         return lo;
     }
@@ -498,6 +596,8 @@ public class OrderDAO extends DBcontext {
                 lo.add(o);
             }
         } catch (Exception e) {
+            System.out.println("myPurchase2: " + e.getMessage());
+
         }
         return lo;
     }
@@ -522,6 +622,8 @@ public class OrderDAO extends DBcontext {
                 lo.add(o);
             }
         } catch (Exception e) {
+            System.out.println("myPurchase3: " + e.getMessage());
+
         }
         return lo;
     }
@@ -546,6 +648,8 @@ public class OrderDAO extends DBcontext {
                 lo.add(o);
             }
         } catch (Exception e) {
+            System.out.println("myPurchase4: " + e.getMessage());
+
         }
         return lo;
     }
@@ -570,6 +674,8 @@ public class OrderDAO extends DBcontext {
                 lo.add(o);
             }
         } catch (Exception e) {
+            System.out.println("myPurchase5: " + e.getMessage());
+
         }
         return lo;
     }
@@ -595,15 +701,17 @@ public class OrderDAO extends DBcontext {
                 lo.add(o);
             }
         } catch (Exception e) {
+            System.out.println("myPurchaseTracking: " + e.getMessage());
+
         }
         return lo;
     }
 
-     public OrderDTO getPurchaseByID(String orderid_raw) {
+    public OrderDTO getPurchaseByID(String orderid_raw) {
         String sql = "select AccountID,TotalPrice,OrderDate,Address,Status,VoucherCode,Phone,Name  from Orders where OrderID = ?";
         try {
             OrderDTO odto = new OrderDTO();
-            int orderid= Integer.parseInt(orderid_raw);
+            int orderid = Integer.parseInt(orderid_raw);
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, orderid);
             ResultSet rs = ps.executeQuery();
@@ -616,25 +724,26 @@ public class OrderDAO extends DBcontext {
                 odto.setPhoneorder(rs.getString("Phone"));
                 odto.setName1(rs.getString("Name"));
                 odto.setVoucherCode(rs.getDouble("VoucherCode"));
-            
+
             }
             return odto;
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("getPurchaseByID: " + e.getMessage());
         }
         return null;
     }
+
     public LinkedHashMap<Order, Customer> searchOrders(String search) {
         String cleanedSearch = search.trim().replaceAll("\\s+", " ").toLowerCase();
         String[] searchTerms = cleanedSearch.split(" ");
 
         // Xây dựng câu lệnh SQL động
         StringBuilder sqlBuilder = new StringBuilder(
-            "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, " +
-            "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes " +
-            "FROM [Order] od " +
-            "JOIN Customer c ON c.customerID = od.customerID " +
-            "WHERE "
+                "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, "
+                + "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes "
+                + "FROM [Order] od "
+                + "JOIN Customer c ON c.customerID = od.customerID "
+                + "WHERE "
         );
 
         for (int i = 0; i < searchTerms.length; i++) {
@@ -642,9 +751,9 @@ public class OrderDAO extends DBcontext {
                 sqlBuilder.append(" OR ");
             }
             sqlBuilder.append("(")
-                      .append("LOWER(od.orderID) LIKE ? ")
-                      .append("OR LOWER(c.username) LIKE ? ")
-                      .append(")");
+                    .append("LOWER(od.orderID) LIKE ? ")
+                    .append("OR LOWER(c.username) LIKE ? ")
+                    .append(")");
         }
 
         sqlBuilder.append(" ORDER BY od.orderID DESC");
@@ -681,22 +790,22 @@ public class OrderDAO extends DBcontext {
                 orderMap.put(ord, cust);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("searchOrders: " + e.getMessage());
         }
         return orderMap;
     }
-    
+
     public LinkedHashMap<Order, Customer> searchOrdersPaging(String search, int pageIndex, int pageSize) {
         String cleanedSearch = search.trim().replaceAll("\\s+", " ").toLowerCase();
         String[] searchTerms = cleanedSearch.split(" ");
 
         // Xây dựng câu lệnh SQL động
         StringBuilder sqlBuilder = new StringBuilder(
-            "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, " +
-            "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes " +
-            "FROM [Order] od " +
-            "JOIN Customer c ON c.customerID = od.customerID " +
-            "WHERE "
+                "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, "
+                + "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes "
+                + "FROM [Order] od "
+                + "JOIN Customer c ON c.customerID = od.customerID "
+                + "WHERE "
         );
 
         for (int i = 0; i < searchTerms.length; i++) {
@@ -704,9 +813,9 @@ public class OrderDAO extends DBcontext {
                 sqlBuilder.append(" OR ");
             }
             sqlBuilder.append("(")
-                      .append("LOWER(od.orderID) LIKE ? ")
-                      .append("OR LOWER(c.username) LIKE ? ")
-                      .append(")");
+                    .append("LOWER(od.orderID) LIKE ? ")
+                    .append("OR LOWER(c.username) LIKE ? ")
+                    .append(")");
         }
 
         sqlBuilder.append(" ORDER BY od.orderID DESC");
@@ -746,11 +855,62 @@ public class OrderDAO extends DBcontext {
                 orderMap.put(ord, cust);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("searchOrdersPaging: " + e.getMessage());
         }
         return orderMap;
     }
 
+    public Order getOrderById(int id) {
+        String sql = "select * from [Order] where orderID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            Order o = new Order();
+            if (rs.next()) {
+                o.setOrderID(rs.getInt("orderID"));
+                o.setCustomerID(rs.getInt("customerID"));
+                o.setTrackingNumber(rs.getInt("trackingNumber"));
+                o.setTotalMoney(rs.getDouble("totalMoney"));
+                o.setOrderDate(formatDate(rs.getDate("orderDate")));
+                o.setShippedDate(formatDate(rs.getDate("shippedDate")));
+                o.setShipAddress(rs.getString("shipAddress"));
+                o.setStatus(rs.getInt("status"));
+                o.setShipVia(rs.getInt("shipVia"));
+                o.setPayment(rs.getString("payment"));
+                o.setNotes(rs.getString("notes"));
 
+            }
+            return o;
+        } catch (Exception e) {
+            System.out.println("getOrderById: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public void updateOrderShipedDate(int id) {
+        String sql = "update [Order] set shippedDate = ? where orderID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            ps.setString(1, LocalDateTime.now().format(formatter));
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("updateOrderShipedDate: " + e.getMessage());
+        }
+    }
+    
+    public void updateOrderShipVia(int oId, int shipperId){
+        String sql = "update [Order] set shipVia = ? where orderID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, shipperId);
+            ps.setInt(2, oId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("updateOrderShipVia: " + e.getMessage());
+        }
+    }
 
 }

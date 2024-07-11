@@ -4,12 +4,10 @@
  */
 package Controller.AdminAccountServlet;
 
-import Controller.MaHoa;
-import DTO.AdminDTO;
+import DAO.NotificationDAO;
 import dal.CustomerDao;
 import dal.RoleDao;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,7 +15,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import DTO.AdminDTO;
-import DTO.Customer;
+import DTO.NotificationDTO;
+import java.util.ArrayList;
 import model.Role;
 
 /**
@@ -41,6 +40,11 @@ public class AdminManagerServlet extends HttpServlet {
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
+            //noti
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
             if (account.getRoleID() == 1) {
                 //List User
 

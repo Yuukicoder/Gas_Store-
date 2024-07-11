@@ -107,7 +107,7 @@
                                                         font-size: larger;
                                                         transition: 0.5s;
                                                         color: var(--color-dark);">
-                                                        <a href="deleteCate?id=${la.getCategoryID()}" class="bx bxs-trash"  style="  padding: 1rem 1rem; color:#176B87   " onclick="showMess(${la.getCategoryID()})" ></a>
+                                                        <a href="#" class="bx bxs-trash"  style="  padding: 1rem 1rem; color:#176B87   " onclick="showMess(${la.getCategoryID()})" ></a>
                                                         <a class="bx bxs-pencil" href="editCate?cid=${la.getCategoryID()}" style="  padding: 1rem 1rem; color:#176B87"></a>
                                                     </td>
                                                 </tr>
@@ -179,6 +179,7 @@
                                                             function showMess(id) {
                                                                 var option = confirm('Are you sure to delete?');
                                                                 if (option === true) {
+                                                                    
                                                                     window.location.href = 'deleteCate?id=' + id;
                                                                     ;
                                                                 } else {
@@ -213,7 +214,7 @@
                     padding-top: 12px;
                     padding-bottom: 12px;
                     text-align: left;
-                    background-color: #22A699;
+                    background-color: var(--light);
                     color: white;
                 }
             </style>

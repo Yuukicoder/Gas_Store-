@@ -5,14 +5,14 @@
 package Controller;
 
 import DAO.CategoryDAO;
+import DAO.NotificationDAO;
 import DAO.ProductDAO;
 import DAO.ProductImgDAO;
 import DAO.SupplierDAO;
-import DTO.AccountDTO;
 import DTO.AdminDTO;
 import DTO.Category;
+import DTO.NotificationDTO;
 import DTO.Product;
-import DTO.ProductDTO;
 import DTO.Supplier;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -30,18 +30,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
 /**
  *
  * @author dell456
  */
 @WebServlet(name = "AddProductServlet", urlPatterns = {"/productAdd"})
 @MultipartConfig(
-    fileSizeThreshold = 1024 * 1024 * 2,  // 2MB
-    maxFileSize = 1024 * 1024 * 10,       // 10MB
-    maxRequestSize = 1024 * 1024 * 50     // 50MB
+        fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50 // 50MB
 )
-public class AddProductServlet extends HttpServlet{
+public class AddProductServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -54,12 +53,12 @@ public class AddProductServlet extends HttpServlet{
             Part ipro = request.getPart("ipr");
             String fileNameIpro = ipro.getSubmittedFileName();
             String price_raw = request.getParameter("price");
-            String supplier_raw = (String)request.getParameter("supplier");
-            String unitOnOrders_raw = (String)request.getParameter("unitOnOrders");
-            String descrip = (String)request.getParameter("descrip");
-            String code= (String)request.getParameter("code");
-            String keyword= (String)request.getParameter("keyword");
-            String shortDes= (String)request.getParameter("shortDes");
+            String supplier_raw = (String) request.getParameter("supplier");
+            String unitOnOrders_raw = (String) request.getParameter("unitOnOrders");
+            String descrip = (String) request.getParameter("descrip");
+            String code = (String) request.getParameter("code");
+            String keyword = (String) request.getParameter("keyword");
+            String shortDes = (String) request.getParameter("shortDes");
 
             System.out.println("descrop" + descrip);
             ProductDAO pdao = new ProductDAO();
@@ -111,13 +110,13 @@ public class AddProductServlet extends HttpServlet{
                 } else {
                     System.out.println("error server");
                 }
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-        }else{
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } else {
             response.sendRedirect("403.jsp");
         }
-             
+
     }
 
     @Override
@@ -125,6 +124,12 @@ public class AddProductServlet extends HttpServlet{
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
+            //Reset noti-time on navbar
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
+
             SupplierDAO supplierDAO = new SupplierDAO();
             CategoryDAO categoryDAO = new CategoryDAO();
             List<Category> cdtos = categoryDAO.getAllCategory();
@@ -132,10 +137,8 @@ public class AddProductServlet extends HttpServlet{
             request.setAttribute("listSupplier", listSupplier);
             request.setAttribute("cdtos", cdtos);
             request.getRequestDispatcher("AddProduct.jsp").forward(request, response);
-        }else{
+        } else {
             response.sendRedirect("403.jsp");
         }
     }
 }
-    
-

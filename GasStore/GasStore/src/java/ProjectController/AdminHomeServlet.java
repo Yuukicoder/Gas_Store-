@@ -5,10 +5,12 @@
 package ProjectController;
 
 import DAO.AccountDAO;
+import DAO.NotificationDAO;
 import DAO.OrderDAO;
 import DAO.ProductDAO;
 import DTO.AccountDTO;
 import DTO.AdminDTO;
+import DTO.NotificationDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,6 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 /**
  *
@@ -37,7 +40,7 @@ public class AdminHomeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -70,7 +73,7 @@ public class AdminHomeServlet extends HttpServlet {
         AccountDAO adao = new AccountDAO();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
-            if (account.getRoleID()== 1) {
+            if (account.getRoleID() == 1) {
                 //get income
                 float incomeToday = odao.getIncomeToday();
                 int orderToday = odao.getOrdersToday();
@@ -80,6 +83,13 @@ public class AdminHomeServlet extends HttpServlet {
                 int totalProductA = pdao.getTotalProduct();
                 int newAccount = adao.getTotalNewAccount();
                 int totalAccount = adao.getTotalAccount();
+
+                //Reset noti-time on navbar
+                NotificationDAO nDAO = new NotificationDAO();
+                ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+                session.setAttribute("notiList", n);
+                //
+
                 //List User
                 AccountDAO accountDAO = new AccountDAO();
                 request.setAttribute("listUser", account);
@@ -93,8 +103,8 @@ public class AdminHomeServlet extends HttpServlet {
                 request.setAttribute("totalCustomer", totalAccount);
                 request.setAttribute("ListOrder", odao.listOrderInAdminHome(8));
                 request.getRequestDispatcher("adminHome.jsp").forward(request, response);
-            }else if(account.getRoleID()== 2){
-                 float incomeToday = odao.getIncomeToday();
+            } else if (account.getRoleID() == 2) {
+                float incomeToday = odao.getIncomeToday();
                 int orderToday = odao.getOrdersToday();
                 int orderDelivered = odao.getTotalOrdersDelivered();
                 int orderCanceled = odao.getTotalOrdersCancled();
@@ -102,7 +112,7 @@ public class AdminHomeServlet extends HttpServlet {
                 int totalProductA = pdao.getTotalProduct();
                 int newAccount = adao.getTotalNewAccount();
                 int totalAccount = adao.getTotalAccount();
-                 AccountDAO accountDAO = new AccountDAO();
+                AccountDAO accountDAO = new AccountDAO();
                 request.setAttribute("listUser", account);
                 request.setAttribute("incomeToday", incomeToday);
                 request.setAttribute("orderToday", orderToday);
@@ -114,8 +124,7 @@ public class AdminHomeServlet extends HttpServlet {
                 request.setAttribute("totalCustomer", totalAccount);
                 request.setAttribute("ListOrder", odao.listOrderInAdminHome(8));
                 request.getRequestDispatcher("StaffHome.jsp").forward(request, response);
-            }
-            else {
+            } else {
                 response.sendRedirect("403.jsp");
             }
         } else {

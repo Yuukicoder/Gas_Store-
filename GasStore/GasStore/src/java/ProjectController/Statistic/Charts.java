@@ -62,55 +62,55 @@ public class Charts extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        StatisticDAO statisticData = new StatisticDAO();
-        String revenueChartRange = request.getParameter("range");
-        revenueChartRange = (revenueChartRange == null) ? "" : revenueChartRange;
-        
-        Map<LocalDate, Double> revenue;
-        
-        if (revenueChartRange.equals("1M")) {
-            revenue = statisticData.getRevenueOf30Days();
-        } else if (revenueChartRange.equals("1Y")) {
-            revenue = statisticData.getRevenueOf12Months();
-        } else {
-            revenue = statisticData.getRevenueOf7Days();
-        }
-        
-        request.setAttribute("revenueDateSet", revenue.keySet().stream()
-                    .map(k -> '\"' + k.toString() + '\"')
-                    .collect(Collectors.joining(","))
-        );
-        request.setAttribute("revenueSumSet", revenue.values().stream()
-                .map(v -> v.toString())
-                .collect(Collectors.joining(","))
-        );
-        
-        Map<String, Integer> bestSellers = statisticData.getTop10BestSellerProducts();
-        
-        request.setAttribute("bestSellersNameSet", bestSellers.keySet().stream()
-                    .map(k -> '\"' + k + '\"')
-                    .collect(Collectors.joining(","))
-        );
-        request.setAttribute("bestSellersQuantitySet", bestSellers.values().stream()
-                    .map(v -> v.toString())
-                    .collect(Collectors.joining(","))
-        );
-        
-        Map<String, Double> bestRatings = statisticData.getTop10HighestRatingProducts();
-        
-        request.setAttribute("bestRatingNameSet", bestRatings.keySet().stream()
-                    .map(k -> '\"' + k + '\"')
-                    .collect(Collectors.joining(","))
-        );
-        request.setAttribute("bestRatingAvgSet", bestRatings.values().stream()
-                    .map(v -> v.toString())
-                    .collect(Collectors.joining(","))
-        );
-        
-        
-        
-        request.getRequestDispatcher("Chart.jsp").forward(request, response);
-        processRequest(request, response);
+//        StatisticDAO statisticData = new StatisticDAO();
+//        String revenueChartRange = request.getParameter("range");
+//        revenueChartRange = (revenueChartRange == null) ? "" : revenueChartRange;
+//        
+//        Map<LocalDate, Double> revenue;
+//        
+//        if (revenueChartRange.equals("1M")) {
+//            revenue = statisticData.getRevenueOf30Days();
+//        } else if (revenueChartRange.equals("1Y")) {
+//            revenue = statisticData.getRevenueOf12Months();
+//        } else {
+//            revenue = statisticData.getRevenueOf7Days();
+//        }
+//        
+//        request.setAttribute("revenueDateSet", revenue.keySet().stream()
+//                    .map(k -> '\"' + k.toString() + '\"')
+//                    .collect(Collectors.joining(","))
+//        );
+//        request.setAttribute("revenueSumSet", revenue.values().stream()
+//                .map(v -> v.toString())
+//                .collect(Collectors.joining(","))
+//        );
+//        
+//        Map<String, Integer> bestSellers = statisticData.getTop10BestSellerProducts();
+//        
+//        request.setAttribute("bestSellersNameSet", bestSellers.keySet().stream()
+//                    .map(k -> '\"' + k + '\"')
+//                    .collect(Collectors.joining(","))
+//        );
+//        request.setAttribute("bestSellersQuantitySet", bestSellers.values().stream()
+//                    .map(v -> v.toString())
+//                    .collect(Collectors.joining(","))
+//        );
+//        
+//        Map<String, Double> bestRatings = statisticData.getTop10HighestRatingProducts();
+//        
+//        request.setAttribute("bestRatingNameSet", bestRatings.keySet().stream()
+//                    .map(k -> '\"' + k + '\"')
+//                    .collect(Collectors.joining(","))
+//        );
+//        request.setAttribute("bestRatingAvgSet", bestRatings.values().stream()
+//                    .map(v -> v.toString())
+//                    .collect(Collectors.joining(","))
+//        );
+//        
+//        
+//        
+//        request.getRequestDispatcher("Chart.jsp").forward(request, response);
+//        processRequest(request, response);
     }
 
     /**

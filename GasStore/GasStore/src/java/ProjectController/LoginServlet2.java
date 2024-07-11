@@ -6,7 +6,8 @@ package ProjectController;
 
 import Controller.MaHoa;
 import DAO.AccountDAO;
-import DTO.AccountDTO;
+import DAO.NotificationDAO;
+import DAO.ShipperDAO;
 import DTO.AdminDTO;
 import dal.CustomerDao;
 import jakarta.servlet.ServletException;
@@ -16,8 +17,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 import DTO.Customer;
+import DTO.NotificationDTO;
+import DTO.ShipperDTO;
+import java.util.ArrayList;
 
 /**
  *
@@ -41,7 +44,6 @@ public class LoginServlet2 extends HttpServlet {
         System.out.println(request.getParameter("code"));
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -77,9 +79,22 @@ public class LoginServlet2 extends HttpServlet {
             CustomerDao cus = new CustomerDao();
             Customer customer = cus.checkuserandPass(username, password);
             if (customer == null) {
-                String msg = "Username or Password is not correct!";
-                request.setAttribute("mess", msg);
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+                ShipperDAO shipDAO = new ShipperDAO();
+                ShipperDTO s = shipDAO.checkuserandPass(username, password);
+                if (s == null) {                  
+                    String msg = "Username or Password is not correct!";
+                    request.setAttribute("mess", msg);
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                } else {
+                    //Reset noti-time on navbar
+                    NotificationDAO nDAO = new NotificationDAO();
+                    ArrayList<NotificationDTO> n = nDAO.getAllOtherTypeNotification(1, s.getShipperID());
+                    session.setAttribute("notiList", n);
+                    //
+                    session.setAttribute("account", s);
+                    response.sendRedirect("ShipperOrderList");
+                }
+
             } else {
                 session.setAttribute("account", customer);
                 session.setAttribute("customerID", customer.getCustomerID());
@@ -104,6 +119,13 @@ public class LoginServlet2 extends HttpServlet {
                     response.sendRedirect("home");
                 }
             } else if (account.getRoleID() == 1) {
+
+                //Reset noti-time on navbar
+                NotificationDAO nDAO = new NotificationDAO();
+                ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+                session.setAttribute("notiList", n);
+                //
+
                 session.setAttribute("account", account);
                 response.sendRedirect("adminHome");
             } else if (account.getRoleID() == 2) {

@@ -14,6 +14,7 @@ public class Order {
     private int trackingNumber;
     private double totalMoney;
     private String orderDate;
+    private String shippedDate;
     private String shipAddress;
     private int status;
     private int shipVia;
@@ -45,6 +46,8 @@ public class Order {
         this.status = status;
         this.notes = notes;
     }
+    
+    
 
     public int getOrderID() {
         return orderID;
@@ -126,6 +129,14 @@ public class Order {
         this.notes = notes;
     }
 
+    public String getShippedDate() {
+        return shippedDate;
+    }
+
+    public void setShippedDate(String shippedDate) {
+        this.shippedDate = shippedDate;
+    }
+    
     @Override
     public String toString() {
         return "Order{" + "orderID=" + orderID + ", customerID=" + customerID + ", trackingNumber=" + trackingNumber + ", totalMoney=" + totalMoney + ", orderDate=" + orderDate + ", shipAddress=" + shipAddress + ", status=" + status + ", shipVia=" + shipVia + ", payment=" + payment + ", notes=" + notes + '}';

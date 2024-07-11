@@ -6,9 +6,11 @@ package Controller;
 
 
 import DAO.CategoryDAO;
+import DAO.NotificationDAO;
 import DAO.ProductDAO;
 import DAO.ProductImgDAO;
 import DAO.SupplierDAO;
+import DTO.NotificationDTO;
 import DTO.Product;
 import DTO.ProductImg;
 import jakarta.servlet.ServletException;
@@ -16,7 +18,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,6 +38,12 @@ public class ProductDetailServlet extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            //Reset noti-time on navbar
+            HttpSession session = request.getSession();
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
             String id_raw = request.getParameter("id");
             int id = Integer.parseInt(id_raw);
             CategoryDAO categoryDAO = new CategoryDAO();

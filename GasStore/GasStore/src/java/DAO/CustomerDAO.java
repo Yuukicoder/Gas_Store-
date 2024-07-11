@@ -40,7 +40,7 @@ public class CustomerDAO extends DBcontext{
                 customer.setIsCustomer(rs.getBoolean("isCustomer"));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("getCustomerByID: " + e.getMessage());
         }
 
         return customer;

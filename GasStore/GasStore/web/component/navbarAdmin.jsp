@@ -1,6 +1,7 @@
-
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="java.text.SimpleDateFormat, java.text.ParseException" %>
+<%@ page import="DTO.NotificationDTO" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -58,42 +59,102 @@
                         <a href="#" class="dropdown-item text-center">See all message</a>
                     </div>
                 </div>
-                <div class="nav-item dropdown">
+                <div class="nav-item dropdown ">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                        <i class="fa fa-bell me-lg-2"></i>
+                        <c:if test="${sessionScope.notiList.size() > 0}">
+                        <div class="notification">
+                            <i class="fa fa-bell me-lg-2"></i><div class="dot"></div>
+                        </div>
+                        </c:if>
+                        <c:if test="${sessionScope.notiList.size() == 0}">
+                            <i class="fa fa-bell me-lg-2"></i>
+                        </c:if>
                         <span class="d-none d-lg-inline-flex">Notification</span>
+
                     </a>
                     <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                        <a href="#" class="dropdown-item">
-                            <h6 class="fw-normal mb-0">Profile updated</h6>
-                            <small>15 minutes ago</small>
-                        </a>
-                        <hr class="dropdown-divider">
-                        <a href="#" class="dropdown-item">
-                            <h6 class="fw-normal mb-0">New user added</h6>
-                            <small>15 minutes ago</small>
-                        </a>
-                        <hr class="dropdown-divider">
-                        <a href="#" class="dropdown-item">
-                            <h6 class="fw-normal mb-0">Password changed</h6>
-                            <small>15 minutes ago</small>
-                        </a>
-                        <hr class="dropdown-divider">
-                        <a href="#" class="dropdown-item text-center">See all notifications</a>
+                        <c:if test="${sessionScope.notiList.size() == 0}">
+                            <a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">There is no</h6>
+                                <h6 class="fw-normal mb-0">new notification</h6>
+                                <small></small>
+                            </a>
+                        </c:if>
+
+                        <c:if test="${sessionScope.notiList.size() > 0}">
+                            <c:forEach var="noti" items="${sessionScope.notiList}">
+                                <a href="AdminNotificationDetailServlet?id=${noti.getNotiID()}" class="dropdown-item">
+                                    <h6 class="fw-normal mb-0">${noti.getTitle()}</h6>
+                                    <%
+                                        NotificationDTO notiDTO = (NotificationDTO) pageContext.getAttribute("noti"); // Assuming getDateSended() returns a String
+                                        String dateSended = (String) notiDTO.getDateSend();
+                                        boolean isValidDate = false;
+            
+                                        if (dateSended != null) {
+                                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                            sdf.setLenient(false); // Ensure strict parsing
+                
+                                            try {
+                                                sdf.parse(dateSended);
+                                                isValidDate = true;
+                                            } catch (ParseException e) {
+                                                // Date parsing failed
+                                            }
+                                        }
+                                    %> 
+                                    <c:if test="<%= isValidDate %>">
+                                        <small>${noti.getDateSend()}</small>
+                                    </c:if>
+                                    <c:if test="<%= !isValidDate %>">
+                                        <small>${noti.getDateSend()} ago</small>
+                                    </c:if>
+                                </a>
+                                <hr class="dropdown-divider">
+                            </c:forEach>   
+                        </c:if>       
+
+                        <!--<a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">New user added</h6>
+                                <small>15 minutes ago</small>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">Password changed</h6>
+                                <small>15 minutes ago</small>
+                            </a>
+                            <hr class="dropdown-divider">-->
+                        <a href="AdminAllNotification" class="dropdown-item text-center">See all notifications</a>
                     </div>
                 </div>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                        <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                        <span class="d-none d-lg-inline-flex">John Doe</span>
+                        <img class="rounded-circle me-lg-2" src="images/User/${sessionScope.account.getImg()}" alt="" style="width: 40px; height: 40px;">
+                        <span class="d-none d-lg-inline-flex">${sessionScope.account.getAdminName()}</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                        <a href="#" class="dropdown-item">My Profile</a>
+                        <a href="AdminProfile" class="dropdown-item">My Profile</a>
                         <a href="#" class="dropdown-item">Settings</a>
                         <a href="logout" class="dropdown-item">Log Out</a>
                     </div>
                 </div>
             </div>
         </nav>
+
+        <style>
+            .notification {
+                position: relative;
+                display: inline-block;
+            }
+
+            .notification .dot {
+                position: absolute;
+                top: 6px;
+                right: 6px;
+                height: 10px;
+                width: 10px;
+                background-color: red;
+                border-radius: 50%;
+            }
+        </style>
     </body>
 </html>

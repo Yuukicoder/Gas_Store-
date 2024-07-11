@@ -5,16 +5,18 @@
 
 package Controller;
 
+import DAO.NotificationDAO;
+import DTO.NotificationDTO;
 import dal.CustomerDao;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import model.Administrator;
-import model.Customer;
 
 /**
  *
@@ -61,6 +63,12 @@ public class AdminManagerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        //Reset noti-time on navbar
+        HttpSession session = request.getSession();
+        NotificationDAO nDAO = new NotificationDAO();
+        ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+        session.setAttribute("notiList", n);
+        //
         processRequest(request, response);
     } 
 

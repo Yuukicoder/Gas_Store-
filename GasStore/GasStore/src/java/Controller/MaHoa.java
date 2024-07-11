@@ -12,11 +12,12 @@ import org.apache.tomcat.util.codec.binary.Base64;
  * @author LENOVO
  */
 public class MaHoa {
-    public static String toSHA1(String str){
+
+    public static String toSHA1(String str) {
         String salt = "leuleulamsaomabietduocmatkhau";
         String result = null;
         str = str + salt;
-        
+
         try {
             byte[] dataBytes = str.getBytes("UTF-8");
             MessageDigest md = MessageDigest.getInstance("SHA-1");
@@ -26,7 +27,7 @@ public class MaHoa {
         }
         return result;
     }
-    
+
     public static void main(String[] args) {
         System.out.println(toSHA1("123456"));
     }

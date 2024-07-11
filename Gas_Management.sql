@@ -1,4 +1,4 @@
-﻿CREATE DATABASE Gas_Management
+﻿create database [Gas_Management]
 Use Gas_Management
 
 CREATE TABLE [dbo].[Administrator](
@@ -279,13 +279,7 @@ ADD CONSTRAINT [FK_Post_Admin] FOREIGN KEY ([administratorID])
 REFERENCES [dbo].[Administrator] ([administratorID]);  
 
 ALTER TABLE [dbo].[Order]
-DROP COLUMN requiredDate
-
-ALTER TABLE [dbo].[Order]
 DROP COLUMN process
-
-ALTER TABLE [dbo].[Order]
-DROP COLUMN shippedDate
 
 ALTER TABLE [dbo].[OrderHistory]  WITH CHECK ADD  CONSTRAINT [FK_OrderHistory_Orders] FOREIGN KEY([orderID])
 REFERENCES [dbo].[Order] ([orderID])

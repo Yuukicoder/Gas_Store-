@@ -1,8 +1,8 @@
 package Controller;
 
-import DAO.ProductDAO;
+import DAO.NotificationDAO;
 import DTO.AdminDTO;
-import DTO.Product;
+import DTO.NotificationDTO;
 import dal.SupplierDao;
 import model.Supplier;
 import jakarta.servlet.ServletException;
@@ -13,18 +13,21 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
 
 @WebServlet(name = "InsertSupplierServlet", urlPatterns = {"/insertSupplier"})
 public class InsertSupplierServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
+            //Reset noti-time on navbar
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
             if (account.getRoleID() == 1) {
                 String pid = request.getParameter("id");
                 String t = request.getParameter("type");

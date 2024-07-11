@@ -46,6 +46,7 @@ public class AccountDAO extends DBcontext {
                 account.setRoleID(rs.getInt(6));
                 account.setEmail(rs.getString(7));
                 account.setImg(rs.getString(8));
+                account.setAdminName(rs.getString(9));
 
 //                    private int adminID;
 //    private String userName;
@@ -58,7 +59,7 @@ public class AccountDAO extends DBcontext {
                 return account;
             }
         } catch (Exception e) {
-
+            System.out.println("checkLogin: " + e.getMessage());
         }
         return null;
     }
@@ -76,11 +77,11 @@ public class AccountDAO extends DBcontext {
             }
             return Count;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("getTotalNewAccount: " + e.getMessage());
         }
         return 0;
     }
-    
+
     public int getTotalAccount() {
         String sql = "SELECT COUNT(AccountID) AS Count from Account";
         try {
@@ -92,7 +93,7 @@ public class AccountDAO extends DBcontext {
             }
             return Count;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("getTotalAccount: " + e.getMessage());
         }
         return 0;
     }
@@ -172,15 +173,16 @@ public class AccountDAO extends DBcontext {
     }
 
     //check username
-    public AccountDTO checkuser(String username) {
-        String sql = "select Username from Account where Username = ? ";
+    public AdminDTO checkuser(String username) {
+        String sql = "select * from Administrator where userName = ? ";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                AccountDTO accountDTO = new AccountDTO();
-                accountDTO.setUsername(rs.getString("Username"));
+                AdminDTO accountDTO = new AdminDTO();
+                accountDTO.setAdminID(rs.getInt(1));
+                accountDTO.setAdminName(rs.getString("Username"));
                 return accountDTO;
             }
         } catch (SQLException ex) {
@@ -208,6 +210,8 @@ public class AccountDAO extends DBcontext {
                 return account;
             }
         } catch (Exception e) {
+            System.out.println("searchAccountByColumn: " + e.getMessage());
+
         }
         return null;
     }
@@ -220,7 +224,7 @@ public class AccountDAO extends DBcontext {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 AdminDTO account = new AdminDTO();
-                  account.setAdminID(rs.getInt(1));
+                account.setAdminID(rs.getInt(1));
                 account.setUserName(rs.getString(2));
                 account.setPassword(rs.getString(3));
                 account.setLastLogin(rs.getString(4));
@@ -231,6 +235,8 @@ public class AccountDAO extends DBcontext {
                 la.add(account);
             }
         } catch (Exception e) {
+            System.out.println("getAllAccount: " + e.getMessage());
+
         }
         return la;
     }
@@ -257,6 +263,8 @@ public class AccountDAO extends DBcontext {
                 la.add(account);
             }
         } catch (Exception e) {
+            System.out.println("searchAccount: " + e.getMessage());
+
         }
         return la;
     }
@@ -283,79 +291,82 @@ public class AccountDAO extends DBcontext {
 //
 //        int check = adao.changePassword("12344", 2);
 //        System.out.println(check);
-            AccountDAO adao = new AccountDAO();
-            
-            List<AdminDTO> la = adao.getAllAccount();
-            for(AdminDTO a : la){
-                System.out.println(a);
-            }
+        AccountDAO adao = new AccountDAO();
+
+        List<AdminDTO> la = adao.getAllAccount();
+        for (AdminDTO a : la) {
+            System.out.println(a);
+        }
     }
 
-    public int updateProfile(AccountDTO accountDTO) {
-        String sql = "UPDATE [dbo].[Account]\n"
-                + "   SET [Username] = ?\n"
-                + "      ,[Fullname] = ?\n"
-                + "      ,[Phone] = ?\n"
-                + "      ,[Email] = ?\n"
-                + "      ,[Address] = ?\n"
-                + " WHERE AccountID = ?";
+    public int updateProfile(AdminDTO accountDTO) {
+        String sql = """
+                     UPDATE [dbo].Administrator
+                     SET [Username] = ?,
+                     [adminName] = ?,
+                     [email] = ?,
+                     [img] = ?
+                     WHERE administratorID = ?""";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, accountDTO.getUsername());
-            ps.setString(2, accountDTO.getFullname());
-            ps.setString(3, accountDTO.getPhone());
-            ps.setString(4, accountDTO.getEmail());
-            ps.setString(5, accountDTO.getAddress());
-            ps.setInt(6, accountDTO.getAccountID());
+            System.out.println("Object: " + accountDTO.getUserName());
+            ps.setString(1, accountDTO.getUserName());
+            ps.setString(2, accountDTO.getAdminName());
+            ps.setString(3, accountDTO.getEmail());
+            ps.setString(4, accountDTO.getImg());
+            ps.setInt(5, accountDTO.getAdminID());
             int checkUpdate = ps.executeUpdate();
             return checkUpdate;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("updateProfile: " + e.getMessage());
         }
         return 0;
     }
 
-    public AccountDTO getAccountById(int aid) {
-        String sql = "select * from Account where AccountID = ?";
-        AccountDTO accountDTO = new AccountDTO();
+    public AdminDTO getAccountById(int aid) {
+        String sql = "select * from Administrator where administratorID = ?";
+        AdminDTO accountDTO = new AdminDTO();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setInt(1, aid);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                accountDTO.setAccountID(aid);
-                accountDTO.setFullname(rs.getString("Fullname"));
-                accountDTO.setUsername(rs.getString("Username"));
-                accountDTO.setAddress(rs.getString("Address"));
-                accountDTO.setEmail(rs.getString("Email"));
-                accountDTO.setPhone(rs.getString("Phone"));
-                accountDTO.setPassword(rs.getString("Password"));
+                accountDTO.setAdminID(aid);
+                accountDTO.setUserName(rs.getString(2));
+                accountDTO.setPassword(rs.getString(3));
+                accountDTO.setLastLogin(rs.getString(4));
+                accountDTO.setIsActive(rs.getInt(5));
+                accountDTO.setRoleID(rs.getInt(6));
+                accountDTO.setEmail(rs.getString(7));
+                accountDTO.setImg(rs.getString(8));
+                accountDTO.setAdminName(rs.getString(9));
             }
 
             return accountDTO;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("getAccountById: " + e.getMessage());
         }
         return null;
     }
 
-    public int changePassword(String newpass, int aid) {
-        String sql = "UPDATE [dbo].[Account]\n"
-                + "   SET [Password] = ?\n"
-                + " WHERE AccountID = ?";
+    public boolean changePassword(String newpass, int uid) {
+        String sql = """
+                     UPDATE [dbo].[Administrator]
+                     SET [password] = ?
+                     WHERE administratorID = ?
+                     """;
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, newpass);
-            ps.setInt(2, aid);
-            int checkUpdate = ps.executeUpdate();
-            return checkUpdate;
-
+            ps.setInt(2, uid);
+            ps.executeUpdate();
+            return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("changePassword: " + e.getMessage());
         }
-        return 0;
+        return false;
     }
 }

@@ -4,8 +4,10 @@
  */
 package Controller;
 
+import DAO.NotificationDAO;
 import DAO.ProductDAO;
 import DTO.AdminDTO;
+import DTO.NotificationDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,19 +15,25 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
  * @author dell456
  */
 @WebServlet(name = "DeactiveProductServlet", urlPatterns = {"/productDeactive"})
-public class DeactiveProductServlet extends HttpServlet{
+public class DeactiveProductServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
+            //Reset noti-time on navbar
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
             try {
                 String id_raw = request.getParameter("id");
                 String action = request.getParameter("action");
@@ -43,8 +51,8 @@ public class DeactiveProductServlet extends HttpServlet{
                 }
             } catch (Exception e) {
             }
-        }else{
+        } else {
             response.sendRedirect("403.jsp");
         }
-    }  
+    }
 }

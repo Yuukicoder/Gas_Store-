@@ -1,10 +1,12 @@
 package Controller;
 
 
+import DAO.NotificationDAO;
 import DAO.OrderDAO;
 import DAO.ProductDAO;
 import DTO.AdminDTO;
 import DTO.Customer;
+import DTO.NotificationDTO;
 import DTO.Order;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 
@@ -38,6 +41,11 @@ public class SearchOrderServlet extends HttpServlet{
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
+            //Reset noti-time on navbar
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
             OrderDAO orderDAO = new OrderDAO();
             String searchKey = request.getParameter("search");
             System.out.println(searchKey);
