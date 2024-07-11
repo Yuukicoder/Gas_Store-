@@ -26,6 +26,7 @@ public class ProductDTO {
     private int unitOnOrders;
     private Date createdDate;
     private int createdBy;
+    private int limit;
    
 //    private int productID;
 //    private int categoryID;
@@ -76,6 +77,14 @@ public class ProductDTO {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
     }
 
     public String getName() {

@@ -11,12 +11,14 @@ import DTO.ItemDTO;
 import DTO.Order;
 import DTO.OrderDTO;
 import DTO.OrderDetail;
+import DTO.Warranty;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 //import DTO.Customer;
@@ -33,62 +35,93 @@ public class OrderDAO extends DBcontext {
 //        
         
         Cart cart = new Cart();
-        dao.addOrder(c, cart, "vin", 0,  "1234");
+//        dao.addOrder(c, cart, "vin", 0,  "1234");
         
     }
-    public void addOrder(Customer a, Cart cart, String address, double voucher1 , String notes ) {
+        
+        public int addOrder(Customer a, Cart cart, String address, double voucher1 , String notes ) {
         LocalDate curDate = LocalDate.now();
         String date = curDate.toString();
         try {
             // Thực hiện câu lệnh INSERT INTO ORDERS
             String sql = "insert into [Order] (customerID,totalMoney,orderDate,shipAddress,status,notes ) values (?,?,?,?,?,?)";
             PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-//            st.setInt(1, a.getCustomerID());
-//            st.setDouble(2, cart.getTotalMoney() - (cart.getTotalMoney() * voucher1) + 10);
-//            st.setString(3, date);
-//            st.setString(4, address);
-//            st.setInt(5, 0);
-//            st.setDouble(6, voucher);
-//            st.setString(7, phone);
-//            st.setString(8, name);
                st.setInt(1, a.getCustomerID());
                st.setDouble(2, cart.getTotalMoney() - (cart.getTotalMoney() * voucher1) + 10);
                st.setString(3,date);
                st.setString(4, address);
                st.setInt(5, 0);
                st.setString(6, notes);
-            int rowsAffected = st.executeUpdate();
-//
-            if (rowsAffected > 0) {
-                // Lấy id order vừa thêm
-            ResultSet generatedKeys = st.getGeneratedKeys();
-            int orderID = 0;
-            if (generatedKeys.next()) {
-                orderID = generatedKeys.getInt(1);
+            int affectedRows = st.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating order failed, no rows affected.");
             }
 
-            try {
-                // Thực hiện câu lệnh INSERT INTO OrderHistory
-                String insertOrderHistoryQuery = "INSERT INTO OrderHistory VALUES (?, ?, ?, ?)";
-                PreparedStatement insertOrderHistoryStatement = connection.prepareStatement(insertOrderHistoryQuery);
-                insertOrderHistoryStatement.setInt(1, orderID);
-                insertOrderHistoryStatement.setInt(2, a.getCustomerID());
-                insertOrderHistoryStatement.setInt(3, 0);
-                insertOrderHistoryStatement.setString(4, date);
-                insertOrderHistoryStatement.executeUpdate();
-            } catch (Exception ex) {
-                // Xử lý ngoại lệ khi thực hiện INSERT INTO OrderHistory
-                ex.printStackTrace();
-            }
-            } else {
-                System.out.println("Insert into ORDERS failed. No rows affected.");
+            try ( ResultSet generatedKeys = st.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Creating order failed, no ID obtained.");
+                }
             }
         } catch (Exception e) {
-            // Xử lý ngoại lệ khi thực hiện INSERT INTO ORDERS
             e.printStackTrace();
         }
-
+        return -1;
     }
+//    public void addOrder(Customer a, Cart cart, String address, double voucher1 , String notes ) {
+//        LocalDate curDate = LocalDate.now();
+//        String date = curDate.toString();
+//        try {
+//            // Thực hiện câu lệnh INSERT INTO ORDERS
+//            String sql = "insert into [Order] (customerID,totalMoney,orderDate,shipAddress,status,notes ) values (?,?,?,?,?,?)";
+//            PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+////            st.setInt(1, a.getCustomerID());
+////            st.setDouble(2, cart.getTotalMoney() - (cart.getTotalMoney() * voucher1) + 10);
+////            st.setString(3, date);
+////            st.setString(4, address);
+////            st.setInt(5, 0);
+////            st.setDouble(6, voucher);
+////            st.setString(7, phone);
+////            st.setString(8, name);
+//               st.setInt(1, a.getCustomerID());
+//               st.setDouble(2, cart.getTotalMoney() - (cart.getTotalMoney() * voucher1) + 10);
+//               st.setString(3,date);
+//               st.setString(4, address);
+//               st.setInt(5, 0);
+//               st.setString(6, notes);
+//            int rowsAffected = st.executeUpdate();
+////
+//            if (rowsAffected > 0) {
+//                // Lấy id order vừa thêm
+//            ResultSet generatedKeys = st.getGeneratedKeys();
+//            int orderID = 0;
+//            if (generatedKeys.next()) {
+//                orderID = generatedKeys.getInt(1);
+//            }
+//
+//            try {
+//                // Thực hiện câu lệnh INSERT INTO OrderHistory
+//                String insertOrderHistoryQuery = "INSERT INTO OrderHistory VALUES (?, ?, ?, ?)";
+//                PreparedStatement insertOrderHistoryStatement = connection.prepareStatement(insertOrderHistoryQuery);
+//                insertOrderHistoryStatement.setInt(1, orderID);
+//                insertOrderHistoryStatement.setInt(2, a.getCustomerID());
+//                insertOrderHistoryStatement.setInt(3, 0);
+//                insertOrderHistoryStatement.setString(4, date);
+//                insertOrderHistoryStatement.executeUpdate();
+//            } catch (Exception ex) {
+//                // Xử lý ngoại lệ khi thực hiện INSERT INTO OrderHistory
+//                ex.printStackTrace();
+//            }
+//            } else {
+//                System.out.println("Insert into ORDERS failed. No rows affected.");
+//            }
+//        } catch (Exception e) {
+//            // Xử lý ngoại lệ khi thực hiện INSERT INTO ORDERS
+//            e.printStackTrace();
+//        }
+//
+//    }
 
     public void cancelOrder(String oid) {
         String sql = "delete from Orders\n"
@@ -809,7 +842,57 @@ public class OrderDAO extends DBcontext {
 
         return order;
     }
+public void updateStockQuantity(Cart cart) {
+        String sql_3 = "UPDATE Product SET stockQuantity = stockQuantity - ? WHERE productID = ?";
+        try {
+            PreparedStatement st3 = connection.prepareStatement(sql_3);
+            for (ItemDTO i : cart.getItems()) {
+                st3.setInt(1, i.getQuantity());
+                st3.setInt(2, i.getProduct().getProductID());
+                st3.executeUpdate();
+            }
+        } catch (Exception e) {
+        }
+    }
 
-
-
+  public List<OrderDTO> getAllOrder(int id) {
+        String sql = "SELECT o.OrderID, o.totalMoney, o.orderDate, o.shipAddress, o.Status\n"
+                + "FROM [Order] o WHERE o.customerID = ?";
+        List<OrderDTO> lo = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                OrderDTO o = new OrderDTO();
+                o.setOrderID(rs.getInt(1));
+                o.setTotalPrice(rs.getDouble(2));
+                o.setOrderDate(rs.getString(3));
+                o.setAddress(rs.getString(4));
+                o.setStatus(rs.getInt(5));
+                lo.add(o);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return lo;
+    }
+  
+  public Date getDateOrderBySerialId(int serialId) {
+        String sql = "Select * from Customer C\n"
+                + "  join [Order] O on C.customerID = O.customerID\n"
+                + "  join [OrderDetails] OD on OD.orderID = O.orderID\n"
+                + "  where OD.serialID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, serialId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {         
+                return rs.getDate("orderDate");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
 }

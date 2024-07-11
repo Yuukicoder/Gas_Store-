@@ -27,6 +27,7 @@ public class Product {
     private int unitOnOrders;
     private String createdDate;
     private int createdBy;
+    private int limit;
 
     public Product() {
     }
@@ -47,6 +48,14 @@ public class Product {
         this.unitOnOrders = unitOnOrders;
         this.createdDate = createdDate;
         this.createdBy = createdBy;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
     }
 
     public int getProductID() {

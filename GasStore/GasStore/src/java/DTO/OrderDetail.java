@@ -14,8 +14,33 @@ public class OrderDetail {
     private int productID;
     private int quantity;
     private double unitPrice;
-
+    private int serialID;
+    private Product pro;
     public OrderDetail() {
+    }
+
+    public int getSerialID() {
+        return serialID;
+    }
+
+    public void setSerialID(int serialID) {
+        this.serialID = serialID;
+    }
+
+    public Product getPro() {
+        return pro;
+    }
+
+    public void setPro(Product pro) {
+        this.pro = pro;
+    }
+    
+    public OrderDetail(int orderID, Product pro, int quantity, int serialID, double unitPrice) {
+        this.orderID = orderID;
+        this.pro = pro;
+        this.quantity = quantity;
+        this.serialID = serialID;
+        this.unitPrice = unitPrice;
     }
     
     public OrderDetail(int orderID, int productID, int quantity, double unitPrice) {

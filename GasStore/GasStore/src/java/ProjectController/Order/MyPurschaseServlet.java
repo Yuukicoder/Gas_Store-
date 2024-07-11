@@ -8,7 +8,11 @@ import DAO.FeedbackDAO;
 import DAO.OrderDAO;
 import DAO.OrderDetailDAO;
 import DAO.ProductDAO;
+import DAO.SerialNumberDAO;
 import DTO.AccountDTO;
+import DTO.Customer;
+import DTO.OrderDTO;
+import DTO.OrderDetail;
 import dal.OrdersDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -45,22 +49,31 @@ public class MyPurschaseServlet extends HttpServlet {
         }
     }
 
-    @Override
+   @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        HttpSession session = request.getSession();
-//        AccountDTO account = (AccountDTO) session.getAttribute("account");
+        HttpSession session = request.getSession();
+        if(session.getAttribute("account") == null) {
+            response.sendRedirect("login");
+            return;
+        }
+        Customer cus = (Customer) session.getAttribute("account");
 //        OrderDAO odao = new OrderDAO();
 //        OrderDetailDAO odDAO = new OrderDetailDAO();
 //        ProductDAO pDAO = new ProductDAO();
 //        FeedbackDAO fdao = new FeedbackDAO();
-        OrdersDao ord  = new OrdersDao();
-        List<Orders> li = ord.getAllByID(1);
-        
+        System.out.println(cus);
+        OrderDAO ord  = new OrderDAO();
+        //chua xac dinh cusid
+        List<OrderDTO> li = ord.getAllOrder(cus.getCustomerID());
+        SerialNumberDAO serialDAO = new SerialNumberDAO();
+        OrderDetailDAO dao = new OrderDetailDAO();
+        ProductDAO pDAO = new ProductDAO();
+        List<OrderDetail> odDetail = dao.getAllOrderDetail2();
+        System.out.println("li"+li);
+        request.setAttribute("serialDAO", serialDAO);
         request.setAttribute("odDAO", li);
-//        request.setAttribute("pDAO", pDAO);
-//        request.setAttribute("fdao", fdao);
-//        request.setAttribute("purchase", odao.myPurchase(account.getAccountID()));
+        request.setAttribute("odDetails", odDetail);
         request.getRequestDispatcher("MyPurchase.jsp").forward(request, response);
     }
 

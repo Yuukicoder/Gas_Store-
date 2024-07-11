@@ -12,12 +12,8 @@ public class DBContext {
     public DBContext() {
         try {
             String username = "sa";
-<<<<<<< Updated upstream
-            String password = "123456";
-=======
             String password = "123";
->>>>>>> Stashed changes
-            String url = "jdbc:sqlserver://localhost:1433;databaseName=Gas_Management";
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=Gas_Management3";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, username, password);
             System.out.println("Database connection successful!");

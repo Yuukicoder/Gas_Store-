@@ -4,8 +4,10 @@
  */
 package ProjectController.CheckOut;
 
+import DAO.DAOWarranty;
 import DAO.IndividualVoucherDAO;
 import DAO.OrderDAO;
+import DAO.OrderDetailDAO;
 import DAO.ProductDAO;
 import DAO.VoucherDAO;
 //import DTO.AccountDTO;
@@ -102,12 +104,71 @@ public class LastCheckOutServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
+//    @Override
+//    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//        String totalvoucher = request.getParameter("totalvoucher");
+//        Double totalVoucherDouble = Double.parseDouble(totalvoucher);
+//        OrderDAO ord = new OrderDAO();
+//        //add voucher
+//        int orderId = ord.getLastOrderID();
+//        String vocheridname = request.getParameter("vourcherID");
+//        String vochername = request.getParameter("vochername");
+//        String vourcherQuantity = request.getParameter("vourcherQuantity");
+//        String nameacount = request.getParameter("nameacount");
+//        System.out.println("a" + nameacount);
+//        String phone = request.getParameter("phone");
+//        System.out.println(phone);
+//        String address = request.getParameter("address");
+//        System.out.println(address);
+//        String tongtienvoucher1 = request.getParameter("tongtienvoucher");
+//        Double tongtienvoucher = Double.parseDouble(tongtienvoucher1);
+//        
+//        ProductDAO prod = new ProductDAO();
+//        List<Product> list = prod.getAllProduct();
+//        Cookie[] arr = request.getCookies();
+//        String txt = "";
+//        if (arr != null) {
+//            for (Cookie o : arr) {
+//                if (o.getName().equals("cart")) {
+//                    txt += o.getValue();
+//                }
+//            }
+//        }
+//        Cart cart = new Cart(txt, list);
+//
+//        HttpSession session = request.getSession();
+////        AccountDTO account = (AccountDTO) session.getAttribute("account");
+//           Customer account = (Customer) session.getAttribute("account");
+//        if (account == null) {
+//            response.sendRedirect("login ");
+//        } else {
+//            ord.addOrder(account, cart, address, totalVoucherDouble, nameacount);
+//            ord.addOrderDetail(cart, ord.getLastOrderID());
+//            ord.updateQuantity(cart);
+//            request.setAttribute("cart", cart);
+//            Cookie c = new Cookie("cart", "");
+//            c.setMaxAge(0);
+//            response.addCookie(c);
+//
+//            IndividualVoucherDAO individualVoucherDAO = new IndividualVoucherDAO();
+//            individualVoucherDAO.addIndividualVoucher(vocheridname, orderId, vochername);
+//
+//            VoucherDAO voucherDAO = new VoucherDAO();
+//            voucherDAO.UpdateQuantityVoucher(vochername, vourcherQuantity);
+//
+//            request.setAttribute("mess", "Order Successfully!!!");
+//
+//            response.sendRedirect("shop");
+//        }
+//    }
+ @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String totalvoucher = request.getParameter("totalvoucher");
         Double totalVoucherDouble = Double.parseDouble(totalvoucher);
         OrderDAO ord = new OrderDAO();
+        OrderDetailDAO oid = new OrderDetailDAO();
         //add voucher
         int orderId = ord.getLastOrderID();
         String vocheridname = request.getParameter("vourcherID");
@@ -139,28 +200,32 @@ public class LastCheckOutServlet extends HttpServlet {
 //        AccountDTO account = (AccountDTO) session.getAttribute("account");
            Customer account = (Customer) session.getAttribute("account");
         if (account == null) {
-            response.sendRedirect("login ");
+            response.sendRedirect("login");
         } else {
-            ord.addOrder(account, cart, address, totalVoucherDouble, nameacount);
-            ord.addOrderDetail(cart, ord.getLastOrderID());
-            ord.updateQuantity(cart);
+            int orderIdReturn = ord.addOrder(account, cart, address, totalVoucherDouble, nameacount);
+            
+            DAOWarranty daoWar = new DAOWarranty();
+            System.out.println("h: "+cart);
+            oid.insertOrderDetail(cart, orderIdReturn);
+            
+            ord.updateStockQuantity(cart);
+            
             request.setAttribute("cart", cart);
             Cookie c = new Cookie("cart", "");
             c.setMaxAge(0);
             response.addCookie(c);
 
-            IndividualVoucherDAO individualVoucherDAO = new IndividualVoucherDAO();
-            individualVoucherDAO.addIndividualVoucher(vocheridname, orderId, vochername);
-
-            VoucherDAO voucherDAO = new VoucherDAO();
-            voucherDAO.UpdateQuantityVoucher(vochername, vourcherQuantity);
+//            IndividualVoucherDAO individualVoucherDAO = new IndividualVoucherDAO();
+//            individualVoucherDAO.addIndividualVoucher(vocheridname, orderId, vochername);
+//
+//            VoucherDAO voucherDAO = new VoucherDAO();
+//            voucherDAO.UpdateQuantityVoucher(vochername, vourcherQuantity);
 
             request.setAttribute("mess", "Order Successfully!!!");
 
             response.sendRedirect("shop");
         }
     }
-
     /**
      * Returns a short description of the servlet.
      *

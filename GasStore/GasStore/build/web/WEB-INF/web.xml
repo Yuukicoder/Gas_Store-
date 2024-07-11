@@ -104,6 +104,10 @@
         <servlet-name>InsertSupplierServlet</servlet-name>
         <servlet-class>Controller.AdminAccountServlet.InsertSupplierServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddWarranty</servlet-name>
+        <servlet-class>ProjectController.Warranty.AddWarranty</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
         <url-pattern>/signup</url-pattern>
@@ -211,6 +215,26 @@
     <servlet-mapping>
         <servlet-name>InsertSupplierServlet</servlet-name>
         <url-pattern>/insert-supplier</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>WarrantyServlet</servlet-name>
+        <servlet-class>ProjectController.Warranty.WarrantyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WarrantyServlet</servlet-name>
+        <url-pattern>/warrantyServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ManageWarranty</servlet-name>
+        <servlet-class>ProjectController.Warranty.ManageWarranty</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManageWarranty</servlet-name>
+        <url-pattern>/manageWarranty</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddWarranty</servlet-name>
+        <url-pattern>/addWarranty</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

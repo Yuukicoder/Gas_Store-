@@ -69,7 +69,13 @@ public Customer(String userName, String password, String email) {
         this.email = email;
     }
     
-
+public Customer(int customerID, String userName, String address, String email) {
+        this.customerID = customerID;
+        this.userName = userName;
+        this.address = address;
+        this.email = email;
+    }
+    
     public Customer(int customerID, String userName, String password, String image, String firstName, String lastName, String phone, String email) {
         this.customerID = customerID;
         this.userName = userName;
