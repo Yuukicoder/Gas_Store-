@@ -6,9 +6,11 @@ package Controller;
 
 
 import DAO.CategoryDAO;
+import DAO.FeedbackDAO;
 import DAO.ProductDAO;
 import DAO.ProductImgDAO;
 import DAO.SupplierDAO;
+import DTO.FeedbackDTO;
 import DTO.Product;
 import DTO.ProductImg;
 import jakarta.servlet.ServletException;
@@ -47,12 +49,16 @@ public class ProductDetailServlet extends HttpServlet{
             String supplierName = supplierDAO.getSupplierByID(supplierId).getCompanyName();
             List<Product> list = proDAO.getProductByCategory(categoryId);
             List<ProductImg> pimgs = pidao.getPImgByPid(id);
+            FeedbackDAO fd = new FeedbackDAO();
+             List<FeedbackDTO> productFeedback = fd.getFeedbackByProductId(id);
             request.setAttribute("pimgs", pimgs);
             request.setAttribute("detail", pro);
             request.setAttribute("categoryName", categoryName);
             request.setAttribute("supplierName", supplierName);
             request.setAttribute("formattedPrice", pro.getFormattedPrice());
             request.setAttribute("alsoLike", list);
+            request.setAttribute("productFeedback", productFeedback);
+
             request.getRequestDispatcher("detail.jsp").forward(request, response);
         } catch (Exception e) {
             // Log the exception

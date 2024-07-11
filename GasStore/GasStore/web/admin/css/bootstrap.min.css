@@ -1581,6 +1581,17 @@ progress{
     color:#fff;
     border-color:#7b809e
 }
+.table-light1{
+    /*--bs-table-bg: #6C7293;*/
+    --bs-table-striped-bg: #737998;
+    --bs-table-striped-color: #000;
+    --bs-table-active-bg: #7b809e;
+    --bs-table-active-color: #000;
+    --bs-table-hover-bg: #777d9b;
+    --bs-table-hover-color: #000;
+    /*color:#fff;*/
+    border-color:#7b809e
+}
 .table-dark{
     --bs-table-bg: #000;
     --bs-table-striped-bg: #0d0d0d;
@@ -3183,7 +3194,7 @@ textarea.form-control-lg{
 }
 .nav-tabs .nav-link.active,.nav-tabs .nav-item.show .nav-link{
     color:#495057;
-    background-color:#000;
+    background-color:#f5f5f5;
     border-color:#000
 }
 .nav-tabs .dropdown-menu{
@@ -6264,7 +6275,7 @@ textarea.form-control-lg{
     color:#dc3545 !important
 }
 .text-light{
-    color:#6C7293 !important
+    color:#ffffff !important
 }
 .text-dark{
     color:#000 !important

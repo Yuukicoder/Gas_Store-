@@ -61,36 +61,36 @@
             .navigation .row .col-2.text-center a.nav-link:hover {
                 color: #ff4500;
             }
-     
 
-.row.px-xl-5-col {
-    background-color: #ffffff; /* Màu nền cho từng order */
-    border: 1px solid #e0e0e0; /* Viền nhẹ */
-    padding: 20px;
-    margin-top: 20px;
-}
+
+            .row.px-xl-5-col {
+                background-color: #ffffff; /* Màu nền cho từng order */
+                border: 1px solid #e0e0e0; /* Viền nhẹ */
+                padding: 20px;
+                margin-top: 20px;
+            }
 
 
         </style>
         <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Lấy tất cả các mục trong danh sách bộ lọc
-        var filterItems = document.querySelectorAll('.nav-pills .nav-item .nav-link');
+            document.addEventListener("DOMContentLoaded", function () {
+                // Lấy tất cả các mục trong danh sách bộ lọc
+                var filterItems = document.querySelectorAll('.nav-pills .nav-item .nav-link');
 
-        // Đặt sự kiện click cho từng mục
-        filterItems.forEach(function(item) {
-            item.addEventListener('click', function() {
-                // Xóa lớp active từ tất cả các mục
-                filterItems.forEach(function(item) {
-                    item.classList.remove('active');
+                // Đặt sự kiện click cho từng mục
+                filterItems.forEach(function (item) {
+                    item.addEventListener('click', function () {
+                        // Xóa lớp active từ tất cả các mục
+                        filterItems.forEach(function (item) {
+                            item.classList.remove('active');
+                        });
+
+                        // Thêm lớp active cho mục được click
+                        this.classList.add('active');
+                    });
                 });
-
-                // Thêm lớp active cho mục được click
-                this.classList.add('active');
             });
-        });
-    });
-</script>
+        </script>
 
 
     </head>
@@ -116,9 +116,9 @@
 
 
         <div class="container-fluid navigation">
-    <div class="row">
-        <div class="col-12">
-            
+            <div class="row">
+                <div class="col-12">
+
                     <ul class="nav nav-pills justify-content-between">
                         <li class="nav-item">
                             <a class="nav-link" href="mypurchase?status=-1">All</a>
@@ -136,32 +136,32 @@
                             <a class="nav-link" href="mypurchase?status=4">Canceled</a>
                         </li>
                     </ul>
-                
+
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<style>
-    .navigation {
-        background-color: #FFFFFF;
-        border-bottom: 1px solid #e0e0e0;
-        padding: 20px;
-        width: 92%;
-        margin-bottom: 20px;
-    }
+        <style>
+            .navigation {
+                background-color: #FFFFFF;
+                border-bottom: 1px solid #e0e0e0;
+                padding: 20px;
+                width: 92%;
+                margin-bottom: 20px;
+            }
 
-    .nav-pills .nav-link {
-        color: #333;
-        font-weight: 500;
-        transition: color 0.3s ease;
-    }
+            .nav-pills .nav-link {
+                color: #333;
+                font-weight: 500;
+                transition: color 0.3s ease;
+            }
 
-    .nav-pills .nav-link.active,
-    .nav-pills .nav-link:hover {
-        color: #ff4500;
-        background-color: transparent;
-    }
-</style>
+            .nav-pills .nav-link.active,
+            .nav-pills .nav-link:hover {
+                color: #ff4500;
+                background-color: transparent;
+            }
+        </style>
 
 
 
@@ -251,7 +251,7 @@
 
                             </tbody>
                         </table>
-                                <hr>
+                        <hr>
                         <div class="right-side m-2" style="margin-right: 5.5rem;
                              margin-top: 1rem; text-align: right;margin-bottom: 10px;">
                             <c:if test="${p.status == 3}">
@@ -286,7 +286,7 @@
                         <div class="modal-body">
                             <table class="table table-light table-borderless table-hover text-center mb-0">
                                 <thead>
-
+                                    <!-- Table headers -->
                                 </thead>
                                 <tbody class="align-middle">
                                     <c:set var="index" value="0"/>
@@ -297,21 +297,21 @@
                                             <td class="align-middle"><img style="width: 80px" class="img-fluid" src="${pDAO.getProductByID(o.getProductID()).getImage()}" alt="Image"></td>
                                             <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getName()}</td>
                                             <td class="align-middle">${o.getQuantity()}</td>
-
-                                            <!--<td class="align-middle">${pDAO.getProductByID(o.getProductID()).getUnitPrice()}₫</td>-->
                                             <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getUnitPrice()* o.getQuantity() }₫</td>
-                                            <!-- Add other columns as needed -->
-                                            <td><a href="feedback?productid=${o.getProductID()}&orderid=${p.orderID}">Feedback</a></td>
+                                            <td>
+                                                <c:if test="${!feedbackDAO.hasFeedback(o.getProductID(), p.orderID)}">
+                                                    <a href="feedback?productid=${o.getProductID()}&orderid=${p.orderID}">Feedback</a>
+                                                </c:if>
+                                                <br>
+                                                <c:if test="${feedbackDAO.hasFeedback(o.getProductID(), p.orderID)}">
+                                                    <a href="viewFeedback?productid=${o.getProductID()}&orderid=${p.orderID}">View Feedback</a>
+                                                </c:if>
+                                            </td>
                                         </tr>
                                     </c:forEach>
-
-
                                 </tbody>
-                                </tbody>
-
                             </table>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -348,7 +348,7 @@
                                                     modalBody.innerHTML = orderDetail;
                                         });
                                     }
-                                    
+
         </script>
         <script>
             function showMess(id) {

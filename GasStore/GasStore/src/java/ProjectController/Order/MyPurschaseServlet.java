@@ -87,8 +87,14 @@ public class MyPurschaseServlet extends HttpServlet {
             List<OrderDetail> orderDetails = odDAO.getOrderDetailByID(order.getOrderID());
             orderDetailsMap.put(order.getOrderID(), orderDetails);
         }
-
+          FeedbackDAO fd = new FeedbackDAO();
+        Map<Integer, Integer> feedbackCountMap = new HashMap<>();
+        for (Orders order : orderList) {
+            int feedbackCount = fd.getCount(order.getOrderID(), cus.getCustomerID());
+            feedbackCountMap.put(order.getOrderID(), feedbackCount);
+        }
         // Set attributes for the request
+         request.setAttribute("feedbackCountMap", feedbackCountMap);
         request.setAttribute("odDAO", odDAO);
         request.setAttribute("order", orderList);
         request.setAttribute("pDAO", pDAO);

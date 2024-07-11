@@ -3183,7 +3183,12 @@ textarea.form-control-lg{
 }
 .nav-tabs .nav-link.active,.nav-tabs .nav-item.show .nav-link{
     color:#495057;
-    background-color:#000;
+    background-color:#f5f5f5;
+    border-color:#000
+}
+.nav-tabs .nav-link.active,.nav-tabs .nav-item.show .nav-link{
+    color:#495057;
+    background-color:#f5f5f5;
     border-color:#000
 }
 .nav-tabs .dropdown-menu{

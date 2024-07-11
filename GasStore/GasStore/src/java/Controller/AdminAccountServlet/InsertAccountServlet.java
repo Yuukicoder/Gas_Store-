@@ -6,6 +6,11 @@
 package Controller.AdminAccountServlet;
 
 import static Controller.MaHoa.toSHA1;
+import DAO.FeedbackDAO;
+import DAO.OrderDAO;
+import DAO.OrderDetailDAO;
+import DAO.OrderHistoryDAO;
+import DAO.ProductDAO;
 import DTO.AdminDTO;
 import dal.CustomerDao;
 import dal.RoleDao;
@@ -18,6 +23,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import DTO.Customer;
+import DTO.FeedbackDTO;
+import DTO.OrderDetail;
+import DTO.OrderHistoryDTO;
+import dal.OrdersDao;
+import java.util.HashMap;
+import java.util.Map;
+import model.Orders;
 import model.Role;
 
 /**
@@ -51,6 +63,46 @@ public class InsertAccountServlet extends HttpServlet {
                 request.setAttribute("detailaccount", u);
             }
         }
+        String statusParam = request.getParameter("status");
+        int status = statusParam != null ? Integer.parseInt(statusParam) : -1; // Default value or handle null case
+
+        // Instantiate DAO objects
+        OrderDAO odao = new OrderDAO();
+        OrderDetailDAO odDAO = new OrderDetailDAO();
+        ProductDAO pDAO = new ProductDAO();
+        OrdersDao ord = new OrdersDao();
+        List<Orders> orderList;
+        if (status != -1) {
+            // Get the orders for the customer filtered by status
+            orderList = ord.getAllByID(Integer.parseInt(pid), status);
+        } else {
+            orderList = ord.getAllByID(Integer.parseInt(pid));
+        }
+        // Create a map to hold order details for each order
+        Map<Integer, List<OrderDetail>> orderDetailsMap = new HashMap<>();
+
+        // Fetch order details for each order
+        for (Orders order : orderList) {
+            List<OrderDetail> orderDetails = odDAO.getOrderDetailByID(order.getOrderID());
+            orderDetailsMap.put(order.getOrderID(), orderDetails);
+        }
+          FeedbackDAO fd = new FeedbackDAO();
+        Map<Integer, Integer> feedbackCountMap = new HashMap<>();
+        for (Orders order : orderList) {
+            int feedbackCount = fd.getCount(order.getOrderID(), Integer.parseInt(pid));
+            feedbackCountMap.put(order.getOrderID(), feedbackCount);
+        }
+//        FeedbackDAO fd = new FeedbackDAO();
+             List<FeedbackDTO> productFeedback = fd.getFeedbackById(Integer.parseInt(pid));
+        // Set attributes for the request
+         request.setAttribute("feedbackCountMap", feedbackCountMap);
+        request.setAttribute("odDAO", odDAO);
+        request.setAttribute("order", orderList);
+        request.setAttribute("pDAO", pDAO);
+        request.setAttribute("purchase", orderList);
+        request.setAttribute("orderDetailsMap", orderDetailsMap);
+        request.setAttribute("productFeedback", productFeedback);
+
         request.getRequestDispatcher("InsertAccount.jsp").forward(request, response);
           } else {
                 response.sendRedirect("403.jsp");

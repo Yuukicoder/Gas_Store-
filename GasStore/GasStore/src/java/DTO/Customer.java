@@ -83,7 +83,7 @@ public Customer(String userName, String password, String email) {
         this.email = email;
     }
     
-    public Customer(String userName, String password, String firstName, String lastName,boolean isCustomer, String phone, String email) {
+    public Customer(String userName, String password, String firstName, String lastName,boolean isCustomer, String phone, String email,String image) {
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
@@ -91,6 +91,7 @@ public Customer(String userName, String password, String email) {
         this.phone = phone;
         this.isCustomer = isCustomer;
         this.email = email;
+        this.image = image;
     }
 
     public Customer(int customerID, String userName, String password, String firstName, String lastName, boolean isCustomer, String phone, String email) {

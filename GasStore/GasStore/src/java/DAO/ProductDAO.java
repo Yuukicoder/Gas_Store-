@@ -54,9 +54,43 @@ public class ProductDAO extends DBcontext {
         }
         return lp;
     }
-
+    
     public Product getProductByID(int id) {
         String sql = "SELECT * FROM Product WHERE productID = " + id;
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                Product product = new Product();
+                product.setProductID(rs.getInt("productID"));
+                product.setCode(rs.getString("code"));
+                product.setName(rs.getString("name"));
+                product.setKeywords(rs.getString("keywords"));
+                product.setShortDescription(rs.getString("shortDescription"));
+                product.setDescription(rs.getString("description"));
+                product.setCategoryID(rs.getInt("categoryID"));
+                product.setSupplierID(rs.getInt("supplierID"));
+                product.setIsActive(rs.getBoolean("isActive"));
+                product.setUnitPrice(rs.getFloat("unitPrice"));
+                product.setImage(rs.getString("image"));
+                product.setStockQuantity(rs.getInt("stockQuantity"));
+                product.setUnitOnOrders(rs.getInt("unitOnOrders"));
+                product.setCreatedDate(rs.getString("createdDate"));
+                product.setCreatedBy(rs.getInt("createdBy"));
+                return product;
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+     public Product getProductByID1(int id,int orid) {
+        String sql = "SELECT * \n" +
+"FROM Product P\n" +
+"JOIN Feedback F ON P.ProductID = F.ProductID\n" +
+"JOIN [Order] O ON F.OrderID = O.OrderID\n" +
+"JOIN Customer A ON O.CustomerID = A.CustomerID\n" +
+"WHERE P.ProductID = ? AND O.OrderID = ?\n" +
+  id+orid;
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();

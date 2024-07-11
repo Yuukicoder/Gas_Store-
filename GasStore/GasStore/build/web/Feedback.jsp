@@ -96,8 +96,8 @@
                             <input hidden name="pid" value="${requestScope.productid1}"/>
                             <input hidden name="oid" value="${requestScope.orderid}"/> 
 
-                            <div class="form-group text-center">
-                                <input type="submit"  value="Leave Your Review" class="btn btn-primary px-4">
+                            <div class="form-group text-center text-dark ">
+                                <input type="submit"  value="Leave Your Review" class="btn btn-warning px-4">
                             </div>
                         </form>
                     </div>

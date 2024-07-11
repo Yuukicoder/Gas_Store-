@@ -26,7 +26,7 @@ import java.util.List;
  * @author msi
  */
 public class OrderDAO extends DBcontext {
-
+    
     public void addOrder(Customer a, Cart cart, String address, double voucher, double voucher1 , String name , String phone) {
         LocalDate curDate = LocalDate.now();
         String date = curDate.toString();
@@ -736,6 +736,7 @@ public class OrderDAO extends DBcontext {
         }
         return orderMap;
     }
+    
 
     public static void main(String[] args) {
         OrderDAO dao = new OrderDAO();

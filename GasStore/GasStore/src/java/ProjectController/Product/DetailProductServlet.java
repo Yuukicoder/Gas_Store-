@@ -10,7 +10,9 @@ import DAO.FeedbackReplyDAO;
 import DAO.ProductDAO;
 import DAO.ProductImgDAO;
 import DTO.AccountDTO;
+import DTO.Product;
 import DTO.ProductDTO;
+import DTO.ProductImg;
 import DTO.ProductImgDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -71,12 +73,12 @@ public class DetailProductServlet extends HttpServlet {
                 String id_raw = request.getParameter("id");
                 int id = Integer.parseInt(id_raw);
                 ProductDAO proDAO = new ProductDAO();
-                ProductDTO pro = proDAO.getProductByID(id);
+                Product pro = proDAO.getProductByID(id);
                 int categoryId = pro.getCategoryID();
                 FeedbackDAO feedbackDAO = new FeedbackDAO();
                 ProductImgDAO pidao = new ProductImgDAO();
-                List<ProductDTO> list = proDAO.getProductByCategory(categoryId);
-                List<ProductImgDTO> pimgs = pidao.getPImgByPid(id);
+                List<Product> list = proDAO.getProductByCategory(categoryId);
+                List<ProductImg> pimgs = pidao.getPImgByPid(id);
                 FeedbackReplyDAO feedbackReplyDAO = new FeedbackReplyDAO();
 
                 //phan trang 

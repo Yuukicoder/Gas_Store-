@@ -88,32 +88,38 @@ public class CustomerDao extends DBcontext {
         } catch (Exception e) {
         }
     }
-
-    public void updateStaff(Administrator admin) {
-        String sql = "update Administrator set userName = ? ,password = ?, isActive = ?, roleID = ?, email = ? where administratorID = ?";
-        try {
-
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//        Timestamp createdTimestamp = Timestamp.valueOf(LocalDateTime.now());
+public void updateStaff(Administrator admin) {
+        String sql = "UPDATE Administrator SET userName = ?, password = ?, isActive = ?, roleID = ?, email = ?, img = ? WHERE administratorID = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             // Set values for parameters
-
             preparedStatement.setString(1, admin.getUserName());
             preparedStatement.setString(2, admin.getPassword());
-
             preparedStatement.setBoolean(3, admin.isIsActive());
             preparedStatement.setInt(4, admin.getRoleID());
-
             preparedStatement.setString(5, admin.getEmail());
-            preparedStatement.executeUpdate();
+            preparedStatement.setString(6, admin.getImg());
+            preparedStatement.setInt(7, admin.getAdministratorID());
+
+            // Execute the update
+            int rowsUpdated = preparedStatement.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("An existing admin was updated successfully!");
+            } else {
+                System.out.println("No admin found with the provided ID.");
+            }
+        } catch (SQLException e) {
+            System.err.println("SQL error: " + e.getMessage());
+            e.printStackTrace();
         } catch (Exception e) {
-            System.out.println(e);
+            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     public void insertStaff(Administrator admin) {
         try {
-            String sql = "INSERT INTO Administrator (userName, password, isActive,roleID, email) "
-                    + "VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Administrator (userName, password, isActive,roleID, email,img) "
+                    + "VALUES (?, ?, ?, ?, ?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             // Set values for parameters
             preparedStatement.setString(1, admin.getUserName());
@@ -123,6 +129,7 @@ public class CustomerDao extends DBcontext {
             preparedStatement.setInt(4, admin.getRoleID());
 
             preparedStatement.setString(5, admin.getEmail());
+            preparedStatement.setString(6, admin.getImg());
 
             // Execute the query
             preparedStatement.executeUpdate();
@@ -130,7 +137,6 @@ public class CustomerDao extends DBcontext {
             System.out.println("Error inserting customer: " + e.getMessage());
         }
     }
-
     /**
      * CustomerDao
      *
@@ -224,10 +230,11 @@ public class CustomerDao extends DBcontext {
             stm.setInt(2, endRow);
             rs = stm.executeQuery();
             while (rs.next()) {
-                Customer em = new Customer(rs.getInt("customerID"), rs.getString("userName"),
-                        rs.getString("password"), rs.getString("firstName"),
-                        rs.getString("lastName"),
-                        rs.getBoolean("isCustomer"), rs.getString("phone"), rs.getString("email"));
+                Customer em;
+                em = new Customer(rs.getInt("customerID"), rs.getString("userName"),
+                        rs.getString("password"), rs.getString("image"),rs.getString("firstName"),
+                        rs.getString("lastName"), 
+                        rs.getString("phone"), rs.getString("email"));
                 list.add(em);
             }
         } catch (SQLException e) {
@@ -361,6 +368,7 @@ public class CustomerDao extends DBcontext {
         }
         return null;
     }
+    
 
     public ArrayList<Customer> getListCheckGmail(String email) {
         ArrayList<Customer> customerList = new ArrayList<>();
@@ -652,8 +660,7 @@ public class CustomerDao extends DBcontext {
         return li;
     }
 
- 
-    public void updateUser(Customer customer) {
+  public void updateUser(Customer customer) {
         String sql = "UPDATE Customer SET userName = ?, password = ?, firstName = ?, lastName = ?, phone = ?, email = ?, image = ?, address = ? WHERE customerID = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, customer.getUserName());
@@ -696,7 +703,6 @@ public class CustomerDao extends DBcontext {
             System.out.println("Error inserting customer: " + e.getMessage());
         }
     }
-
     public List<model.Customer> SearchPaginatedCustomers(int pageNum, int pageSize, String tname) {
         lists = new ArrayList<>();
         try {
