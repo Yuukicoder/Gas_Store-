@@ -280,7 +280,48 @@ public class ProductDAO extends DBcontext {
         }
         return productCMap;
     }
+    public int updateProduct2(Product productDTO) {
+        String sql;
+        
+            sql = "UPDATE [dbo].[Product]\n"
+                    + "   SET [categoryID] = ?,\n"
+                    + "      [code] = ?,\n"
+                    + "      [name] = ?,\n"
+                    + "      [keywords] = ?,\n"
+                    + "      [shortDescription] = ?,\n"
+                    + "      [description] = ?,\n"
+                    + "      [supplierID] = ?,\n"
+                    + "      [isActive] = ?,\n"
+                    + "      [unitPrice] = ?,\n"
+                    + "      [stockQuantity] = ?,\n"
+                    + "      [unitOnOrders] = ?\n"
+                    + " WHERE productID = ?";
+        
 
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, productDTO.getCategoryID());
+            st.setString(2, productDTO.getCode());
+            st.setString(3, productDTO.getName());
+            st.setString(4, productDTO.getKeywords());
+            st.setString(5, productDTO.getShortDescription());
+            st.setString(6, productDTO.getDescription());
+            st.setInt(7, productDTO.getSupplierID());
+            st.setBoolean(8, productDTO.isIsActive());
+            st.setBigDecimal(9, BigDecimal.valueOf(productDTO.getUnitPrice()));
+           
+                st.setInt(10, productDTO.getStockQuantity());
+                st.setInt(11, productDTO.getUnitOnOrders());
+                st.setInt(12, productDTO.getProductID());
+            
+
+            return st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return 0;
+    }
     public int updateProduct(Product productDTO, int checkImg) {
         String sql;
         if (checkImg == 1) {

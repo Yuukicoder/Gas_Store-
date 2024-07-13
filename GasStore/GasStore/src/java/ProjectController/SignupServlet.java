@@ -78,10 +78,10 @@ public class SignupServlet extends HttpServlet {
             throws ServletException, IOException {
        String firstname_raw = request.getParameter("firstname");
        String lastname_raw = request.getParameter("lastname");
-        String user_raw = request.getParameter("username");
+        String user_raw = request.getParameter("user");
         String gamil_raw = request.getParameter("email");
-        String password_raw = MaHoa.toSHA1(request.getParameter("password"));
-        String password_raw2 = request.getParameter("password");
+        String password_raw = MaHoa.toSHA1(request.getParameter("pass"));
+        String password_raw2 = request.getParameter("pass");
         String repass_raw = MaHoa.toSHA1(request.getParameter("repass"));
         String phone_raw = request.getParameter("phone");
         System.out.println(firstname_raw);

@@ -16,7 +16,11 @@ public class Cart {
 
     private List<ItemDTO> items;
 
+//    public Cart() {
+//    }
     public Cart() {
+        // Khởi tạo danh sách items
+        items = new ArrayList<>();
     }
 
     public Cart(List<ItemDTO> items) {

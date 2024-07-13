@@ -28,24 +28,41 @@ import java.util.List;
 public class OrderDAO extends DBcontext {
     
     public void addOrder(Customer a, Cart cart, String address, double voucher, double voucher1 , String name , String phone) {
+        public static void main(String[] args) {
+        OrderDAO dao = new OrderDAO();
+//        System.out.println(dao.searchOrders("duc").size());
+        Customer c = new Customer(2);
+//        
+        
+        Cart cart = new Cart();
+        dao.addOrder(c, cart, "vin", 0,  "1234");
+        
+    }
+    public void addOrder(Customer a, Cart cart, String address, double voucher1 , String notes ) {
         LocalDate curDate = LocalDate.now();
         String date = curDate.toString();
         try {
             // Thực hiện câu lệnh INSERT INTO ORDERS
-            String sql = "INSERT INTO ORDERS VALUES (?,?,?,?,?,?,?,?)";
+            String sql = "insert into [Order] (customerID,totalMoney,orderDate,shipAddress,status,notes ) values (?,?,?,?,?,?)";
             PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            st.setInt(1, a.getCustomerID());
-            st.setDouble(2, cart.getTotalMoney() - (cart.getTotalMoney() * voucher1) + 10);
-            st.setString(3, date);
-            st.setString(4, address);
-            st.setInt(5, 0);
-            st.setDouble(6, voucher);
-            st.setString(7, phone);
-            st.setString(8, name);
+//            st.setInt(1, a.getCustomerID());
+//            st.setDouble(2, cart.getTotalMoney() - (cart.getTotalMoney() * voucher1) + 10);
+//            st.setString(3, date);
+//            st.setString(4, address);
+//            st.setInt(5, 0);
+//            st.setDouble(6, voucher);
+//            st.setString(7, phone);
+//            st.setString(8, name);
+               st.setInt(1, a.getCustomerID());
+               st.setDouble(2, cart.getTotalMoney() - (cart.getTotalMoney() * voucher1) + 10);
+               st.setString(3,date);
+               st.setString(4, address);
+               st.setInt(5, 0);
+               st.setString(6, notes);
             int rowsAffected = st.executeUpdate();
 //
-//            if (rowsAffected > 0) {
-//                // Lấy id order vừa thêm
+            if (rowsAffected > 0) {
+                // Lấy id order vừa thêm
             ResultSet generatedKeys = st.getGeneratedKeys();
             int orderID = 0;
             if (generatedKeys.next()) {
@@ -65,9 +82,9 @@ public class OrderDAO extends DBcontext {
                 // Xử lý ngoại lệ khi thực hiện INSERT INTO OrderHistory
                 ex.printStackTrace();
             }
-//            } else {
-//                System.out.println("Insert into ORDERS failed. No rows affected.");
-//            }
+            } else {
+                System.out.println("Insert into ORDERS failed. No rows affected.");
+            }
         } catch (Exception e) {
             // Xử lý ngoại lệ khi thực hiện INSERT INTO ORDERS
             e.printStackTrace();
@@ -738,10 +755,6 @@ public class OrderDAO extends DBcontext {
     }
     
 
-    public static void main(String[] args) {
-        OrderDAO dao = new OrderDAO();
-        System.out.println(dao.searchOrders("duc").size());
-        
-    }
+
 
 }

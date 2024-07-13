@@ -53,7 +53,7 @@ public class CustomerDao extends DBcontext {
         }
         return li;
     }
-
+    
     public Administrator getAdminByID(int id) {
         list = new ArrayList<>();
         try {
@@ -162,7 +162,7 @@ public void updateStaff(Administrator admin) {
         return list;
     }
 
-    public Customer getAllByID(int id) {
+   public Customer getAllByID(int id) {
         list = new ArrayList<>();
         try {
             String strSelect = "select * from Customer where customerID = ?";
