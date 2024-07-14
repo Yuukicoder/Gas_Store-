@@ -41,6 +41,8 @@ public class VoucherDAO extends DBcontext {
                 lv.add(v);
             }
         } catch (Exception e) {
+            System.out.println("VoucherDAO - listVoucher: " + e.getMessage());
+
         }
         return lv;
     }
@@ -65,10 +67,11 @@ public class VoucherDAO extends DBcontext {
                 lv.add(v);
             }
         } catch (Exception e) {
+            System.out.println("VoucherDAO - getidVoucher: " + e.getMessage());
         }
         return lv;
     }
-    
+
     public List<Voucher> getQuantityVoucher(String id) {
         String sql = "SELECT [VoucherID],[Name],[VoucherCode],[DateStart],[DateEnd],[Quantity],[Discount]\n"
                 + "  FROM [dbo].[Voucher] where VoucherCode = ? and Quantity = 0 ";
@@ -89,13 +92,14 @@ public class VoucherDAO extends DBcontext {
                 lv.add(v);
             }
         } catch (Exception e) {
+            System.out.println("VoucherDAO - getQuantityVoucher: " + e.getMessage());
         }
         return lv;
     }
-    
-    public List<Voucher> getDateVoucher(String name,String id) {
-        String sql = "SELECT [VoucherID],[Name],[VoucherCode],[DateStart],[DateEnd],[Quantity],[Discount]\n" +
-"                 FROM [dbo].[Voucher] where VoucherCode = ? and [DateEnd] >= ? ";
+
+    public List<Voucher> getDateVoucher(String name, String id) {
+        String sql = "SELECT [VoucherID],[Name],[VoucherCode],[DateStart],[DateEnd],[Quantity],[Discount]\n"
+                + "                 FROM [dbo].[Voucher] where VoucherCode = ? and [DateEnd] >= ? ";
         List<Voucher> lv = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -115,19 +119,20 @@ public class VoucherDAO extends DBcontext {
                 lv.add(v);
             }
         } catch (Exception e) {
+            System.out.println("VoucherDAO - getDateVoucher: " + e.getMessage());
         }
         return lv;
     }
-    
-      public List<Voucher> getDateStartVoucher(String name,String id) {
-        String sql = "SELECT [VoucherID],[Name],[VoucherCode],[DateStart],[DateEnd],[Quantity],[Discount]\n" +
-"                 FROM [dbo].[Voucher] where VoucherCode = ? and [DateStart] <= ?  ";
+
+    public List<Voucher> getDateStartVoucher(String name, String id) {
+        String sql = "SELECT [VoucherID],[Name],[VoucherCode],[DateStart],[DateEnd],[Quantity],[Discount]\n"
+                + "                 FROM [dbo].[Voucher] where VoucherCode = ? and [DateStart] <= ?  ";
         List<Voucher> lv = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, name);
             ps.setString(2, id);
-   
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Voucher v = new Voucher();
@@ -141,11 +146,11 @@ public class VoucherDAO extends DBcontext {
                 lv.add(v);
             }
         } catch (Exception e) {
+            System.out.println("VoucherDAO - getDateStartVoucher: " + e.getMessage());
         }
         return lv;
     }
-    
-    
+
     public void addVoucher(String name, String code, String start, String end, int discount, int quantity) {
         String sql = "INSERT INTO [dbo].[Voucher]\n"
                 + "           ([Name]\n"
@@ -165,10 +170,11 @@ public class VoucherDAO extends DBcontext {
             ps.setInt(6, quantity);
             ps.executeUpdate();
         } catch (Exception e) {
+            System.out.println("VoucherDAO - addVoucher: " + e.getMessage());
         }
     }
 
-     public void UpdateVoucher(String name, String code, String start, String end, int discount, int quantity) {
+    public void UpdateVoucher(String name, String code, String start, String end, int discount, int quantity) {
         String sql = "UPDATE [dbo].[Voucher]\n"
                 + "SET [Name] = ?,\n"
                 + "    [DateStart] = ?,\n"
@@ -179,7 +185,7 @@ public class VoucherDAO extends DBcontext {
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, name);
-          
+
             ps.setString(2, start);
             ps.setString(3, end);
             ps.setInt(4, discount);
@@ -188,7 +194,7 @@ public class VoucherDAO extends DBcontext {
 
             ps.executeUpdate();
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("VoucherDAO - UpdateVoucher: " + e.getMessage());
         }
     }
 
@@ -211,12 +217,12 @@ public class VoucherDAO extends DBcontext {
                 return v;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("VoucherDAO - getDataByName: " + e.getMessage());
         }
         return voucher;
     }
 
-     public void UpdateQuantityVoucher(String name, String quantity) {
+    public void UpdateQuantityVoucher(String name, String quantity) {
         String sql = "UPDATE [dbo].[Voucher] SET [Quantity] = ? WHERE [VoucherCode] = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -224,13 +230,12 @@ public class VoucherDAO extends DBcontext {
             ps.setString(2, name);
             ps.executeUpdate();
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("VoucherDAO - UpdateQuantityVoucher: " + e.getMessage());
         }
     }
-    
-    
+
     public static void main(String[] args) {
-            VoucherDAO voucherDAO = new VoucherDAO();
-            voucherDAO.UpdateQuantityVoucher("BOGOCODE", "15");
+        VoucherDAO voucherDAO = new VoucherDAO();
+        voucherDAO.UpdateQuantityVoucher("BOGOCODE", "15");
     }
 }

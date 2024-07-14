@@ -4,8 +4,6 @@
  */
 package ProjectController;
 
-import DAO.AccountDAO;
-import DTO.AccountDTO;
 import DTO.Customer;
 import GMAIL.Gmail;
 import GMAIL.Randompassword;

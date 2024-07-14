@@ -4,10 +4,10 @@
  */
 package ProjectController;
 
-import DAO.AccountDAO;
+import DAO.NotificationDAO;
 import DAO.PostListDAO;
-import DTO.AccountDTO;
 import DTO.AdminDTO;
+import DTO.NotificationDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 
 /**
  *
@@ -48,7 +49,6 @@ public class DeletePostServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -64,6 +64,12 @@ public class DeletePostServlet extends HttpServlet {
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
             if (account.getRoleID()== 1 || account.getRoleID()== 2) {
+                //Reset noti-time on navbar
+                NotificationDAO nDAO = new NotificationDAO();
+                ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+                session.setAttribute("notiList", n);
+                //
+                
                 String postID_raw = request.getParameter("id");
                 PostListDAO postListDAO = new PostListDAO();
                 try {

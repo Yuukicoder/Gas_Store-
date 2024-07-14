@@ -40,6 +40,7 @@ public class OrderHistoryDAO extends DBcontext {
                 lp.add(or);
             }
         } catch (Exception e) {
+            System.out.println("OrderHistoryDAO - getAllOrderHistory: " + e.getMessage());
         }
         return lp;
     }
@@ -57,7 +58,7 @@ public class OrderHistoryDAO extends DBcontext {
             insertOrderHistoryStatement.setString(4, date);
             insertOrderHistoryStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("OrderHistoryDAO - insertOrderHistory: " + e.getMessage());
         }
 
     }

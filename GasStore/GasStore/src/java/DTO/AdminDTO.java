@@ -17,6 +17,7 @@ public class AdminDTO {
     private int roleID;
     private String email;
     private String img;
+    private String adminName;
 
     public AdminDTO() {
     }
@@ -91,9 +92,16 @@ public class AdminDTO {
     public String getImg() {
         return img;
     }
-
+    
     public void setImg(String img) {
         this.img = img;
     }
-    
+
+    public String getAdminName() {
+        return adminName;
+    }
+
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
+    }
 }

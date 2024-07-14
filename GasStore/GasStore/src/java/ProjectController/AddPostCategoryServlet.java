@@ -4,11 +4,10 @@
  */
 package ProjectController;
 
-import DAO.AccountDAO;
+import DAO.NotificationDAO;
 import DAO.PostCategoryDAO;
-import DTO.AccountDTO;
 import DTO.AdminDTO;
-import DTO.PostCategoryDTO;
+import DTO.NotificationDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,6 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 
 /**
  *
@@ -35,7 +35,7 @@ public class AddPostCategoryServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -49,7 +49,6 @@ public class AddPostCategoryServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -64,7 +63,13 @@ public class AddPostCategoryServlet extends HttpServlet {
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
-            if (account.getRoleID()== 1 || account.getRoleID()== 2) {
+            if (account.getRoleID() == 1 || account.getRoleID() == 2) {
+                //Reset noti-time on navbar
+                NotificationDAO nDAO = new NotificationDAO();
+                ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+                session.setAttribute("notiList", n);
+                //
+
                 //List User
                 response.sendRedirect("postDashboard");
 
@@ -91,7 +96,7 @@ public class AddPostCategoryServlet extends HttpServlet {
         AdminDTO account = (AdminDTO) session.getAttribute("account");
 
         if (account != null) {
-            if (account.getRoleID()== 1 || account.getRoleID()== 2) {
+            if (account.getRoleID() == 1 || account.getRoleID() == 2) {
                 String categoryPost = request.getParameter("categoryPost");
 
                 PostCategoryDAO pcdao = new PostCategoryDAO();

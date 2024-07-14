@@ -26,17 +26,19 @@ import java.util.List;
  * @author msi
  */
 public class OrderDAO extends DBcontext {
-        public static void main(String[] args) {
+
+    public static void main(String[] args) {
         OrderDAO dao = new OrderDAO();
 //        System.out.println(dao.searchOrders("duc").size());
         Customer c = new Customer(2);
 //        
-        
+
         Cart cart = new Cart();
-        dao.addOrder(c, cart, "vin", 0,  "1234");
-        
+        dao.addOrder(c, cart, "vin", 0, "1234");
+
     }
-    public void addOrder(Customer a, Cart cart, String address, double voucher1 , String notes ) {
+
+    public void addOrder(Customer a, Cart cart, String address, double voucher1, String notes) {
         LocalDate curDate = LocalDate.now();
         String date = curDate.toString();
         try {
@@ -51,41 +53,41 @@ public class OrderDAO extends DBcontext {
 //            st.setDouble(6, voucher);
 //            st.setString(7, phone);
 //            st.setString(8, name);
-               st.setInt(1, a.getCustomerID());
-               st.setDouble(2, cart.getTotalMoney() - (cart.getTotalMoney() * voucher1) + 10);
-               st.setString(3,date);
-               st.setString(4, address);
-               st.setInt(5, 0);
-               st.setString(6, notes);
+            st.setInt(1, a.getCustomerID());
+            st.setDouble(2, cart.getTotalMoney() - (cart.getTotalMoney() * voucher1) + 10);
+            st.setString(3, date);
+            st.setString(4, address);
+            st.setInt(5, 0);
+            st.setString(6, notes);
             int rowsAffected = st.executeUpdate();
 //
             if (rowsAffected > 0) {
                 // Lấy id order vừa thêm
-            ResultSet generatedKeys = st.getGeneratedKeys();
-            int orderID = 0;
-            if (generatedKeys.next()) {
-                orderID = generatedKeys.getInt(1);
-            }
+                ResultSet generatedKeys = st.getGeneratedKeys();
+                int orderID = 0;
+                if (generatedKeys.next()) {
+                    orderID = generatedKeys.getInt(1);
+                }
 
-            try {
-                // Thực hiện câu lệnh INSERT INTO OrderHistory
-                String insertOrderHistoryQuery = "INSERT INTO OrderHistory VALUES (?, ?, ?, ?)";
-                PreparedStatement insertOrderHistoryStatement = connection.prepareStatement(insertOrderHistoryQuery);
-                insertOrderHistoryStatement.setInt(1, orderID);
-                insertOrderHistoryStatement.setInt(2, a.getCustomerID());
-                insertOrderHistoryStatement.setInt(3, 0);
-                insertOrderHistoryStatement.setString(4, date);
-                insertOrderHistoryStatement.executeUpdate();
-            } catch (Exception ex) {
-                // Xử lý ngoại lệ khi thực hiện INSERT INTO OrderHistory
-                ex.printStackTrace();
-            }
+                try {
+                    // Thực hiện câu lệnh INSERT INTO OrderHistory
+                    String insertOrderHistoryQuery = "INSERT INTO OrderHistory VALUES (?, ?, ?, ?)";
+                    PreparedStatement insertOrderHistoryStatement = connection.prepareStatement(insertOrderHistoryQuery);
+                    insertOrderHistoryStatement.setInt(1, orderID);
+                    insertOrderHistoryStatement.setInt(2, a.getCustomerID());
+                    insertOrderHistoryStatement.setInt(3, 0);
+                    insertOrderHistoryStatement.setString(4, date);
+                    insertOrderHistoryStatement.executeUpdate();
+                } catch (Exception ex) {
+                    // Xử lý ngoại lệ khi thực hiện INSERT INTO OrderHistory
+                    System.out.println("OrderDAO - addOrder - INSERT INTO OrderHistory: " + ex.getMessage());
+                }
             } else {
                 System.out.println("Insert into ORDERS failed. No rows affected.");
             }
         } catch (Exception e) {
             // Xử lý ngoại lệ khi thực hiện INSERT INTO ORDERS
-            e.printStackTrace();
+            System.out.println("OrderDAO - addOrder - INSERT INTO ORDERS: " + e.getMessage());
         }
 
     }
@@ -98,6 +100,8 @@ public class OrderDAO extends DBcontext {
             st.setString(1, oid);
             st.executeUpdate();
         } catch (Exception e) {
+            System.out.println("OrderDAO - cancelOrder: " + e.getMessage());
+
         }
     }
 
@@ -111,6 +115,8 @@ public class OrderDAO extends DBcontext {
                 id = rs.getInt(1);
             }
         } catch (Exception e) {
+            System.out.println("OrderDAO - getLastOrderID: " + e.getMessage());
+
         }
         return id;
     }
@@ -128,6 +134,8 @@ public class OrderDAO extends DBcontext {
                 st2.executeUpdate();
             }
         } catch (Exception e) {
+            System.out.println("OrderDAO - addOrderDetail: " + e.getMessage());
+
         }
 
     }
@@ -142,6 +150,7 @@ public class OrderDAO extends DBcontext {
                 st3.executeUpdate();
             }
         } catch (Exception e) {
+            System.out.println("OrderDAO - updateQuantity: " + e.getMessage());
         }
     }
 
@@ -165,17 +174,17 @@ public class OrderDAO extends DBcontext {
                 lo.add(ord);
             }
         } catch (Exception e) {
+            System.out.println("OrderDAO - listOrderInAdminHome: " + e.getMessage());
         }
         return lo;
     }
-    
-    
+
     public LinkedHashMap<Order, Customer> listOrderAdminHome(int number) {
-        String sql = "SELECT TOP " + number + " od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, " +
-                     "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes " +
-                     "FROM [Order] od " +
-                     "JOIN Customer c ON c.customerID = od.customerID " +
-                     "ORDER BY od.orderID DESC";
+        String sql = "SELECT TOP " + number + " od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, "
+                + "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes "
+                + "FROM [Order] od "
+                + "JOIN Customer c ON c.customerID = od.customerID "
+                + "ORDER BY od.orderID DESC";
 
         LinkedHashMap<Order, Customer> orderMap = new LinkedHashMap<>();
 
@@ -200,19 +209,19 @@ public class OrderDAO extends DBcontext {
                 orderMap.put(ord, cust);
             }
         } catch (Exception e) {
-            e.printStackTrace(); 
+            System.out.println("OrderDAO - listOrderAdminHome<LinkedHashMap>: " + e.getMessage());
         }
         return orderMap;
     }
-    
+
     public LinkedHashMap<Order, Customer> pagingOrder(int pageNumber, int pageSize) {
         LinkedHashMap<Order, Customer> orderMap = new LinkedHashMap<>();
-        String sql = "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, " +
-                     "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes " +
-                     "FROM [Order] od " +
-                     "JOIN Customer c ON c.customerID = od.customerID " +
-                     "ORDER BY od.orderID DESC " +
-                     "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        String sql = "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, "
+                + "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes "
+                + "FROM [Order] od "
+                + "JOIN Customer c ON c.customerID = od.customerID "
+                + "ORDER BY od.orderID DESC "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -246,13 +255,12 @@ public class OrderDAO extends DBcontext {
             return orderMap;
 
         } catch (SQLException e) {
-            System.out.println("SQL Exception: " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("OrderDAO - pagingOrder: " + e.getMessage());
         }
 
         return null;
     }
-    
+
     public int countAllOrders() {
         int totalCount = 0;
         String sql = "SELECT COUNT(*) AS totalOrders FROM [Order]";
@@ -263,12 +271,10 @@ public class OrderDAO extends DBcontext {
                 totalCount = rs.getInt("totalOrders");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("OrderDAO - countAllOrders: " + e.getMessage());
         }
         return totalCount;
     }
-
-
 
     public double todaySale() {
         // Lấy ngày hiện tại
@@ -284,6 +290,7 @@ public class OrderDAO extends DBcontext {
                 value = rs.getDouble(1);
             }
         } catch (Exception e) {
+            System.out.println("OrderDAO - todaySale: " + e.getMessage());
         }
         return value;
     }
@@ -306,6 +313,7 @@ public class OrderDAO extends DBcontext {
                 lo.add(o);
             }
         } catch (Exception e) {
+            System.out.println("OrderDAO - myPurchase: " + e.getMessage());
         }
         return lo;
     }
@@ -329,6 +337,7 @@ public class OrderDAO extends DBcontext {
                 lod.add(o);
             }
         } catch (Exception e) {
+            System.out.println("OrderDAO - orderDetail: " + e.getMessage());
         }
         return lod;
     }
@@ -362,13 +371,11 @@ public class OrderDAO extends DBcontext {
                 } catch (Exception e) {
                     System.out.println(e);
                 }
-            } 
+            }
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("OrderDAO - changeStatusOrder: " + e.getMessage());
         }
     }
-
-
 
     public float getIncomeToday() {
         String sql = "SELECT SUM(TotalPrice) AS total_amount\n"
@@ -383,7 +390,7 @@ public class OrderDAO extends DBcontext {
             }
             return incomeToday;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("OrderDAO - getIncomeToday: " + e.getMessage());
         }
         return 0;
     }
@@ -401,14 +408,14 @@ public class OrderDAO extends DBcontext {
             }
             return orders;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("OrderDAO - getOrdersToday: " + e.getMessage());
         }
         return 0;
     }
-    
+
     public int getTotalOrdersDelivered() {
-        String sql = "SELECT COUNT(OrderID) AS OrderCount\n" +
-"                FROM Orders where Orders.Status = 3";
+        String sql = "SELECT COUNT(OrderID) AS OrderCount\n"
+                + "                FROM Orders where Orders.Status = 3";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -418,14 +425,14 @@ public class OrderDAO extends DBcontext {
             }
             return orders;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("OrderDAO - getTotalOrdersDelivered: " + e.getMessage());
         }
         return 0;
     }
-    
-     public int getTotalOrdersCancled() {
-        String sql = "SELECT COUNT(OrderID) AS OrderCount\n" +
-"                FROM Orders where Orders.Status = 4";
+
+    public int getTotalOrdersCancled() {
+        String sql = "SELECT COUNT(OrderID) AS OrderCount\n"
+                + "                FROM Orders where Orders.Status = 4";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -435,11 +442,10 @@ public class OrderDAO extends DBcontext {
             }
             return orders;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("OrderDAO - getTotalOrdersCancled: " + e.getMessage());
         }
         return 0;
     }
-    
 
     //xóa list = 4 
     public void getListOrder4(String oid) {
@@ -451,6 +457,7 @@ public class OrderDAO extends DBcontext {
             st.setString(1, oid);
             st.executeUpdate();
         } catch (Exception e) {
+            System.out.println("OrderDAO - getListOrder4: " + e.getMessage());
         }
     }
 
@@ -474,6 +481,7 @@ public class OrderDAO extends DBcontext {
                 lo.add(o);
             }
         } catch (Exception e) {
+            System.out.println("OrderDAO - myPurchase1: " + e.getMessage());
         }
         return lo;
     }
@@ -498,6 +506,7 @@ public class OrderDAO extends DBcontext {
                 lo.add(o);
             }
         } catch (Exception e) {
+            System.out.println("OrderDAO - myPurchase2: " + e.getMessage());
         }
         return lo;
     }
@@ -522,6 +531,7 @@ public class OrderDAO extends DBcontext {
                 lo.add(o);
             }
         } catch (Exception e) {
+            System.out.println("OrderDAO - myPurchase3: " + e.getMessage());
         }
         return lo;
     }
@@ -546,6 +556,7 @@ public class OrderDAO extends DBcontext {
                 lo.add(o);
             }
         } catch (Exception e) {
+            System.out.println("OrderDAO - myPurchase4: " + e.getMessage());
         }
         return lo;
     }
@@ -570,6 +581,7 @@ public class OrderDAO extends DBcontext {
                 lo.add(o);
             }
         } catch (Exception e) {
+            System.out.println("OrderDAO - myPurchase5: " + e.getMessage());
         }
         return lo;
     }
@@ -595,15 +607,16 @@ public class OrderDAO extends DBcontext {
                 lo.add(o);
             }
         } catch (Exception e) {
+            System.out.println("OrderDAO - myPurchaseTracking: " + e.getMessage());
         }
         return lo;
     }
 
-     public OrderDTO getPurchaseByID(String orderid_raw) {
+    public OrderDTO getPurchaseByID(String orderid_raw) {
         String sql = "select AccountID,TotalPrice,OrderDate,Address,Status,VoucherCode,Phone,Name  from Orders where OrderID = ?";
         try {
             OrderDTO odto = new OrderDTO();
-            int orderid= Integer.parseInt(orderid_raw);
+            int orderid = Integer.parseInt(orderid_raw);
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, orderid);
             ResultSet rs = ps.executeQuery();
@@ -616,25 +629,26 @@ public class OrderDAO extends DBcontext {
                 odto.setPhoneorder(rs.getString("Phone"));
                 odto.setName1(rs.getString("Name"));
                 odto.setVoucherCode(rs.getDouble("VoucherCode"));
-            
+
             }
             return odto;
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("OrderDAO - getPurchaseByID: " + e.getMessage());
         }
         return null;
     }
+
     public LinkedHashMap<Order, Customer> searchOrders(String search) {
         String cleanedSearch = search.trim().replaceAll("\\s+", " ").toLowerCase();
         String[] searchTerms = cleanedSearch.split(" ");
 
         // Xây dựng câu lệnh SQL động
         StringBuilder sqlBuilder = new StringBuilder(
-            "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, " +
-            "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes " +
-            "FROM [Order] od " +
-            "JOIN Customer c ON c.customerID = od.customerID " +
-            "WHERE "
+                "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, "
+                + "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes "
+                + "FROM [Order] od "
+                + "JOIN Customer c ON c.customerID = od.customerID "
+                + "WHERE "
         );
 
         for (int i = 0; i < searchTerms.length; i++) {
@@ -642,9 +656,9 @@ public class OrderDAO extends DBcontext {
                 sqlBuilder.append(" OR ");
             }
             sqlBuilder.append("(")
-                      .append("LOWER(od.orderID) LIKE ? ")
-                      .append("OR LOWER(c.username) LIKE ? ")
-                      .append(")");
+                    .append("LOWER(od.orderID) LIKE ? ")
+                    .append("OR LOWER(c.username) LIKE ? ")
+                    .append(")");
         }
 
         sqlBuilder.append(" ORDER BY od.orderID DESC");
@@ -681,22 +695,22 @@ public class OrderDAO extends DBcontext {
                 orderMap.put(ord, cust);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("OrderDAO - searchOrders: " + e.getMessage());
         }
         return orderMap;
     }
-    
+
     public LinkedHashMap<Order, Customer> searchOrdersPaging(String search, int pageIndex, int pageSize) {
         String cleanedSearch = search.trim().replaceAll("\\s+", " ").toLowerCase();
         String[] searchTerms = cleanedSearch.split(" ");
 
         // Xây dựng câu lệnh SQL động
         StringBuilder sqlBuilder = new StringBuilder(
-            "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, " +
-            "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes " +
-            "FROM [Order] od " +
-            "JOIN Customer c ON c.customerID = od.customerID " +
-            "WHERE "
+                "SELECT od.orderID, od.customerID, c.username, od.trackingNumber, od.totalMoney, "
+                + "od.orderDate, od.shipAddress, od.status, od.shipVia, od.payment, od.notes "
+                + "FROM [Order] od "
+                + "JOIN Customer c ON c.customerID = od.customerID "
+                + "WHERE "
         );
 
         for (int i = 0; i < searchTerms.length; i++) {
@@ -704,9 +718,9 @@ public class OrderDAO extends DBcontext {
                 sqlBuilder.append(" OR ");
             }
             sqlBuilder.append("(")
-                      .append("LOWER(od.orderID) LIKE ? ")
-                      .append("OR LOWER(c.username) LIKE ? ")
-                      .append(")");
+                    .append("LOWER(od.orderID) LIKE ? ")
+                    .append("OR LOWER(c.username) LIKE ? ")
+                    .append(")");
         }
 
         sqlBuilder.append(" ORDER BY od.orderID DESC");
@@ -746,11 +760,9 @@ public class OrderDAO extends DBcontext {
                 orderMap.put(ord, cust);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("OrderDAO - searchOrdersPaging: " + e.getMessage());
         }
         return orderMap;
     }
-
-
 
 }

@@ -35,7 +35,7 @@ public class SupplierDAO extends DBcontext{
             }
             return supplier;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("SupplierDAO - getSupplierByID: " + e.getMessage());
         }
         return null;
     }
@@ -58,7 +58,7 @@ public class SupplierDAO extends DBcontext{
                 lc.add(supplier);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("SupplierDAO - getAllSupplier: " + e.getMessage());
         }
         return lc;
     }

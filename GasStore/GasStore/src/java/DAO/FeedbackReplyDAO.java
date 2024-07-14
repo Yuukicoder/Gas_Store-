@@ -19,10 +19,12 @@ import java.util.ArrayList;
 public class FeedbackReplyDAO extends DBcontext {
 
     public ArrayList<FeedbackReplyDTO> getLisfeedbackreply(int id) {
-        String sql = "SELECT  A.Fullname,FE.Reply,FE.DateCreate ,A.Role FROM Feedback F                                   \n"
-                + "								    LEFT JOIN FeedbackReply FE ON FE.FeedbackID = F.FeedbackID\n"
-                + "									JOIN Account A ON FE.AccountID = A.AccountID\n"
-                + "									WHERE F.FeedbackID= ? ORDER BY FE.ReplyID DESC";
+        String sql = """
+                     SELECT  A.Fullname,FE.Reply,FE.DateCreate ,A.Role FROM Feedback F                                   
+                     LEFT JOIN FeedbackReply FE ON FE.FeedbackID = F.FeedbackID
+                     JOIN Account A ON FE.AccountID = A.AccountID
+                     WHERE F.FeedbackID= ? ORDER BY FE.ReplyID DESC
+                     """;
         ArrayList<FeedbackReplyDTO> al = new ArrayList<>();
         try ( PreparedStatement pt = connection.prepareStatement(sql)) {
             pt.setInt(1, id);
@@ -39,7 +41,7 @@ public class FeedbackReplyDAO extends DBcontext {
                 al.add(dTO);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("FeedbackReplyDAO - getLisfeedbackreply: " + e.getMessage());
         }
         return al;
     }
@@ -63,7 +65,7 @@ public class FeedbackReplyDAO extends DBcontext {
             int inster = pt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("FeedbackReplyDAO - insertfeedbackreply: " + e.getMessage());
         }
 
     }

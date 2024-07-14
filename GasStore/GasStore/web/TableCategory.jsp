@@ -213,7 +213,7 @@
                     padding-top: 12px;
                     padding-bottom: 12px;
                     text-align: left;
-                    background-color: #22A699;
+                    background-color: var(--light);
                     color: white;
                 }
             </style>

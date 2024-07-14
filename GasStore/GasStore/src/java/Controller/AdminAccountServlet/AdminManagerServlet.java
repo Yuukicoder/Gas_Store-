@@ -4,12 +4,12 @@
  */
 package Controller.AdminAccountServlet;
 
-import Controller.MaHoa;
+import DAO.NotificationDAO;
 import DTO.AdminDTO;
+import DTO.NotificationDTO;
 import dal.CustomerDao;
 import dal.RoleDao;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +18,6 @@ import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import model.Administrator;
-import model.Customer;
 import model.Role;
 
 /**
@@ -42,6 +41,11 @@ public class AdminManagerServlet extends HttpServlet {
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
+            //Reset noti-time on navbar - Vu Anh
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
             if (account.getRoleID() == 1) {
                 //List User
 
@@ -78,7 +82,6 @@ public class AdminManagerServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

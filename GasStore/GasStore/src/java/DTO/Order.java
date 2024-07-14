@@ -9,6 +9,7 @@ package DTO;
  * @author dell456
  */
 public class Order {
+
     private int orderID;
     private int customerID;
     private int trackingNumber;
@@ -131,6 +132,4 @@ public class Order {
         return "Order{" + "orderID=" + orderID + ", customerID=" + customerID + ", trackingNumber=" + trackingNumber + ", totalMoney=" + totalMoney + ", orderDate=" + orderDate + ", shipAddress=" + shipAddress + ", status=" + status + ", shipVia=" + shipVia + ", payment=" + payment + ", notes=" + notes + '}';
     }
 
-    
-    
 }

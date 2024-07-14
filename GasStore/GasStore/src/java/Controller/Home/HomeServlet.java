@@ -57,7 +57,6 @@ public class HomeServlet extends HttpServlet {
         }
     } 
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
      * Handles the HTTP <code>GET</code> method.
      * @param request servlet request
@@ -72,10 +71,15 @@ public class HomeServlet extends HttpServlet {
         CategoryDAO categoryDAO = new CategoryDAO();
 
         session.setAttribute("category", categoryDAO.displayCategoryinHome());
+        
         ProductDAO productDAO = new ProductDAO();
         ArrayList<PostDTO> postDTOs = new ArrayList<>();
+        
         PostListDAO pldao = new PostListDAO();
-        postDTOs = pldao.getAllPostByGroupID(2);
+        PostCategoryDAO postCate = new PostCategoryDAO();
+        
+        postDTOs = pldao.getAllPostByGroupID(postCate.getCategoryIDByName("Banner"));
+        System.out.println("Banner Id: " + postCate.getCategoryIDByName("Banner"));
         
         //get top selling product of each category
         LinkedHashMap<String, List<Product>> topSelling = new LinkedHashMap<>();
@@ -87,11 +91,15 @@ public class HomeServlet extends HttpServlet {
             }          
         }
         
-        PostCategoryDAO postCate = new PostCategoryDAO();
+        
         LinkedHashMap<String, List<PostDTO>> footerList = new LinkedHashMap<>();
-        for (int i = 3; i < 6; i++) {
-            List<PostDTO> footerPostList = pldao.getAllPostByGroupID(i);
-            footerList.put(postCate.getCategoryByID(i).getName(), footerPostList);
+        int[] postCateList = {postCate.getCategoryIDByName("About Us"),
+                              postCate.getCategoryIDByName("Customer Service"),
+                              postCate.getCategoryIDByName("Policy")};
+        for (int i = 0; i < postCateList.length; i++) {
+            System.out.println("Footer ListId: " + postCateList[i]);
+            List<PostDTO> footerPostList = pldao.getAllPostByGroupID(postCateList[i]);
+            footerList.put(postCate.getCategoryByID(postCateList[i]).getName(), footerPostList);
         }
         session.setAttribute("footerList", footerList);
 

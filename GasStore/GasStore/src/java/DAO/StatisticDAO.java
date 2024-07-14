@@ -36,6 +36,7 @@ public class StatisticDAO extends DBcontext {
                 totalPrices.put(orderDate.toLocalDate(), sumTotal);
             }
         } catch (Exception e) {
+            System.out.println("StatisticDAO - getRevenueOf7Days: " + e.getMessage());
         }
         return totalPrices;
     }
@@ -60,6 +61,7 @@ public class StatisticDAO extends DBcontext {
                 totalPrices.put(orderDate.toLocalDate(), sumTotal);
             }
         } catch (Exception e) {
+            System.out.println("StatisticDAO - getRevenueOf30Days: " + e.getMessage());
         }
         return totalPrices;
     }
@@ -83,6 +85,7 @@ public class StatisticDAO extends DBcontext {
                 totalPrices.put(orderDate, sumTotal);
             }
         } catch (Exception e) {
+            System.out.println("StatisticDAO - getRevenueOf12Months: " + e.getMessage());
         }
         return totalPrices;
     }
@@ -102,6 +105,7 @@ public class StatisticDAO extends DBcontext {
                 topProducts.put(productName, totalSell);
             }
         } catch (Exception e) {
+            System.out.println("StatisticDAO - getTop10BestSellerProducts: " + e.getMessage());
         }
         return topProducts;
     }

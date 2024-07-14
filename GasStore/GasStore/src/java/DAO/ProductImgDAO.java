@@ -32,6 +32,7 @@ public class ProductImgDAO extends DBcontext {
                 lp.add(pimg);
             }
         } catch (Exception e) {
+            System.out.println("ProductImgDAO - getImg: " + e.getMessage());
         }
         return lp;
     }
@@ -52,7 +53,7 @@ public class ProductImgDAO extends DBcontext {
             }
             return pidtos;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("ProductImgDAO - getPImgByPid: " + e.getMessage());
         }
         return null;
     }
@@ -68,8 +69,7 @@ public class ProductImgDAO extends DBcontext {
             int checkUpdate = ps.executeUpdate();
             return checkUpdate;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-
+            System.out.println("ProductImgDAO - updateProductImage: " + e.getMessage());
         }
         return 0;
     }
@@ -93,7 +93,7 @@ public class ProductImgDAO extends DBcontext {
             }
             return count;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("ProductImgDAO - addNewImageProduct: " + e.getMessage());
         }
         return 0;
     }
@@ -125,7 +125,7 @@ public class ProductImgDAO extends DBcontext {
             }
             return count;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("ProductImgDAO - deleteImage: " + e.getMessage());
         }
         return 0;
     }
