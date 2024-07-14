@@ -108,6 +108,14 @@ public class LastCheckOutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String paymentMethod = request.getParameter("payment");
+        
+        if ("vnpay".equals(paymentMethod)) {
+            // Chuyển hướng tới cổng thanh toán VNPay
+            String vnpayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+            response.sendRedirect(vnpayUrl); // URL c
+            return;
+        }
         String totalvoucher = request.getParameter("totalvoucher");
         Double totalVoucherDouble = Double.parseDouble(totalvoucher);
         OrderDAO ord = new OrderDAO();

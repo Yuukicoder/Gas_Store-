@@ -5,10 +5,12 @@
 package ProjectController.Voucher;
 
 import DAO.ProductDAO;
-import DAO.VoucherDAO;
+//import DAO.VoucherDAO;
+import DAO.DiscountDAO;
 import DTO.Cart;
 import DTO.Product;
-import DTO.Voucher;
+//import DTO.Voucher;
+import DTO.Discount;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -82,12 +84,13 @@ public class listVoucherCart extends HttpServlet {
         String vouchercode = request.getParameter("vouchercode");
         String date = request.getParameter("date");
 
-        VoucherDAO aO = new VoucherDAO();
+                DiscountDAO aO = new DiscountDAO();
 
-        List<Voucher> vouchers = aO.getidVoucher(vouchercode);
-        List<Voucher> voucherQuantity = aO.getQuantityVoucher(vouchercode);
-        List<Voucher> voucherDate = aO.getDateVoucher(vouchercode,date);
-        List<Voucher> voucherStartDate = aO.getDateStartVoucher(vouchercode,date);
+
+         List<Discount> vouchers = aO.getidDiscount(vouchercode);
+        List<Discount> voucherQuantity = aO.getQuantityDiscount(vouchercode);
+        List<Discount> voucherDate = aO.getDateDiscount(vouchercode,date);
+        List<Discount> voucherStartDate = aO.getDateStartDiscounts(vouchercode,date);
         System.out.println(vouchers);
         if (vouchers == null || vouchers.isEmpty()) {
             request.setAttribute("used", "Voucher does not exist");
@@ -98,7 +101,7 @@ public class listVoucherCart extends HttpServlet {
         } else if (!voucherQuantity.isEmpty()) {
             request.setAttribute("used", "Voucher has expired ");
         }  else {
-            request.setAttribute("used1", aO.getidVoucher(vouchercode));
+            request.setAttribute("used1", aO.getidDiscount(vouchercode));
         }
         System.out.println(voucherStartDate);
          System.out.println(voucherDate);
