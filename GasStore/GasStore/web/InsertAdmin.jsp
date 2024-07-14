@@ -38,7 +38,11 @@
 
         <!-- Template Stylesheet -->
         <link href="admin/css/style.css" rel="stylesheet">
+
         <style>
+            .form-control:disabled,.form-control:read-only{
+                background-color:#e9ecef;
+            }
             #productTable {
                 border-collapse: collapse;
                 width: 100%;
@@ -106,17 +110,9 @@
             .mt-1 {
                 margin-top: 1rem; /* Ensuring margin-top is consistent */
             }
-            img {
-                display: block;
-                margin: 0 auto;
-                width: 50%; /* Adjust as needed */
-            }
-            img.thumbnail {
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                padding: 5px;
-                width: 150px; /* Adjust as needed */
-            }
+
+
+
         </style>
 
     </head>
@@ -148,17 +144,17 @@
                             <input type="hidden" value="${detail.administratorID}" name="accountID">
                             <div class="row">
                                 <div class="col-lg-6 col-12 col-md-6 col-sm-12">
-
                                     <div class="image-container">
-                                        <input type="file" name="pimg"  class="form-control">
+                                        <input type="file" name="pimg" id="imageInput" class="form-control" accept="image/*">
                                         <input type="text" name="timg" value="${detail.img}" class="form-control" hidden>
-                                        <div class="mt-1" style="width:30%;">
-                                            <img style="width: 100%;" src="${detail.img}" alt="User Image"/>
+                                        <div class="d-flex flex-column align-items-center text-center p-3 py-5 position-relative">
+                                            <img id="profileImage" class="mt-5" width="50%;" src="${detail.img}">
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-6 col-12 col-md-6 col-sm-12">
+                                    <h5 style="color: red;">${requestScope.err}</h5>
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <div class="form-floating">
@@ -166,15 +162,10 @@
                                                 <label for="username">Username</label>
                                             </div>
                                         </div>
+                                        <input type="password" class="form-control" id="password" name="passWord" value="${detail.password}" placeholder="Password" hidden readonly>
                                         <div class="col-md-6">
                                             <div class="form-floating">
-                                                <input type="password" class="form-control" id="password" name="passWord" value="${detail.password}" placeholder="Password" <c:if test="${not empty detail.password}">readonly</c:if>>
-                                                    <label for="password">Password</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="email" class="form-control" id="email" name="aemail" value="${detail.email}" placeholder="Email">
+                                                <input type="email" class="form-control" id="email" name="aemail" value="${detail.email}" placeholder="Email">
                                                 <label for="email">Email</label>
                                             </div>
                                         </div>
@@ -191,50 +182,147 @@
                                             <div class="form-floating">
                                                 <select name="roleid" class="form-control">
                                                     <c:forEach items="${requestScope.rdata}" var="r">
-                                                        <option value="${r.roleID}" <c:if test="${detail.roleID == r.roleID}">selected</c:if>>${r.name}</option>
+                                                        <option value="${r.roleID}" 
+                                                                <c:if test="${detail.roleID == r.roleID}">
+                                                                    selected
+                                                                </c:if>>
+                                                            ${r.name}
+                                                        </option>
                                                     </c:forEach>
-                                                    <option value="3" <c:if test="${detail.roleID == 3}">selected</c:if>>Customer</option>
-                                                </select>
-                                                <label for="role">Role</label> 
+                                                    <option value="3" 
+                                                            <c:if test="${detail.roleID == 3}">
+                                                                selected</c:if>>
+                                                                Customer
+                                                            </option>
+                                                    </select>
+                                                    <label for="role">Role</label> 
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="imageValidationModal" tabindex="-1" role="dialog" aria-labelledby="imageValidationModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="imageValidationModalLabel">Thông báo lỗi</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body" id="modalBody">
+                                                <!-- Error message will be shown here -->
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="col-12">
                                     <button type="submit" class="btn btn-primary w-100" name="btnInUp">Insert/Update</button>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="m-3 mt-4">
+                        <a href="ManageStaff" class="btn btn-primary">Back to Manage Account</a>
                     </div>
                 </div>
+                <!-- Main Content End -->
 
-                <div class="m-3 mt-4">
-                    <a href="ManageStaff" class="btn btn-primary">Back to Manage Account</a>
-                </div>
+                <!-- Content End -->
+                <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
             </div>
-            <!-- Main Content End -->
 
-            <!-- Content End -->
-            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-        </div>
+            <!-- JavaScript Libraries -->
+            <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="admin/lib/chart/chart.min.js"></script>
+            <script src="admin/lib/easing/easing.min.js"></script>
+            <script src="admin/lib/waypoints/waypoints.min.js"></script>
+            <script src="admin/lib/owlcarousel/owl.carousel.min.js"></script>
+            <script src="admin/lib/tempusdominus/js/moment.min.js"></script>
+            <script src="admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
+            <script src="admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+            <script src="admin/js/main.js"></script>
+            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+            <script type="text/javascript">
 
-        <!-- JavaScript Libraries -->
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="admin/lib/chart/chart.min.js"></script>
-        <script src="admin/lib/easing/easing.min.js"></script>
-        <script src="admin/lib/waypoints/waypoints.min.js"></script>
-        <script src="admin/lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="admin/lib/tempusdominus/js/moment.min.js"></script>
-        <script src="admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
-        <script src="admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-        <script src="admin/js/main.js"></script>
+                // Check if alertMessage attribute is set and display the alert
+            <% if (request.getAttribute("alertMessage") != null) { %>
+                window.onload = function () {
+                    alert("<%= request.getAttribute("alertMessage") %>");
+                    window.location.href = "ManageStaff"; // Redirect to ManageStaff after alert
+                }
+            <% } %>
+        </script>
         <script>
-            const pictureURL = document.querySelector('.image-name');
-            function changePicture() {
-                document.querySelector('#image').src = pictureURL.value;
-            }
-            pictureURL.addEventListener("input", changePicture)
+            document.getElementById('profileImage').addEventListener('click', function () {
+                this.classList.toggle('blur');
+                document.getElementById('imageOverlay').style.display = 'flex';
+            });
+
+            document.getElementById('imageOverlay').addEventListener('click', function () {
+                document.getElementById('imageUpload').click();
+            });
+            document.getElementById('imageUpload').addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('profileImage').src = e.target.result;
+                        document.getElementById('profileImage').classList.remove('blur');
+                        document.getElementById('imageOverlay').style.display = 'none';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        </script>    
+
+
+        <script>
+            document.getElementById('imageInput').addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                const modalBodyElement = document.getElementById('modalBody');
+
+                if (!file) {
+                    modalBodyElement.textContent = 'Không thể đọc file';
+                    $('#imageValidationModal').modal('show');
+                    return;
+                }
+
+                const validFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/tiff', 'image/heif', 'image/webp'];
+                const maxSize = 4 * 1024 * 1024; // 4 MB
+
+                if (!validFormats.includes(file.type)) {
+                    modalBodyElement.textContent = 'Không thể tải ảnh lên. Ảnh phải được lưu dưới dạng file JPG, PNG, GIF, TIFF, HEIF hoặc WebP.';
+                    $('#imageValidationModal').modal('show');
+                    return;
+                }
+
+                if (file.size > maxSize) {
+                    modalBodyElement.textContent = 'Không thể tải ảnh lên. Ảnh phải có kích thước nhỏ hơn 4 MB.';
+                    $('#imageValidationModal').modal('show');
+                    return;
+                }
+
+                modalBodyElement.textContent = ''; // Clear any previous error message
+                $('#imageValidationModal').modal('hide'); // Hide modal if the image is valid
+
+                // Nếu ảnh hợp lệ, có thể tiếp tục xử lý ảnh, ví dụ: hiển thị ảnh lên trang
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profileImage').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
         </script>
 
     </body>

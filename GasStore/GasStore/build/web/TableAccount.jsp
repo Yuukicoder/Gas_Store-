@@ -76,9 +76,9 @@
                                                 </div>
                                             </div>
                                         </form><div class="col-lg-6 col-6">
-                                    <div class="m-3 mt-4">
+<!--                                    <div class="m-3 mt-4">
                                         <a href="insert-account" class="btn btn-primary">Add new Users</a>
-                                    </div>
+                                    </div>-->
                                     </div>
                                     </div>
 
@@ -88,7 +88,7 @@
                                                 <tr class="text-white">
                                                     
                                                     <th scope="col">ID</th>
-                                                    <th scope ="col">Avatar</th>
+                                                    <th scope="col">Image</th>
                                                     <th scope="col">Username</th>
                                                     <th scope="col">Full Name</th>
                                                     <th scope="col">Phone</th>
@@ -101,13 +101,13 @@
                                                 <c:forEach items="${requestScope.lidata}" var="o" varStatus="status">
                                                     <tr>
                                                         <td>${status.index+1}</td>
-                                                        <td><img src="${o.getImage()}" width="70%" height="50%" alt="alt"/></td>
+                                                        <td><img src="${o.getImage()}" alt="alt"/></td>
                                                         <td>${o.getUserName()}</td>
                                                         <td>${o.getFullName()}</td>
                                                         <td>${o.getPhone()}</td>
                                                         <td>${o.getEmail()}</td>
                                                         <td>
-                                                            <a href="insert-account?type=0&id=${o.getCustomerID()}" class="update-button">Update</a><br>
+                                                            <a href="insert-account?type=0&id=${o.getCustomerID()}" class="update-button">View</a><br>
                                                             <a href="ManageUser?type=1&id=${o.getCustomerID()}">Delete</a>
                                                         </td>
                                                     </tr>

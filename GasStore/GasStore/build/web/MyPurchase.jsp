@@ -29,7 +29,7 @@
 
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
-         <style>
+        <style>
             #special-link {
                 border-bottom: 2px solid red;
             }
@@ -62,7 +62,36 @@
                 color: #ff4500;
             }
 
+
+            .row.px-xl-5-col {
+                background-color: #ffffff; /* Màu nền cho từng order */
+                border: 1px solid #e0e0e0; /* Viền nhẹ */
+                padding: 20px;
+                margin-top: 20px;
+            }
+
+
         </style>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Lấy tất cả các mục trong danh sách bộ lọc
+                var filterItems = document.querySelectorAll('.nav-pills .nav-item .nav-link');
+
+                // Đặt sự kiện click cho từng mục
+                filterItems.forEach(function (item) {
+                    item.addEventListener('click', function () {
+                        // Xóa lớp active từ tất cả các mục
+                        filterItems.forEach(function (item) {
+                            item.classList.remove('active');
+                        });
+
+                        // Thêm lớp active cho mục được click
+                        this.classList.add('active');
+                    });
+                });
+            });
+        </script>
+
 
     </head>
 
@@ -89,72 +118,103 @@
         <div class="container-fluid navigation">
             <div class="row">
                 <div class="col-12">
-                    <div class="row">
-                        <div class="col-2 text-center">
-                            <a  id="special-link"  class="text-dark nav-link" href="mypurchase">All</a>
-                        </div>
-                        <div class="col-2 text-center active">
-                            <a class="text-dark nav-link" href="topay">To Pay</a>
-                        </div>
-                        <div class="col-2 text-center">
-                            <a class="text-dark nav-link" href="toship">To Ship</a>
-                        </div>
-                        <div class="col-2 text-center">
-                            <a class="text-dark nav-link" href="toreceive">To Receive</a>
-                        </div>
-                        <div class="col-2 text-center">
-                            <a class="text-dark nav-link" href="completed">Completed</a>
-                        </div>
-                        <div class="col-2 text-center">
-                            <a class="text-dark nav-link" href="cancelled">Cancelled</a>
-                        </div>
-                    </div>
+
+                    <ul class="nav nav-pills justify-content-between">
+                        <li class="nav-item">
+                            <a class="nav-link" href="mypurchase?status=-1">All</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="mypurchase?status=1">Confirmed and packed</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="mypurchase?status=2">Being transported</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="mypurchase?status=3">Delivered</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="mypurchase?status=4">Canceled</a>
+                        </li>
+                    </ul>
+
                 </div>
             </div>
         </div>
 
- 
+        <style>
+            .navigation {
+                background-color: #FFFFFF;
+                border-bottom: 1px solid #e0e0e0;
+                padding: 20px;
+                width: 92%;
+                margin-bottom: 20px;
+            }
+
+            .nav-pills .nav-link {
+                color: #333;
+                font-weight: 500;
+                transition: color 0.3s ease;
+            }
+
+            .nav-pills .nav-link.active,
+            .nav-pills .nav-link:hover {
+                color: #ff4500;
+                background-color: transparent;
+            }
+        </style>
+
+
+
+
 
 
         <!-- Cart Start -->
-        <div class="container-fluid">
+        <div class="container-fluid col-12 col-sm-12 col-lg-12 col-md-12" >
             <c:set var="tt" value="0"/>
-            <%--<c:forEach items="$purchase}" var="p">--%>
+            <c:forEach items="${purchase}" var="p">
                 <c:set var="tt" value="${tt+1}"/>
-                <div class="row px-xl-5 ">
-                    <div class="col-12">
-                        <div class="thead-dark">
-                            <span>${p.orderDate}</span>
+
+                <div class="row px-xl-5  pt-2 mt-1" >
+                    <div class="col-12" style="border-style: ridge; background-color: white;">
+                        <div class="thead-dark" >
+                            <span class="text-dark">${p.getOrderDate()}</span>
+                            <br>
                             <c:if test="${p.status == 0}">
-                                <span>|</span>
+                                <!-- Waiting for progressing -->
+                                <span></span>
                                 <span style="font-weight: bold;color: #7A9D54">Waiting for progressing</span>
                                 <span>|</span>
                                 <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getCustomerID()}" style="color: #BF9742">Order tracking</a></span>
                                 <span>|</span>
-                                <span><a href="#" onclick="showMess(${p.orderID})" style="color: #BDCDD6">Cancel</a></span>
+                                <span><a href="#" onclick="cancelOrder(${p.orderID})" style="color: #BDCDD6">Cancel</a></span>
                             </c:if>
                             <c:if test="${p.status == 1}">
-                                <span>|</span>
+                                <!-- Confirmed and packed -->
+                                <span></span>
                                 <span style="font-weight: bold;color: #7A9D54">Confirmed and packed</span>
                                 <span>|</span>
-                                <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getCustomerID()}" style="color: #BF9742">Order tracking</a></span>                       
-                            </c:if>
-                            <c:if test="${p.status == 2}">
+                                <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getCustomerID()}" style="color: #BF9742">Order tracking</a></span>  
                                 <span>|</span>
+                                <button class="bg-secondary"><span class="text-danger" style="text-decoration: none;"><a href="#" onclick="cancelOrder(${p.orderID})">Cancel</a></span></button>
+                            </c:if>
+                            <!-- Similar blocks for other status types -->
+
+                            <c:if test="${p.status == 2}">
+                                <span></span>
                                 <span style="font-weight: bold;color: #7A9D54">Being transported</span>
                                 <span>|</span>
-                                <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getCustomerID()}" style="color: #BF9742">Order tracking</a></span>
+                                <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getCustomerID()}" style="color: #BF9742;">Order tracking</a></span>
 
                             </c:if>
                             <c:if test="${p.status == 3}">
-                                <span>|</span>
+                                <span></span>
                                 <span style="font-weight: bold;color: #4FC0D0">Delivered</span>
                                 <span>|</span>
                                 <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getCustomerID()}" style="color: #BF9742">Order tracking</a></span>
 
                             </c:if>
                             <c:if test="${p.status == 4}">
-                                <span>|</span>
+                                <span></span>
                                 <span style="font-weight: bold;color: red">Canceled</span>
                                 <span>|</span>
                                 <span><a href="ordertracking?orderid=${p.orderID}&acountid=${account.getCustomerID()}" style="color: #BF9742">Order tracking</a></span>                      
@@ -163,32 +223,51 @@
                         </div>
                         <hr><!-- comment -->
                         <table class="table table-light table-borderless table-hover text-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Image</th>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <!--<th>Total Price</th>-->
+                                </tr>
+                            </thead>
                             <tbody class="align-middle">
-                                <c:forEach var="k" items="${odDAO}">
+                                <c:set var="index" value="0"/>
+                                <c:forEach var="o" items="${orderDetailsMap[p.orderID]}">
+                                    <c:set var="index" value="${index + 1}"/>
                                     <tr>
-                                        <td class="align-middle"><img style="width: 80px" class="img-fluid" src="images/Product/${pDAO.getProductByID(k.getProduct_id()).getImage()}" alt="Image"></td> 
-                                        <!--<td class="align-middle">$pDAO.getProductByID(k.getProduct_id()).getName()}</td>-->
-                                        <td class="align-middle"> ${k.getTotalMoney()}</td>
-                                        <!--<td class="align-middle">$(pDAO.getProductByID(k.getProduct_id()).getPrice()*k.getQuantity())}$</td>--> 
+                                        <td>${index}</td>
+                                        <td class="align-middle"><img style="width: 80px" class="img-fluid" src="${pDAO.getProductByID(o.getProductID()).getImage()}" alt="Image"></td>
+                                        <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getName()}</td>
+                                        <td class="align-middle">${o.getQuantity()}</td>
+
+                                        <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getFormattedTotalMoney()}₫</td>
+                                        <!-- Add other columns as needed -->
                                     </tr>
                                 </c:forEach>
 
 
                             </tbody>
                         </table>
-<!--                        <div class="right-side" style="margin-right: 5.5rem;
-                             margin-top: 1rem; text-align: right;">
-                            <span style="margin-right: 1rem">
-                                <button class="btn btn-link btn-detail" data-toggle="modal" data-target="#orderModal${tt}" style="background: black;
-                                        border-radius: 10px;"> Feedback</button>
-                            </span>
-                                <span style="font-weight: bold">Total: $p.totalPrice</span>
-                        </div>-->
+                        <hr>
+                        <div class="right-side m-2" style="margin-right: 5.5rem;
+                             margin-top: 1rem; text-align: right;margin-bottom: 10px;">
+                            <c:if test="${p.status == 3}">
+                                <span style="margin-right: 1rem">
+                                    <button class="btn btn-link btn-detail btn-warning text-dark" data-toggle="modal" data-target="#orderModal${tt}" 
+                                            border-radius: 10px;"> Feedback</button>
+                                </span>
+                            </c:if>
+                            <span style="font-weight: bold; color: red; ">Total: ${p.getFormattedTotalMoney()} VND</span>
+                        </div>
                     </div>
 
                 </div>
-            <%--</c:forEach>--%>
+            </c:forEach>
         </div>
+
 
 
 
@@ -206,30 +285,38 @@
                         </div>
                         <div class="modal-body">
                             <table class="table table-light table-borderless table-hover text-center mb-0">
-                                <tr>
-                                    <th>Product Name</th>
-                                    <th>Quantity</th>
-                                    <th >Price</th>
-                                    <th >Action</th>
-                                </tr>
-                                <c:forEach var="k" items="${odDAO.getOrderDetailByID(p.getOrderID())}">
-                                    <tr>
-
-                                        <td>${pDAO.getProductByID(k.getProduct_id()).getName()}</td>
-                                        <td>${k.getQuantity()}</td>
-                                        <td>${(pDAO.getProductByID(k.getProduct_id()).getPrice()*k.getQuantity())}$</td>
-                                        <c:if test="${p.status == 3 && fdao.checkfeedback(p.getOrderID(),k.getProduct_id()).isEmpty()}">
-                                            <td><a href="feedback?productid=${k.getProduct_id()}&orderid=${p.getOrderID()}"> Feedback</a></td>
-                                        </c:if>
-
-                                    </tr>
-                                </c:forEach>
+                                <thead>
+                                    <!-- Table headers -->
+                                </thead>
+                                <tbody class="align-middle">
+                                    <c:set var="index" value="0"/>
+                                    <c:forEach var="o" items="${orderDetailsMap[p.orderID]}">
+                                        <c:set var="index" value="${index + 1}"/>
+                                        <tr>
+                                            <td>${index}</td>
+                                            <td class="align-middle"><img style="width: 80px" class="img-fluid" src="${pDAO.getProductByID(o.getProductID()).getImage()}" alt="Image"></td>
+                                            <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getName()}</td>
+                                            <td class="align-middle">${o.getQuantity()}</td>
+                                            <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getUnitPrice()* o.getQuantity() }₫</td>
+                                            <td>
+                                                <c:if test="${!feedbackDAO.hasFeedback(o.getProductID(), p.orderID)}">
+                                                    <a href="feedback?productid=${o.getProductID()}&orderid=${p.orderID}">Feedback</a>
+                                                </c:if>
+                                                <br>
+                                                <c:if test="${feedbackDAO.hasFeedback(o.getProductID(), p.orderID)}">
+                                                    <a href="viewFeedback?productid=${o.getProductID()}&orderid=${p.orderID}">View Feedback</a>
+                                                </c:if>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
-        </c:forEach> 
+        </c:forEach>
+
         <!-- Cart End -->
         <%@include file="component/footer.jsp" %>
         <!-- Back to Top -->
@@ -261,15 +348,25 @@
                                                     modalBody.innerHTML = orderDetail;
                                         });
                                     }
+
         </script>
         <script>
             function showMess(id) {
                 var option = confirm('Are you sure to cancel order?');
                 if (option === true) {
-                    window.location.href = 'cancelO?oid=' + id;
+                    window.location.href = "changeStatus?id=" + name + "&status=4";
                 }
             }
         </script>
+        <script>
+            function cancelOrder(orderId) {
+                var option = confirm('Are you sure to cancel this order?');
+                if (option === true) {
+                    window.location.href = 'changestatus1?pid=' + orderId + '&sstatus=4';
+                }
+            }
+        </script>
+
     </body>
 
 </html>

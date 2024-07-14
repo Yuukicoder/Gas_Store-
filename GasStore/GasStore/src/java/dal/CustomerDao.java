@@ -155,7 +155,7 @@ public class CustomerDao extends DBContext {
         return list;
     }
 
-   public Customer getAllByID(int id) {
+    public Customer getAllByID(int id) {
         list = new ArrayList<>();
         try {
             String strSelect = "select * from Customer where customerID = ?";
@@ -400,8 +400,7 @@ public class CustomerDao extends DBContext {
         }
         return null;
     }
-    
-        
+
     public ArrayList<Customer> getListCheckGmail(String email) {
         ArrayList<Customer> customerList = new ArrayList<>();
         String sql = "SELECT * FROM Customer WHERE email = ?";
@@ -425,8 +424,8 @@ public class CustomerDao extends DBContext {
         }
         return customerList;
     }
-    
-        public Customer getgmailupdate(String pass, String gmail) {
+
+    public Customer getgmailupdate(String pass, String gmail) {
         String sql = "UPDATE [dbo].[Customer]\n"
                 + "   SET [password] = ?\n"
                 + " WHERE [email]  = ?";
@@ -441,38 +440,285 @@ public class CustomerDao extends DBContext {
         }
         return null;
     }
-        
-    
-public static void main(String[] args) {
-    CustomerDao customerDao = new CustomerDao();
 
-    // Define an email and new password to test with
-    String testEmail = "haquocminhduc@gmail.com";
-    String newPassword = "newPassword123";
+    public int getTotalAdmin() {
+        int count = 0;
+        try {
+            String query = "SELECT COUNT(*) AS total FROM Administrator";
+            stm = connection.prepareStatement(query);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return count;
+    }
 
-    // Call the getgmailupdate function to update the password for the test email
-    customerDao.getgmailupdate(newPassword, testEmail);
+    public List<Administrator> getPaginatedAdmin(int pageNum, int pageSize) {
+        li = new ArrayList<>();
+        try {
+            String strSelect = "WITH tempTable AS (\n"
+                    + "    SELECT ROW_NUMBER() OVER (ORDER BY administratorID) AS rownum, *\n"
+                    + "    FROM Administrator\n"
+                    + ")\n"
+                    + "SELECT * FROM  tempTable\n"
+                    + "LEFT JOIN Role ON tempTable.roleID = Role.roleID\n"
+                    + "where tempTable.rownum between ? and ?";
+            stm = connection.prepareStatement(strSelect);
+            int startRow = (pageNum - 1) * pageSize + 1;
+            int endRow = startRow + pageSize - 1;
+            stm.setInt(1, startRow);
+            stm.setInt(2, endRow);
+            rs = stm.executeQuery();
+            while (rs.next()) {
 
-    // Call the getListCheckGmail function with the test email to verify the update
-    ArrayList<Customer> customers = customerDao.getListCheckGmail(testEmail);
+                Administrator em = new Administrator(rs.getInt("administratorID"),
+                        rs.getString("userName"), rs.getString("password"),
+                        rs.getInt("roleID"), rs.getString("email"),
+                        rs.getString("img"), rs.getString("name"), rs.getBoolean("isActive"));
+                li.add(em);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return li;
+    }
 
-    // Print out the results
-    if (customers.isEmpty()) {
-        System.out.println("No customers found with the email: " + testEmail);
-    } else {
-        System.out.println("Customers found with the email: " + testEmail);
-        for (Customer customer : customers) {
-            System.out.println("Customer ID: " + customer.getCustomerID());
-            System.out.println("Username: " + customer.getUserName());
-            System.out.println("First Name: " + customer.getFirstName());
-            System.out.println("Last Name: " + customer.getLastName());
-            System.out.println("Phone: " + customer.getPhone());
-            System.out.println("Email: " + customer.getEmail());
-            // Print out the password to verify the update
-            System.out.println("Password: " + customer.getPassword());
-            System.out.println("---------------------------");
+    public List<Administrator> SearchPaginatedAdmin(int pageNum, int pageSize, String tname) {
+        List<Administrator> li = new ArrayList<>();
+        String[] parts = tname.trim().toLowerCase().split("\\s+");
+
+        // Construct the SQL query dynamically for word search
+        StringBuilder queryBuilder = new StringBuilder("WITH tempTable AS (")
+                .append("SELECT ROW_NUMBER() OVER (ORDER BY administratorID) AS rownum, * ")
+                .append("FROM Administrator) ")
+                .append("SELECT * FROM tempTable ")
+                .append("LEFT JOIN Role ON tempTable.roleID = Role.roleID WHERE ");
+        for (int i = 0; i < parts.length; i++) {
+            queryBuilder.append("(userName LIKE ? OR email LIKE ? OR name LIKE ?)");
+            if (i < parts.length - 1) {
+                queryBuilder.append(" OR ");
+            }
+        }
+        queryBuilder.append(" AND tempTable.rownum BETWEEN ? AND ?");
+
+        boolean hasResults = false;
+
+        try (PreparedStatement stm = connection.prepareStatement(queryBuilder.toString())) {
+            // Set the parameters for each part
+            int paramIndex = 1;
+            for (String part : parts) {
+                String searchPattern = "%" + part + "%";
+                stm.setString(paramIndex++, searchPattern);
+                stm.setString(paramIndex++, searchPattern);
+                stm.setString(paramIndex++, searchPattern);
+            }
+            int startRow = (pageNum - 1) * pageSize + 1;
+            int endRow = startRow + pageSize - 1;
+            stm.setInt(paramIndex++, startRow);
+            stm.setInt(paramIndex, endRow);
+
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    Administrator em = new Administrator(
+                            rs.getInt("administratorID"),
+                            rs.getString("userName"),
+                            rs.getString("password"),
+                            rs.getInt("roleID"),
+                            rs.getString("email"),
+                            rs.getString("img"),
+                            rs.getString("name"),
+                            rs.getBoolean("isActive")
+                    );
+                    li.add(em);
+                    hasResults = true;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        // If no results are found, perform search by individual letters
+        if (!hasResults) {
+            li.clear();
+            parts = tname.trim().toLowerCase().split(""); // Split by individual letters
+
+            // Construct the SQL query dynamically for letter search
+            queryBuilder = new StringBuilder("WITH tempTable AS (")
+                    .append("SELECT ROW_NUMBER() OVER (ORDER BY administratorID) AS rownum, * ")
+                    .append("FROM Administrator) ")
+                    .append("SELECT * FROM tempTable ")
+                    .append("LEFT JOIN Role ON tempTable.roleID = Role.roleID WHERE ");
+            for (int i = 0; i < parts.length; i++) {
+                queryBuilder.append("(userName LIKE ? OR email LIKE ? OR name LIKE ?)");
+                if (i < parts.length - 1) {
+                    queryBuilder.append(" OR ");
+                }
+            }
+            queryBuilder.append(" AND tempTable.rownum BETWEEN ? AND ?");
+
+            try (PreparedStatement stm = connection.prepareStatement(queryBuilder.toString())) {
+                // Set the parameters for each part
+                int paramIndex = 1;
+                for (String part : parts) {
+                    String searchPattern = "%" + part + "%";
+                    stm.setString(paramIndex++, searchPattern);
+                    stm.setString(paramIndex++, searchPattern);
+                    stm.setString(paramIndex++, searchPattern);
+                }
+                int startRow = (pageNum - 1) * pageSize + 1;
+                int endRow = startRow + pageSize - 1;
+                stm.setInt(paramIndex++, startRow);
+                stm.setInt(paramIndex, endRow);
+
+                try (ResultSet rs = stm.executeQuery()) {
+                    while (rs.next()) {
+                        Administrator em = new Administrator(
+                                rs.getInt("administratorID"),
+                                rs.getString("userName"),
+                                rs.getString("password"),
+                                rs.getInt("roleID"),
+                                rs.getString("email"),
+                                rs.getString("img"),
+                                rs.getString("name"),
+                                rs.getBoolean("isActive")
+                        );
+                        li.add(em);
+                    }
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+
+        return li;
+    }
+      public boolean isUsernameAvailable(String username) {
+        String sql = "SELECT COUNT(*) AS count FROM Customer WHERE userName = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count") == 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking username availability: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean isUsernameAvailable2(String username, int id) {
+        String sql = "SELECT COUNT(*) AS count FROM Customer WHERE userName = ? AND customerID != ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setInt(2, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count") == 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking username availability: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean isAdminAvailable(String username) {
+        String sql = "SELECT COUNT(*) AS count FROM Administrator WHERE userName = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count") == 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking username availability: " + e.getMessage());
+        }
+        return false;
+    }
+
+    // Helper method to check if email is available
+    public boolean isEmailAvailable(String email) {
+        String sql = "SELECT COUNT(*) AS count FROM Customer WHERE email = ? ";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count") == 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking email availability: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean isEmailAvailable2(String email, int id) {
+        String sql = "SELECT COUNT(*) AS count FROM Customer WHERE email = ? AND customerID != ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.setInt(2, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count") == 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking email availability: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean isEmailAdmin(String email) {
+        String sql = "SELECT COUNT(*) AS count FROM Administrator WHERE email = ? ";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count") == 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking email availability: " + e.getMessage());
+        }
+        return false;
+    }
+
+
+    public static void main(String[] args) {
+        CustomerDao customerDao = new CustomerDao();
+
+        // Define an email and new password to test with
+        String testEmail = "haquocminhduc@gmail.com";
+        String newPassword = "newPassword123";
+
+        // Call the getgmailupdate function to update the password for the test email
+        customerDao.getgmailupdate(newPassword, testEmail);
+
+        // Call the getListCheckGmail function with the test email to verify the update
+        ArrayList<Customer> customers = customerDao.getListCheckGmail(testEmail);
+
+        // Print out the results
+        if (customers.isEmpty()) {
+            System.out.println("No customers found with the email: " + testEmail);
+        } else {
+            System.out.println("Customers found with the email: " + testEmail);
+            for (Customer customer : customers) {
+                System.out.println("Customer ID: " + customer.getCustomerID());
+                System.out.println("Username: " + customer.getUserName());
+                System.out.println("First Name: " + customer.getFirstName());
+                System.out.println("Last Name: " + customer.getLastName());
+                System.out.println("Phone: " + customer.getPhone());
+                System.out.println("Email: " + customer.getEmail());
+                // Print out the password to verify the update
+                System.out.println("Password: " + customer.getPassword());
+                System.out.println("---------------------------");
+            }
         }
     }
-}
 
 }
