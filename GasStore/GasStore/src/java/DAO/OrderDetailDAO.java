@@ -31,11 +31,12 @@ public class OrderDetailDAO extends DBcontext {
                 orderDetails.add(orderDetail);
             }
         } catch (Exception e) {
-            System.out.println("OrderDetailDAO - getAllOrderDetail: " + e.getMessage());
+            System.out.println(e);
         }
         return orderDetails;
     }
 //
+
     public List<OrderDetail> getOrderDetailByID(int orderID) {
         String sql = "SELECT productID, orderID, quantity, unitPrice FROM OrderDetails WHERE orderID = ?";
         List<OrderDetail> t = new ArrayList<>();
@@ -49,13 +50,37 @@ public class OrderDetailDAO extends DBcontext {
                 orderDetail.setOrderID(rs.getInt("orderID"));
                 orderDetail.setQuantity(rs.getInt("quantity"));
                 orderDetail.setUnitPrice(rs.getDouble("unitPrice"));
-                t.add(orderDetail) ;
+                t.add(orderDetail);
             }
         } catch (Exception e) {
-            System.out.println("OrderDetailDAO - getOrderDetailByID: " + e.getMessage());
+            System.out.println(e);
         }
-        return t; 
+        return t;
     }
+
+    public List<OrderDetail> getOrderDetail(int oid) {
+        String sql = "	SELECT * FROM OrderDetails WHERE orderID = ?";
+        List<OrderDetail> t = new ArrayList<>();
+        ProductDAO pdao = new ProductDAO();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, oid);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setProductID(rs.getInt("productID"));
+                orderDetail.setOrderID(rs.getInt("orderID"));
+                orderDetail.setQuantity(rs.getInt("quantity"));
+                orderDetail.setUnitPrice(rs.getDouble("unitPrice"));
+                orderDetail.setProduct(pdao.getProductByID(rs.getInt("productID")));
+                t.add(orderDetail);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return t;
+    }
+
     public static void main(String[] args) {
         OrderDetailDAO dao = new OrderDetailDAO();
         ProductDAO pDAO = new ProductDAO();

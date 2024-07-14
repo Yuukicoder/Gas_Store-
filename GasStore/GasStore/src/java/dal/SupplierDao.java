@@ -239,6 +239,27 @@ public class SupplierDao extends DBContext {
         }
         return supplier;
     }
+    
+    public Supplier getByEmailAndPassword(String email, String password) {
+        Supplier supplier = null;
+        try {
+            String strSelect = "Select * from Supplier where email = ? and password = ?";
+            stm = connection.prepareStatement(strSelect);
+            stm.setString(1, email);
+            stm.setString(2, password);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                supplier = new Supplier(rs.getInt("supplierId"),
+                        rs.getString("companyName"), rs.getBoolean("status"),
+                        rs.getDate("createdDate"), rs.getString("email"),
+                        rs.getString("phone"), rs.getString("homePage"));
+                return supplier;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return supplier;
+    }
 
     public static void main(String[] args) {
         SupplierDao sus = new SupplierDao();
