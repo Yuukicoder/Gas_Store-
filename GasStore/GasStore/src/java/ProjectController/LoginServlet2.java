@@ -6,7 +6,7 @@ package ProjectController;
 
 import Controller.MaHoa;
 import DAO.AccountDAO;
-import DTO.AccountDTO;
+import DAO.NotificationDAO;
 import DTO.AdminDTO;
 import dal.CustomerDao;
 import jakarta.servlet.ServletException;
@@ -16,8 +16,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 import DTO.Customer;
+import DTO.NotificationDTO;
+import java.util.ArrayList;
 
 /**
  *
@@ -41,7 +42,6 @@ public class LoginServlet2 extends HttpServlet {
         System.out.println(request.getParameter("code"));
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -104,6 +104,12 @@ public class LoginServlet2 extends HttpServlet {
                     response.sendRedirect("home");
                 }
             } else if (account.getRoleID() == 1) {
+                //Reset noti-time on navbar - Vu Anh
+                NotificationDAO nDAO = new NotificationDAO();
+                ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+                session.setAttribute("notiList", n);
+                //
+
                 session.setAttribute("account", account);
                 response.sendRedirect("adminHome");
             } else if (account.getRoleID() == 2) {

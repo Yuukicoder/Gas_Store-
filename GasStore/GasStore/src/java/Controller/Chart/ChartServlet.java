@@ -4,7 +4,10 @@
  */
 package Controller.Chart;
 
+import DAO.NotificationDAO;
 import DAO.StatisticDAO;
+import DTO.AdminDTO;
+import DTO.NotificationDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,8 +15,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 
@@ -50,7 +55,6 @@ public class ChartServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -62,90 +66,101 @@ public class ChartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        AdminDTO account = (AdminDTO) session.getAttribute("account");
+        if (account != null) {
+            //Reset noti-time on navbar - Vu Anh
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
+            
+            StatisticDAO statisticData = new StatisticDAO();
+            String revenueChartRange = request.getParameter("range");
+            revenueChartRange = (revenueChartRange == null) ? "" : revenueChartRange;
 
-        StatisticDAO statisticData = new StatisticDAO();
-        String revenueChartRange = request.getParameter("range");
-        revenueChartRange = (revenueChartRange == null) ? "" : revenueChartRange;
+            Map<LocalDate, Double> revenue;
 
-        Map<LocalDate, Double> revenue;
+            //Date data
+            if (revenueChartRange.equals("1M")) {
+                revenue = statisticData.getRevenueOf30Days();
 
-        //Date data
-        if (revenueChartRange.equals("1M")) {
-            revenue = statisticData.getRevenueOf30Days();
+                LocalDate[] datesArray = revenue.keySet().toArray(new LocalDate[0]);
+                String[] formattedDates = new String[datesArray.length];
 
-            LocalDate[] datesArray = revenue.keySet().toArray(new LocalDate[0]);
-            String[] formattedDates = new String[datesArray.length];
+                for (int i = 0; i < datesArray.length; i++) {
+                    //labels: [2024-06-01,2024-06-02,2024-06-03]
+                    formattedDates[i] = '"' + datesArray[i].toString() + '"';
+                    //labels: ["2024-06-01","2024-06-02","2024-06-03"]
+                }
 
-            for (int i = 0; i < datesArray.length; i++) {
-                //labels: [2024-06-01,2024-06-02,2024-06-03]
-                formattedDates[i] = '"' + datesArray[i].toString() + '"';
-                //labels: ["2024-06-01","2024-06-02","2024-06-03"]
+                request.setAttribute("revenueDateSet", String.join(",", formattedDates));
+
+            } else if (revenueChartRange.equals("1Y")) {
+                revenue = statisticData.getRevenueOf12Months();
+                LocalDate[] datesArray = revenue.keySet().toArray(new LocalDate[0]);
+                String[] formattedDates = new String[datesArray.length];
+
+                for (int i = 0; i < datesArray.length; i++) {
+                    formattedDates[i] = '"' + "Tháng " + datesArray[i].toString().split("-")[1] + '"';
+                }
+
+                request.setAttribute("revenueDateSet", String.join(",", formattedDates));
+
+            } else {
+                revenue = statisticData.getRevenueOf7Days();
+                LocalDate[] datesArray = revenue.keySet().toArray(new LocalDate[0]);
+                String[] formattedDates = new String[datesArray.length];
+
+                for (int i = 0; i < datesArray.length; i++) {
+                    //labels: [2024-06-01,2024-06-02,2024-06-03]
+                    formattedDates[i] = '"' + datesArray[i].toString() + '"';
+                    //labels: ["2024-06-01","2024-06-02","2024-06-03"]
+                }
+
+                request.setAttribute("revenueDateSet", String.join(",", formattedDates));
+
             }
+            //
 
-            request.setAttribute("revenueDateSet", String.join(",", formattedDates));
-
-        } else if (revenueChartRange.equals("1Y")) {
-            revenue = statisticData.getRevenueOf12Months();
-            LocalDate[] datesArray = revenue.keySet().toArray(new LocalDate[0]);
-            String[] formattedDates = new String[datesArray.length];
-
-            for (int i = 0; i < datesArray.length; i++) {
-                formattedDates[i] = '"' + "Tháng " + datesArray[i].toString().split("-")[1] + '"';
+            //Revenue data
+            Double[] revenueArray = revenue.values().toArray(new Double[0]);
+            double totalRevenue = statisticData.getTotalMoney(revenueArray);
+            String[] formattedValues = new String[revenueArray.length];
+            for (int i = 0; i < revenueArray.length; i++) {
+                formattedValues[i] = revenueArray[i].toString();
             }
+            NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+            currencyFormatter.setMaximumFractionDigits(0);
+            request.setAttribute("TotalRevenue", currencyFormatter.format(totalRevenue));
+            request.setAttribute("revenueSumSet", String.join(",", formattedValues));
+            //
 
-            request.setAttribute("revenueDateSet", String.join(",", formattedDates));
+            //Best seller data
+            Map<String, Integer> bestSellers = statisticData.getTop10BestSellerProducts();
 
+            //Product name data
+            String[] nameArray = bestSellers.keySet().toArray(new String[0]);
+            String[] formattedNames = new String[nameArray.length];
+            for (int i = 0; i < nameArray.length; i++) {
+                formattedNames[i] = '"' + nameArray[i] + '"';
+            }
+            request.setAttribute("bestSellersNameSet", String.join(",", formattedNames));
+            //
+
+            //Quantity data
+            var quantityArray = bestSellers.values().toArray();
+            String[] formattedQuantities = new String[quantityArray.length];
+            for (int i = 0; i < quantityArray.length; i++) {
+                formattedQuantities[i] = quantityArray[i].toString();
+            }
+            request.setAttribute("bestSellersQuantitySet", String.join(",", formattedQuantities));
+            //
+
+            request.getRequestDispatcher("Chart.jsp").forward(request, response);
         } else {
-            revenue = statisticData.getRevenueOf7Days();
-            LocalDate[] datesArray = revenue.keySet().toArray(new LocalDate[0]);
-            String[] formattedDates = new String[datesArray.length];
-
-            for (int i = 0; i < datesArray.length; i++) {
-                //labels: [2024-06-01,2024-06-02,2024-06-03]
-                formattedDates[i] = '"' + datesArray[i].toString() + '"';
-                //labels: ["2024-06-01","2024-06-02","2024-06-03"]
-            }
-
-            request.setAttribute("revenueDateSet", String.join(",", formattedDates));
-
+            response.sendRedirect("403.jsp");
         }
-        //
-
-        //Revenue data
-        Double[] revenueArray = revenue.values().toArray(new Double[0]);
-        double totalRevenue = statisticData.getTotalMoney(revenueArray);
-        String[] formattedValues = new String[revenueArray.length];
-        for (int i = 0; i < revenueArray.length; i++) {
-            formattedValues[i] = revenueArray[i].toString();
-        }
-        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-        currencyFormatter.setMaximumFractionDigits(0);
-        request.setAttribute("TotalRevenue", currencyFormatter.format(totalRevenue));
-        request.setAttribute("revenueSumSet", String.join(",", formattedValues));
-        //
-
-        //Best seller data
-        Map<String, Integer> bestSellers = statisticData.getTop10BestSellerProducts();
-
-        //Product name data
-        String[] nameArray = bestSellers.keySet().toArray(new String[0]);
-        String[] formattedNames = new String[nameArray.length];
-        for (int i = 0; i < nameArray.length; i++) {
-            formattedNames[i] = '"' + nameArray[i] + '"';
-        }
-        request.setAttribute("bestSellersNameSet", String.join(",", formattedNames));
-        //
-
-        //Quantity data
-        var quantityArray = bestSellers.values().toArray();
-        String[] formattedQuantities = new String[quantityArray.length];
-        for (int i = 0; i < quantityArray.length; i++) {
-            formattedQuantities[i] = quantityArray[i].toString();
-        }
-        request.setAttribute("bestSellersQuantitySet", String.join(",", formattedQuantities));
-        //
-
-        request.getRequestDispatcher("Chart.jsp").forward(request, response);
     }
 
     /**

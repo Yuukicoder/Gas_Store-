@@ -57,7 +57,7 @@
                         </ol>
                         <div class="carousel-inner">
                             <div class="carousel-item position-relative active" style="height: 430px;">
-                                <img class="position-absolute w-100 h-100" src="images/news/${pdto.getPostbanner()}"
+                                <img class="position-absolute w-100 h-100" src="images/news/Banner/${pdto.getPostbanner()}"
                                      style="object-fit: cover;">
                                 <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                     <div class="p-3" style="max-width: 700px;">
@@ -76,7 +76,7 @@
                             <c:forEach items="${requestScope.post}" var="c" varStatus="status">
                                 <c:if test="${status.index > 0}">
                                     <div class="carousel-item position-relative" style="height: 430px;">
-                                        <img class="position-absolute w-100 h-100" src="images/news/${c.getPostbanner()}"
+                                        <img class="position-absolute w-100 h-100" src="images/news/Banner/${c.getPostbanner()}"
                                              style="object-fit: cover;">
                                         <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                             <div class="p-3" style="max-width: 700px;">
@@ -187,7 +187,7 @@
 
 
         <!-- Offer Start -->
-        <div class="container-fluid pt-5 pb-3">
+<!--        <div class="container-fluid pt-5 pb-3">
             <div class="row px-xl-5">
                 <div class="col-md-6">
                     <div class="product-offer mb-30" style="height: 300px;">
@@ -210,7 +210,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
         <!-- Offer End -->
 
         <!-- Vendor End -->

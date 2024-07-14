@@ -31,7 +31,7 @@ public class OrderDetailDAO extends DBcontext {
                 orderDetails.add(orderDetail);
             }
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("OrderDetailDAO - getAllOrderDetail: " + e.getMessage());
         }
         return orderDetails;
     }
@@ -52,7 +52,7 @@ public class OrderDetailDAO extends DBcontext {
                 t.add(orderDetail) ;
             }
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("OrderDetailDAO - getOrderDetailByID: " + e.getMessage());
         }
         return t; 
     }

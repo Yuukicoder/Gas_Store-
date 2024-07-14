@@ -86,28 +86,25 @@
                             <div class="col-md-4 mb-5">
                                 <h5 class="text-secondary text-uppercase mb-4">${categoryName}</h5>
                                 <div class="d-flex flex-column justify-content-start">
-                                    <!--                                    <a class="text-secondary mb-2" href="home"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                                                                        <a class="text-secondary mb-2" href="shop"><i class="fa fa-angle-right mr-2"></i>Shop</a>
-                                    
-                                                                        <a class="text-secondary mb-2" href="cart"><i class="fa fa-angle-right mr-2"></i>Cart</a>-->
+                                    <!--<a class="text-secondary mb-2" href="home"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                                    <a class="text-secondary mb-2" href="shop"><i class="fa fa-angle-right mr-2"></i>Shop</a>
+                                    <a class="text-secondary mb-2" href="cart"><i class="fa fa-angle-right mr-2"></i>Cart</a>-->
                                     <c:forEach items="${postList}" var="p">
-                                        <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>${p.getTitle()}</a>
-                                    </c:forEach>
+                                        <a class="text-secondary mb-2" href="postDetail?postID=${p.getPostID()}"><i class="fa fa-angle-right mr-2"></i>${p.getTitle()}</a>
+                                        </c:forEach>
 
                                 </div>
                             </div>
                         </c:forEach>
-                        <!--                        <div class="col-md-4 mb-5">
-                                                    <h5 class="text-secondary text-uppercase mb-4">My Account</h5>
-                                                    <div class="d-flex flex-column justify-content-start">
-                                                        <a class="text-secondary mb-2" href="home"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                                                        <a class="text-secondary mb-2" href="shop"><i class="fa fa-angle-right mr-2"></i>Shop</a>
-                        
-                                                        <a class="text-secondary mb-2" href="cart"><i class="fa fa-angle-right mr-2"></i>Card</a>
-                        
-                        
-                                                    </div>
-                                                </div>-->
+                        <!--<div class="col-md-4 mb-5">
+                        <h5 class="text-secondary text-uppercase mb-4">My Account</h5>
+                        <div class="d-flex flex-column justify-content-start">
+                            <a class="text-secondary mb-2" href="home"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                            <a class="text-secondary mb-2" href="shop"><i class="fa fa-angle-right mr-2"></i>Shop</a>
+
+                            <a class="text-secondary mb-2" href="cart"><i class="fa fa-angle-right mr-2"></i>Card</a>
+                        </div>
+                    </div>-->
                         <div class="col-md-4 mb-5">
 
                             <h6 class="text-secondary text-uppercase mt-4 mb-3">Social Media</h6>

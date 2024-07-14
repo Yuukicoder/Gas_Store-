@@ -15,7 +15,8 @@ import java.util.List;
  *
  * @author dell456
  */
-public class DiscountDAO extends DBcontext{
+public class DiscountDAO extends DBcontext {
+
     public void addDiscount(String name, String code, String start, String end, int discountAmount, String discountType, int quantity) {
         String sql = "INSERT INTO [dbo].[Discount]\n"
                 + "           ([name]\n"
@@ -37,9 +38,11 @@ public class DiscountDAO extends DBcontext{
             ps.setInt(7, quantity);
             ps.executeUpdate();
         } catch (Exception e) {
+            System.out.println("DiscountDAO - addDiscount: " + e.getMessage());
+
         }
     }
-    
+
     public List<Discount> listDiscount() {
         String sql = "SELECT [discountID]\n"
                 + "      ,[name]\n"
@@ -67,10 +70,12 @@ public class DiscountDAO extends DBcontext{
                 listDiscount.add(d);
             }
         } catch (Exception e) {
+            System.out.println("DiscountDAO - listDiscount: " + e.getMessage());
+
         }
         return listDiscount;
     }
-    
+
     public Discount getDataByName(String name) {
         Discount discount = null;
         String sql = "SELECT * FROM [dbo].[Discount] WHERE [name] = ?";
@@ -91,31 +96,31 @@ public class DiscountDAO extends DBcontext{
                 return d;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("DiscountDAO - getDataByName: " + e.getMessage());
         }
         return discount;
     }
-    
+
     public boolean isNameExists(String name) {
         String query = "SELECT COUNT(*) FROM Discount WHERE name = ?";
         try (
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, name);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 int count = resultSet.getInt(1);
                 return count > 0;
             }
-            }catch (Exception e) {
-                e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("DiscountDAO - isNameExists: " + e.getMessage());
         }
         return false;
     }
-    
+
     public boolean isCodeExists(String code) {
         String query = "SELECT COUNT(*) FROM Discount WHERE discountCode = ?";
         try (
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, code);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -123,13 +128,13 @@ public class DiscountDAO extends DBcontext{
                 return count > 0;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("DiscountDAO - isCodeExists: " + e.getMessage());
         }
         return false;
     }
-    
+
     public void updateDiscount(String name, String code, String start, String end, String discountType, int discountAmount, int quantity) {
-        String sql =  "UPDATE [dbo].[Discount]\n"
+        String sql = "UPDATE [dbo].[Discount]\n"
                 + "SET [name] = ?,\n"
                 + "    [startDate] = ?,\n"
                 + "    [endDate] = ?,\n"
@@ -140,7 +145,7 @@ public class DiscountDAO extends DBcontext{
         List<Discount> listDiscount = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
-             ps.setString(1, name);
+            ps.setString(1, name);
             ps.setString(2, start);
             ps.setString(3, end);
             ps.setString(4, discountType);
@@ -149,22 +154,21 @@ public class DiscountDAO extends DBcontext{
             ps.setString(7, code);
             ps.executeUpdate();
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("DiscountDAO - updateDiscount: " + e.getMessage());
         }
     }
-    
-    public void deleteDiscount(int id){
+
+    public void deleteDiscount(int id) {
         String sql = "DELETE FROM Discount WHERE discountID = ?";
-        try{
+        try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, id);
             ps.executeUpdate();
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("DiscountDAO - deleteDiscount: " + e.getMessage());
         }
     }
-    
-    
+
     public static void main(String[] args) {
         DiscountDAO discountDAO = new DiscountDAO();
         System.out.println(discountDAO.isNameExists("hhhh"));

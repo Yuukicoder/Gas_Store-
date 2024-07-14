@@ -38,7 +38,7 @@ public class PostDetailDAO extends DBcontext {
 
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - getPostDTOByID: " + e.getMessage());
         }
         return postDTO;
     }
@@ -58,7 +58,7 @@ public class PostDetailDAO extends DBcontext {
             int checkAdd = ps.executeUpdate();
             return checkAdd;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - updatePost: " + e.getMessage());
         }
         return 0;
     }

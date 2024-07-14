@@ -5,15 +5,14 @@ package Controller.AdminAccountServlet;
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-import Controller.MaHoa;
 import static Controller.MaHoa.toSHA1;
+import DAO.NotificationDAO;
 import DTO.AdminDTO;
 import GMAIL.Gmail;
 import GMAIL.Randompassword;
 import dal.CustomerDao;
 import dal.RoleDao;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
@@ -22,13 +21,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Random;
 import java.security.SecureRandom;
 import model.Administrator;
 import DTO.Customer;
+import DTO.NotificationDTO;
+import java.util.ArrayList;
 import model.Role;
 
 /**
@@ -63,9 +62,14 @@ public class InsertAdminServlet extends HttpServlet {
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
+            //Reset noti-time on navbar - Vu Anh
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
             if (account.getRoleID() == 1) {
-//List User
-// response.sendRedirect("ManageAccount.jsp");
+//                List User
+//                response.sendRedirect("ManageAccount.jsp");
 
                 CustomerDao cus = new CustomerDao();
                 RoleDao ro = new RoleDao();
@@ -151,25 +155,25 @@ public class InsertAdminServlet extends HttpServlet {
 // Handling other form data
         if (roleID == 3) {
             if (apass == null || apass.isEmpty()) {
-                        Gmail gmail = new Gmail();
-                        //goi ham random
-                        Randompassword randompassword = new Randompassword();
-                        apass = randompassword.generateRandomString();
+                Gmail gmail = new Gmail();
+                //goi ham random
+                Randompassword randompassword = new Randompassword();
+                apass = randompassword.generateRandomString();
 
-                        gmail.sendEmail(
-                                "<!DOCTYPE html>\n"
-                                + "<html>\n"
-                                + "<head>\n"
-                                + "<title>Page Title</title>\n"
-                                + "</head>\n"
-                                + "<body>\n"
-                                + "\n"+ "<h1>Your username is :" + aname + " </h1>\n"
-                                + "<h1>Your password is :" + apass + " </h1>\n"
-                                + "<p>Log in  <a href=\"http://localhost:8088/GasStore2/login\">Here</a></p>\n"
-                                + "\n"
-                                + "</body>\n"
-                                + "</html>", amail);
-                    }
+                gmail.sendEmail(
+                        "<!DOCTYPE html>\n"
+                        + "<html>\n"
+                        + "<head>\n"
+                        + "<title>Page Title</title>\n"
+                        + "</head>\n"
+                        + "<body>\n"
+                        + "\n" + "<h1>Your username is :" + aname + " </h1>\n"
+                        + "<h1>Your password is :" + apass + " </h1>\n"
+                        + "<p>Log in  <a href=\"http://localhost:8088/GasStore2/login\">Here</a></p>\n"
+                        + "\n"
+                        + "</body>\n"
+                        + "</html>", amail);
+            }
             Customer em = new Customer(aname, apass, amail);
             cus.insertCustomer(em);
             if (adid != null && !adid.isEmpty()) {
@@ -226,12 +230,12 @@ public class InsertAdminServlet extends HttpServlet {
                     request.getRequestDispatcher("InsertAdmin.jsp").forward(request, response);
                     return;
                 } else {
-                    
+
                     request.setAttribute("err", "Account name or email is available");
-                    
-                  request.getRequestDispatcher("InsertAdmin.jsp").forward(request, response);
+
+                    request.getRequestDispatcher("InsertAdmin.jsp").forward(request, response);
                     return;
-                    
+
                 }
             }
             response.sendRedirect("ManageStaff");

@@ -5,9 +5,11 @@
 package Controller;
 
 import DAO.DiscountDAO;
+import DAO.NotificationDAO;
 import DAO.VoucherDAO;
 import DTO.AdminDTO;
 import DTO.Discount;
+import DTO.NotificationDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -28,6 +31,12 @@ public class DiscountServlet extends HttpServlet{
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if(account!=null){
+            //Reset noti-time on navbar - Vu Anh
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
+            
             String name = request.getParameter("name").toUpperCase();
             String start = request.getParameter("start");
             String end = request.getParameter("end");
@@ -63,6 +72,12 @@ public class DiscountServlet extends HttpServlet{
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if(account!=null){
+            //Reset noti-time on navbar - Vu Anh
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
+            
             String action = request.getParameter("action");
             if (action == null) {
                 DiscountDAO discountDAO = new DiscountDAO();

@@ -1,7 +1,9 @@
 package Controller.AdminAccountServlet;
 
+import DAO.NotificationDAO;
 import DAO.ProductDAO;
 import DTO.AdminDTO;
+import DTO.NotificationDTO;
 import DTO.Product;
 import dal.SupplierDao;
 import java.io.IOException;
@@ -26,6 +28,12 @@ public class InsertSupplierServlet extends HttpServlet {
         AdminDTO account = (AdminDTO) session.getAttribute("account");
 
         if (account != null && account.getRoleID() == 1) {
+            //Reset noti-time on navbar - Vu Anh
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
+
             String pid = request.getParameter("id");
             String t = request.getParameter("type");
             SupplierDao supplierDao = new SupplierDao();
@@ -55,14 +63,14 @@ public class InsertSupplierServlet extends HttpServlet {
 
                 if (action == null || action.equals("show")) {
                     action = "normal";
-                    productCmap = productDAO.pagingProduct2(action, indexPage, numPage,Integer.parseInt(pid));
+                    productCmap = productDAO.pagingProduct2(action, indexPage, numPage, Integer.parseInt(pid));
                     productDTOs = productDAO.getAllProductBySupplier(Integer.parseInt(pid));
                     int numProduct = productDTOs.size();
                     int endPage = isAll ? 1 : (numProduct / numPage + (numProduct % numPage == 0 ? 0 : 1));
                     request.setAttribute("endPage", endPage);
                     request.setAttribute("action", "show");
                 } else {
-                    productCmap = productDAO.pagingProduct2(action, indexPage, numPage,Integer.parseInt(pid));
+                    productCmap = productDAO.pagingProduct2(action, indexPage, numPage, Integer.parseInt(pid));
                     productDTOs = productDAO.getAllProductHide();
                     int numProduct = productDTOs.size();
                     int endPage = isAll ? 1 : (numProduct / numPage + (numProduct % numPage == 0 ? 0 : 1));

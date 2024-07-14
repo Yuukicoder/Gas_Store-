@@ -32,6 +32,7 @@ public class PostCategoryDAO extends DBcontext {
             }
             return postCategoryDTOs;
         } catch (Exception e) {
+            System.out.println("PostCategoryDAO - getAllPostCategory: " + e.getMessage());
         }
         return null;
     }
@@ -48,7 +49,7 @@ public class PostCategoryDAO extends DBcontext {
             }
             return categoryID;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - getCategoryIDByName: " + e.getMessage());
         }
         return 0;
     }
@@ -71,7 +72,7 @@ public class PostCategoryDAO extends DBcontext {
             int checkAdd = ps.executeUpdate();
             return checkAdd;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - addPostCategory: " + e.getMessage());
         }
         return 0;
     }
@@ -84,7 +85,7 @@ public class PostCategoryDAO extends DBcontext {
             int checkDelete = ps.executeUpdate();
             return checkDelete;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - deletePostCategoryById: " + e.getMessage());
         }
         return 0;
     }
@@ -103,7 +104,7 @@ public class PostCategoryDAO extends DBcontext {
             }
             return pcdto;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - getCategoryByID: " + e.getMessage());
         }
         return null;
     }
@@ -120,7 +121,7 @@ public class PostCategoryDAO extends DBcontext {
             int checkUpdate = ps.executeUpdate();
             return checkUpdate;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - updatePostCategory: " + e.getMessage());
         }
         return 0;
     }

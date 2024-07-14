@@ -46,7 +46,7 @@ public class FeedbackDAO extends DBcontext {
             int inster = pt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("FeedbackDAO - insertfeedback: " + e.getMessage());
         }
 
     }
@@ -62,7 +62,7 @@ public class FeedbackDAO extends DBcontext {
             int inster = pt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("FeedbackDAO - updateFeedback: " + e.getMessage());
         }
 
     }
@@ -95,7 +95,7 @@ public class FeedbackDAO extends DBcontext {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("FeedbackDAO - getListorder: " + e.getMessage());
         }
         return al;
     }
@@ -136,7 +136,7 @@ public class FeedbackDAO extends DBcontext {
                 feedbackList.add(feedbackDTO);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("FeedbackDAO - getlistfeedback: " + e.getMessage());
         }
         return feedbackList;
     }
@@ -192,7 +192,7 @@ public class FeedbackDAO extends DBcontext {
                 feedbackList.add(feedbackDTO);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("FeedbackDAO - getlistfeedback1: " + e.getMessage());
         }
         return feedbackList;
     }
@@ -208,7 +208,7 @@ public class FeedbackDAO extends DBcontext {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("FeedbackDAO - getCount: " + e.getMessage());
         }
         return 0;
     }
@@ -240,7 +240,7 @@ public class FeedbackDAO extends DBcontext {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("FeedbackDAO - getidfeedback: " + e.getMessage());
         }
         return al;
     }
@@ -264,7 +264,7 @@ public class FeedbackDAO extends DBcontext {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("FeedbackDAO - getCount: " + e.getMessage());
         }
         return 0;
     }
@@ -303,7 +303,7 @@ public class FeedbackDAO extends DBcontext {
                 feedbackList.add(feedbackDTO);
             }
         } catch (SQLException e) {
-            System.out.println("Error retrieving feedback: " + e.getMessage());
+            System.out.println("FeedbackDAO - getFeedbackById: " + e.getMessage());
         }
 
         return feedbackList;
@@ -328,7 +328,7 @@ public class FeedbackDAO extends DBcontext {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("FeedbackDAO - checkfeedback: " + e.getMessage());
         }
         return al;
     }

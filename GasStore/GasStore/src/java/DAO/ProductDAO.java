@@ -50,7 +50,7 @@ public class ProductDAO extends DBcontext {
                 lp.add(product);
             }
         } catch (Exception e) {
-            e.printStackTrace();  // Consider logging the exception
+            System.out.println("ProductDAO - getAllProduct: " + e.getMessage());
         }
         return lp;
     }
@@ -80,6 +80,7 @@ public class ProductDAO extends DBcontext {
                 return product;
             }
         } catch (Exception e) {
+            System.out.println("ProductDAO - getProductByID: " + e.getMessage());
         }
         return null;
     }
@@ -116,7 +117,7 @@ public class ProductDAO extends DBcontext {
                 lp.add(product);
             }
         } catch (Exception e) {
-            e.printStackTrace();  // Consider logging the exception
+            System.out.println("ProductDAO - getProductByCategory: " + e.getMessage());
         }
         return lp;
     }
@@ -148,7 +149,7 @@ public class ProductDAO extends DBcontext {
                 list.add(product);
             }
         } catch (Exception e) {
-            e.printStackTrace();  // Consider logging the exception
+            System.out.println("ProductDAO - searchByKeywords: " + e.getMessage());
         }
         return list;
     }
@@ -196,7 +197,7 @@ public class ProductDAO extends DBcontext {
                 list.add(product);
             }
         } catch (Exception e) {
-            e.printStackTrace();  // Consider logging the exception
+            System.out.println("ProductDAO - searchByName: " + e.getMessage());
         }
         return list;
     }
@@ -217,7 +218,7 @@ public class ProductDAO extends DBcontext {
             int check = st.executeUpdate();
             return check;
         } catch (SQLException e) {
-            System.out.println("Hide" + e.getMessage());
+            System.out.println("ProductDAO - actionWithProductById: " + e.getMessage());
         }
         return 0;
     }
@@ -242,7 +243,7 @@ public class ProductDAO extends DBcontext {
                 productCMap.put(product, categoryName);
             }
         } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("ProductDAO - getProductWithCategory: " + e.getMessage());
         }
         return productCMap;
     }
@@ -283,7 +284,7 @@ public class ProductDAO extends DBcontext {
 
             return st.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("ProductDAO - updateProduct2: " + e.getMessage());
         }
 
         return 0;
@@ -345,7 +346,7 @@ public class ProductDAO extends DBcontext {
 
             return st.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("ProductDAO - updateProduct: " + e.getMessage());
         }
 
         return 0;
@@ -380,9 +381,9 @@ public class ProductDAO extends DBcontext {
                 return getNewProductID();
             }
         } catch (SQLException e) {
-            System.out.println("SQL Exception: " + e.getMessage());
+            System.out.println("ProductDAO - addNewProduct - SQLException: " + e.getMessage());
         } catch (IllegalArgumentException e) {
-            System.out.println("Date formatting issue: " + e.getMessage());
+            System.out.println("ProductDAO - addNewProduct - IllegalArgumentException: " + e.getMessage());
         }
         return 0;
     }
@@ -400,7 +401,7 @@ public class ProductDAO extends DBcontext {
             }
             return productID;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("ProductDAO - getNewProductID: " + e.getMessage());
         }
         return 0;
     }
@@ -434,7 +435,7 @@ public class ProductDAO extends DBcontext {
             }
             return productCMap;
         } catch (SQLException e) {
-            System.out.println("SQL Exception: " + e.getMessage());
+            System.out.println("ProductDAO - pagingProduct: " + e.getMessage());
         }
 
         return null;
@@ -490,7 +491,7 @@ public class ProductDAO extends DBcontext {
             }
             return productCMap;
         } catch (SQLException e) {
-            System.out.println("SQL Exception: " + e.getMessage());
+            System.out.println("ProductDAO - searchProductsPaging: " + e.getMessage());
         }
 
         return null;
@@ -517,7 +518,7 @@ public class ProductDAO extends DBcontext {
                 return rs.getInt(1); // Return the count
             }
         } catch (SQLException e) {
-            System.out.println("SQL Exception: " + e.getMessage());
+            System.out.println("ProductDAO - countProducts: " + e.getMessage());
         }
 
         return 0; // Return 0 if there is an error or no matching products
@@ -534,7 +535,7 @@ public class ProductDAO extends DBcontext {
             }
             return count;
         } catch (SQLException e) {
-            System.out.println("SQL Error: " + e.getMessage());
+            System.out.println("ProductDAO - getTotalNewProduct: " + e.getMessage());
         }
         return 0;
     }
@@ -548,7 +549,7 @@ public class ProductDAO extends DBcontext {
                 return rs.getInt("Count");
             }
         } catch (SQLException e) {
-            System.out.println("SQL Error: " + e.getMessage());
+            System.out.println("ProductDAO - getTotalProduct: " + e.getMessage());
         }
         return 0;
     }
@@ -579,6 +580,7 @@ public class ProductDAO extends DBcontext {
                 lp.add(product);
             }
         } catch (Exception e) {
+            System.out.println("ProductDAO - getAllProductHide: " + e.getMessage());
         }
         return lp;
     }
@@ -616,7 +618,7 @@ public class ProductDAO extends DBcontext {
                 productCMap.put(product, categoryName);
             }
         } catch (SQLException e) {
-            System.out.println("Hide" + e.getMessage());
+            System.out.println("ProductDAO - getSearchProduct: " + e.getMessage());
         }
 
         return productCMap;
@@ -659,7 +661,7 @@ public class ProductDAO extends DBcontext {
                 filteredProducts.add(product);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("ProductDAO - filterProductsBySupplierPriceCategory: " + e.getMessage());
         }
 
         return filteredProducts;
@@ -689,7 +691,7 @@ public class ProductDAO extends DBcontext {
             }
             return products;
         } catch (SQLException e) {
-            System.out.println("SQL Exception: " + e.getMessage());
+            System.out.println("ProductDAO - getTop3ProductByEachCategory: " + e.getMessage());
         }
 
         return null;
@@ -724,7 +726,7 @@ public class ProductDAO extends DBcontext {
             }
             return productCMap;
         } catch (SQLException e) {
-            System.out.println("SQL Exception: " + e.getMessage());
+            System.out.println("ProductDAO - pagingProduct2: " + e.getMessage());
         }
 
         return null;
@@ -755,7 +757,7 @@ public class ProductDAO extends DBcontext {
                 lp.add(product);
             }
         } catch (Exception e) {
-            e.printStackTrace();  // Consider logging the exception
+            System.out.println("ProductDAO - getAllProductBySupplier: " + e.getMessage());
         }
         return lp;
     }

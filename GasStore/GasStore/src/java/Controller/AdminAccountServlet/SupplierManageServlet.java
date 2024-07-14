@@ -1,6 +1,8 @@
 package Controller.AdminAccountServlet;
 
+import DAO.NotificationDAO;
 import DTO.AdminDTO;
+import DTO.NotificationDTO;
 import dal.SupplierDao;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -8,6 +10,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import model.Supplier;
 
@@ -19,6 +22,11 @@ public class SupplierManageServlet extends HttpServlet {
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
+            //Reset noti-time on navbar - Vu Anh
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
             if (account.getRoleID() == 1) {
                 String pid = request.getParameter("id");
                 String t = request.getParameter("type");
