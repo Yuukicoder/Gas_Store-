@@ -14,7 +14,7 @@ public class OrderDetail {
     private int productID;
     private int quantity;
     private double unitPrice;
-
+    private Product pdto;
     public OrderDetail() {
     }
     
@@ -31,6 +31,14 @@ public class OrderDetail {
         this.productID = productID;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
+    }
+
+    public Product getProduct() {
+        return pdto;
+    }
+
+    public void setProduct(Product pdto) {
+        this.pdto = pdto;
     }
 
     public int getOrderDetailID() {

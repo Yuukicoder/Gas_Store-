@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import DTO.Product;
+import java.util.Date;
 
 /**
  *
@@ -760,6 +761,146 @@ public class ProductDAO extends DBcontext {
             System.out.println("ProductDAO - getAllProductBySupplier: " + e.getMessage());
         }
         return lp;
+    }
+    
+    
+    
+    //tuong huy mapParams
+//changeProductStatus
+//paginateProducts
+//getAllProductWithParam
+    
+    public List<Product> filterProductsBySupplierAndPrice(Integer supplierID, Integer priceRange) {
+        List<Product> filteredProducts = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM Product WHERE 1=1");
+
+        if (supplierID != null) {
+            sql.append(" AND SupplierID = ").append(supplierID);
+        }
+        if (priceRange != null) {
+            sql.append(" AND UnitPrice BETWEEN ").append(priceRange - 100000).append(" AND ").append(priceRange + 100000);
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString()); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Product product = new Product();
+                product.setProductID(rs.getInt("productID"));
+                product.setCode(rs.getString("code"));
+                product.setName(rs.getString("name"));
+                product.setKeywords(rs.getString("keywords"));
+                product.setShortDescription(rs.getString("shortDescription"));
+                product.setDescription(rs.getString("description"));
+                product.setCategoryID(rs.getInt("categoryID"));
+                product.setSupplierID(rs.getInt("supplierID"));
+                product.setIsActive(rs.getBoolean("isActive"));
+                product.setUnitPrice(rs.getFloat("unitPrice"));
+                product.setImage(rs.getString("image"));
+                product.setStockQuantity(rs.getInt("stockQuantity"));
+                product.setUnitOnOrders(rs.getInt("unitOnOrders"));
+                product.setCreatedDate(rs.getString("createdDate"));
+                product.setCreatedBy(rs.getInt("createdBy"));
+                filteredProducts.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return filteredProducts;
+    }
+    public List<Product> getAllProductWithParam(int sid, String searchParam, Integer status) {
+        List<Product> products = new ArrayList<>();
+        List<Object> list = new ArrayList<>();
+
+        try {
+            StringBuilder query = new StringBuilder();
+            query.append("SELECT * FROM Product WHERE supplierId = ?");
+            list.add(sid);
+            if (searchParam != null && !searchParam.trim().isEmpty()) {
+                query.append(" AND name LIKE ?");
+                list.add("%" + searchParam + "%");
+            }
+
+            if (status != null) {
+                query.append(" AND isActive = ?");
+                list.add(status);
+            }
+
+            query.append(" ORDER BY ProductID DESC");
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query.toString());
+            mapParams(preparedStatement, list);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Product product = new Product();
+                    product.setProductID(resultSet.getInt("productID"));
+                    product.setCode(resultSet.getString("code"));
+                    product.setName(resultSet.getString("name"));
+                    product.setKeywords(resultSet.getString("keywords"));
+                    product.setShortDescription(resultSet.getString("shortDescription"));
+                    product.setDescription(resultSet.getString("description"));
+                    product.setCategoryID(resultSet.getInt("categoryID"));
+                    product.setSupplierID(resultSet.getInt("supplierID"));
+                    product.setIsActive(resultSet.getBoolean("isActive"));
+                    product.setUnitPrice(resultSet.getFloat("unitPrice"));
+                    product.setImage(resultSet.getString("image"));
+                    product.setStockQuantity(resultSet.getInt("stockQuantity"));
+                    product.setUnitOnOrders(resultSet.getInt("unitOnOrders"));
+                    product.setCreatedDate(resultSet.getString("createdDate"));
+                    product.setCreatedBy(resultSet.getInt("createdBy"));
+                    products.add(product);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return products;
+    }
+
+    public List<Product> paginateProducts(List<Product> products, int page, int pageSize) {
+        int fromIndex = (page - 1) * pageSize;
+        int toIndex = Math.min(fromIndex + pageSize, products.size());
+
+        if (fromIndex > toIndex) {
+            fromIndex = toIndex;
+        }
+
+        return products.subList(fromIndex, toIndex);
+    }
+
+    public int changeProductStatus(int productId, boolean isActive) {
+        String sql = "UPDATE Product SET isActive = ? WHERE productID = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setBoolean(1, isActive);
+            st.setInt(2, productId);
+            return st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error changing product status: " + e.getMessage());
+            return 0;
+        }
+    }
+
+    public void mapParams(PreparedStatement ps, List<Object> args) throws SQLException {
+        int i = 1;
+        for (Object arg : args) {
+            if (arg instanceof Date) {
+                ps.setTimestamp(i++, new Timestamp(((Date) arg).getTime()));
+            } else if (arg instanceof Integer) {
+                ps.setInt(i++, (Integer) arg);
+            } else if (arg instanceof Long) {
+                ps.setLong(i++, (Long) arg);
+            } else if (arg instanceof Double) {
+                ps.setDouble(i++, (Double) arg);
+            } else if (arg instanceof Float) {
+                ps.setFloat(i++, (Float) arg);
+            } else {
+                ps.setString(i++, (String) arg);
+            }
+
+        }
     }
     public static void main(String[] args) {
         ProductDAO p = new ProductDAO();
