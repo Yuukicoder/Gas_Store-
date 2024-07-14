@@ -3,13 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/SWP391/project9/Gas_Store-/GasStore/GasStore/src/java/DAO/CategoryDAO.java</file>
-            <file>file:/D:/SWP391/project9/Gas_Store-/GasStore/GasStore/src/java/ProjectController/SignupServlet.java</file>
-            <file>file:/D:/SWP391/project9/Gas_Store-/GasStore/GasStore/web/login.jsp</file>
-            <file>file:/D:/SWP391/project9/Gas_Store-/GasStore/GasStore/src/java/DAO/VoucherDAO.java</file>
-            <file>file:/D:/SWP391/project9/Gas_Store-/GasStore/GasStore/web/error-pages/admin/scss/bootstrap/scss/_functions.scss</file>
-            <file>file:/D:/SWP391/project9/Gas_Store-/GasStore/GasStore/src/java/dal/DBContext.java</file>
-            <file>file:/D:/SWP391/project9/Gas_Store-/GasStore/GasStore/src/java/DAO/DBcontext.java</file>
+            <file>file:/D:/Workspace/FPT-Chuyên%20Ngành/Kì%205/SWP391/1/2/Gas_Store-/Gas_Store-/GasStore/GasStore/web/component/SideBarAdmin.jsp</file>
+            <file>file:/C:/Users/vip2021/OneDrive/Desktop/1/1/Gas_Store-/GasStore/GasStore/src/java/DAO/DBcontext.java</file>
+            <file>file:/C:/Users/vip2021/OneDrive/Desktop/1/1/Gas_Store-/GasStore/GasStore/src/java/dal/CustomerDao.java</file>
+            <file>file:/C:/Users/vip2021/OneDrive/Desktop/1/1/Gas_Store-/GasStore/GasStore/src/java/dal/DBContext.java</file>
         </group>
     </open-files>
 </project-private>

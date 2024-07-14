@@ -80,16 +80,15 @@
                 margin-top: 1rem;
             }
 
-            .image-container10rem{ /* Maximum width as specified */
+            .image-container img {
+                width: 100%;
+                max-width: 10rem; /* Maximum width as specified */
                 height: auto; /* Maintain aspect ratio */
                 border: 1px solid #ddd; /* Optional border for better visuals */
                 border-radius: 0.25rem; /* Slightly rounded corners */
                 box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Optional shadow */
             }
-            img {
-                max-width: 80%;
-                height: auto;
-            }
+
         </style>
 
     </head>
@@ -131,8 +130,8 @@
                                                         <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                                                     </div>
                                                 </div>
-
-                                            </form>
+                                        
+                                        </form>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-4 col-md-4 m-3 text-right">
@@ -140,97 +139,97 @@
                                         <a href="create-admin" class="btn btn-primary">Add new Employee</a>
                                     </div>
                                 </div>
+                           
 
 
 
+                            <div class="table-responsive">
+                                <table id="productTable" class="table text-start align-middle table-bordered table-hover mb-0">
+                                    <thead>
+                                        <tr class="text-white">
+                                            <th scope="col">Avatar</th>
+                                            <th scope="col">Username</th>
+                                            <th scope="col">Role</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Active</th>
 
-                                <div class="table-responsive">
-                                    <table id="productTable" class="table text-start align-middle table-bordered table-hover mb-0">
-                                        <thead>
-                                            <tr class="text-white">
-                                                <th scope="col">Avatar</th>
-                                                <th scope="col">Username</th>
-                                                <th scope="col">Role</th>
-                                                <th scope="col">Email</th>
-                                                <th scope="col">Active</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="${requestScope.adata}" var="l">
+                                            <tr>
+                                                <td><div class="image-container"><img class="width: 50%;" src="${l.getImg()}" alt="alt"/></div></td>
+                                                <td>${l.getUserName()}</td>
+                                                <td>${l.getName()}</td>
+                                                <td>${l.getEmail()}</td>
 
-                                                <th scope="col">Action</th>
+                                                <td>${l.isIsActive()}</td>
+                                                <td>
+                                                    <a href="create-admin?atype=0&aid=${l.getAdministratorID()}" class="update-button">Update</a><br>
+                                                    <a href="ManageStaff?atype=1&aid=${l.getAdministratorID()}">Delete</a>
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach items="${requestScope.adata}" var="l">
-                                                <tr>
-                                                    <td><div class="image-container"><img class="width: 30%;" src="${l.getImg()}" alt="alt"/></div></td>
-                                                    <td>${l.getUserName()}</td>
-                                                    <td>${l.getName()}</td>
-                                                    <td>${l.getEmail()}</td>
-
-                                                    <td>${l.isIsActive()}</td>
-                                                    <td>
-                                                        <a href="create-admin?atype=0&aid=${l.getAdministratorID()}" class="update-button">Update</a><br>
-                                                        <a href="ManageStaff?atype=1&aid=${l.getAdministratorID()}">Delete</a>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="row">
-                                    <div class="pagination ">
-                                        <c:if test="${pageNum > 1}">
-                                            <a href="?pageNum=${pageNum-1}">Previous</a>
-                                        </c:if>
-                                        Page ${pageNum} of ${totalPage}
-                                        <c:if test="${pageNum < totalPage}">
-                                            <a href="?pageNum=${pageNum+1}">Next</a>
-                                        </c:if>
-                                    </div>
-
-                                </div>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
                             </div>
+                            <div class="row">
+                                <div class="pagination ">
+                                    <c:if test="${pageNum > 1}">
+                                        <a href="?pageNum=${pageNum-1}">Previous</a>
+                                    </c:if>
+                                    Page ${pageNum} of ${totalPage}
+                                    <c:if test="${pageNum < totalPage}">
+                                        <a href="?pageNum=${pageNum+1}">Next</a>
+                                    </c:if>
+                                </div>
 
-
-
+                            </div>
                         </div>
-                    </div>
-                    <div class="m-3 mt-4">
-                        <a href="adminHome" class="btn btn-primary">Back to Manage Account</a>
+
+
+
                     </div>
                 </div>
-
-                <!-- Main Content End --><a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+                <div class="m-3 mt-4">
+                    <a href="adminHome" class="btn btn-primary">Back to Manage Account</a>
+                </div>
             </div>
-            <!-- Content End -->
+
+            <!-- Main Content End --><a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+        </div>
+        <!-- Content End -->
 
 
 
-            <!-- JavaScript Libraries -->
-            <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="admin/lib/chart/chart.min.js"></script>
-            <script src="admin/lib/easing/easing.min.js"></script>
-            <script src="admin/lib/waypoints/waypoints.min.js"></script>
-            <script src="admin/lib/owlcarousel/owl.carousel.min.js"></script>
-            <script src="admin/lib/tempusdominus/js/moment.min.js"></script>
-            <script src="admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
-            <script src="admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-            <script src="admin/js/main.js"></script>
-            <script>
-                $(document).ready(function () {
-                    $('.insert-div').hide(); // Hide the insert div initially
+        <!-- JavaScript Libraries -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="admin/lib/chart/chart.min.js"></script>
+        <script src="admin/lib/easing/easing.min.js"></script>
+        <script src="admin/lib/waypoints/waypoints.min.js"></script>
+        <script src="admin/lib/owlcarousel/owl.carousel.min.js"></script>
+        <script src="admin/lib/tempusdominus/js/moment.min.js"></script>
+        <script src="admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
+        <script src="admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+        <script src="admin/js/main.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('.insert-div').hide(); // Hide the insert div initially
 
-                    $('#toggleInsert').click(function (e) {
-                        e.preventDefault();
-                        $('.insert-div').toggle();
-                    });
-
-                    $('.update-button').click(function () {
-                        if ($('.insert-div').is(':hidden')) {
-                            $('.insert-div').show();
-                        }
-                    });
+                $('#toggleInsert').click(function (e) {
+                    e.preventDefault();
+                    $('.insert-div').toggle();
                 });
-            </script>
+
+                $('.update-button').click(function () {
+                    if ($('.insert-div').is(':hidden')) {
+                        $('.insert-div').show();
+                    }
+                });
+            });
+        </script>
     </body>
 
 </html>

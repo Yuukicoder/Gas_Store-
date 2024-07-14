@@ -138,25 +138,37 @@
             <form action="UserProfile" method="post" id="formUpdate" onsubmit="return ValidateProfileForm()" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-3 col-lg-4 col-6 col-sm-12 border-right">
-                        <input type="text" name="aimg" value="${sessionScope.account.getImage()}" hidden>
+                        <input type="text" name="aimg" value="${acc.getImage()}" hidden>
 
                         <div class="d-flex flex-column align-items-center text-center p-3 py-5 position-relative">
-                            <img id="profileImage" class="mt-5 rounded-circle" width="50%;" src="${sessionScope.account.getImage()}">
+    <!-- Hiển thị ảnh hiện tại -->
+    <img id="profileImage" class="mt-5 rounded-circle" width="50%;" src="${sessionScope.account.getImage()}">
 
-                            <div id="imageOverlay" class="image-overlay">
-                                <span class="edit-icon">&#9998;</span> <!-- Unicode for a pen icon -->
-                            </div>
-                            <input type="file" name="pimg" id="imageUpload" class="d-none" >
-                           
-                                    <span class="font-weight-bold">${sessionScope.account.getUserName()}</span>
-                            <span class="text-black-50">${sessionScope.account.getFullName()}</span>
-                        </div>
+    <!-- Overlay để cho phép chọn ảnh -->
+    <div id="imageOverlay" class="image-overlay">
+        <span class="edit-icon">&#9998;</span> <!-- Unicode for a pen icon -->
+    </div>
+
+    <!-- Input để chọn file ảnh -->
+    <input type="file" name="pimg" id="imageUpload" class="d-none" accept="image/*" onchange="validateImage(this)">
+    
+    <!-- Thông báo lỗi -->
+    <!--<p id="imageError" style="color: red; display: none;">Please select a valid image file (JPEG, PNG, GIF)</p>-->
+
+    <span class="font-weight-bold">${sessionScope.account.getUserName()}</span>
+    <span class="text-black-50">${sessionScope.account.getFullName()}</span>
+    <p id="imageError" style="color: red; display: none;">Please select a valid image file (JPEG, PNG, GIF)</p>
+</div>
+
+                        <p style="color: red;">${errorrr}</p>
                         <div class="col-md-12">
                             <div class="p-3 center">
 
 
-                                <button class="border px-3 p-1 add-experience" onclick="openPasswordModal()" type="button">
-                                    <i class="fa fa-edit"></i>&nbsp;Change Password
+                                <button class="border px-3 p-1 add-experience"  type="button">
+                                    <a href="change-pass">
+                                        <i class="fa fa-edit"></i>&nbsp;Change Password
+                                    </a>
                                 </button>
                             </div>
                             <br>
@@ -169,31 +181,37 @@
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h4 class="text-right">Profile Settings</h4>
                             </div>
-
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <p class="text-right text-danger">${requestScope.err}</p>
+                            </div>
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <label class="labels">User Name</label>
-                                    <input type="text" class="form-control" value="${sessionScope.account.getUserName()}" name="user" id="uname">
+                                    <label class="labels mt-2">User Name</label>
+                                    <input style="background-color: white;" type="text" class="form-control " value="${sessionScope.account.getUserName()}" name="user" id="uname" readonly>
                                 </div>
                                 <div class="col-md-12">
-                                    <label class="labels">Full name</label>
+                                    <label class="labels mt-2">Full name</label>
                                     <input type="text" class="form-control" value="${sessionScope.account.getFullName()}" name="name" id="ufullname">
                                 </div>
                                 <div class="col-md-12">
-                                    <label class="labels">Mobile Number</label>
-                                    <input type="text" class="form-control" value="${sessionScope.account.getPhone()}" name="mobile" id="uphone">
+                                    <label class="labels mt-2">Mobile Number</label>
+                                    <a style="margin-left: 5px;" href="#" onclick="confirmChangePhone()">Change</a>
+                                    <input type="text" class="form-control" value="${sessionScope.account.getPhone()}" name="mobile" id="uphone" readonly>
                                 </div>
+
                                 <div class="col-md-12">
-                                    <label class="labels">Email</label>
-                                    <input type="text" class="form-control" value="${sessionScope.account.getEmail()}" name="email" id="uemail">
+                                    <label class="labels mt-2">Email</label>
+                                    <a style="margin-left: 5px;" href="#" onclick="confirmChangeEmail()">Change</a>
+                                    <input type="text" class="form-control" value="${sessionScope.account.getEmail()}" name="email" id="uemail" readonly>
                                 </div>
+
                                 <div class="col-md-12">
-                                    <label class="labels">Address</label>
+                                    <label class="labels mt-2">Address</label>
                                     <input type="text" class="form-control" value="${sessionScope.account.getAddress()}" name="address" id="uaddress">
                                 </div>
                             </div>
                             <div class="mt-5 text-center">
-                                <button class="btn btn-primary profile-button" type="submit" onclick="confirmSave()" name="update" value="profile">Save Profile</button>
+                                <button class="btn btn-warning  profile-button" type="submit"  name="update" value="profile">Save Profile</button>
                             </div>
                         </div>
                     </div>
@@ -201,6 +219,7 @@
                 </div>
             </form>
         </div>
+
 
         <!-- Nội dung cửa sổ chứa màn hình chèn phủ -->
         <div class="overlay" id="modalWrapper" style="display: none;">
@@ -210,7 +229,7 @@
                         <h4 class="text-right">Change Password</h4>
                     </div>
 
-                    <form action="UserProfile?aid=${account.getCustomerID()}" method="post" id="formUpdate" onsubmit="return savePassword();">
+                    <form action="UserProfile" method="post" id="formUpdate" onsubmit="return savePassword();">
                         <div class="row mt-3">
                             <div class="col-md-12">
                                 <label class="labels">Enter old password</label>
@@ -247,7 +266,15 @@
         <%@include file="component/footer.jsp" %>
 
         <script>
-            var passAcc = '<%= request.getAttribute("passAcc") %>';
+            var passAcc = '<%= request.getAttribute("pass") %>';
+        </script>
+        <script>
+            function confirmChangeEmail() {
+                var result = confirm("Are you sure you want to change your email?");
+                if (result) {
+                    document.getElementById("uemail").removeAttribute("readonly");
+                }
+            }
         </script>
 
         <script>
@@ -274,7 +301,7 @@
                 var oldpass = document.getElementsByName('oldpass')[0].value;
                 var reEnteredPassword = document.getElementsByName('repass')[0].value;
                 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
-                if (oldpass === passAcc) {
+                if (toSHA1(oldpass) === passAcc) {
                     if (passwordRegex.test(newPassword)) {
                         if (newPassword === reEnteredPassword) {
                             var result = confirm("Are you sure you want to update password?");
@@ -378,17 +405,76 @@
             });
 
             document.getElementById('imageUpload').addEventListener('change', function (event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        document.getElementById('profileImage').src = e.target.result;
-                        document.getElementById('profileImage').classList.remove('blur');
-                        document.getElementById('imageOverlay').style.display = 'none';
-                    }
-                    reader.readAsDataURL(file);
+        const file = event.target.files[0];
+        if (file) {
+            // Check file type
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Please select a valid image file (JPEG, PNG, GIF)');
+                // Reset input field to clear the invalid file
+                event.target.value = '';
+                return;
+            }
+
+            // Check file size (5MB limit)
+            const maxSize = 5 * 1024 * 1024;
+            if (file.size > maxSize) {
+                alert('File size exceeds 5MB limit');
+                // Reset input field to clear the invalid file
+                event.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('profileImage').src = e.target.result;
+                document.getElementById('profileImage').classList.remove('blur');
+                document.getElementById('imageOverlay').style.display = 'none';
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+        </script>
+        <script>
+    function validateImage(input) {
+        const file = input.files[0];
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        const maxSize = 5 * 1024 * 1024; // 5MB
+
+        // Kiểm tra loại file
+        if (!allowedTypes.includes(file.type)) {
+            document.getElementById('imageError').style.display = 'block';
+            input.value = ''; // Đặt lại giá trị của input để xóa file không hợp lệ
+            return;
+        }
+
+        // Kiểm tra kích thước file
+        if (file.size > maxSize) {
+            alert('File size exceeds 5MB limit');
+            document.getElementById('imageError').style.display = 'block';
+            input.value = ''; // Đặt lại giá trị của input để xóa file không hợp lệ
+            return;
+        }
+
+        // Nếu hợp lệ, hiển thị ảnh mới
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById('profileImage').src = e.target.result;
+            document.getElementById('profileImage').classList.remove('blur');
+            document.getElementById('imageOverlay').style.display = 'none';
+            document.getElementById('imageError').style.display = 'none'; // Ẩn thông báo lỗi
+        };
+        reader.readAsDataURL(file);
+    }
+</script>
+
+        <script>
+            function confirmChangePhone() {
+                var result = confirm("Are you sure you want to change your phone number?");
+                if (result) {
+                    document.getElementById("uphone").removeAttribute("readonly");
                 }
-            });
+            }
         </script>
 
     </body>

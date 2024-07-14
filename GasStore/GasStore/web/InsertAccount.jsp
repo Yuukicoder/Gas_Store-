@@ -32,11 +32,7 @@
 
         <!-- Template Stylesheet -->
         <link href="admin/css/style.css" rel="stylesheet">
-        <!--    <style>
-                .insert-div {
-                    display: none;
-                }
-            </style>-->
+
         <script>
             window.onload = function () {
                 var errorMessage = '<c:out value="${error}" />';
@@ -80,65 +76,166 @@
 
                                 <form action="insert-account" method="post">
                                     <input type="hidden" value="${detailaccount.customerID}" name="account_id">
-                                    <!--`         <div class="row">-->
-                                    <div class="row g-3">
-
-                                        <div class="row g-3 col-lg-12 col-md-12">
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" class="form-control" id="username" name="username" value="${detailaccount.userName}" placeholder="Username" <c:if test="${not empty detailaccount.userName}">readonly</c:if>>
-                                                        <label for="username">Username</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <input type="password" class="form-control" id="password" name="password" value="${detailaccount.password}" placeholder="Password" <c:if test="${not empty detailaccount.password}">readonly</c:if>>
-                                                        <label for="password">Password</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" id="first_name" name="first_name" value="${detailaccount.firstName}" placeholder="First Name" <c:if test="${not empty detailaccount.firstName}">readonly</c:if>>
-                                                        <label for="first_name">First Name</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" id="last_name" name="last_name" value="${detailaccount.lastName}" placeholder="Last Name" <c:if test="${not empty detailaccount.lastName}">readonly</c:if>>
-                                                        <label for="last_name">Last Name</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" id="email" name="email" value="${detailaccount.email}" placeholder="Email" <c:if test="${not empty detailaccount.email}">readonly</c:if>>
-                                                        <label for="email">Email</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <input type="text" class="form-control" id="phone_number" name="phone_number" value="${detailaccount.phone}" placeholder="Phone Number" <c:if test="${not empty detailaccount.phone}">readonly</c:if>>
-                                                    <label for="phone_number">Phone Number</label>
-                                                </div>
-                                            </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-12 col-md-6 col-sm-12">
 
 
-                                            <div class="col-12">
-                                                <button type="submit" class="btn btn-primary w-100" name="btnInUp">Insert/Update</button>
+                                            <!--<div class="d-flex flex-column align-items-center text-center p-3 py-5 position-relative">-->
+                                            <img id="profileImage"  width="50%;" src="${detailaccount.image}">
+                                            <!--</div>-->
+
+                                        </div>
+                                        <div class="col-lg-6 col-12 col-md-6 col-sm-12">
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control" id="username" name="username" value="${detailaccount.userName}" placeholder="Username" <c:if test="${not empty detailaccount.userName}">readonly</c:if>>
+                                                            <label for="username">Username</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-floating">
+                                                            <input type="password" class="form-control" id="password" name="password" value="${detailaccount.password}" placeholder="Password" <c:if test="${not empty detailaccount.password}">readonly</c:if>>
+                                                            <label for="password">Password</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" id="first_name" name="first_name" value="${detailaccount.firstName}" placeholder="First Name" <c:if test="${not empty detailaccount.firstName}">readonly</c:if>>
+                                                            <label for="first_name">First Name</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" id="last_name" name="last_name" value="${detailaccount.lastName}" placeholder="Last Name" <c:if test="${not empty detailaccount.lastName}">readonly</c:if>>
+                                                            <label for="last_name">Last Name</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" id="email" name="email" value="${detailaccount.email}" placeholder="Email" <c:if test="${not empty detailaccount.email}">readonly</c:if>>
+                                                            <label for="email">Email</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" id="phone_number" name="phone_number" value="${detailaccount.phone}" placeholder="Phone Number" <c:if test="${not empty detailaccount.phone}">readonly</c:if>>
+                                                            <label for="phone_number">Phone Number</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!--                                                <div class="col-12">
+                                                                                                    <button type="submit" class="btn btn-primary w-100" name="btnInUp">Insert/Update</button>
+                                                                                                </div>-->
                                             </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                        <!--</div>-->
+                        <!-- Tabbed Section Start -->
+
                     </div>
-                    <div class=" m-3 mt-3 col-lg-3">
-                        <a href="ManageUser" class="btn btn-primary">Back</a>
+                    <div class="row px-xl-5 mt-3">
+                        <div class="col">
+                            <div class="p-30" style="background-color: white;">
+                                <div class="nav nav-tabs mb-4">
+                                    <a class="nav-item nav-link text-dark active" data-bs-toggle="tab" href="#tab-pane-1">User's Orders</a>
+                                    <a class="nav-item nav-link text-dark" data-bs-toggle="tab" href="#tab-pane-2">Customer Feedback</a>
+                                </div>
+
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="tab-pane-1">
+                                        <h4 class="m-3">User's Orders</h4>
+                                        <div class="container-fluid col-12 col-sm-12 col-lg-12 col-md-12">
+                                        <c:set var="tt" value="0" />
+                                        <c:forEach items="${purchase}" var="p">
+                                            <c:set var="tt" value="${tt+1}" />
+
+                                            <hr><!-- comment -->
+                                            <div class="border border-grey rounded p-3 mb-3">
+                                                <h5 class="mt-2">Order #${tt}</h5>
+                                                <table class="table table-light1 table-borderless table-hover text-center mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Image</th>
+                                                            <th>Product Name</th>
+                                                            <th>Quantity</th>
+                                                            <th>Unit Price</th>
+                                                            <!--<th>Total Price</th>-->
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="align-middle">
+                                                        <c:set var="index" value="0" />
+                                                        <c:forEach var="o" items="${orderDetailsMap[p.orderID]}">
+                                                            <c:set var="index" value="${index + 1}" />
+                                                            <tr>
+                                                                <td>${index}</td>
+                                                                <td class="align-middle">
+                                                                    <img style="width: 80px" class="img-fluid" src="${pDAO.getProductByID(o.getProductID()).getImage()}" alt="Image">
+                                                                </td>
+                                                                <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getName()}</td>
+                                                                <td class="align-middle">${o.getQuantity()}</td>
+                                                                <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getFormattedTotalMoney()}₫</td>
+                                                                <!-- Add other columns as needed -->
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </tbody>
+                                                </table>
+
+                                                <div class="right-side m-2" style="margin-right: 5.5rem; margin-top: 1rem; text-align: right; margin-bottom: 10px;">
+                                                    <span style="font-weight: bold; color: red;">Total: ${p.getFormattedTotalMoney()} VND</span>
+                                                </div>
+                                            </div>
+                                        </c:forEach>
+                                    </div>
+                                </div>
+                                <!-- Tab-pane-1 end -->
+
+                                <div class="tab-pane fade" id="tab-pane-2">
+                                    <h4 class="m-3">Customer Feedback</h4>
+
+                                    <c:forEach var="feedback" items="${requestScope.productFeedback}">
+                                        <div class="card mb-3">
+                                            <div class="d-flex align-items-center card-body">
+                                                <img class="img-fluid mr-3" src="${feedback.getProductDTO().getImage()}" style="width: 50px; height: 50px; max-width: 70%;" alt="">
+                                                <div>
+                                                    <p>${feedback.getProductDTO().name}</p>
+                                                    <h6>username: ${feedback.getAccountDTO().getFirstName()}</h6>
+                                                    <div class="d-flex my-3 align-items-center">
+                                                        <p class="mb-0 mr-2">Rating * :</p>
+                                                        <div class="text-primary">
+                                                            <!-- Assuming you have a rating value -->
+                                                            <c:forEach begin="1" end="${feedback.start}">
+                                                                <i class="fas fa-star"></i>
+                                                            </c:forEach>
+                                                            <c:forEach begin="${feedback.start + 1}" end="5">
+                                                                <i class="far fa-star"></i>
+                                                            </c:forEach>
+                                                        </div>
+                                                    </div>
+                                                    <h6 class="card-text">Feedback: ${feedback.context}</h6>
+                                                    <!--<p class="card-text"><small class="text-muted">$feedback.date}</small></p>-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+
+                                <!-- Tab-pane-2 end -->
+                            </div>
+                            <!-- Tab-content end -->
+                        </div>
                     </div>
                 </div>
 
+                <!-- Tabbed Section End -->
+                <div class="m-3 mt-3 col-lg-3">
+                    <a href="ManageUser" class="btn btn-primary">Back</a>
+                </div>
             </div>
-
             <!-- Blank End -->
             <!-- Content End -->
             <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>

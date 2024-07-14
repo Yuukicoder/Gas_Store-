@@ -4,11 +4,13 @@
  */
 package model;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
- *
- * @author vip2021
+ * Represents an order entity.
  */
 public class Orders {
     private int orderID;
@@ -16,29 +18,26 @@ public class Orders {
     private int trackingNumber;
     private int totalMoney;
     private Date orderDate;
-    private Date shippedDate;
-    private Date requiredDate;
     private String shipAddress;
     private int status;
-    private int process;
+    private int shipVia;
     private String payment;
     private String notes;
 
-    public Orders(int orderID, int customerID, int trackingNumber, int totalMoney, Date orderDate, Date shippedDate, Date requiredDate, String shipAddress, int status, int process, String payment, String notes) {
+    public Orders(int orderID, int customerID, int trackingNumber, int totalMoney, Date orderDate, Date date1, Date date2, String shipAddress, int status, int shipVia, String payment, String notes) {
         this.orderID = orderID;
         this.customerID = customerID;
         this.trackingNumber = trackingNumber;
         this.totalMoney = totalMoney;
         this.orderDate = orderDate;
-        this.shippedDate = shippedDate;
-        this.requiredDate = requiredDate;
         this.shipAddress = shipAddress;
         this.status = status;
-        this.process = process;
+        this.shipVia = shipVia;
         this.payment = payment;
         this.notes = notes;
     }
 
+    // Getters and Setters
     public int getOrderID() {
         return orderID;
     }
@@ -79,24 +78,6 @@ public class Orders {
         this.orderDate = orderDate;
     }
 
-    public Date getShippedDate() {
-        return shippedDate;
-    }
-
-    public void setShippedDate(Date shippedDate) {
-        this.shippedDate = shippedDate;
-    }
-
-    
-
-    public Date getRequiredDate() {
-        return requiredDate;
-    }
-
-    public void setRequiredDate(Date requiredDate) {
-        this.requiredDate = requiredDate;
-    }
-
     public String getShipAddress() {
         return shipAddress;
     }
@@ -113,12 +94,12 @@ public class Orders {
         this.status = status;
     }
 
-    public int getProcess() {
-        return process;
+    public int getShipVia() {
+        return shipVia;
     }
 
-    public void setProcess(int process) {
-        this.process = process;
+    public void setShipVia(int shipVia) {
+        this.shipVia = shipVia;
     }
 
     public String getPayment() {
@@ -136,6 +117,23 @@ public class Orders {
     public void setNotes(String notes) {
         this.notes = notes;
     }
-    
-    
+    public String getFormattedTotalMoney() {
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        return formatter.format(totalMoney);
+    }
+    @Override
+    public String toString() {
+        return "Orders{" +
+                "orderID=" + orderID +
+                ", customerID=" + customerID +
+                ", trackingNumber=" + trackingNumber +
+                ", totalMoney=" + totalMoney +
+                ", orderDate=" + orderDate +
+                ", shipAddress='" + shipAddress + '\'' +
+                ", status=" + status +
+                ", shipVia=" + shipVia +
+                ", payment='" + payment + '\'' +
+                ", notes='" + notes + '\'' +
+                '}';
+    }
 }
