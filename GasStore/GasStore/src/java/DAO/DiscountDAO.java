@@ -75,7 +75,36 @@ public class DiscountDAO extends DBcontext {
         }
         return listDiscount;
     }
-
+    
+      public List<Discount> getidDiscount(String id) {
+        String sql = "select discountID, name, discountCode, startDate, endDate, quantity from Discount\n" +
+"where discountCode = ?";
+        List<Discount> lv = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Discount v = new Discount();
+//                v.setVourcherID(rs.getInt(1));
+//                v.setName(rs.getString(2));
+//                v.setVoucherCode(rs.getString(3));
+//                v.setStart(rs.getString(4));
+//                v.setEnd(rs.getString(5));
+//                v.setQuantity(rs.getInt(6));
+//                v.setDiscount(rs.getInt(7));
+                    v.setDiscountID(rs.getInt(1));
+                    v.setName(rs.getString(2));
+                    v.setDiscountCode(rs.getString(3));
+                    v.setStartDate(rs.getString(4));
+                    v.setEndDate(rs.getString(5));
+                    v.setQuantity(rs.getInt(6));
+                lv.add(v);
+            }
+        } catch (Exception e) {
+        }
+        return lv;
+    }
     public Discount getDataByName(String name) {
         Discount discount = null;
         String sql = "SELECT * FROM [dbo].[Discount] WHERE [name] = ?";
@@ -168,7 +197,85 @@ public class DiscountDAO extends DBcontext {
             System.out.println("DiscountDAO - deleteDiscount: " + e.getMessage());
         }
     }
+    
+      public List<Discount> getQuantityDiscount(String id) {
+        String sql = "select discountID, name,discountCode, startDate, endDate, quantity from Discount where discountCode = ? and quantity = 0";
+        List<Discount> lv = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Discount v = new Discount();
+//                v.setVourcherID(rs.getInt(1));
+                v.setDiscountID(1);
+                v.setName(rs.getString(2));
+//                v.setVoucherCode(rs.getString(3));
+                v.setDiscountCode(rs.getString(3));
+//                v.setStart(rs.getString(4));
+                v.setStartDate(rs.getString(4));
+//                v.setEnd(rs.getString(5));
+                v.setEndDate(rs.getString(5));
+                v.setQuantity(rs.getInt(6));
+             
+                lv.add(v);
+            }
+        } catch (Exception e) {
+        }
+        return lv;
+    }
+       public List<Discount> getDateDiscount(String name,String id) {
+        String sql = "select discountID, name,discountCode, startDate, endDate, quantity from Discount where discountCode = ? and endDate >= ? ";
+        List<Discount> lv = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setString(2, id);
 
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Discount v = new Discount();
+                  v.setDiscountID(1);
+                v.setName(rs.getString(2));
+//                v.setVoucherCode(rs.getString(3));
+                v.setDiscountCode(rs.getString(3));
+//                v.setStart(rs.getString(4));
+                v.setStartDate(rs.getString(4));
+//                v.setEnd(rs.getString(5));
+                v.setEndDate(rs.getString(5));
+                v.setQuantity(rs.getInt(6));
+                lv.add(v);
+            }
+        } catch (Exception e) {
+        }
+        return lv;
+    }
+      public List<Discount> getDateStartDiscounts(String name,String id) {
+        String sql = "select discountID, name,discountCode, startDate, endDate, quantity from Discount where discountCode = ? and startDate <= ? ";
+        List<Discount> lv = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setString(2, id);
+   
+            ResultSet rs = ps.executeQuery();
+           while (rs.next()) {
+                Discount v = new Discount();
+                  v.setDiscountID(1);
+                v.setName(rs.getString(2));
+//                v.setVoucherCode(rs.getString(3));
+                v.setDiscountCode(rs.getString(3));
+//                v.setStart(rs.getString(4));
+                v.setStartDate(rs.getString(4));
+//                v.setEnd(rs.getString(5));
+                v.setEndDate(rs.getString(5));
+                v.setQuantity(rs.getInt(6));
+                lv.add(v);
+            }
+        } catch (Exception e) {
+        }
+        return lv;
+    }
     public static void main(String[] args) {
         DiscountDAO discountDAO = new DiscountDAO();
         System.out.println(discountDAO.isNameExists("hhhh"));
