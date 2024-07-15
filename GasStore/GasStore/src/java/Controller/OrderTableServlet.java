@@ -4,7 +4,6 @@
  */
 package Controller;
 
-import DAO.NotificationDAO;
 import DAO.OrderDAO;
 import DTO.AdminDTO;
 import jakarta.servlet.ServletException;
@@ -16,9 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import DTO.Customer;
-import DTO.NotificationDTO;
 import DTO.Order;
-import java.util.ArrayList;
 
 /**
  *
@@ -37,16 +34,12 @@ public class OrderTableServlet extends HttpServlet{
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
-            //Reset noti-time on navbar - Vu Anh
-            NotificationDAO nDAO = new NotificationDAO();
-            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
-            session.setAttribute("notiList", n);
-            //
             String message = (String) session.getAttribute("msg");
             session.removeAttribute("msg");
             OrderDAO orderDAO = new OrderDAO();
             LinkedHashMap<Order, Customer> orderMap = new LinkedHashMap<>();
             String numPage_raw = request.getParameter("numPage");
+            double totalRevenue = orderDAO.getRevenue();
             try {
                 int indexPage = 0;
                 if (request.getParameter("indexPage") == null) {
@@ -72,6 +65,7 @@ public class OrderTableServlet extends HttpServlet{
                 int numOrder = orderDAO.countAllOrders();
                 int endPage = isAll ? 1 : (numOrder / numPage + (numOrder % numPage == 0 ? 0 : 1));
 
+                request.setAttribute("totalRevenue", totalRevenue);
                 request.setAttribute("endPage", endPage);
                 request.setAttribute("tag", indexPage);
                 request.setAttribute("msg", message);

@@ -77,10 +77,10 @@
                                         <label style="color: black">Address:</label>
                                         <span style="color: black">${sessionScope['account'].getAddress()}</span>
                                         <!--<input class="form-control" id="address" type="text" placeholder="Enter your address..." name="address">-->
+                                        <input type="hidden" name="address" value="${sessionScope['account'].getAddress()}">
                                          <form action="UpdateAddress" method="POST">
                                     <input class="form-control" id="address" type="text" placeholder="Enter your new address..." name="newAddress">
                                     <button type="submit" class="btn btn-primary mt-2">Update address</button>
-                                                                            <input type="hidden" name="address" value="${sessionScope['account'].getAddress()}">
 
                                 </form>
                                         

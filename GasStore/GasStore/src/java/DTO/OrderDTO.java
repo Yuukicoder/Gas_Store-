@@ -115,4 +115,9 @@ public class OrderDTO extends AccountDTO {
         this.Status = Status;
     }
 
+    @Override
+    public String toString() {
+        return "OrderDTO{" + "OrderID=" + OrderID + ", AccountID=" + AccountID + ", totalPrice=" + totalPrice + ", OrderDate=" + OrderDate + ", Address=" + Address + ", Status=" + Status + ", name1=" + name1 + ", VoucherCode=" + VoucherCode + ", Phoneorder=" + Phoneorder + '}';
+    }
+
 }
