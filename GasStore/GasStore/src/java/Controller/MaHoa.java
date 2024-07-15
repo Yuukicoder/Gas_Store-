@@ -28,6 +28,6 @@ public class MaHoa {
     }
     
     public static void main(String[] args) {
-        System.out.println(toSHA1("Tuonghuy1234"));
+        System.out.println(toSHA1("123456"));
     }
 }
