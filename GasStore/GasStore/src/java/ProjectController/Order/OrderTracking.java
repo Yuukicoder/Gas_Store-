@@ -25,7 +25,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import model.Customer;
 import model.Orders;
 
 /**
@@ -93,7 +92,7 @@ public class OrderTracking extends HttpServlet {
         OrderDetailDAO odDAO = new OrderDetailDAO();
         FeedbackDAO fdao = new FeedbackDAO();
         List<Orders> orderList = ord.getAllByID(Integer.parseInt(acountid_raw));
-        Orders or = ord.getByID(Integer.parseInt(orderid_raw));
+        Orders or = ord.getByID1(Integer.parseInt(orderid_raw));
         request.setAttribute("purchase", orderList);
         request.setAttribute("purchase_detail", odao.getPurchaseByID(orderid_raw));
         request.setAttribute("orderid", orderid_raw);

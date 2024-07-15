@@ -28,7 +28,7 @@ public class SerialNumberDAO extends DBcontext{
                 return new SerialNumber(
                        rs.getInt("SerialID"),
                        rs.getInt("ProductID"), 
-                       rs.getInt("SerialNumber")
+                       rs.getString("SerialNumber")
                 );
             }
         } catch (Exception e) {

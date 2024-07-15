@@ -210,24 +210,21 @@ public class CustomerDao extends DBContext {
     }
 
     public void updateUser(Customer customer) {
-        String sql = "update Customer set userName = ? ,password = ?, firstName = ?, lastName = ?, phone = ?, email = ? where customerID = ?";
-        try {
-
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//        Timestamp createdTimestamp = Timestamp.valueOf(LocalDateTime.now());
-            // Set values for parameters
+        String sql = "UPDATE Customer SET userName = ?, password = ?, firstName = ?, lastName = ?, phone = ?, email = ?, image = ?, address = ? WHERE customerID = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, customer.getUserName());
             preparedStatement.setString(2, customer.getPassword());
-
             preparedStatement.setString(3, customer.getFirstName());
             preparedStatement.setString(4, customer.getLastName());
-
             preparedStatement.setString(5, customer.getPhone());
             preparedStatement.setString(6, customer.getEmail());
-            preparedStatement.setInt(7, customer.getCustomerID());
+            preparedStatement.setString(7, customer.getImage());
+            preparedStatement.setString(8, customer.getAddress());
+            preparedStatement.setInt(9, customer.getCustomerID());
+
             preparedStatement.executeUpdate();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -336,15 +333,16 @@ public class CustomerDao extends DBContext {
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Customer cus = new Customer();
+               Customer cus = new Customer();
                 cus.setCustomerID(rs.getInt("customerID"));
                 cus.setUserName(rs.getString("userName"));
                 cus.setPassword(rs.getString("password"));
+                cus.setImage(rs.getString("image"));
                 cus.setFirstName(rs.getString("firstName"));
                 cus.setLastName(rs.getString("lastName"));
                 cus.setPhone(rs.getString("phone"));
+                cus.setAddress(rs.getString("address"));
                 cus.setEmail(rs.getString("email"));
-                cus.setIsCustomer(rs.getBoolean("isCustomer"));
                 return cus;
             }
         } catch (SQLException ex) {
@@ -687,7 +685,17 @@ public class CustomerDao extends DBContext {
         }
         return false;
     }
-
+    public void updatePassword2(int id, String newPassword) {
+        String sql = "UPDATE [Customer] SET password = ? WHERE customerID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, newPassword);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(CustomerDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public static void main(String[] args) {
         CustomerDao customerDao = new CustomerDao();

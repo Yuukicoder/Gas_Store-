@@ -36,6 +36,18 @@ public class Orders {
         this.payment = payment;
         this.notes = notes;
     }
+    public Orders(int orderID, int customerID, int trackingNumber, int totalMoney, Date orderDate, String shipAddress, int status, int shipVia, String payment, String notes) {
+        this.orderID = orderID;
+        this.customerID = customerID;
+        this.trackingNumber = trackingNumber;
+        this.totalMoney = totalMoney;
+        this.orderDate = orderDate;
+        this.shipAddress = shipAddress;
+        this.status = status;
+        this.shipVia = shipVia;
+        this.payment = payment;
+        this.notes = notes;
+    }
 
     // Getters and Setters
     public int getOrderID() {

@@ -122,7 +122,7 @@ public class LoginServlet extends HttpServlet {
         System.out.println("Login: username " + username + " pass" + password);
         HttpSession session = request.getSession();
         AccountDAO accountDAO = new AccountDAO();
-        AdminDTO account = accountDAO.checkLogin(username, password);
+        AdminDTO account = accountDAO.checkLogin1(username, password);
         if (account == null) {
           CustomerDao cus = new CustomerDao();
                 Customer customer = cus.checkuserandPass(username, password);
