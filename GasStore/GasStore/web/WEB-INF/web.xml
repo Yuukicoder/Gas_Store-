@@ -104,6 +104,10 @@
         <servlet-name>InsertSupplierServlet</servlet-name>
         <servlet-class>Controller.AdminAccountServlet.InsertSupplierServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UpdateAddress</servlet-name>
+        <servlet-class>Controller.UpdateAddress</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
         <url-pattern>/signup</url-pattern>
@@ -212,6 +216,11 @@
         <servlet-name>InsertSupplierServlet</servlet-name>
         <url-pattern>/insert-supplier</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateAddress</servlet-name>
+        <url-pattern>/UpdateAddress</url-pattern>
+    </servlet-mapping>
+    
     <session-config>
         <session-timeout>
             30

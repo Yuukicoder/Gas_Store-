@@ -5,7 +5,10 @@
 package Controller.Category;
 
 import DAO.CategoryDAO;
+import DAO.NotificationDAO;
+import DTO.AdminDTO;
 import DTO.Category;
+import DTO.NotificationDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,6 +16,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,7 +53,6 @@ public class ManageCateServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -60,56 +64,68 @@ public class ManageCateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String search = request.getParameter("search");
+        HttpSession session = request.getSession();
+        AdminDTO account = (AdminDTO) session.getAttribute("account");
+        if (account != null) {
+            //Reset noti-time on navbar - Vu Anh
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
+            
+            String search = request.getParameter("search");
 
-        if (search == null) {
-            search = "";
-        }
-        CategoryDAO categoryDAO = new CategoryDAO();
-        List<Category> lc = categoryDAO.searchCategory(search);
-        List<Category> result;
-        String indexPage_raw = request.getParameter("indexPage");
+            if (search == null) {
+                search = "";
+            }
+            CategoryDAO categoryDAO = new CategoryDAO();
+            List<Category> lc = categoryDAO.searchCategory(search);
+            List<Category> result;
+            String indexPage_raw = request.getParameter("indexPage");
 
-        String pageSize_raw = request.getParameter("pageSize");
+            String pageSize_raw = request.getParameter("pageSize");
 
-        int pageSize = 0;
+            int pageSize = 0;
 
-        if (pageSize_raw == null) {
-            pageSize_raw = "5";
-            pageSize = 5;
-        } else if (pageSize_raw.equals("0")) {
-            request.setAttribute("currentPageSize", pageSize_raw);
-            request.setAttribute("tag", 1);
-            request.setAttribute("endPage", 1);
-            request.setAttribute("search", search);
-            request.setAttribute("listCategory", lc);
-            request.getRequestDispatcher("TableCategory.jsp").forward(request, response);
-        } else {
-            pageSize = Integer.parseInt(pageSize_raw);
-        }
-
-        try {
-            int indexPage = 0;
-            if (indexPage_raw == null) {
-                indexPage = 1;
+            if (pageSize_raw == null) {
+                pageSize_raw = "5";
+                pageSize = 5;
+            } else if (pageSize_raw.equals("0")) {
+                request.setAttribute("currentPageSize", pageSize_raw);
+                request.setAttribute("tag", 1);
+                request.setAttribute("endPage", 1);
+                request.setAttribute("search", search);
+                request.setAttribute("listCategory", lc);
+                request.getRequestDispatcher("TableCategory.jsp").forward(request, response);
             } else {
-                indexPage = Integer.parseInt(indexPage_raw);
+                pageSize = Integer.parseInt(pageSize_raw);
             }
-            int numProduct = lc.size();
-            int endPage = numProduct / pageSize;
-            if (numProduct % pageSize != 0) {
-                endPage++;
-            }
-            result = categoryDAO.pagging(indexPage, pageSize, search);
 
-            request.setAttribute("currentPageSize", pageSize_raw);
-            request.setAttribute("search", search);
-            request.setAttribute("endPage", endPage);
-            request.setAttribute("tag", indexPage);
-            request.setAttribute("listCategory", result);
-            request.getRequestDispatcher("TableCategory.jsp").forward(request, response);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+            try {
+                int indexPage = 0;
+                if (indexPage_raw == null) {
+                    indexPage = 1;
+                } else {
+                    indexPage = Integer.parseInt(indexPage_raw);
+                }
+                int numProduct = lc.size();
+                int endPage = numProduct / pageSize;
+                if (numProduct % pageSize != 0) {
+                    endPage++;
+                }
+                result = categoryDAO.pagging(indexPage, pageSize, search);
+
+                request.setAttribute("currentPageSize", pageSize_raw);
+                request.setAttribute("search", search);
+                request.setAttribute("endPage", endPage);
+                request.setAttribute("tag", indexPage);
+                request.setAttribute("listCategory", result);
+                request.getRequestDispatcher("TableCategory.jsp").forward(request, response);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            response.sendRedirect("403.jsp");
         }
 
     }
@@ -125,57 +141,63 @@ public class ManageCateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String search = request.getParameter("search");
+        HttpSession session = request.getSession();
+        AdminDTO account = (AdminDTO) session.getAttribute("account");
+        if (account != null) {
+            String search = request.getParameter("search");
 
-        if (search == null) {
-            search = "";
-        }
-        CategoryDAO categoryDAO = new CategoryDAO();
-        List<Category> lc = categoryDAO.searchCategory(search);
-        List<Category> result;
-        String indexPage_raw = request.getParameter("indexPage");
+            if (search == null) {
+                search = "";
+            }
+            CategoryDAO categoryDAO = new CategoryDAO();
+            List<Category> lc = categoryDAO.searchCategory(search);
+            List<Category> result;
+            String indexPage_raw = request.getParameter("indexPage");
 
-        String pageSize_raw = request.getParameter("pageSize");
+            String pageSize_raw = request.getParameter("pageSize");
 
-        int pageSize = 0;
+            int pageSize = 0;
 
-        if (pageSize_raw == null) {
-            pageSize_raw = "5";
-            pageSize = 5;
-        } else if (pageSize_raw.equals("0")) {
-            request.setAttribute("currentPageSize", pageSize_raw);
-            request.setAttribute("tag", 1);
-            request.setAttribute("endPage", 1);
-            request.setAttribute("search", search);
-            request.setAttribute("listCategory", lc);
-            request.getRequestDispatcher("TableCategory.jsp").forward(request, response);
-        } else {
-            pageSize = Integer.parseInt(pageSize_raw);
-        }
-
-        try {
-            int indexPage = 0;
-            if (indexPage_raw == null) {
-                indexPage = 1;
+            if (pageSize_raw == null) {
+                pageSize_raw = "5";
+                pageSize = 5;
+            } else if (pageSize_raw.equals("0")) {
+                request.setAttribute("currentPageSize", pageSize_raw);
+                request.setAttribute("tag", 1);
+                request.setAttribute("endPage", 1);
+                request.setAttribute("search", search);
+                request.setAttribute("listCategory", lc);
+                request.getRequestDispatcher("TableCategory.jsp").forward(request, response);
             } else {
-                indexPage = Integer.parseInt(indexPage_raw);
+                pageSize = Integer.parseInt(pageSize_raw);
             }
-            int numProduct = lc.size();
-            int endPage = numProduct / pageSize;
-            if (numProduct % pageSize != 0) {
-                endPage++;
-            }
-            result = categoryDAO.pagging(indexPage, pageSize, search);
 
-            System.out.println("endPage: " + endPage);
-            request.setAttribute("currentPageSize", pageSize_raw);
-            request.setAttribute("search", search);
-            request.setAttribute("endPage", endPage);
-            request.setAttribute("tag", indexPage);
-            request.setAttribute("listCategory", result);
-            request.getRequestDispatcher("TableCategory.jsp").forward(request, response);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+            try {
+                int indexPage = 0;
+                if (indexPage_raw == null) {
+                    indexPage = 1;
+                } else {
+                    indexPage = Integer.parseInt(indexPage_raw);
+                }
+                int numProduct = lc.size();
+                int endPage = numProduct / pageSize;
+                if (numProduct % pageSize != 0) {
+                    endPage++;
+                }
+                result = categoryDAO.pagging(indexPage, pageSize, search);
+
+                System.out.println("endPage: " + endPage);
+                request.setAttribute("currentPageSize", pageSize_raw);
+                request.setAttribute("search", search);
+                request.setAttribute("endPage", endPage);
+                request.setAttribute("tag", indexPage);
+                request.setAttribute("listCategory", result);
+                request.getRequestDispatcher("TableCategory.jsp").forward(request, response);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            response.sendRedirect("403.jsp");
         }
     }
 

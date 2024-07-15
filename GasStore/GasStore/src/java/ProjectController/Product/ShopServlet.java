@@ -28,9 +28,7 @@ public class ShopServlet extends HttpServlet {
         //Filter theo ID - Vu anh
         String cateId = request.getParameter("cateid");
         List<Product> products ;
-        System.out.println("shopServlet: cateId " + cateId);
         if(cateId == null){
-            System.out.println("ShopServlet: CateId is null");
             products = productDAO.getAllProduct();
         }else{
             products = productDAO.getProductByCategory(Integer.parseInt(cateId));
@@ -63,7 +61,6 @@ public class ShopServlet extends HttpServlet {
         request.setAttribute("suppliers", supplierMap);
         
         //Filter theo ID - Vu anh
-        System.out.println("Shop: " + cateId);
         request.setAttribute("cateid", cateId);
 
         request.getRequestDispatcher("shop.jsp").forward(request, response);

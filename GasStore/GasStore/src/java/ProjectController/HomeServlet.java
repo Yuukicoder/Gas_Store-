@@ -37,7 +37,7 @@ public class HomeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -61,31 +61,30 @@ public class HomeServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    HttpSession session = request.getSession();
-    CategoryDAO categoryDAO = new CategoryDAO();
-    
-    session.setAttribute("category", categoryDAO.displayCategoryinHome());
-    ProductDAO productDAO = new ProductDAO();
-    ArrayList<PostDTO> postDTOs = new ArrayList<>();
-    PostListDAO pldao = new PostListDAO();
-    postDTOs = pldao.getAllPost();
-    
-    if (!postDTOs.isEmpty()) {
-        PostDTO pdto = postDTOs.get(0);
-        request.setAttribute("pdto", pdto);
-    } else {
-        // Handle the case where postDTOs is empty
-        request.setAttribute("pdto", null); // or you could set some default value
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        CategoryDAO categoryDAO = new CategoryDAO();
+
+        session.setAttribute("category", categoryDAO.displayCategoryinHome());
+        ProductDAO productDAO = new ProductDAO();
+        ArrayList<PostDTO> postDTOs = new ArrayList<>();
+        PostListDAO pldao = new PostListDAO();
+        postDTOs = pldao.getAllPost();
+
+        if (!postDTOs.isEmpty()) {
+            PostDTO pdto = postDTOs.get(0);
+            request.setAttribute("pdto", pdto);
+        } else {
+            // Handle the case where postDTOs is empty
+            request.setAttribute("pdto", null); // or you could set some default value
+        }
+
+        request.setAttribute("post", postDTOs);
+        session.setAttribute("product", productDAO.getAllProduct());
+
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
-    
-    request.setAttribute("post", postDTOs);
-    session.setAttribute("product", productDAO.getAllProduct());
-
-    request.getRequestDispatcher("index.jsp").forward(request, response);
-}
-
 
     /**
      * Handles the HTTP <code>POST</code> method.

@@ -33,7 +33,7 @@ public class CategoryDAO extends DBcontext {
                 lc.add(category);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("CategoryDAO - getAllCategory: " + e.getMessage());
         }
         return lc;
     }
@@ -54,7 +54,7 @@ public class CategoryDAO extends DBcontext {
                 lc.add(category);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("CategoryDAO - searchCategory: " + e.getMessage());
         }
         return lc;
     }
@@ -68,10 +68,10 @@ public class CategoryDAO extends DBcontext {
             ps.setString(3, des);
             ps.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("CategoryDAO - addCategory: " + e.getMessage());
         }
     }
-    
+
     public void updateCategory(int id, String code, String name, String des) {
         System.out.println("update in dao: " + des);
         try {
@@ -84,7 +84,7 @@ public class CategoryDAO extends DBcontext {
             ps.setInt(4, id);
             ps.execute();
         } catch (Exception e) {
-            System.out.println("update: " + e.getMessage());
+            System.out.println("CategoryDAO - updateCategory: " + e.getMessage());
         }
     }
 
@@ -95,10 +95,10 @@ public class CategoryDAO extends DBcontext {
             ps.setInt(1, id);
             ps.execute();
         } catch (Exception e) {
-            System.out.println("delete: " + e.getMessage());
+            System.out.println("CategoryDAO - deleteCategory: " + e.getMessage());
         }
     }
-    
+
     public List<Category> pagging(int pageIndex, int pageSize, String search) {
         System.out.println("pageSize: " + pageSize);
         String sql = "select * from Category where name like ? order by categoryID offset ? rows fetch next ? rows only";
@@ -117,7 +117,7 @@ public class CategoryDAO extends DBcontext {
                 lc.add(c);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("CategoryDAO - pagging: " + e.getMessage());
         }
         System.out.println("list size: " + lc.size());
         return lc;
@@ -138,7 +138,7 @@ public class CategoryDAO extends DBcontext {
                 lc.add(category);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("CategoryDAO - displayCategoryinHome: " + e.getMessage());
         }
         return lc;
     }
@@ -155,7 +155,7 @@ public class CategoryDAO extends DBcontext {
                 return category;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("CategoryDAO - getCategoryByColumnName: " + e.getMessage());
         }
         return null;
     }
@@ -168,7 +168,7 @@ public class CategoryDAO extends DBcontext {
             ps.setInt(2, id);
             ps.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("CategoryDAO - changeStatusCategoryByID: " + e.getMessage());
         }
     }
 
@@ -195,7 +195,7 @@ public class CategoryDAO extends DBcontext {
             return countProduct;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("CategoryDAO - getQuantityCategory: " + e.getMessage());
         }
         return null;
 
@@ -216,7 +216,7 @@ public class CategoryDAO extends DBcontext {
             }
             return categoryDTO;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("CategoryDAO - getCategoryByID: " + e.getMessage());
         }
         return null;
     }

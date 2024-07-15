@@ -5,12 +5,14 @@
 package Controller;
 
 import DAO.CategoryDAO;
+import DAO.NotificationDAO;
 import DAO.ProductDAO;
 import DAO.ProductImgDAO;
 import DAO.SupplierDAO;
 import DTO.AccountDTO;
 import DTO.AdminDTO;
 import DTO.Category;
+import DTO.NotificationDTO;
 import DTO.ProductImg;
 import DTO.Supplier;
 import jakarta.servlet.ServletException;
@@ -45,6 +47,11 @@ public class UpdateProductServlet extends HttpServlet{
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
+            //Reset noti-time on navbar - Vu Anh
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
             String pid_raw = (String)request.getParameter("pid");
             String name = (String)request.getParameter("name");
             String category_raw =(String)request.getParameter("category");
@@ -171,6 +178,11 @@ public class UpdateProductServlet extends HttpServlet{
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
+            //Reset noti-time on navbar - Vu Anh
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
             String product_id_raw = request.getParameter("pid");
             try {
                 int product_id = Integer.parseInt(product_id_raw);

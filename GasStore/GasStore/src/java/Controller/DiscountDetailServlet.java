@@ -84,33 +84,67 @@ public class DiscountDetailServlet extends HttpServlet {
     throws ServletException, IOException {
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
-        if(account!=null){
-            String currentName = request.getParameter("currentName");
-            String name = request.getParameter("name");
-            String start = request.getParameter("start");
-            String end = request.getParameter("end");
-            String type = request.getParameter("discountType");
-            String amountRaw = request.getParameter("discountAmount");
-            String quantityRaw = request.getParameter("quantity");
-            String code = request.getParameter("code");
-            try {
+        if(account != null){
+            String action = request.getParameter("action");
+
+            if ("update".equals(action)) {
+                // Update existing discount
+                String currentName = request.getParameter("currentName");
+                String name = request.getParameter("name");
+                String start = request.getParameter("start");
+                String end = request.getParameter("end");
+                String type = request.getParameter("discountType");
+                String amountRaw = request.getParameter("discountAmount");
+                String quantityRaw = request.getParameter("quantity");
+                String code = request.getParameter("code");
+
+                try {
+                    DiscountDAO discountDAO = new DiscountDAO();
+                    boolean nameChanged = !currentName.equals(name);
+                    if (nameChanged && discountDAO.isNameExists(name)) {
+                        String errorMessage = "Discount name already exists.";
+                        request.setAttribute("errorMessage", errorMessage);
+                        request.setAttribute("discount", discountDAO.getDataByName(currentName));
+                        request.getRequestDispatcher("VoucherDetail.jsp").forward(request, response);
+                    } else {
+                        int amount = Integer.parseInt(amountRaw);
+                        int quantity = Integer.parseInt(quantityRaw);
+                        discountDAO.updateDiscount(name, code, start, end, type, amount, quantity);
+                        response.sendRedirect("discountTable");
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } else if ("add".equals(action)) {
+                // Add new discount
+                String name = request.getParameter("name").toUpperCase();
+                String start = request.getParameter("start");
+                String end = request.getParameter("end");
+                int discountAmount = Integer.parseInt(request.getParameter("discountAmount"));
+                String discountType = request.getParameter("discountType");
+                int quantity = Integer.parseInt(request.getParameter("quantity"));
+                String code = request.getParameter("code").toUpperCase();
+
                 DiscountDAO discountDAO = new DiscountDAO();
-                boolean nameChanged = !currentName.equals(name);
-                if (nameChanged && discountDAO.isNameExists(name)) {
-                    String errorMessage = "Discount name already exists.";
+                boolean isNameExists = discountDAO.isNameExists(name);
+                boolean isCodeExists = discountDAO.isCodeExists(code);
+
+                if (isNameExists || isCodeExists) {
+                    String errorMessage = "";
+                    if (isNameExists) {
+                        errorMessage += "Discount name already exists. ";
+                    }
+                    if (isCodeExists) {
+                        errorMessage += "Discount code already exists.";
+                    }
                     request.setAttribute("errorMessage", errorMessage);
-                    request.setAttribute("discount", discountDAO.getDataByName(currentName));
-                    request.getRequestDispatcher("VoucherDetail.jsp").forward(request, response);
+                    request.getRequestDispatcher("TableVoucher.jsp").forward(request, response);
                 } else {
-                    int amount = Integer.parseInt(amountRaw);
-                    int quantity = Integer.parseInt(quantityRaw);
-                    discountDAO.updateDiscount(name, code, start, end, type, amount, quantity);
+                    discountDAO.addDiscount(name, code, start, end, discountAmount, discountType, quantity);
                     response.sendRedirect("discountTable");
                 }
-            } catch (Exception e) {
-                System.out.println(e);
             }
-        }else{
+        } else {
             response.sendRedirect("403.jsp");
         }
     }

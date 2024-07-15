@@ -46,12 +46,12 @@
         </div>
         <!-- Breadcrumb End -->
 
-        <form action="lastcheck" method="POST" onsubmit="return validateForm()">   
+       <form action="lastcheck" method="POST" onsubmit="return validateForm()">  
             <!-- Checkout Start -->
             <div class="container-fluid">
                 <div class="row px-xl-5">
                     <div class="col-lg-8">
-                        <form action="lastcheck" method="POST" onsubmit="return validateForm()">
+                        <form action="lastcheck" method="POST" onsubmit="return validateForm()"></form>
                             <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing Address</span></h5>
                             <div class="bg-light p-30 mb-5">
                                 <div class="row">
@@ -78,7 +78,12 @@
                                         <span style="color: black">${sessionScope['account'].getAddress()}</span>
                                         <!--<input class="form-control" id="address" type="text" placeholder="Enter your address..." name="address">-->
                                         <input type="hidden" name="address" value="${sessionScope['account'].getAddress()}">
+                                         <form action="UpdateAddress" method="POST">
+                                    <input class="form-control" id="address" type="text" placeholder="Enter your new address..." name="newAddress">
+                                    <button type="submit" class="btn btn-primary mt-2">Update address</button>
 
+                                </form>
+                                        
                                     </div>
 
                                 </div>
@@ -106,7 +111,7 @@
                                 </div>
                                 <div class="d-flex justify-content-between mb-3">
                                     <h6>Voucher</h6>               
-                                    <h6>${requestScope.vocherid}%</h6>
+                                    <h6>0%</h6>
 
                                 </div>
                                 <div class="d-flex justify-content-between mb-3">
@@ -136,9 +141,15 @@
                         <div class="mb-5" style="color: gray">
                             <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Payment</span></h5>
                             <div class="bg-light p-30">
+                                <!--                                <div class="form-group">
+                                                                    <div class="custom-control custom-radio">
+                                                                        <input type="radio" class="custom-control-input" name="payment" id="vnpay">
+                                                                        <label class="custom-control-label" for="vnpay">Vnpay</label>
+                                                                    </div>
+                                                                </div>-->
                                 <div class="form-group">
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" name="payment" id="vnpay">
+                                        <input type="radio" class="custom-control-input" name="payment" id="vnpay" value="vnpay">
                                         <label class="custom-control-label" for="vnpay">Vnpay</label>
                                     </div>
                                 </div>

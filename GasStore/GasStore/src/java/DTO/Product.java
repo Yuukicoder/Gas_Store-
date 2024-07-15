@@ -27,7 +27,7 @@ public class Product {
     private int unitOnOrders;
     private String createdDate;
     private int createdBy;
-
+    private int limit;
     public Product() {
     }
     
@@ -168,6 +168,15 @@ public class Product {
     public void setCreatedBy(int createdBy) {
         this.createdBy = createdBy;
     }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }
+    
     
     public String getFormattedPrice() {
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);

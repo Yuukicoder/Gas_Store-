@@ -33,7 +33,7 @@ public class PostListDAO extends DBcontext {
                 postDTOs.add(postDTO);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - getAllPost: " + e.getMessage());
         }
         return postDTOs;
     }
@@ -60,7 +60,7 @@ public class PostListDAO extends DBcontext {
                 postDTOs.add(postDTO);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - getAllPostByGroupID: " + e.getMessage());
         }
         return postDTOs;
     }
@@ -82,7 +82,7 @@ public class PostListDAO extends DBcontext {
                 postDTO.setContext(rs.getString("Context"));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - getPostDTOByID: " + e.getMessage());
         }
         return postDTO;
     }
@@ -106,7 +106,7 @@ public class PostListDAO extends DBcontext {
                 postDTOs.add(postDTO);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - getPostLatest: " + e.getMessage());
         }
         return postDTOs;
     }
@@ -145,7 +145,7 @@ public class PostListDAO extends DBcontext {
             }
             return postDTOs;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - getAllPostWithCondition: " + e.getMessage());
         }
         return null;
     }
@@ -182,7 +182,7 @@ public class PostListDAO extends DBcontext {
                 postDTOs.add(postDTO);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - getPostSearch: " + e.getMessage());
         }
 
         return postDTOs;
@@ -222,7 +222,7 @@ public class PostListDAO extends DBcontext {
             int checkAdd = ps.executeUpdate();
             return checkAdd;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - addNewPost: " + e.getMessage());
         }
         return 0;
     }
@@ -235,7 +235,7 @@ public class PostListDAO extends DBcontext {
             int checkDelete = ps.executeUpdate();
             return checkDelete;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - deletePostByID: " + e.getMessage());
         }
         return 0;
     }
@@ -266,7 +266,7 @@ public class PostListDAO extends DBcontext {
                 postDTOs.add(postDTO);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - pagingPostWithCondition: " + e.getMessage());
         }
         return postDTOs;
     }
@@ -295,7 +295,7 @@ public class PostListDAO extends DBcontext {
                 postDTOs.add(postDTO);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("PostCategoryDAO - pagingPost: " + e.getMessage());
         }
         return postDTOs;
     }

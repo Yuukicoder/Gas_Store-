@@ -5,7 +5,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>DarkPan - Bootstrap 5 Admin Template</title>
+        <title>Discount Table</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -42,6 +42,31 @@
                 float: right;
                 width: 50%;
             }
+            #categoryTable {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            #categoryTable td, #categoryTable th {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+            #categoryTable tr:nth-child(even){
+                background-color: #f2f2f2;
+            }
+
+            #categoryTable tr:hover {
+                background-color: #ddd;
+            }
+
+            #categoryTable th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: left;
+                background-color: #22A699;
+                color: white;
+            }
         </style>
     </head>
 
@@ -65,60 +90,23 @@
                 <div class="container-fluid pt-4 px-4">
                     <div class="row g-4">
                         <div class="">
-                            <div class="bg-secondary rounded h-99 p-4" >
-                                <h6 class="mb-4">Add Disocunt</h6>
-                                <form action="discountTable" method="POST" onsubmit="return validateForm()">
-                                    <div class="left-side">
-                                        <div class="col-md-6">
-                                            <label class="form-label">Discount Name</label>
-                                            <input type="text" class="form-control col-4" name="name" required>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label class="form-label">Start Date</label>
-                                            <input type="date" class="form-control col-3" name="start" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">End Date</label>
-                                            <input type="date" class="form-control col-3" name="end" required>
-                                        </div>
-                                        
-                                        <div class="col-md-6">
-                                            <label class="form-label">Quantity </label>
-                                            <input type="number" class="form-control col-3" name="quantity" step="1" required>
-                                        </div>
-                                        <div style="margin-top: 15px;color: red" id="error-messages">
-                                            <c:if test="${not empty errorMessage}">
-                                                <p>${errorMessage}</p>
-                                            </c:if>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary" style="margin-bottom: 20px">Add new discount</button>
-
-                                    </div>
-                                    <div class="right-side">
-                                        <div class="col-md-6">
-                                            <label class="form-label">Discount Type</label>
-                                            <select id="discountType" class="form-control col-3" name="discountType" required onchange="checkDiscountType()">
-                                                <option value="" disabled selected>Select Discount Type</option>
-                                                <option value="PERCENT">PERCENT</option>
-                                                <option value="FIXED">FIXED</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label">Discount Amount</label>
-                                            <input type="number" class="form-control col-3" step="1" name="discountAmount" id="discountAmount" required disabled>
-                                        </div>
-                                        <div class="col-md-6" style="margin-bottom: 20px">
-                                            <label class="form-label">Discount Code</label>
-                                            <input type="text" class="form-control col-4" id="code-input" name="code" required>
-                                        </div>
-                                        <a class="btn btn-primary" onclick="generateCode()">Create Code</a>
-                                    </div>
-                                </form>
-                            </div>
                             <div class="bg-secondary text-center rounded p-4">
-                                <div class="d-flex align-items-center justify-content-center mb-4" style="width: 100%; text-align: center;">
-                                    <h6 class="mb-0">All Discount</h6>
+                                 <h3 style="color: #E57C23">${msg}</h3>
+                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                    <div class="bg-secondary rounded h-100 p-4">
+                                        <h5 ><a href="discountTable">All Discount</a></h5>
+                                    </div>
+                                    <form action="discountTable" method="post">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control bg-dark border-0" placeholder="Search Code" name="search">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text bg-transparent text-primary" style="    border: none;
+                                                      margin-top: 4px;">
+                                                    <button type="submit" class="fa fa-search" style="text-decoration: none; border: none;background: white;"></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                                 <div class="table-responsive">
                                     <table id="categoryTable"
@@ -132,7 +120,19 @@
                                                 <th scope="col" style="text-align: center">Discount Amount</th>
                                                 <th scope="col" style="text-align: center">Start</th>
                                                 <th scope="col" style="text-align: center">End</th>
-                                                <th scope="col" style="text-align: center"></th>
+                                                <th scope="col" style="text-align: center">
+                                                    <form method="get" action="discountTable">
+                                                        <select name="numPage" onchange="this.form.submit()">
+                                                            <option value="5" ${numPage == '5' ? 'selected' : ''}>5</option>
+                                                            <option value="10" ${numPage == '10' ? 'selected' : ''}>10</option>
+                                                            <option value="20" ${numPage == '20' ? 'selected' : ''}>20</option>
+                                                            <option value="50" ${numPage == '50' ? 'selected' : ''}>50</option>
+                                                            <option value="all" ${numPage == 'all' ? 'selected' : ''}>All</option>
+                                                        </select>
+                                                        <input type="hidden" name="indexPage" value="${tag}" />
+                                                        <input type="hidden" name="action" value="${action}" />
+                                                    </form>
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -157,7 +157,24 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div id="pagination"></div>
+                                <div id="pagination">
+                                    <nav style="float: right;margin-top: 25px; color: black" aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            <c:if test="${tag > 1}">
+                                                <li  class="page-item"><a style="color: black"  class="page-link" href="discountTable?indexPage=${tag-1}&amp;numPage=${numPage != null ? numPage : '5'}"">Previous</a></li>
+                                            </c:if>
+                                            <c:forEach begin="1" end="${endPage}" var="i">
+                                                <li style="color: black"  class="page-item ${tag == i ?"active":"" || page1 == i ?"active":""  } "><a style="color: black"  class="page-link" href="discountTable?indexPage=${i}&amp;numPage=${numPage != null ? numPage : '5'}">${i}</a></li>
+                                            </c:forEach>
+                                            <c:if test="${tag<endPage}">
+                                                <li class="page-item"><a style="color: black"  class="page-link" href="discountTable?indexPage=${tag+1}&amp;numPage=${numPage != null ? numPage : '5'}">Next</a></li>
+                                            </c:if>
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <div class="text-center mt-4">
+                                    <a href="VoucherDetail.jsp" class="btn btn-primary">Add Discount</a>
+                                </div>
                             </div>
 
                         </div>

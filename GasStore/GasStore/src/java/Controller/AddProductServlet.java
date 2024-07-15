@@ -5,14 +5,14 @@
 package Controller;
 
 import DAO.CategoryDAO;
+import DAO.NotificationDAO;
 import DAO.ProductDAO;
 import DAO.ProductImgDAO;
 import DAO.SupplierDAO;
-import DTO.AccountDTO;
 import DTO.AdminDTO;
 import DTO.Category;
+import DTO.NotificationDTO;
 import DTO.Product;
-import DTO.ProductDTO;
 import DTO.Supplier;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -125,6 +125,12 @@ public class AddProductServlet extends HttpServlet{
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
+            //Reset noti-time on navbar - Vu Anh
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.setAttribute("notiList", n);
+            //
+            
             SupplierDAO supplierDAO = new SupplierDAO();
             CategoryDAO categoryDAO = new CategoryDAO();
             List<Category> cdtos = categoryDAO.getAllCategory();

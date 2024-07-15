@@ -6,7 +6,7 @@ package ProjectController;
 
 import Controller.MaHoa;
 import DAO.AccountDAO;
-import DTO.AccountDTO;
+import DAO.NotificationDAO;
 import DTO.AdminDTO;
 import dal.CustomerDao;
 import jakarta.servlet.ServletException;
@@ -16,8 +16,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 import DTO.Customer;
+import DTO.NotificationDTO;
+import dal.SupplierDao;
+import java.util.ArrayList;
+import model.Supplier;
 
 /**
  *
@@ -41,7 +44,6 @@ public class LoginServlet2 extends HttpServlet {
         System.out.println(request.getParameter("code"));
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -65,57 +67,60 @@ public class LoginServlet2 extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = MaHoa.toSHA1(request.getParameter("password"));
-        System.out.println("Login: username " + username + " pass" + password);
-        HttpSession session = request.getSession();
-        AccountDAO accountDAO = new AccountDAO();
-        AdminDTO account = accountDAO.checkLogin(username, password);
-        if (account == null) {
-            CustomerDao cus = new CustomerDao();
-            Customer customer = cus.checkuserandPass(username, password);
-            if (customer == null) {
-                String msg = "Username or Password is not correct!";
-                request.setAttribute("mess", msg);
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-            } else {
-                session.setAttribute("account", customer);
-                session.setAttribute("customerID", customer.getCustomerID());
-                response.sendRedirect("home");
-                return;
-            }
-        } else {
-            if (isSpecialCharacter(username)) {
-                String msg = "Username don't use special character";
-                request.setAttribute("mess", msg);
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-                // Compare username and password case-sensitive
-            } else if (!account.getUserName().equals(username) || !account.getPassword().equals(password)) {
-                CustomerDao cus = new CustomerDao();
-                Customer customer = cus.checkuserandPass(username, password);
-                if (customer == null) {
-                    String msg = "Username or Password is not correct!";
-                    request.setAttribute("mess", msg);
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                } else {
-                    session.setAttribute("account", customer);
-                    response.sendRedirect("home");
-                }
-            } else if (account.getRoleID() == 1) {
-                session.setAttribute("account", account);
-                response.sendRedirect("adminHome");
-            } else if (account.getRoleID() == 2) {
-                session.setAttribute("account", account);
-                response.sendRedirect("adminHome");
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    String username = request.getParameter("username");
+    String password = MaHoa.toSHA1(request.getParameter("password"));
+    System.out.println("Login: username " + username + " pass " + password);
+    HttpSession session = request.getSession();
+    AccountDAO accountDAO = new AccountDAO();
+    AdminDTO account = accountDAO.checkLogin(username, password);
 
-            } else {
-                session.setAttribute("account", account);
+    if (account == null) {
+        CustomerDao cus = new CustomerDao();
+        Customer customer = cus.checkuserandPass(username, password);
+        Supplier supplier = new SupplierDao().getByEmailAndPassword(username, password);
+
+        if (supplier != null) {
+            session.setAttribute("supplier", supplier);
+            System.out.println(supplier);
+            response.sendRedirect("supplier/home");
+            return;
+        } else if (customer != null) {
+            session.setAttribute("account", customer);
+            session.setAttribute("customerID", customer.getCustomerID());
+            response.sendRedirect("home");
+            return;
+        } else {
+            String msg = "Username or Password is not correct!";
+            request.setAttribute("mess", msg);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+    } else {
+        if (isSpecialCharacter(username)) {
+            String msg = "Username don't use special character";
+            request.setAttribute("mess", msg);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        } else {
+            session.setAttribute("account", account);
+            if (account.getRoleID() == 1) {
+                NotificationDAO nDAO = new NotificationDAO();
+                ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+                session.setAttribute("notiList", n);
                 response.sendRedirect("adminHome");
+                return;
+            } else if (account.getRoleID() == 2) {
+                response.sendRedirect("adminHome");
+                return;
+            } else {
+                response.sendRedirect("adminHome");
+                return;
             }
         }
     }
+}
 
     private boolean isSpecialCharacter(String username) {
 

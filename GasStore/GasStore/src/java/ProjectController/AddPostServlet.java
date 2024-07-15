@@ -4,11 +4,11 @@
  */
 package ProjectController;
 
-import DAO.AccountDAO;
+import DAO.NotificationDAO;
 import DAO.PostCategoryDAO;
 import DAO.PostListDAO;
-import DTO.AccountDTO;
 import DTO.AdminDTO;
+import DTO.NotificationDTO;
 import DTO.PostCategoryDTO;
 import DTO.PostDTO;
 import java.io.IOException;
@@ -60,7 +60,6 @@ public class AddPostServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -76,6 +75,12 @@ public class AddPostServlet extends HttpServlet {
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
             if (account.getRoleID()== 1 || account.getRoleID()== 2) {
+                //Reset noti-time on navbar
+                NotificationDAO nDAO = new NotificationDAO();
+                ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+                session.setAttribute("notiList", n);
+                //
+                
                 //List User
                 PostCategoryDAO postCategoryDAO = new PostCategoryDAO();
                 ArrayList<PostCategoryDTO> postCategoryDTOs = postCategoryDAO.getAllPostCategory();

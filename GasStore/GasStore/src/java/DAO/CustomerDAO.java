@@ -40,10 +40,21 @@ public class CustomerDAO extends DBcontext{
                 customer.setIsCustomer(rs.getBoolean("isCustomer"));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("CustomerDAO - getCustomerByID: " + e.getMessage());
         }
 
         return customer;
+    }
+    public void updateCustomerAddress(int id, String newAddress) {
+        String sql = "UPDATE Customer SET address = ? WHERE customerID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, newAddress);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     public static void main(String[] args) {

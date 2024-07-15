@@ -5,8 +5,10 @@
 package ProjectController.Cart;
 
 import DAO.ProductDAO;
-import DAO.VoucherDAO;
+//import DAO.VoucherDAO;
+import DAO.DiscountDAO;
 import DTO.Cart;
+import DTO.Discount;
 import DTO.Product;
 import DTO.Voucher;
 import jakarta.servlet.ServletException;
@@ -90,14 +92,14 @@ public class CartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String vouchercode = request.getParameter("vouchercode");
-        VoucherDAO aO = new VoucherDAO();
+        DiscountDAO aO = new DiscountDAO();
 
-        List<Voucher> vouchers = aO.getidVoucher(vouchercode);
+         List<Discount> vouchers = aO.getidDiscount(vouchercode);
 
         if (vouchers == null || vouchers.isEmpty()) {
             request.setAttribute("used", "Voucher does not exist");
         } else {
-            request.setAttribute("used1", aO.getidVoucher(vouchercode));
+            request.setAttribute("used1", aO.getidDiscount(vouchercode));
         }
 
         request.getRequestDispatcher("cart.jsp").forward(request, response);
