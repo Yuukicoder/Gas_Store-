@@ -14,8 +14,8 @@ import javax.mail.internet.*;
  */
 public class Gmail {
 
-    private static final String FROM_EMAIL = "tuonghuy7104@gmail.com";
-    private static final String PASSWORD = "umku peli rrwq ppuy";
+    private static final String FROM_EMAIL = "haquocminhduc@gmail.com";
+    private static final String PASSWORD = "hvjn uvoe dmlc iopt";
 
 
     public void sendEmail(String content ,String toGmail) {

@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import DTO.Product;
+import DTO.ProductDTO;
 import java.util.Date;
 
 /**
@@ -667,6 +668,39 @@ public class ProductDAO extends DBcontext {
 
         return filteredProducts;
     }
+    
+    public Product getProductBySerialID(int id) {
+        String sql = "SELECT p.* FROM Product p JOIN \n"
+                + "SerialNumbers s ON p.productID = s.ProductID\n"
+                + "WHERE s.SerialID = " + id;
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                Product product = new Product();
+                product.setProductID(rs.getInt("productID"));
+                product.setCode(rs.getString("code"));
+                product.setName(rs.getString("name"));
+                product.setKeywords(rs.getString("keywords"));
+                product.setShortDescription(rs.getString("shortDescription"));
+                product.setDescription(rs.getString("description"));
+                product.setCategoryID(rs.getInt("categoryID"));
+                product.setSupplierID(rs.getInt("supplierID"));
+                product.setIsActive(rs.getBoolean("isActive"));
+                product.setUnitPrice(rs.getFloat("unitPrice"));
+                product.setImage(rs.getString("image"));
+                product.setStockQuantity(rs.getInt("stockQuantity"));
+                product.setUnitOnOrders(rs.getInt("unitOnOrders"));
+                product.setCreatedDate(rs.getString("createdDate"));
+                product.setCreatedBy(rs.getInt("createdBy"));
+                product.setLimit(rs.getInt("limit"));
+                return product;
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
 
     public List<Product> getTop3ProductByEachCategory(int cateId) {
         ArrayList<Product> products = new ArrayList<>();
@@ -902,6 +936,29 @@ public class ProductDAO extends DBcontext {
 
         }
     }
+    
+    public ProductDTO getProductBySeriaId(int serialId) {
+        String sql = "  Select * from Product P\n"
+                + "  join SerialNumbers S on P.productID = S.ProductID\n"
+                + "  where S.SerialID = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, serialId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                ProductDTO pro = new ProductDTO();
+                pro.setProductId(rs.getInt("productID"));
+                pro.setName(rs.getString("name"));
+                pro.setImage(rs.getString("image"));
+                pro.setLimit(rs.getInt("limit"));
+                return pro;
+            }
+        } catch (SQLException e) {
+            System.out.println("SQL Exception: " + e.getMessage());
+        }
+        return null;
+    }
+    
     public static void main(String[] args) {
         ProductDAO p = new ProductDAO();
         List<Product> list = p.getProductByCategory(2);

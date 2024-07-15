@@ -145,6 +145,7 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                
                                 <div id="pagination">
                                    <form id="paginationForm" action="searchOrder" method="get">
                                         <input type="hidden" name="indexPage" id="indexPage">

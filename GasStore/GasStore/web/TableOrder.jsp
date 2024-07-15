@@ -63,7 +63,7 @@
                             <div class="bg-secondary text-center rounded p-4">
                                 <div class="d-flex align-items-center justify-content-between mb-4">
                                     <h6 class="mb-0">All Order</h6>
-
+                                    
                                 </div>
                                 <form action="searchOrder" method="get">
                                     <div class="input-group">
@@ -76,7 +76,7 @@
                                     </div>
                                 </form>
                                 <div class="table-responsive">
-                                    <table id="categoryTable" class="table text-start align-middle table-bordered table-hover mb-0" style="text-align: center">
+                                    <table id="categoryTable" class="table text-start align-middle table-bordered table-hover mb-0" style="border: 1px solid #ddd; margin-top: 20px">
                                         <thead>
                                             <tr class="text-white">
                                                 <th scope="col">No</th>
@@ -105,11 +105,11 @@
                                             <c:set var="index" value="0" />
                                             <c:forEach items="${listOrder}" var="entry">
                                                 <tr>
-                                                    <td>${index + 1}</td>
-                                                    <td>${entry.key.orderID}</td>
-                                                    <td>${entry.key.orderDate}</td>
-                                                    <td>${entry.value.userName}</td>
-                                                    <td style="text-align: right"><fmt:formatNumber value="${entry.key.totalMoney}" pattern="#,##0.#"/></td>
+                                                    <td><p>${index + 1}</p></td>
+                                                    <td><p>${entry.key.orderID}</p></td>
+                                                    <td><p> ${entry.key.orderDate}</p></td>
+                                                    <td><p>${entry.value.userName}</p></td>
+                                                    <td style="text-align: right"><p><fmt:formatNumber value="${entry.key.totalMoney}" /></p></td>
                                                     <td class="col-md-3">
                                                         <c:if test="${entry.key.status != 4 && entry.key.status != 3}">
                                                             <select class="form-select form-select-sm col-md-3" aria-label=".form-select-sm example" onchange="handleOptionChange(this)">
@@ -140,12 +140,15 @@
                                                             <p style="color: red">This order has been cancel</p>
                                                         </c:if>
                                                     </td>
-                                                    <td><a class="btn btn-sm btn-primary" href="orderDetail?id=${entry.key.orderID}">Detail</a></td>       
+                                                    <td><p><a class="btn btn-sm btn-primary" href="orderDetail?id=${entry.key.orderID}">Detail</a></p></td>       
                                                 </tr>
                                                 <c:set var="index" value="${index + 1}" />
                                             </c:forEach>
                                         </tbody>
                                     </table>
+                                </div>
+                                <div style="display: flex; justify-content: center; align-item: center; margin-top: 20px">
+                                    <h6 class="mb-0" style="font-size: 18px; font-weight: bold;">Total Revenue: <span style="color: #3AA6B9; font-size: 18px; font-weight: bold;"><fmt:formatNumber value="${totalRevenue}" type="currency" currencySymbol="VND" /></span></h6>
                                 </div>
                                 <div id="pagination">
                                     <nav style="float: right;margin-top: 25px; color: black" aria-label="Page navigation example">

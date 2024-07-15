@@ -14,6 +14,7 @@ public class OrderDetail {
     private int productID;
     private int quantity;
     private double unitPrice;
+    private int serialID;
     private Product pdto;
     public OrderDetail() {
     }
@@ -30,6 +31,14 @@ public class OrderDetail {
         this.orderID = orderID;
         this.productID = productID;
         this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
+    
+        public OrderDetail(int orderID, Product pro, int quantity, int serialID, double unitPrice) {
+        this.orderID = orderID;
+        this.pdto = pro;
+        this.quantity = quantity;
+        this.serialID = serialID;
         this.unitPrice = unitPrice;
     }
 
@@ -83,12 +92,28 @@ public class OrderDetail {
         this.unitPrice = unitPrice;
     }
 
-    @Override
-    public String toString() {
-        return "OrderDetail{" + "orderID=" + orderID + ", productID=" + productID + ", quantity=" + quantity + ", unitPrice=" + unitPrice + '}';
+    public int getSerialID() {
+        return serialID;
+    }
+
+    public void setSerialID(int serialID) {
+        this.serialID = serialID;
+    }
+
+    public Product getPdto() {
+        return pdto;
+    }
+
+    public void setPdto(Product pdto) {
+        this.pdto = pdto;
     }
     
-    
-    
+    public double getTotalPrice() {
+        return unitPrice * quantity;
+    }
 
+    @Override
+    public String toString() {
+        return "OrderDetail{" + "orderDetailID=" + orderDetailID + ", orderID=" + orderID + ", productID=" + productID + ", quantity=" + quantity + ", unitPrice=" + unitPrice + ", serialID=" + serialID + ", pdto=" + pdto + '}';
+    }
 }

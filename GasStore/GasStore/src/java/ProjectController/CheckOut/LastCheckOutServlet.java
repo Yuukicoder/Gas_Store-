@@ -4,9 +4,11 @@
  */
 package ProjectController.CheckOut;
 
+import DAO.DAOWarranty;
 import DAO.IndividualVoucherDAO;
 import DAO.NotificationDAO;
 import DAO.OrderDAO;
+import DAO.OrderDetailDAO;
 import DAO.ProductDAO;
 import DAO.VoucherDAO;
 //import DTO.AccountDTO;
@@ -119,6 +121,7 @@ public class LastCheckOutServlet extends HttpServlet {
         String totalvoucher = request.getParameter("totalvoucher");
         Double totalVoucherDouble = Double.parseDouble(totalvoucher);
         OrderDAO ord = new OrderDAO();
+        OrderDetailDAO oid = new OrderDetailDAO();
         //add voucher
         int orderId = ord.getLastOrderID();
         String vocheridname = request.getParameter("vourcherID");
@@ -169,9 +172,13 @@ public class LastCheckOutServlet extends HttpServlet {
             nDAO.addNoti(noti);
             //
 
-            ord.addOrder(account, cart, address, totalVoucherDouble, nameacount);
-            ord.addOrderDetail(cart, ord.getLastOrderID());
-            ord.updateQuantity(cart);
+            int orderIdReturn = ord.addOrder(account, cart, address, totalVoucherDouble, nameacount);
+            
+            DAOWarranty daoWar = new DAOWarranty();
+    
+            oid.insertOrderDetail(cart, orderIdReturn);
+            
+            ord.updateStockQuantity(cart);
             request.setAttribute("cart", cart);
             Cookie c = new Cookie("cart", "");
             c.setMaxAge(0);

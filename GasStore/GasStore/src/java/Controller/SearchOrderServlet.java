@@ -1,12 +1,10 @@
 package Controller;
 
 
-import DAO.NotificationDAO;
 import DAO.OrderDAO;
 import DAO.ProductDAO;
 import DTO.AdminDTO;
 import DTO.Customer;
-import DTO.NotificationDTO;
 import DTO.Order;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 
@@ -41,11 +38,6 @@ public class SearchOrderServlet extends HttpServlet{
         HttpSession session = request.getSession();
         AdminDTO account = (AdminDTO) session.getAttribute("account");
         if (account != null) {
-            //Reset noti-time on navbar - Vu Anh
-            NotificationDAO nDAO = new NotificationDAO();
-            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
-            session.setAttribute("notiList", n);
-            //
             OrderDAO orderDAO = new OrderDAO();
             String searchKey = request.getParameter("search");
             System.out.println(searchKey);
@@ -53,7 +45,7 @@ public class SearchOrderServlet extends HttpServlet{
             String numPage_raw = request.getParameter("numPage");
             LinkedHashMap<Order, Customer> allSearchOrder = orderDAO.searchOrders(searchKey);
             LinkedHashMap<Order, Customer> orderMap = new LinkedHashMap<>();
-
+            double totalRevenue = orderDAO.getRevenue();
             try {
                 int indexPage = 1;
                 if (indexPage_raw != null) {
@@ -79,6 +71,7 @@ public class SearchOrderServlet extends HttpServlet{
                 int orderCount = allSearchOrder.size();
                 int endPage = isAll ? 1 : (orderCount / numPage + (orderCount % numPage == 0 ? 0 : 1));
 
+                request.setAttribute("totalRevenue", totalRevenue);
                 request.setAttribute("endPage", endPage);
                 request.setAttribute("search", searchKey);
                 request.setAttribute("tag", indexPage);
