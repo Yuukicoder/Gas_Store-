@@ -33,6 +33,7 @@ import org.apache.http.client.fluent.Request;
  *
  * @author Admin
  */
+@WebServlet(name="LoginServlet", urlPatterns={"/login"})
 public class LoginServlet extends HttpServlet {
 
     /**

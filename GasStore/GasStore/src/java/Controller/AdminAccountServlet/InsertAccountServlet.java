@@ -79,9 +79,9 @@ public class InsertAccountServlet extends HttpServlet {
                 List<Orders> orderList;
                 if (status != -1) {
                     // Get the orders for the customer filtered by status
-                    orderList = ord.getAllByID(Integer.parseInt(pid), status);
+                    orderList = ord.getAllByID1(Integer.parseInt(pid), status);
                 } else {
-                    orderList = ord.getAllByID(Integer.parseInt(pid));
+                    orderList = ord.getAllByID1(Integer.parseInt(pid));
                 }
                 // Create a map to hold order details for each order
                 Map<Integer, List<OrderDetail>> orderDetailsMap = new HashMap<>();

@@ -48,6 +48,7 @@ public class Feedback extends HttpServlet {
         }
     }
 
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -83,14 +84,15 @@ public class Feedback extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String oid = request.getParameter("oid");
-        String date = request.getParameter("date");
+//        String date = request.getParameter("date");
         String text = request.getParameter("text");
         String voed = request.getParameter("rating");
         String poi = request.getParameter("pid");
 
         FeedbackDAO feedbackDAO = new FeedbackDAO();
-        feedbackDAO.insertfeedback(oid, poi, text, text, date, voed);
-        request.getRequestDispatcher("mypurchase").forward(request, response);
+        feedbackDAO.insertfeedback(oid, poi, text, text, voed);
+//        request.getRequestDispatcher("mypurchase").forward(request, response);
+response.sendRedirect("mypurchase");
     }
 
     /**

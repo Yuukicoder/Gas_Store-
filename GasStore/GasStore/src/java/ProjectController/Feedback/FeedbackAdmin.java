@@ -1,128 +1,94 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package ProjectController.Feedback;
 
 import DAO.FeedbackDAO;
 import DAO.FeedbackReplyDAO;
+import DTO.AdminDTO;
+import DTO.FeedbackReplyDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.List;
 
-/**
- *
- * @author phung
- */
 @WebServlet(name = "FeedbackAdmin", urlPatterns = {"/tableFeedback"})
 public class FeedbackAdmin extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet FeedbackAdmin</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet FeedbackAdmin at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
     }
 
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String indexpage = request.getParameter("index");
-        String statusFilter = request.getParameter("statusFilter12");
+        HttpSession session = request.getSession();
+        AdminDTO account = (AdminDTO) session.getAttribute("account");
+        if (account != null) {
+            if (account.getRoleID() == 1) {
+                String indexPage = request.getParameter("index");
+                String statusFilter = request.getParameter("statusFilter12");
 
-        if (indexpage == null) {
-            indexpage = "1";
+                if (indexPage == null) {
+                    indexPage = "1";
+                }
+                if (statusFilter == null) {
+                    statusFilter = "0";
+                }
+
+                int statusFilterValue = Integer.parseInt(statusFilter);
+                int index = Integer.parseInt(indexPage);
+                FeedbackReplyDAO fd = new FeedbackReplyDAO();
+                List<FeedbackReplyDTO> f = fd.getLisfeedbackreply();
+                FeedbackDAO feedbackDAO = new FeedbackDAO();
+
+                // Pagination calculation
+                int count = feedbackDAO.getCount(statusFilterValue);
+                int endPage = count / 5;
+                if (count % 5 != 0) {
+                    endPage++;
+                }
+                if (statusFilterValue == 1 || statusFilterValue == 2) {
+                    request.setAttribute("feedback", feedbackDAO.getlistfeedback1(index, statusFilterValue));
+                } else if (statusFilterValue == 0) {
+                    request.setAttribute("feedback", feedbackDAO.getlistfeedback2(index));
+                }
+                request.setAttribute("endP", endPage);
+                request.setAttribute("tag", index);
+                request.setAttribute("FReply", f);
+                request.setAttribute("statusFilter12", statusFilterValue);
+
+                request.getRequestDispatcher("TableFeedBack.jsp").forward(request, response);
+            } else {
+                response.sendRedirect("403.jsp");
+            }
+        } else {
+            response.sendRedirect("login.jsp");
         }
-        if (statusFilter == null) {
-            statusFilter = "0";
-        }
-        Integer statusFilter1 = Integer.parseInt(statusFilter);
-        int index = Integer.parseInt(indexpage);
-
-        FeedbackDAO feedbackDAO = new FeedbackDAO();
-        FeedbackReplyDAO feedbackReplyDAO = new FeedbackReplyDAO();
-
-        //phan trang 
-        int count = feedbackDAO.getCount();
-        int endpage = count / 5;
-        if (count % 3 != 0) {
-            endpage++;
-        }
-        request.setAttribute("feedback", feedbackDAO.getlistfeedback((index), statusFilter1));
-
-        request.setAttribute("endP", endpage);
-        request.setAttribute("feedbackDAO", feedbackDAO);
-        request.setAttribute("tag", index);
-        request.setAttribute("statusFilter12", statusFilter1);
-
-        request.getRequestDispatcher("TableFeedBack.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String fid = request.getParameter("feedbackID");
         String date = request.getParameter("date");
         String text = request.getParameter("text");
-        String aid = request.getParameter("acountID");
+        String aid = request.getParameter("accountID");
         String page = request.getParameter("page");
 
         FeedbackReplyDAO feedbackReplyDAO = new FeedbackReplyDAO();
         FeedbackDAO feedbackDAO = new FeedbackDAO();
 
         feedbackReplyDAO.insertfeedbackreply(fid, aid, text, date);
-        feedbackDAO.updateFeedback(fid, true);
+        feedbackDAO.updateFeedbackStatus(fid, true);
 
         response.sendRedirect("tableFeedback?index=" + page);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Feedback Administration Servlet";
+    }
 }

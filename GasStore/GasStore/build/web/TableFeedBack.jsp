@@ -59,11 +59,12 @@
                     <div class="row g-4">
                         <div class="bg-secondary text-center rounded p-4">
                             <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h6 class="mb-0">FeedBack Reply</h6>
+                                <h3 class="mb-0">FeedBack </h3>
                                 <select id="filterStatus" onchange="handleOptionChange(this);">
                                     <option value="0" name="0">All</option>
-                                    <option value="1" name="1">Confirmed</option>
                                     <option value="2" name="2">Unconfirmed</option>
+                                    <option value="1" name="1">Confirmed</option>
+                                    
                                 </select>
                             </div>
 
@@ -79,15 +80,15 @@
                                             <th scope="col">Star</th>
                                             <!--<th scope="col">Reply</th>-->
                                             <th>Check</th>
-                                            <!--<th>Detail</th>-->
+                                            <th>Detail</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <c:forEach var="feedback" items="${feedback}">
                                             <tr>
                                                 <td>${feedback.feedBackID}</td>
-                                                <td>${feedback.accountDTO.getFirstName()}</td>
-                                                <td><img src="${feedback.productDTO.image}" alt="alt" style="width: 50px;"/></td>
+                                                <td><a href="insert-account?type=0&id=${feedback.accountDTO.getCustomerID()}">${feedback.accountDTO.getFirstName()}</a></td>
+                                                <td><a href="productUpdate?pid=${feedback.productDTO.productID}"><img src="${feedback.productDTO.image}" alt="alt" style="width: 50px;"/></a></td>
                                                 <td>${feedback.productDTO.name}</td>
                                                 <td style="max-width: 30ch; overflow-wrap: break-word;">${feedback.context}</td>
                                                 <td>${feedback.start}</td>
@@ -102,210 +103,248 @@
                                                     <c:if test="${feedback.status != true}">
                                                     <td><i style="font-size: 35px;" class='bx bx-checkbox'></i></td>
                                                     </c:if>
-<!--                                                <td>
-                                                    <a href="productUpdate?pid=$feedback.productID}" target="_blank">
+                                                <td>
+                                                    <a href="productDetail?id=${feedback.productDTO.productID}" target="_blank">
                                                         <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                                     </a>
-                                                </td>-->
+                                                </td>
                                             </tr>
                                         </c:forEach>
                                     </tbody>
                                 </table>
-
-                                <div class="feedback-overlay" id="feedbackOverlay"></div>
-
-                                <form method="post" action="tableFeedback" onsubmit="return validateFeedbackInput();">
+                                <include>
+                                <div class="feedback-overlay" id="feedbackOverlay">
                                     <div class="feedback-form" id="feedbackForm">
                                         <div class="feedback-content">
-                                            <input hidden id="page" name="page" value="$tag}" />
-                                            <input hidden id="feedbackIDSet" name="feedbackID" />
-                                            <input hidden id="accountIDSet" name="accountID" value="$sessionScope.account.accountID}" />
-                                            <input hidden name="date" value="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>" />
-                                            <h1 style="color: black">Reply Feedback</h1>
-                                            <textarea id="feedbackInput" name="text" placeholder="Enter reply feedback"></textarea>
-                                            <p id="characterMessage" style="color: red; width: 360px"></p>
-                                            <button type="submit">Submit</button>
+                                            <!-- Close button -->
+                                            <button type="button" class="close-button" onclick="closeFeedbackForm()">X</button>
+
+                                            <form method="post" action="tableFeedback" onsubmit="return validateFeedbackInput();">
+                                                <input hidden id="page" name="page" value="${tag}" />
+                                                <input hidden id="feedbackIDSet" name="feedbackID" />
+                                                <input  hidden id="accountIDSet" name="accountID" value="${sessionScope.account.adminID}" />
+                                                <input  hidden name="date" value="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>" />
+                                                <h1 style="color: black">Reply Feedback</h1>
+                                                <textarea id="feedbackInput" name="text" placeholder="Enter reply feedback"></textarea>
+                                                <p id="characterMessage" style="color: red; width: 360px"></p>
+                                                <button type="submit">Submit</button>
+                                            </form>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
+                                                
+                                <style>
+                                    .feedback-overlay {
+                                        /* Add your styles for the overlay */
+                                    }
 
-                                
+                                    .feedback-form {
+                                        /* Add your styles for the form */
+                                    }
+
+                                    .close-button {
+                                        position: absolute;
+                                        top: 10px;
+                                        right: 10px;
+                                        border: none;
+                                        font-size: 20px;
+                                        cursor: pointer;
+                                    }
+                                </style>
+
+                                <script>
+                                    function closeFeedbackForm() {
+                                        document.getElementById('feedbackOverlay').style.display = 'none';
+                                    }
+                                </script>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Blank End -->
+                    <div class="container-fluid pt-4 px-4">
+                        <div class="bg-secondary rounded-top p-4">
+                            <div class="row">
+                                <div class="col-12 col-sm-6 text-center text-sm-start">
+                                    &copy; <a href="#">GasStore</a>, All Right Reserved. 
+                                </div>
+                                <div class="col-12 col-sm-6 text-center text-sm-end">
+                                    <!--/*** This template is free as long as you keep the footer author?s credit link/attribution link/backlink. If you'd like to use the template without the footer author?s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                                    Designed By <a href="https://gitlab.com/asusrogg14/swp391-laptopshop">SWP391 - GROUP 6</a>
+                                    <br>Distributed By: <a href="#" >All members</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Blank End -->
+                <!-- Content End -->
 
-                <%--<%@include file="component/FooterAdmin.jsp" %>--%>
+                <!-- Back to Top -->
+                <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
             </div>
-            <!-- Content End -->
 
-            <!-- Back to Top -->
-            <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-        </div>
+            <!-- JavaScript Libraries -->
+            <script src="admin/js/feedbackScript.js"></script>
+            <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="admin/lib/chart/chart.min.js"></script>
+            <script src="admin/lib/easing/easing.min.js"></script>
+            <script src="admin/lib/waypoints/waypoints.min.js"></script>
+            <script src="admin/lib/owlcarousel/owl.carousel.min.js"></script>
+            <script src="admin/lib/tempusdominus/js/moment.min.js"></script>
+            <script src="admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
+            <script src="admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-        <!-- JavaScript Libraries -->
-        <script src="admin/js/feedbackScript.js"></script>
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="admin/lib/chart/chart.min.js"></script>
-        <script src="admin/lib/easing/easing.min.js"></script>
-        <script src="admin/lib/waypoints/waypoints.min.js"></script>
-        <script src="admin/lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="admin/lib/tempusdominus/js/moment.min.js"></script>
-        <script src="admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
-        <script src="admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+            <!-- Template Javascript -->
+            <script src="admin/js/main.js"></script>
+            <script>
+                                    function showFeedbackForm(button) {
+                                        var feedbackOverlay = document.getElementById("feedbackOverlay");
+                                        var feedbackForm = document.getElementById("feedbackForm");
+                                        var feedbackID = button.getAttribute("data-feedback-id"); // L?y giá tr? c?a data-feedback-id t? button
+                                        // ??t giá tr? feedbackID vào set
+                                        var setElement = document.getElementById("feedbackIDSet");
+                                        setElement.setAttribute("value", feedbackID);
 
-        <!-- Template Javascript -->
-        <script src="admin/js/main.js"></script>
-        <script>
-                        function showFeedbackForm(button) {
-                            var feedbackOverlay = document.getElementById("feedbackOverlay");
-                            var feedbackForm = document.getElementById("feedbackForm");
-                            var feedbackID = button.getAttribute("data-feedback-id"); // L?y giá tr? c?a data-feedback-id t? button
-                            // ??t giá tr? feedbackID vào set
-                            var setElement = document.getElementById("feedbackIDSet");
-                            setElement.setAttribute("value", feedbackID);
+                                        feedbackOverlay.style.display = "block";
+                                        feedbackForm.style.display = "block";
+                                    }
 
-                            feedbackOverlay.style.display = "block";
-                            feedbackForm.style.display = "block";
-                        }
-
-                        function closeFeedbackForm() {
-                            var feedbackOverlay = document.getElementById("feedbackOverlay");
-                            var feedbackForm = document.getElementById("feedbackForm");
-                            feedbackOverlay.style.display = "none";
-                            feedbackForm.style.display = "none";
+                                    function closeFeedbackForm() {
+                                        var feedbackOverlay = document.getElementById("feedbackOverlay");
+                                        var feedbackForm = document.getElementById("feedbackForm");
+                                        feedbackOverlay.style.display = "none";
+                                        feedbackForm.style.display = "none";
 
 
-                        }
+                                    }
 
-                        function handleOptionChange(selectElement) {
-                            var selectedOption = selectElement.value;
-                            var name = selectElement.options[selectElement.selectedIndex].getAttribute('name');
-                            if (selectedOption == 0) {
-                                // Ch? chuy?n h??ng n?u ?ã ch?n m?t tùy ch?n khác tùy ch?n "All"
-                                window.location.href = "tableFeedback?statusFilter12=" + name;
-                            } else if (selectedOption == 1) {
-                                // Ch? chuy?n h??ng n?u ?ã ch?n m?t tùy ch?n khác tùy ch?n "All"
-                                window.location.href = "tableFeedback?statusFilter12=" + name;
-                            }
-                            if (selectedOption == 2) {
-                                // Ch? chuy?n h??ng n?u ?ã ch?n m?t tùy ch?n khác tùy ch?n "All"
-                                window.location.href = "tableFeedback?statusFilter12=" + name;
-                            }
+                                    function handleOptionChange(selectElement) {
+                                        var selectedOption = selectElement.value;
+                                        var name = selectElement.options[selectElement.selectedIndex].getAttribute('name');
+                                        if (selectedOption == 0) {
+                                            // Ch? chuy?n h??ng n?u ?ã ch?n m?t tùy ch?n khác tùy ch?n "All"
+                                            window.location.href = "tableFeedback?statusFilter12=" + name;
+                                        } else if (selectedOption == 1) {
+                                            // Ch? chuy?n h??ng n?u ?ã ch?n m?t tùy ch?n khác tùy ch?n "All"
+                                            window.location.href = "tableFeedback?statusFilter12=" + name;
+                                        }
+                                        if (selectedOption == 2) {
+                                            // Ch? chuy?n h??ng n?u ?ã ch?n m?t tùy ch?n khác tùy ch?n "All"
+                                            window.location.href = "tableFeedback?statusFilter12=" + name;
+                                        }
 
-                        }
+                                    }
 
-                        document.getElementById("filterStatus").addEventListener("change", function () {
-                            handleOptionChange(this);
-                        });
+                                    document.getElementById("filterStatus").addEventListener("change", function () {
+                                        handleOptionChange(this);
+                                    });
 
-                        document.addEventListener("DOMContentLoaded", function () {
-                            var statusFilter12Value = "${statusFilter12}"; // Giá tr? statusFilter12 t? bi?u? th?c hi?n GET
-                            var filterStatus = document.getElementById("filterStatus");
+                                    document.addEventListener("DOMContentLoaded", function () {
+                                        var statusFilter12Value = "${statusFilter12}"; // Giá tr? statusFilter12 t? bi?u? th?c hi?n GET
+                                        var filterStatus = document.getElementById("filterStatus");
 
-                            // Thi?t l?p tùy ch?n ???c ch?n d?a trên giá tr? statusFilter12
-                            if (statusFilter12Value === "0") {
-                                filterStatus.value = "0";
-                            } else if (statusFilter12Value === "1") {
-                                filterStatus.value = "1";
-                            } else {
-                                filterStatus.value = "2"; // N?u không có giá tr? ho?c giá tr? không h?p l?
-                            }
-                        });
-        </script>
+                                        // Thi?t l?p tùy ch?n ???c ch?n d?a trên giá tr? statusFilter12
+                                        if (statusFilter12Value === "0") {
+                                            filterStatus.value = "0";
+                                        } else if (statusFilter12Value === "1") {
+                                            filterStatus.value = "1";
+                                        } else {
+                                            filterStatus.value = "2"; // N?u không có giá tr? ho?c giá tr? không h?p l?
+                                        }
+                                    });
+            </script>
 
-        <script>
-            function validateFeedbackInput() {
-                var feedbackInput = document.getElementById("feedbackInput").value;
+            <script>
+                function validateFeedbackInput() {
+                    var feedbackInput = document.getElementById("feedbackInput").value;
 
-                // Ki?m tra xem textarea có b? r?ng không
-                if (feedbackInput.trim() === "") {
-                    document.getElementById("characterMessage").textContent = "Please enter review text!";
-                    return false;
+                    // Ki?m tra xem textarea có b? r?ng không
+                    if (feedbackInput.trim() === "") {
+                        document.getElementById("characterMessage").textContent = "Please enter review text!";
+                        return false;
+                    }
+
+                    // N?u tr??ng textarea không r?ng, cho phép submit form
+                    return true;
+                }
+            </script>
+
+
+
+
+            <style>
+                .feedback-overlay {
+                    display: none;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.6);
+                    z-index: 9999;
                 }
 
-                // N?u tr??ng textarea không r?ng, cho phép submit form
-                return true;
-            }
-        </script>
+                .feedback-form {
+                    display: none;
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: #fff;
+                    padding: 20px;
+                    z-index: 10000;
+                    max-width: 400px;
+                    border-radius: 8px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                }
 
+                .feedback-content {
+                    text-align: center;
+                }
 
+                .feedback-content h1 {
+                    margin-bottom: 20px;
+                    font-size: 24px;
+                    color: #333;
+                }
 
+                .feedback-content textarea {
+                    width: 100%;
+                    height: 150px;
+                    margin-bottom: 20px;
+                    padding: 10px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    resize: vertical;
+                    word-break: break-all;
+                }
 
-        <style>
-            .feedback-overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.6);
-                z-index: 9999;
-            }
+                .feedback-content button {
+                    display: inline-block;
+                    padding: 8px 16px;
+                    margin-right: 10px;
+                    background-color: #007bff;
+                    color: #fff;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease;
+                }
 
-            .feedback-form {
-                display: none;
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: #fff;
-                padding: 20px;
-                z-index: 10000;
-                max-width: 400px;
-                border-radius: 8px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            }
+                .feedback-content button:hover {
+                    background-color: #0056b3;
+                }
 
-            .feedback-content {
-                text-align: center;
-            }
+                .btn-link {
+                    color: blue;
+                    cursor: pointer;
+                }
 
-            .feedback-content h1 {
-                margin-bottom: 20px;
-                font-size: 24px;
-                color: #333;
-            }
-
-            .feedback-content textarea {
-                width: 100%;
-                height: 150px;
-                margin-bottom: 20px;
-                padding: 10px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                resize: vertical;
-                word-break: break-all;
-            }
-
-            .feedback-content button {
-                display: inline-block;
-                padding: 8px 16px;
-                margin-right: 10px;
-                background-color: #007bff;
-                color: #fff;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-            }
-
-            .feedback-content button:hover {
-                background-color: #0056b3;
-            }
-
-            .btn-link {
-                color: blue;
-                cursor: pointer;
-            }
-
-            .btn-link:hover {
-                text-decoration: underline;
-            }
-        </style>
+                .btn-link:hover {
+                    text-decoration: underline;
+                }
+            </style>
 
 
 

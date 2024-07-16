@@ -5,6 +5,7 @@
 package DAO;
 
 import DTO.AccountDTO;
+import DTO.AdminDTO;
 import DTO.FeedbackDTO;
 import DTO.FeedbackReplyDTO;
 import java.sql.PreparedStatement;
@@ -18,30 +19,28 @@ import java.util.ArrayList;
  */
 public class FeedbackReplyDAO extends DBcontext {
 
-    public ArrayList<FeedbackReplyDTO> getLisfeedbackreply(int id) {
-        String sql = """
-                     SELECT  A.Fullname,FE.Reply,FE.DateCreate ,A.Role FROM Feedback F                                   
-                     LEFT JOIN FeedbackReply FE ON FE.FeedbackID = F.FeedbackID
-                     JOIN Account A ON FE.AccountID = A.AccountID
-                     WHERE F.FeedbackID= ? ORDER BY FE.ReplyID DESC
-                     """;
-        ArrayList<FeedbackReplyDTO> al = new ArrayList<>();
+    public ArrayList<FeedbackReplyDTO> getLisfeedbackreply() {
+        String sql = "SELECT  A.userName,FE.reply,FE.replydate FROM Feedback F                                   \n" +
+                    "LEFT JOIN FeedbackReply FE ON FE.FeedbackID = F.FeedbackID\n" +
+                    "JOIN Administrator A ON FE.adminid = A.administratorID\n" +
+                    " ORDER BY FE.feedbackReplyID DESC\n";
+                ArrayList<FeedbackReplyDTO> al = new ArrayList<>();
         try ( PreparedStatement pt = connection.prepareStatement(sql)) {
-            pt.setInt(1, id);
+//            pt.setInt(1, id);
             ResultSet rs = pt.executeQuery();
             while (rs.next()) {
 
-                AccountDTO aO = new AccountDTO();
-                aO.setFullname(rs.getString("Fullname"));
-                aO.setRole(rs.getInt("Role"));
+                AdminDTO aO = new AdminDTO();
+                aO.setUserName(rs.getString("userName"));
+//                aO.setRole(rs.getInt("Role"));
                 FeedbackReplyDTO dTO = new FeedbackReplyDTO();
-                dTO.setReply(rs.getString("Reply"));
-                dTO.setDate(rs.getDate("DateCreate"));
+                dTO.setReply(rs.getString("reply"));
+                dTO.setDate(rs.getDate("replydate"));
                 dTO.setAccountDTO(aO);
                 al.add(dTO);
             }
         } catch (SQLException e) {
-            System.out.println("FeedbackReplyDAO - getLisfeedbackreply: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
         return al;
     }
