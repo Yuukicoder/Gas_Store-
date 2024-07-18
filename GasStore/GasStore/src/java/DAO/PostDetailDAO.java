@@ -48,13 +48,15 @@ public class PostDetailDAO extends DBcontext {
                 + "   SET [Title] = ?     \n"
                 + "      ,[Postbanner] = ?\n"
                 + "      ,[Context] = ?\n"
+                + "      ,[PostCategoryID] = ?\n"
                 + " WHERE PostID = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, pdto.getTitle());
             ps.setString(2, pdto.getPostbanner());
             ps.setString(3, pdto.getContext());
-            ps.setInt(4, pdto.getPostID());
+            ps.setInt(5, pdto.getPostID()); //học đếm lại thôi 🙂, PostID cái thứ 5 chứ
+            ps.setString(4, pdto.getPostCate()); //Post cate số 4
             int checkAdd = ps.executeUpdate();
             return checkAdd;
         } catch (SQLException e) {

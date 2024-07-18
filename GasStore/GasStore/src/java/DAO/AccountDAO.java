@@ -63,6 +63,52 @@ public class AccountDAO extends DBcontext {
         return null;
     }
 
+<<<<<<< Updated upstream
+=======
+    public AdminDTO checkLogin1(String username, String password) {
+        String sql = "SELECT * FROM Administrator WHERE Username = ? AND Password = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                AdminDTO account = new AdminDTO();
+//                account.setAccountID(rs.getInt(1));
+//                account.setUsername(rs.getString(2));
+//                account.setPassword(rs.getString(3));
+//                account.setFullname(rs.getString(4));
+//                account.setPhone(rs.getString(5));
+//                account.setEmail(rs.getString(6));
+//                account.setAddress(rs.getString(7));
+//                account.setQue(rs.getString(8));
+//                account.setRole(rs.getInt(9));
+                account.setAdminID(rs.getInt(1));
+                account.setUserName(rs.getString(2));
+                account.setPassword(rs.getString(3));
+                account.setLastLogin(rs.getString(4));
+                account.setIsActive(rs.getInt(5));
+                account.setRoleID(rs.getInt(6));
+                account.setEmail(rs.getString(7));
+                account.setImg(rs.getString(8));
+                account.setAdminName(rs.getString("adminName"));
+//                    private int adminID;
+//    private String userName;
+//    private String password;
+//    private String lastLogin;
+//    private int isActive;
+//    private int roleID;
+//    private String email;
+//    private String img;
+                return account;
+            }
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
+
+>>>>>>> Stashed changes
     public int getTotalNewAccount() {
         String sql = "SELECT COUNT(AccountID) AS Count\n"
                 + "FROM Account\n"
