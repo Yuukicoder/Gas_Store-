@@ -32,8 +32,8 @@ import java.util.Map;
  *
  * @author dell456
  */
-@WebServlet(name = "ProductDetailServlet", urlPatterns = {"/productDetail"})
-public class ProductDetailServlet extends HttpServlet {
+@WebServlet(name = "ProductDetailServlet", urlPatterns = {"/Product-detail"})
+public class ProductDetailAdmin extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -97,7 +97,7 @@ public class ProductDetailServlet extends HttpServlet {
             request.setAttribute("totalFeedbackCount", feedbackCount);
              request.setAttribute("allReplies", allReplies);
               request.setAttribute("replyies", replies);
-            request.getRequestDispatcher("detail.jsp").forward(request, response);
+            request.getRequestDispatcher("adminDetailProduct.jsp").forward(request, response);
              for (Map.Entry<Integer, Map<Integer, FeedbackReplyDTO>> entry : allReplies.entrySet()) {
             System.out.println("Feedback ID: " + entry.getKey());
             for (Map.Entry<Integer, FeedbackReplyDTO> replyEntry : entry.getValue().entrySet()) {

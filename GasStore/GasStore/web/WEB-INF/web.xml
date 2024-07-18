@@ -116,6 +116,10 @@
         <servlet-name>ChangePassServlet</servlet-name>
         <servlet-class>ProjectController.Account.ChangePassServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Contact</servlet-name>
+        <servlet-class>Controller.Contact</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
         <url-pattern>/signup</url-pattern>
@@ -235,6 +239,10 @@
     <servlet-mapping>
         <servlet-name>ChangePassServlet</servlet-name>
         <url-pattern>/change-pass</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Contact</servlet-name>
+        <url-pattern>/Contact</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
