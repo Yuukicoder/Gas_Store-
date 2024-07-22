@@ -9,6 +9,7 @@ import DAO.OrderDAO;
 import DAO.OrderDetailDAO;
 import DAO.ProductDAO;
 import DAO.SerialNumberDAO;
+import DTO.AdminDTO;
 import DTO.Customer;
 import DTO.OrderDetail;
 import DTO.Product;
@@ -157,14 +158,14 @@ public class WarrantyServlet extends HttpServlet {
             System.out.println(warranty);
             if (!warranty.getStatus().equals("done") && !warranty.getStatus().equals("unaccept")) {
                 isValid = false;
-                request.setAttribute("mess1", "product is processing");
+                request.setAttribute("mess1", "Product Is Processing");
             }
         }
         SerialNumberDAO daoSerial = new SerialNumberDAO();
 
         if (!validateImage(proImage)) {
             isValid = false;
-            request.setAttribute("mess2", "image invalid");
+            request.setAttribute("mess2", "Image Invalid");
         } else {
             filename = proImage.getSubmittedFileName();
             String folderPath = getServletContext().getRealPath("") + File.separator + "./images/productError";
@@ -180,7 +181,7 @@ public class WarrantyServlet extends HttpServlet {
         boolean isOver = checkDateOver(monthLimit, convertToLocalDate(dateOrder));
         if (isOver) {
             isValid = false;
-            request.setAttribute("mess3", "Product warranty expires");
+            request.setAttribute("mess3", "Product Warranty Expires");
         }
         if (!isValid) {
             Product pro = proDao.getProductByID(proId);

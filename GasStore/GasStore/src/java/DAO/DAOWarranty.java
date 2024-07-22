@@ -6,6 +6,7 @@ package DAO;
 
 import DTO.Customer;
 import DTO.OrderDetail;
+import DTO.ProductDTO;
 import DTO.Warranty;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -25,8 +26,10 @@ public class DAOWarranty extends DBcontext {
                 + "           ,[CreateDate]\n"
                 + "           ,[CustomerID]\n"
                 + "           ,[ProofImg]\n"
-                + "           ,[Notes])\n"
-                + "     VALUES(?, ?, ?, ?, ?)";
+                + "           ,[Notes]"
+                + "           ,[Process_by]"
+                + "           ,[status])\n"
+                + "     VALUES(?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, war.getSerialID());
@@ -34,6 +37,8 @@ public class DAOWarranty extends DBcontext {
             ps.setInt(3, war.getCustomerID());
             ps.setString(4, war.getProofImg());
             ps.setString(5, war.getNotes());
+            ps.setInt(6, war.getProcess_By());
+            ps.setString(7, war.getStatus());
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             System.out.println(e);
@@ -42,7 +47,7 @@ public class DAOWarranty extends DBcontext {
     }
 
     public boolean insertWarrantyByCus(Warranty war) {
-        System.out.println("war: "+war);
+        System.out.println("war: " + war);
         String sql = "INSERT INTO [dbo].[Warranties]\n"
                 + "           ([SerialID] "
                 + "           ,[CreateDate] "
@@ -67,7 +72,7 @@ public class DAOWarranty extends DBcontext {
         }
         return false;
     }
-    
+
     public List<Warranty> getAllWarranty() {
         String sql = "Select * from [dbo].[Warranties]";
         List<Warranty> list = new ArrayList<>();
@@ -248,5 +253,34 @@ public class DAOWarranty extends DBcontext {
             System.out.println(e);
         }
         return -1;
+    }
+
+    public int countNumberOfProductInWarrantyList(int productID) {
+        String sql = """
+                     select COUNT(*) as Total
+                     from Warranties w
+                     inner join SerialNumbers s
+                     on w.SerialID = s.SerialID
+                     where ProductID = ?""";
+        int sum = 0; 
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, productID);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                sum = rs.getInt(1);
+                return sum;
+            }
+        } catch (Exception e) {
+            System.out.println("countNumberOfProductInWarrantyList:" + e.getMessage());
+        }
+        return sum;
+    }
+    
+    public static void main(String[] args) {
+        DAOWarranty dao = new DAOWarranty();
+        ProductDAO pDAO = new ProductDAO();
+        ProductDTO pro = pDAO.getProductBySeriaId(111);
+        System.out.println(pro.getStockQuantity());
     }
 }
