@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Gas Store</title>
         <script src="ckeditor/ckeditor.js"></script>
         <script src="./tinymce/tinymce.min.js"></script>
         <script src="./js/tinymceConfig.js"></script>
