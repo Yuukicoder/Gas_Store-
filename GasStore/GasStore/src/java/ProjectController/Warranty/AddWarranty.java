@@ -202,7 +202,14 @@ public class AddWarranty extends HttpServlet {
                 nDAO.addNoti(noti);
  
             }
+<<<<<<< Updated upstream
             
+=======
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.removeAttribute("notiList");
+            session.setAttribute("notiList", n);
+>>>>>>> Stashed changes
             response.sendRedirect("manageWarranty");
             return;
         }

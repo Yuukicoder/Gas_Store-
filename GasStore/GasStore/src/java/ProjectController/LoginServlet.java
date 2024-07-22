@@ -110,6 +110,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = MaHoa.toSHA1(request.getParameter("password"));
@@ -154,6 +155,8 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("account", account);
                 response.sendRedirect("adminHome");
 =======
+=======
+>>>>>>> Stashed changes
         throws ServletException, IOException {
     String username = request.getParameter("username");
     String password = MaHoa.toSHA1(request.getParameter("password"));
@@ -161,6 +164,9 @@ public class LoginServlet extends HttpServlet {
     HttpSession session = request.getSession();
     AccountDAO accountDAO = new AccountDAO();
     AdminDTO account = accountDAO.checkLogin(username, password);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
     if (account == null) {
@@ -175,7 +181,12 @@ public class LoginServlet extends HttpServlet {
             return;
         } else if (customer != null) {
             NotificationDAO nDAO = new NotificationDAO();
+<<<<<<< Updated upstream
             ArrayList<NotificationDTO> n = nDAO.getAllOtherTypeNotification(1, customer.getCustomerID());
+=======
+            ArrayList<NotificationDTO> n = nDAO.getOther3NewestUnreadNoti(1, customer.getCustomerID());
+            session.removeAttribute("notiList");
+>>>>>>> Stashed changes
             session.setAttribute("notiList", n);
             session.setAttribute("account", customer);
             session.setAttribute("customerID", customer.getCustomerID());
@@ -199,6 +210,10 @@ public class LoginServlet extends HttpServlet {
             if (account.getRoleID() == 1) {
                 NotificationDAO nDAO = new NotificationDAO();
                 ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+<<<<<<< Updated upstream
+=======
+                session.removeAttribute("notiList");
+>>>>>>> Stashed changes
                 session.setAttribute("notiList", n);
                 response.sendRedirect("adminHome");
                 return;

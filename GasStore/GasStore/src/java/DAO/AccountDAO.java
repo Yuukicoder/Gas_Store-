@@ -64,7 +64,10 @@ public class AccountDAO extends DBcontext {
     }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
     public AdminDTO checkLogin1(String username, String password) {
         String sql = "SELECT * FROM Administrator WHERE Username = ? AND Password = ?";
         try {
@@ -108,6 +111,9 @@ public class AccountDAO extends DBcontext {
         return null;
     }
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     public int getTotalNewAccount() {
         String sql = "SELECT COUNT(AccountID) AS Count\n"
