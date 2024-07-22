@@ -5,6 +5,13 @@
         <group>
             <file>file:/D:/Workspace/FPT-Chuyên%20Ngành/Kì%205/SWP391/Gas_Store-/GasStore/GasStore/web/contact.jsp</file>
             <file>file:/D:/Workspace/FPT-Chuyên%20Ngành/Kì%205/SWP391/Gas_Store-/GasStore/GasStore/src/java/Controller/Contact.java</file>
+            <file>file:/D:/SWP391/Test2/Gas_Store-/GasStore/GasStore/src/java/DAO/ProductDAO.java</file>
+            <file>file:/D:/SWP391/Test2/Gas_Store-/GasStore/GasStore/src/java/DTO/ProductDTO.java</file>
+            <file>file:/D:/SWP391/Test2/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Order/MyPurschaseServlet.java</file>
+            <file>file:/D:/SWP391/Test2/Gas_Store-/GasStore/GasStore/src/java/DTO/Product.java</file>
+            <file>file:/D:/SWP391/Test2/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Warranty/AddWarranty.java</file>
+            <file>file:/D:/SWP391/Test2/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Warranty/WarrantyServlet.java</file>
+            <file>file:/D:/SWP391/Test2/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Warranty/MyWarranty.java</file>
         </group>
     </open-files>
 </project-private>

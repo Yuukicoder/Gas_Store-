@@ -9,7 +9,7 @@
     <body>
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
-                <a href="admin" class="navbar-brand mx-4 mb-3">
+                <a href="adminHome" class="navbar-brand mx-4 mb-3">
                     <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>ADMIN SITE</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
@@ -33,6 +33,7 @@
                             <a href="productManage" class="dropdown-item">Product</a>
                             <a href="orderTable" class="dropdown-item">Order</a>
                             <a href="discountTable" class="dropdown-item">Discount</a>
+                            <a href="manageWarranty" class="dropdown-item">Warranty</a>
                             <a href="tableFeedback" class="dropdown-item">Feedback</a>
                             <a href="postDashboard" class="dropdown-item">Post</a>
                         </div>

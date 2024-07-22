@@ -6,9 +6,14 @@ package ProjectController.Warranty;
 
 import DAO.CustomerDAO;
 import DAO.DAOWarranty;
+import DAO.NotificationDAO;
+import DAO.NotificationReceiverDAO;
 import DAO.ProductDAO;
 import DAO.SerialNumberDAO;
+import DTO.AdminDTO;
 import DTO.Customer;
+import DTO.NotificationDTO;
+import DTO.NotificationReceiverDTO;
 import DTO.Product;
 import DTO.SerialNumber;
 import DTO.Warranty;
@@ -22,6 +27,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -75,8 +81,8 @@ public class ManageWarranty extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Customer account = (Customer) session.getAttribute("account");
-        if (account == null) {
+        AdminDTO admin = (AdminDTO) session.getAttribute("account");
+        if (admin == null) {
             response.sendRedirect("login");
             return;
         }
@@ -111,15 +117,37 @@ public class ManageWarranty extends HttpServlet {
         } else if (service.equals("updateStatus")) {
             String warId = request.getParameter("warrantyId");
             String warStatus = request.getParameter("status");
-            Warranty war = new Warranty();
-            war.setWarrantyID(Integer.parseInt(warId));
+            Warranty war = daoWa.getWarrantyById(Integer.parseInt(warId));
             war.setStatus(warStatus);
+            NotificationDAO nDAO = new NotificationDAO();
+            NotificationReceiverDTO nr = new NotificationReceiverDTO();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String currentDateTime = formatter.format(java.sql.Timestamp.valueOf(LocalDateTime.now()));
             LocalDate currentDate = LocalDate.now();
             Date newDate = Date.valueOf(currentDate);
             if (warStatus.equals("done")) {
                 war.setDoneDate(newDate);
             }
             daoWa.updateWarrantyStatus(war);
+            
+            //Notify for Customer: Update status
+            SerialNumberDAO serialDAO = new SerialNumberDAO();
+            SerialNumber serial = serialDAO.getSerialById(war.getSerialID());
+            NotificationDTO noti = new NotificationDTO();
+            noti.setTitle("Update status on your warranty");
+            noti.setContent("<p>Your warranty with Serial Number:  <strong>" + serial.getSerialNumber() + "</strong></p>\n"
+                    + "<p>Has an update with status: <strong>" + war.getStatus() + "</strong></p>\n"
+                    + "<p>Sent time: <strong>" + currentDateTime + "</strong></p>\n");
+            noti.setDateSend(currentDateTime);
+            noti.setIsRead(0);
+            noti.setIsForAdmins(0);
+
+            int notiId = nDAO.addNoti(noti);
+            nr.setNotiID(notiId);
+            nr.setReceiverType(1);
+            nr.setReceiverID(cusDao.getCustomerByID(war.getCustomerID()).getCustomerID());
+            NotificationReceiverDAO nrDAO = new NotificationReceiverDAO();
+            nrDAO.addReceiver(nr);
             response.sendRedirect("manageWarranty");
         } else if (service.equals("search")) {
             String serialNumber = request.getParameter("serialNumber");
@@ -149,8 +177,8 @@ public class ManageWarranty extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Customer account = (Customer) session.getAttribute("account");
-        if (account == null) {
+        AdminDTO admin = (AdminDTO) session.getAttribute("account");
+        if (admin == null) {
             response.sendRedirect("login");
             return;
         }
@@ -166,7 +194,7 @@ public class ManageWarranty extends HttpServlet {
             Warranty war = new Warranty();
             war.setWarrantyID(Integer.parseInt(warId));
             war.setStatus(warStatus);
-            war.setProcess_By(account.getCustomerID());
+            war.setProcess_By(admin.getAdminID());
             LocalDate currentDate = LocalDate.now();
             Date newDate = Date.valueOf(currentDate);
             war.setReciverDate(newDate);

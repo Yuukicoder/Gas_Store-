@@ -950,6 +950,7 @@ public class ProductDAO extends DBcontext {
                 pro.setProductId(rs.getInt("productID"));
                 pro.setName(rs.getString("name"));
                 pro.setImage(rs.getString("image"));
+                pro.setStockQuantity(rs.getInt("stockQuantity"));
                 pro.setLimit(rs.getInt("limit"));
                 return pro;
             }

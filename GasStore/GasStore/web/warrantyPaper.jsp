@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Phiêu bảo hành</title>
+        <title>Phiếu bảo hành</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -80,7 +80,7 @@
     </form>
         
     <body class="p-3">
-        <h4 class="text-center text-uppercase">Phiếu bảo hành</h4>
+        <h4 class="text-center text-uppercase">PHIẾU BẢO HÀNH</h4>
         <div class="text-center" id="current-date"></div>
         <div>
             <h6 class="text-uppercase">Thông tin khách hàng</h6>
@@ -89,9 +89,9 @@
         </div>  
         <div>
             <h6 class="text-uppercase">Thông tin người tiếp nhận</h6>
-            <c:set var="emp" value="${emp}"/>
-            <p>Tên Nhân viên: ${emp.getFullName()}</p>
-            <p>Mã số nv: NV${emp.getCustomerID()}</p>
+            <c:set var="emp" value="${sessionScope.account}"/>
+            <p>Tên Nhân viên: ${emp.getUserName()}</p>
+            <p>Mã số nv: NV${emp.getAdminID()}</p>
         </div>
         <form action="manageWarranty" method="POST">
             <div class="">
@@ -137,7 +137,7 @@
                                     }
                                 %>
                             </td>
-                            <td>${pro.getLimit()}</td>
+                            <td>${pro.getLimit()} tháng</td>
                             <td>Trong thời gian</td>
                         </tr>
                     </tbody>
@@ -145,7 +145,7 @@
             </div>
             <div class="d-flex justify-content-between">
                 <div>Khách hàng: ${cus.getFullName()}</div>
-                <div>Nhân viên tiếp nhận: ${emp.getFullName()}</div>
+                <div>Nhân viên tiếp nhận: ${emp.getUserName()}</div>
             </div>
             <c:if test="${warr.getStatus() == 'wait' || warr.getStatus() == 'Wait'}">
                 <button type="submit" class="bg-success border-0 px-3 py-2 rounded mt-5 text-white">Accept</button>

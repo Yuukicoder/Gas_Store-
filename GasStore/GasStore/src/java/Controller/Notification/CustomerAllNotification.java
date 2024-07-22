@@ -3,16 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package ProjectController.Warranty;
+package Controller.Notification;
 
-import DAO.AccountDAO;
-import DAO.CustomerDAO;
-import DAO.DAOWarranty;
-import DAO.ProductDAO;
-import DTO.AdminDTO;
+import DAO.NotificationDAO;
 import DTO.Customer;
-import DTO.Product;
-import DTO.Warranty;
+import DTO.NotificationDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -20,13 +15,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 
 /**
  *
- * @author HP
+ * @author dell456
  */
-@WebServlet(name = "MyWarranty", urlPatterns = {"/viewMyWarranty"})
-public class MyWarranty extends HttpServlet {
+@WebServlet(name="CustomerAllNotification", urlPatterns={"/customerAllNoti"})
+public class CustomerAllNotification extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -43,10 +40,10 @@ public class MyWarranty extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet MyWarranty</title>");  
+            out.println("<title>Servlet CustomerAllNotification</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet MyWarranty at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CustomerAllNotification at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,23 +59,24 @@ public class MyWarranty extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        DAOWarranty daoWa = new DAOWarranty();
-        String warId = request.getParameter("waId");
-        Warranty war = daoWa.getWarrantyById(Integer.parseInt(warId));
-        CustomerDAO cusDao = new CustomerDAO();
-        request.setAttribute("warr", war);
-        ProductDAO proDao = new ProductDAO();
-        AccountDAO accDAO = new AccountDAO();
-        Product pro = proDao.getProductBySerialID(war.getSerialID());
-        request.setAttribute("pro", pro);
-        Customer cus = cusDao.getCustomerByID(war.getCustomerID());
-        int empId = daoWa.getEmployeeIdBySerialId(war.getSerialID());
-        AdminDTO emp = accDAO.getAccountById(empId);
-        request.setAttribute("cus", cus);
-        request.setAttribute("emp", emp);
-        request.getRequestDispatcher("viewMyWarranty.jsp").forward(request, response);
-    }
+    throws ServletException, IOException {
+                HttpSession session = request.getSession();
+                Customer account = (Customer) session.getAttribute("account");
+        if (account != null) {
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> list = nDAO.getAllOtherTypeNotification(1, account.getCustomerID());
+            request.setAttribute("list", list);
+
+            //Reset notification-navbar
+            ArrayList<NotificationDTO> n = nDAO.getOther3NewestUnreadNoti(1, account.getCustomerID());
+            session.setAttribute("notiList", n);
+            //
+
+            request.getRequestDispatcher("NotificationListCustomer.jsp").forward(request, response);
+        } else {
+            response.sendRedirect("403.jsp");
+        }
+    } 
 
     /** 
      * Handles the HTTP <code>POST</code> method.

@@ -142,7 +142,7 @@
 
                         <div class="d-flex flex-column align-items-center text-center p-3 py-5 position-relative">
     <!-- Hiển thị ảnh hiện tại -->
-    <img id="profileImage" class="mt-5 rounded-circle" width="50%;" src="${sessionScope.account.getImage()}">
+    <img id="profileImage" class="mt-5 rounded-circle" width="50%;" src="${sessionScope.account.getImage()}" alt="This is profile">
 
     <!-- Overlay để cho phép chọn ảnh -->
     <div id="imageOverlay" class="image-overlay">
