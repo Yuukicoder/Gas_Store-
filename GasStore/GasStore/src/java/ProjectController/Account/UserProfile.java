@@ -11,8 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
-import model.Customer;
-
 /**
  *
  * @author 1234
@@ -27,15 +25,14 @@ public class UserProfile extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Integer aid = (Integer) session.getAttribute("customerID");
-
-        if (aid == null) {
+        DTO.Customer customer = (DTO.Customer) session.getAttribute("account");
+        if (customer == null) {
             response.sendRedirect("login.jsp");
             return;
         }
 
         CustomerDao cus = new CustomerDao();
-        DTO.Customer c = cus.getAllByID(aid);
+        DTO.Customer c = cus.getAllByID(customer.getCustomerID());
         DTO.Customer cu = cus.checkuserandPass(c.getUserName(), c.getPassword());
         session.setAttribute("account", c);
         request.setAttribute("pass", c.getPassword());
@@ -71,8 +68,8 @@ public class UserProfile extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Integer aid = (Integer) session.getAttribute("customerID");
-        if (aid == null) {
+        DTO.Customer customers = (DTO.Customer) session.getAttribute("account");
+        if (customers == null) {
             response.sendRedirect("login.jsp");
             return;
         }
@@ -100,9 +97,9 @@ public class UserProfile extends HttpServlet {
         }
         try {
             if ("profile".equals(button)) {
-                DTO.Customer customer = customerDao.getAllByID(aid);
-                boolean isUsernameAvailable = cus.isUsernameAvailable2(user, aid);
-                boolean isEmailAvailable = cus.isEmailAvailable2(email, aid);
+                DTO.Customer customer = customerDao.getAllByID(customers.getCustomerID());
+                boolean isUsernameAvailable = cus.isUsernameAvailable2(user, customers.getCustomerID());
+                boolean isEmailAvailable = cus.isEmailAvailable2(email, customers.getCustomerID());
 
                 if (isUsernameAvailable && isEmailAvailable) {
                     // Split the full name into parts

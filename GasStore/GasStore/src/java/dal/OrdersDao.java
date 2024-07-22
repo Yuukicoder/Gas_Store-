@@ -220,6 +220,89 @@ public class OrdersDao extends DBContext{
 
         }
     }
+     public List<Orders> getAll1() {
+
+        list = new ArrayList<>();
+        try {
+            String strSelect = "Select * from  [Order]";
+            stm = connection.prepareStatement(strSelect);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+
+                Orders em = new Orders(rs.getInt("orderID"),rs.getInt("customerID"),rs.getInt("trackingNumber"),
+                rs.getInt("totalMoney"),rs.getDate("orderDate"),rs.getString("shipAddress"),rs.getInt("status"),
+                        rs.getInt("shipVia"),rs.getString("payment"),rs.getString("notes"));
+                list.add(em);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+     
+    
+     public List<Orders> getAllByID1(int id) {
+
+        list = new ArrayList<>();
+        try {
+            String strSelect = "Select * from  [Order] where customerID = ? order by orderDate DESC";
+            stm = connection.prepareStatement(strSelect);
+            stm.setInt(1, id);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+
+                Orders em = new Orders(rs.getInt("orderID"),rs.getInt("customerID"),rs.getInt("trackingNumber"),
+                rs.getInt("totalMoney"),rs.getDate("orderDate"),rs.getString("shipAddress"),rs.getInt("status"),
+                        rs.getInt("shipVia"),rs.getString("payment"),rs.getString("notes"));
+                list.add(em);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+     public List<Orders> getAllByID1(int id, int status) {
+
+        list = new ArrayList<>();
+        try {
+            String strSelect = "Select * from  [Order] where customerID = ? and status = ?";
+            stm = connection.prepareStatement(strSelect);
+            stm.setInt(1, id);
+            stm.setInt(2, status);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+
+                Orders em = new Orders(rs.getInt("orderID"),rs.getInt("customerID"),rs.getInt("trackingNumber"),
+                rs.getInt("totalMoney"),rs.getDate("orderDate"),rs.getString("shipAddress"),rs.getInt("status"),
+                        rs.getInt("shipVia"),rs.getString("payment"),rs.getString("notes"));
+                list.add(em);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+      public Orders getByID1(int id) {
+
+        list = new ArrayList<>();
+        try {
+            String strSelect = "Select * from  [Order] where orderID = ?";
+            stm = connection.prepareStatement(strSelect);
+            stm.setInt(1, id);
+            
+            rs = stm.executeQuery();
+            while (rs.next()) {
+
+                Orders em = new Orders(rs.getInt("orderID"),rs.getInt("customerID"),rs.getInt("trackingNumber"),
+                rs.getInt("totalMoney"),rs.getDate("orderDate"),rs.getString("shipAddress"),rs.getInt("status"),
+                        rs.getInt("shipVia"),rs.getString("payment"),rs.getString("notes"));
+                return em;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
      public static void main(String[] args) {
         OrdersDao o = new OrdersDao();
         List<Orders> li = o.getAllByID(1);

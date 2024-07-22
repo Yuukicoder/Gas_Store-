@@ -8,7 +8,7 @@
 
     <head>
         <meta charset="utf-8">
-        <title>MultiShop - Online Shop Website Template</title>
+        <title>GasStore</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="Free HTML Templates" name="keywords">
         <meta content="Free HTML Templates" name="description">
@@ -58,11 +58,11 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="bg-light p-30">
-                        <h4 class="mb-4 text-center">Review</h4>
+                        <h4 class="mb-4 text-center">Feedback</h4>
 
                         <table class="table table-light table-borderless table-hover text-center mb-4">
 
-                            <img  class="img-fluid w-100" src="images/Product/${requestScope.productid.image}" style="width: 650px; height: 250px ;max-width: 70% ;margin: 0 auto; display: block;" alt="">
+                            <img  class="img-fluid w-100" src="${requestScope.productid.image}" style="width: 650px; height: 250px ;max-width: 70% ;margin: 0 auto; display: block;" alt="">
                             <p style="    text-align: center; ">${requestScope.productid.name}</p>
 
                         </table>
@@ -96,8 +96,8 @@
                             <input hidden name="pid" value="${requestScope.productid1}"/>
                             <input hidden name="oid" value="${requestScope.orderid}"/> 
 
-                            <div class="form-group text-center">
-                                <input type="submit"  value="Leave Your Review" class="btn btn-primary px-4">
+                            <div class="form-group text-center text-dark ">
+                                <input type="submit"  value="Leave Your Review" class="btn btn-warning px-4">
                             </div>
                         </form>
                     </div>

@@ -2,25 +2,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package ProjectController.Feedback;
+package Controller.AdminAccountServlet;
 
-import DAO.FeedbackDAO;
-import DAO.ProductDAO;
-import DTO.FeedbackDTO;
+import DTO.AdminDTO;
+import dal.SupplierDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.Supplier;
 
 /**
  *
- * @author phung
+ * @author vip2021
  */
-@WebServlet(name = "Feedback", urlPatterns = {"/feedback"})
-public class Feedback extends HttpServlet {
+public class AddSupplierServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,18 +32,26 @@ public class Feedback extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Feedback</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Feedback at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        HttpSession session = request.getSession();
+        AdminDTO account = (AdminDTO) session.getAttribute("account");
+        if (account != null) {
+            if (account.getRoleID() == 1) {
+                String pid = request.getParameter("id");
+                String t = request.getParameter("type");
+                SupplierDao supplierDao = new SupplierDao();
+                if (pid != null && !pid.isEmpty() && t != null && !t.isEmpty()) {
+                    if (t.equals("0")) {
+                        Supplier supplier = supplierDao.getSupplierByID(Integer.parseInt(pid));
+                        request.setAttribute("detail", supplier);
+                    }
+                }
+//          
+                request.getRequestDispatcher("addSupplier.jsp").forward(request, response);
+            } else {
+                response.sendRedirect("403.jsp");
+            }
+        } else {
+            response.sendRedirect("403.jsp");
         }
     }
 
@@ -60,16 +67,7 @@ public class Feedback extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int productid = Integer.parseInt(request.getParameter("productid"));
-        int orderid = Integer.parseInt(request.getParameter("orderid"));
-
-        ProductDAO aO2 = new ProductDAO();
-
-        request.setAttribute("productid1", productid);
-        request.setAttribute("orderid", orderid);
-        request.setAttribute("productid", aO2.getProductByID(productid));
-
-        request.getRequestDispatcher("Feedback.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -83,16 +81,18 @@ public class Feedback extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String oid = request.getParameter("oid");
-//        String date = request.getParameter("date");
-        String text = request.getParameter("text");
-        String voed = request.getParameter("rating");
-        String poi = request.getParameter("pid");
+        SupplierDao sus = new SupplierDao();
+        String uid = request.getParameter("account_id");
+        String name = request.getParameter("username");
+        String smail = request.getParameter("email");
+//        
+//        String mail = request.getParameter("email");
+        String phone = request.getParameter("phone");
+        String home = request.getParameter("HomePage");
+        Supplier newSup = new Supplier(!uid.isEmpty() ? Integer.parseInt(uid) : 0, name, smail, phone, home);
+        sus.insertSupplier(newSup);
+        response.sendRedirect("ManageSupplier");
 
-        FeedbackDAO feedbackDAO = new FeedbackDAO();
-        feedbackDAO.insertfeedback(oid, poi, text, text, voed);
-//        request.getRequestDispatcher("mypurchase").forward(request, response);
-response.sendRedirect("mypurchase");
     }
 
     /**

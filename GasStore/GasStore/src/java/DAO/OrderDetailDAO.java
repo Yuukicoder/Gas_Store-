@@ -166,10 +166,49 @@ public class OrderDetailDAO extends DBcontext {
         }
         return null; 
     }
-
+     public List<OrderDetail> getAllOrderDetail1() {
+        String sql = "SELECT  productID, orderID, quantity, unitPrice FROM OrderDetails";
+        List<OrderDetail> orderDetails = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setProductID(rs.getInt("productID"));
+                orderDetail.setOrderID(rs.getInt("orderID"));
+                orderDetail.setQuantity(rs.getInt("quantity"));
+                orderDetail.setUnitPrice(rs.getDouble("unitPrice"));
+                orderDetails.add(orderDetail);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return orderDetails;
+    }
+//
+    public List<OrderDetail> getOrderDetailByID1(int orderID) {
+        String sql = "SELECT productID, orderID, quantity, unitPrice FROM OrderDetails WHERE orderID = ?";
+        List<OrderDetail> t = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, orderID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setProductID(rs.getInt("productID"));
+                orderDetail.setOrderID(rs.getInt("orderID"));
+                orderDetail.setQuantity(rs.getInt("quantity"));
+                orderDetail.setUnitPrice(rs.getDouble("unitPrice"));
+                t.add(orderDetail) ;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return t; 
+    }
     public static void main(String[] args) {
         OrderDetailDAO dao = new OrderDetailDAO();
         ProductDAO pDAO = new ProductDAO();
-        System.out.println(dao.getOrderDetailByID(4));
+        System.out.println(dao.getOrderDetailByID(8));
     }
 }

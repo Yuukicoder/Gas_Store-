@@ -148,13 +148,13 @@
                                 <div class="tab-content">
                                     <div class="tab-pane fade show active" id="tab-pane-1">
                                         <h4 class="m-3">User's Orders</h4>
-                                        <div class="container-fluid col-12 col-sm-12 col-lg-12 col-md-12">
+                                        <div class="container-fluid col-12 col-sm-12 col-lg-12 col-md-12" id="orderList">
                                         <c:set var="tt" value="0" />
-                                        <c:forEach items="${purchase}" var="p">
-                                            <c:set var="tt" value="${tt+1}" />
+                                        <c:forEach items="${purchase}" var="p" varStatus="loop">
+                                            <c:set var="tt" value="${tt + 1}" />
 
                                             <hr><!-- comment -->
-                                            <div class="border border-grey rounded p-3 mb-3">
+                                            <div class="border border-grey rounded p-3 mb-3" style="display: ${loop.index < 3 ? 'block' : 'none'};">
                                                 <h5 class="mt-2">Order #${tt}</h5>
                                                 <table class="table table-light1 table-borderless table-hover text-center mb-0">
                                                     <thead>
@@ -169,9 +169,9 @@
                                                     </thead>
                                                     <tbody class="align-middle">
                                                         <c:set var="index" value="0" />
-                                                        <c:forEach var="o" items="${orderDetailsMap[p.orderID]}">
+                                                        <c:forEach var="o" items="${orderDetailsMap[p.orderID]}" varStatus="innerLoop">
                                                             <c:set var="index" value="${index + 1}" />
-                                                            <tr>
+                                                            <tr style="display: ${innerLoop.index < 5 ? 'table-row' : 'none'};">
                                                                 <td>${index}</td>
                                                                 <td class="align-middle">
                                                                     <img style="width: 80px" class="img-fluid" src="${pDAO.getProductByID(o.getProductID()).getImage()}" alt="Image">
@@ -190,39 +190,55 @@
                                                 </div>
                                             </div>
                                         </c:forEach>
+
+                                        <!-- Nút "Xem thêm" -->
+                                        <div class="text-center mt-3">
+                                            <button class="btn btn-primary" id="loadMoreOrdersBtn">View More</button>
+                                        </div>
                                     </div>
                                 </div>
+
+
                                 <!-- Tab-pane-1 end -->
 
                                 <div class="tab-pane fade" id="tab-pane-2">
                                     <h4 class="m-3">Customer Feedback</h4>
 
-                                    <c:forEach var="feedback" items="${requestScope.productFeedback}">
-                                        <div class="card mb-3">
-                                            <div class="d-flex align-items-center card-body">
-                                                <img class="img-fluid mr-3" src="${feedback.getProductDTO().getImage()}" style="width: 50px; height: 50px; max-width: 70%;" alt="">
-                                                <div>
-                                                    <p>${feedback.getProductDTO().name}</p>
-                                                    <h6>username: ${feedback.getAccountDTO().getFirstName()}</h6>
-                                                    <div class="d-flex my-3 align-items-center">
-                                                        <p class="mb-0 mr-2">Rating * :</p>
-                                                        <div class="text-primary">
-                                                            <!-- Assuming you have a rating value -->
-                                                            <c:forEach begin="1" end="${feedback.start}">
-                                                                <i class="fas fa-star"></i>
-                                                            </c:forEach>
-                                                            <c:forEach begin="${feedback.start + 1}" end="5">
-                                                                <i class="far fa-star"></i>
-                                                            </c:forEach>
+                                    <div id="feedbackList">
+                                        <!-- Hiển thị 5 feedback ban đầu -->
+                                        <c:forEach var="feedback" items="${requestScope.productFeedback}" varStatus="loop">
+                                            <div class="card mb-3" style="display: ${loop.index < 2 ? 'block' : 'none'};">
+                                                <div class="d-flex align-items-center card-body">
+                                                    <img class="img-fluid mr-3" src="${feedback.getProductDTO().getImage()}" style="width: 50px; height: 50px; max-width: 70%;" alt="">
+                                                    <div>
+                                                        <p>${feedback.getProductDTO().name}</p>
+                                                        <h6>username: ${feedback.getAccountDTO().getFirstName()}</h6>
+                                                        <div class="d-flex my-3 align-items-center">
+                                                            <p class="mb-0 mr-2">Rating * :</p>
+                                                            <div class="text-primary">
+                                                                <!-- Assuming you have a rating value -->
+                                                                <c:forEach begin="1" end="${feedback.start}">
+                                                                    <i class="fas fa-star"></i>
+                                                                </c:forEach>
+                                                                <c:forEach begin="${feedback.start + 1}" end="5">
+                                                                    <i class="far fa-star"></i>
+                                                                </c:forEach>
+                                                            </div>
                                                         </div>
+                                                        <h6 class="card-text">Feedback: ${feedback.context}</h6>
+                                                        <!--<p class="card-text"><small class="text-muted">$feedback.date}</small></p>-->
                                                     </div>
-                                                    <h6 class="card-text">Feedback: ${feedback.context}</h6>
-                                                    <!--<p class="card-text"><small class="text-muted">$feedback.date}</small></p>-->
                                                 </div>
                                             </div>
-                                        </div>
-                                    </c:forEach>
+                                        </c:forEach>
+                                    </div>
+
+                                    <!-- Nút "Xem thêm" -->
+                                    <div class="text-center mt-3">
+                                        <button class="btn btn-primary" id="loadMoreBtn">View More</button>
+                                    </div>
                                 </div>
+
 
                                 <!-- Tab-pane-2 end -->
                             </div>
@@ -253,6 +269,29 @@
         <script src="admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
         <script src="admin/js/main.js"></script>
         <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const loadMoreOrdersBtn = document.getElementById("loadMoreOrdersBtn");
+                const orderList = document.getElementById("orderList");
+                const itemsToShow = 3; // Số lượng đơn hàng cần hiển thị mỗi lần bấm nút "Xem thêm"
+                let visibleOrders = itemsToShow;
+
+                loadMoreOrdersBtn.addEventListener("click", function () {
+                    const orderCards = orderList.querySelectorAll('.border');
+                    for (let i = visibleOrders; i < visibleOrders + itemsToShow; i++) {
+                        if (orderCards[i]) {
+                            orderCards[i].style.display = 'block';
+                        }
+                    }
+                    visibleOrders += itemsToShow;
+
+                    // Ẩn nút "Xem thêm" nếu không còn đơn hàng để hiển thị
+                    if (visibleOrders >= orderCards.length) {
+                        loadMoreOrdersBtn.style.display = 'none';
+                    }
+                });
+            });
+        </script>
+        <script>
             const toggleInsertAnchor = document.getElementById('toggleInsert');
             const insertDiv = document.querySelector('.insert-div');
 
@@ -271,6 +310,29 @@
                 button.addEventListener('click', function () {
                     if (insertDiv.style.display === 'none') {
                         insertDiv.style.display = 'block';
+                    }
+                });
+            });
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const loadMoreBtn = document.getElementById("loadMoreBtn");
+                const feedbackList = document.getElementById("feedbackList");
+                const itemsToShow = 2; // Số lượng mục cần hiển thị mỗi lần bấm nút "Xem thêm"
+                let visibleItems = itemsToShow;
+
+                loadMoreBtn.addEventListener("click", function () {
+                    const cards = feedbackList.querySelectorAll('.card');
+                    for (let i = visibleItems; i < visibleItems + itemsToShow; i++) {
+                        if (cards[i]) {
+                            cards[i].style.display = 'block';
+                        }
+                    }
+                    visibleItems += itemsToShow;
+
+                    // Ẩn nút "Xem thêm" nếu không còn feedback để hiển thị
+                    if (visibleItems >= cards.length) {
+                        loadMoreBtn.style.display = 'none';
                     }
                 });
             });

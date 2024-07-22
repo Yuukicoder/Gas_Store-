@@ -4,6 +4,7 @@
  */
 package DTO;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -52,7 +53,14 @@ public class Product {
     public int getProductID() {
         return productID;
     }
-
+    public String getFormattedTotalMoney1() {
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        return formatter.format(unitPrice);
+    }
+    public String getFormattedTotalMoney() {
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        return formatter.format(unitPrice);
+    }
     public void setProductID(int productID) {
         this.productID = productID;
     }
