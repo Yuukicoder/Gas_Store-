@@ -62,7 +62,8 @@ public class AccountDAO extends DBcontext {
         }
         return null;
     }
-public AdminDTO checkLogin1(String username, String password) {
+
+    public AdminDTO checkLogin1(String username, String password) {
         String sql = "SELECT * FROM Administrator WHERE Username = ? AND Password = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -88,7 +89,7 @@ public AdminDTO checkLogin1(String username, String password) {
                 account.setRoleID(rs.getInt(6));
                 account.setEmail(rs.getString(7));
                 account.setImg(rs.getString(8));
-
+                account.setAdminName(rs.getString("adminName"));
 //                    private int adminID;
 //    private String userName;
 //    private String password;
@@ -104,6 +105,7 @@ public AdminDTO checkLogin1(String username, String password) {
         }
         return null;
     }
+
     public int getTotalNewAccount() {
         String sql = "SELECT COUNT(AccountID) AS Count\n"
                 + "FROM Account\n"

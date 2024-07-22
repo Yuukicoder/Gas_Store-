@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Phiêu bảo hành</title>
+        <title>Phiếu bảo hành</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -71,7 +71,7 @@
 
 
     <body class="p-3">
-        <h1 class="text-center text-uppercase">Phiếu bảo hành!</h1>
+        <h1 class="text-center text-uppercase">PHIẾU BẢO HÀNH</h1>
         <div class="text-center" >${warr.getCreateDate()}</div>
         <div>
             <h6 class="text-uppercase">Thông tin khách hàng</h6>
@@ -82,8 +82,8 @@
         <div>
             <h6 class="text-uppercase">Thông tin người tiếp nhận</h6>
             <c:set var="emp" value="${emp}"/>
-            <p>Tên Nhân viên: ${emp.getFullName()}</p>
-            <p>Mã số nv: NV${emp.getCustomerID()}</p>
+            <p>Tên Nhân viên: ${emp.getUserName()}</p>
+            <p>Mã số nv: NV${emp.getAdminID()}</p>
         </div>
         <h6>Ngày hẹn trả: <input type="Date" name="expectDate" value="${warr.getExpectedDate()}" required /></h6>
 
@@ -126,7 +126,7 @@
                                 }
                             %>
                         </td>
-                        <td>${pro.getLimit()}</td>
+                        <td>${pro.getLimit()} tháng</td>
                         <td>Trong thời gian</td>
                     </tr>
                 </tbody>
@@ -134,7 +134,7 @@
         </div>
         <div class="d-flex justify-content-between">
             <div>Khách hàng:<br>${cus.getFullName()}</div>
-            <div>Nhân viên tiếp nhận: <br>${emp.getFullName()}</div>
+            <div>Nhân viên tiếp nhận: <br>${emp.getUserName()}</div>
         </div>
 
         <script>

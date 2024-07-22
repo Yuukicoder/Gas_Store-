@@ -20,6 +20,7 @@ public class PostDTO {
     private String Description;
     private String PostCate;
     private int updatedBy;
+    
 
     public PostDTO() {
     }
@@ -35,6 +36,16 @@ public class PostDTO {
         this.Description = Description;
         this.PostCate = PostCate;
         this.updatedBy = updatedBy;
+    }
+
+    public PostDTO(int PostID, String Title, String Postbanner, String Context, String Description, String PostCate) {
+        this.PostID = PostID;
+        this.Title = Title;
+        this.Postbanner = Postbanner;
+        this.Context = Context;
+        this.Description = Description;
+        this.PostCate = PostCate;
+        System.out.println("PostDTO: " + PostCate);
     }
 
     public PostDTO(int PostID, String Title, String Postbanner, String Context, String Description) {

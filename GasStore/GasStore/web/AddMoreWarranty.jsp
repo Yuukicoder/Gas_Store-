@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Add Warranty</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </head>
@@ -53,7 +53,7 @@
                 <div class="col">
                     <div data-mdb-input-init class="form-outline">
                         <label class="form-label" for="form3Example2">Employee name</label>
-                        <input type="text" name="employeeId" value="${emp.getCustomerID()}" hidden id="form3Example2" class="form-control" />
+                        <input type="text" name="employeeId" value="${emp.getAdminID()}" hidden id="form3Example2" class="form-control" />
                         <input type="text" name="employeeName" value="${emp.getUserName()}" id="form3Example2" class="form-control" />
                     </div>
                 </div>
@@ -77,9 +77,7 @@
             </form>
             </c:if>
         </div>
-        <footer>
-            Footer
-        </footer>
+        <%@include file="component/footer.jsp" %>
        <script>
     function previewImages(input) {
         var previewContainer = document.getElementById('previewContainer');
