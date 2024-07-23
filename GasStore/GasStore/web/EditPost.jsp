@@ -58,7 +58,7 @@
                                     <select name="category" id="category" class="form-control col-4">
                                         <option value="${pdto.getPostCate()}" selected>${pdto.getPostCate()}</option>
                                         <c:forEach items="${requestScope.postCategoryDTOs}" var="c">
-                                            <option value="${c.getName()}">${c.getName()}</option>
+                                            <option value="${c.getCategoryID()}">${c.getName()}</option>
                                         </c:forEach>
                                     </select>
                                 </div>

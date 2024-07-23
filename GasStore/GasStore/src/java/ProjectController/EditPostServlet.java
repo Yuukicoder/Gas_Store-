@@ -118,6 +118,8 @@ public class EditPostServlet extends HttpServlet {
 protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     HttpSession session = request.getSession();
+    String pCate_raw = request.getParameter("category");
+    System.out.println(pCate_raw);
     String pid_raw = request.getParameter("pid");
     String banner_raw = request.getParameter("pbanner");
     String content = request.getParameter("content");
@@ -128,10 +130,14 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         Part banner = request.getPart("banner");
         String fileBanner = banner.getSubmittedFileName();
 
-        PostDTO pdto;
+        PostDTO pdto;   
         if (fileBanner.isEmpty()) {
             // Không có file banner mới được tải lên
-            pdto = new PostDTO(pid, title, banner_raw, content, "updated");
+            pdto = new PostDTO(pid, title, banner_raw, content, "updated", pCate_raw);
+            
+            //Trường hợp ko có banner mới tải lên, hàm tạo ko truyền cate_raw -> null
+            //
+            
         } else {
             // Kiểm tra kiểu MIME của file
             String mimeType = getServletContext().getMimeType(fileBanner);
@@ -141,7 +147,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
                 return;
             }
 
-            pdto = new PostDTO(pid, title, fileBanner, content, "updated");
+            pdto = new PostDTO(pid, title, fileBanner, content, "updated", pCate_raw);
         }
 
         PostDetailDAO postDetailDAO = new PostDetailDAO();

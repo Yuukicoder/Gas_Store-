@@ -6,6 +6,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="java.text.SimpleDateFormat, java.text.ParseException" %>
+<%@ page import="DTO.NotificationDTO" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -32,6 +34,19 @@
             .show {
                 display: block;
             }
+            .notification {
+                position: relative;
+                display: inline-block;
+            }
+            .notification .dot {
+                position: absolute;
+                top: 2px;
+                left: 8px;
+                height: 6px;
+                width: 6px;
+                background-color: red;
+                border-radius: 50%;
+            }
         </style>
     </head>
     <body>
@@ -51,6 +66,63 @@
                     <c:if test="${account != null}">
                         <div class="d-inline-flex align-items-center">
                             <div class="btn-group dropdown">
+                                <button type="button" class="btn btn-sm btn-light dropdown-toggle dropbtn" onclick="toggleNotificationDropdown()">
+                                    <c:if test="${sessionScope.notiList.size() > 0}">
+                                        <div class="notification">
+                                            <i class="fa fa-bell"></i><div class="dot"></div>
+                                        </div>
+                                    </c:if>
+                                    <c:if test="${sessionScope.notiList.size() == 0}">
+                                        <i class="fa fa-bell"></i>
+                                    </c:if>
+                                    Notification
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-content" id="notificationDropdown">
+                                    <c:if test="${sessionScope.notiList.size() == 0}">
+                                        <a href="#" class="dropdown-item">
+                                            <h6 class="fw-normal mb-0">There is no</h6>
+                                            <h6 class="fw-normal mb-0">new notification</h6>
+                                            <small></small>
+                                        </a>
+                                    </c:if>
+                                    <c:if test="${sessionScope.notiList.size() > 0}">
+                                        <c:forEach var="noti" items="${sessionScope.notiList}">
+                                            <a href="customerDetailNoti?id=${noti.getNotiID()}" class="dropdown-item">
+                                                <h6 class="fw-normal mb-0">${noti.getTitle()}</h6>
+                                                <%
+                                                    NotificationDTO notiDTO = (NotificationDTO) pageContext.getAttribute("noti"); 
+                                                    String dateSended = (String) notiDTO.getDateSend();
+                                                    boolean isValidDate = false;
+
+                                                    if (dateSended != null) {
+                                                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                                        sdf.setLenient(false);
+
+                                                        try {
+                                                            sdf.parse(dateSended);
+                                                            isValidDate = true;
+                                                        } catch (ParseException e) {
+                                                            // Date parsing failed
+                                                        }
+                                                    }
+                                                %> 
+                                                <c:if test="<%= isValidDate %>">
+                                                    <small>${noti.getDateSend()}</small>
+                                                </c:if>
+                                                <c:if test="<%= !isValidDate %>">
+                                                    <small>${noti.getDateSend()} ago</small>
+                                                </c:if>
+                                            </a>
+                                            <hr class="dropdown-divider">
+                                        </c:forEach>   
+                                    </c:if>
+                                    <a href="customerAllNoti" class="dropdown-item text-center">See all notifications</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-inline-flex align-items-center">
+                            <div class="btn-group dropdown">
                                 <button type="button" class="btn btn-sm btn-light dropdown-toggle dropbtn" onclick="toggleDropdown()">
                                     <img src="${sessionScope.account.getImage()}" width="10%" height="" alt="avatar"/>
 
@@ -58,6 +130,7 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-content" id="myDropdown">
                                     <a class="dropdown-item" href="mypurchase">My Purchase</a>
+                                    <a class="dropdown-item" href="myWarranty">My Warranty</a>
                                     <a class="dropdown-item" href="UserProfile">Profile</a>
                                     <a class="dropdown-item" href="logout">Logout</a>
                                 </div>
@@ -81,7 +154,7 @@
             <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
                 <div class="col-lg-4">
                     <a href="home" class="text-decoration-none">
-                        <a href="index.jsp"><img src="img/Gas_Store.png" alt="logo" width="100px"></a>
+                        <a href="home"><img src="img/Gas_Store.png" alt="logo" width="100px"></a>
                     </a>
                 </div>
 
@@ -104,7 +177,9 @@
             function toggleDropdown() {
                 document.getElementById("myDropdown").classList.toggle("show");
             }
-
+            function toggleNotificationDropdown() {
+                document.getElementById("notificationDropdown").classList.toggle("show");
+            }
             window.onclick = function (event) {
                 if (!event.target.matches('.dropbtn')) {
                     var dropdowns = document.getElementsByClassName("dropdown-content");

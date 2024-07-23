@@ -6,10 +6,13 @@
 package ProjectController.Warranty;
 
 import DAO.DAOWarranty;
+import DAO.NotificationDAO;
 import DAO.OrderDAO;
 import DAO.ProductDAO;
 import DAO.SerialNumberDAO;
+import DTO.AdminDTO;
 import DTO.Customer;
+import DTO.NotificationDTO;
 import DTO.ProductDTO;
 import DTO.Warranty;
 import java.io.IOException;
@@ -29,7 +32,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -139,8 +144,8 @@ public class AddWarranty extends HttpServlet {
             }
         } else if(service.equals("add")) {
         HttpSession session = request.getSession();
-            Customer account = (Customer) session.getAttribute("account");
-            if (account == null) {
+            AdminDTO admin = (AdminDTO) session.getAttribute("account");
+            if (admin == null) {
                 response.sendRedirect("login");
                 return;
             }
@@ -171,11 +176,36 @@ public class AddWarranty extends HttpServlet {
             LocalDate currentDate = LocalDate.now();
             Date newDate = Date.valueOf(currentDate);
             Warranty war = new Warranty(Integer.parseInt(serialId),
-                    cus.getCustomerID(), String.join(",", filenames), note, newDate, "accepted",
-                    Date.valueOf(expectDate), account.getCustomerID());
+                    cus.getCustomerID(), String.join(",", filenames),
+                    note, newDate, "wait",
+                    Date.valueOf(expectDate), admin.getAdminID());
 
             DAOWarranty dao = new DAOWarranty();
             dao.insertWarranty(war);
+            
+            //Notification - Minh Duc - Warning Bad Product
+            ProductDTO pro = proDao.getProductBySeriaId(Integer.parseInt(serialId));
+            int numberOfProduct = dao.countNumberOfProductInWarrantyList(pro.getProductId());
+            if((double)numberOfProduct / pro.getStockQuantity() >= 0.001){
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String currentDateTime = formatter.format(java.sql.Timestamp.valueOf(LocalDateTime.now()));
+                NotificationDTO noti = new NotificationDTO();
+                noti.setTitle("Warning: Poor Quality Product");
+                noti.setContent("<p>ProductID: " + pro.getProductId() + "</p>\n"
+                        + "<p>Product Name: "+ pro.getName() + "</p>\n"
+                        + "<p>Taken for warranty exceed the safety limit compared to the total products in stock.</p>\n"
+                        + "<p>At " + currentDateTime);
+                noti.setDateSend(currentDateTime);
+                noti.setIsRead(0);
+                noti.setIsForAdmins(1);
+                NotificationDAO nDAO = new NotificationDAO();
+                nDAO.addNoti(noti);
+ 
+            }
+            NotificationDAO nDAO = new NotificationDAO();
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            session.removeAttribute("notiList");
+            session.setAttribute("notiList", n);
             response.sendRedirect("manageWarranty");
             return;
         }

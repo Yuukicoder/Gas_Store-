@@ -11,8 +11,12 @@ import DAO.NotificationDAO;
 import DAO.ProductDAO;
 import DAO.ProductImgDAO;
 import DAO.SupplierDAO;
+<<<<<<< HEAD
 import DTO.FeedbackDTO;
 import DTO.FeedbackReplyDTO;
+=======
+import DTO.Customer;
+>>>>>>> 624005260203d23b0f52b7daca00e3ed32b3caf8
 import DTO.NotificationDTO;
 import DTO.Product;
 import DTO.ProductImg;
@@ -46,7 +50,8 @@ public class ProductDetailServlet extends HttpServlet {
             //Reset noti-time on navbar - Vu Anh
             HttpSession session = request.getSession();
             NotificationDAO nDAO = new NotificationDAO();
-            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
+            Customer customer = (Customer)session.getAttribute("account");
+            ArrayList<NotificationDTO> n = nDAO.getOther3NewestUnreadNoti(1, customer.getCustomerID());
             session.setAttribute("notiList", n);
             //
             String id_raw = request.getParameter("id");
