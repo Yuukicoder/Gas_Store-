@@ -42,6 +42,7 @@
 <!--                                <a href="contact.jsp" class="nav-item nav-link">Contact</a>-->
                                   <a href="PostListController" class="nav-item nav-link">News</a>
                                                                     <a href="PostListController" class="nav-item nav-link">DisCount</a>
+                                                                                                                                        <a href="Contact" class="nav-item nav-link">Contact</a>
                             </div>
                             
                             <div class="navbar-nav ml-auto py-0 d-none d-lg-block">

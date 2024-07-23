@@ -209,6 +209,9 @@ public class OrderDetailDAO extends DBcontext {
     public static void main(String[] args) {
         OrderDetailDAO dao = new OrderDetailDAO();
         ProductDAO pDAO = new ProductDAO();
-        System.out.println(dao.getOrderDetailByID(8));
+        List<OrderDetail> od = dao.getOrderDetail(8);
+        for(OrderDetail o: od){
+            System.out.println(o.getProductID());
+        }
     }
 }

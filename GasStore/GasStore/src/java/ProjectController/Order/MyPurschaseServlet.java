@@ -1,14 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package ProjectController.Order;
 
 import DAO.FeedbackDAO;
 import DAO.OrderDAO;
 import DAO.OrderDetailDAO;
 import DAO.ProductDAO;
-import DTO.AccountDTO;
 import DTO.OrderDetail;
 import dal.OrdersDao;
 import jakarta.servlet.ServletException;
@@ -27,29 +22,8 @@ import java.util.Map;
 import model.Customer;
 import model.Orders;
 
-/**
- *
- * @author msi
- */
 @WebServlet(name = "MyPurschaseServlet", urlPatterns = {"/mypurchase"})
 public class MyPurschaseServlet extends HttpServlet {
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet MyPurschaseServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet MyPurschaseServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -79,22 +53,27 @@ public class MyPurschaseServlet extends HttpServlet {
         } else {
             orderList = ord.getAllByID1(cus.getCustomerID());
         }
+        
         // Create a map to hold order details for each order
         Map<Integer, List<OrderDetail>> orderDetailsMap = new HashMap<>();
-
+        FeedbackDAO fd = new FeedbackDAO();
+        Map<Integer, Map<Integer, Boolean>> feedbackMap = new HashMap<>();
+        
         // Fetch order details for each order
         for (Orders order : orderList) {
             List<OrderDetail> orderDetails = odDAO.getOrderDetailByID(order.getOrderID());
             orderDetailsMap.put(order.getOrderID(), orderDetails);
+            
+            Map<Integer, Boolean> productFeedbackMap = new HashMap<>();
+            for (OrderDetail detail : orderDetails) {
+                boolean hasFeedback = fd.hasFeedback(detail.getProductID(), order.getOrderID(), cus.getCustomerID());
+                productFeedbackMap.put(detail.getProductID(), hasFeedback);
+            }
+            feedbackMap.put(order.getOrderID(), productFeedbackMap);
         }
-          FeedbackDAO fd = new FeedbackDAO();
-        Map<Integer, Integer> feedbackCountMap = new HashMap<>();
-        for (Orders order : orderList) {
-            int feedbackCount = fd.getCount(order.getOrderID(), cus.getCustomerID());
-            feedbackCountMap.put(order.getOrderID(), feedbackCount);
-        }
+
         // Set attributes for the request
-         request.setAttribute("feedbackCountMap", feedbackCountMap);
+        request.setAttribute("feedbackMap", feedbackMap);
         request.setAttribute("odDAO", odDAO);
         request.setAttribute("order", orderList);
         request.setAttribute("pDAO", pDAO);
@@ -166,5 +145,4 @@ public class MyPurschaseServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

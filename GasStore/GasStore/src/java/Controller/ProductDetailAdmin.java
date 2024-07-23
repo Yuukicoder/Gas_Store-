@@ -1,8 +1,7 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package Controller;
 
 import DAO.CategoryDAO;
@@ -12,19 +11,18 @@ import DAO.NotificationDAO;
 import DAO.ProductDAO;
 import DAO.ProductImgDAO;
 import DAO.SupplierDAO;
-import DTO.Customer;
 import DTO.FeedbackDTO;
 import DTO.FeedbackReplyDTO;
 import DTO.NotificationDTO;
 import DTO.Product;
 import DTO.ProductImg;
-import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,24 +30,23 @@ import java.util.Map;
 
 /**
  *
- * @author vip2021
+ * @author dell456
  */
-public class ProductDetailServlet extends HttpServlet {
-   
-   
+@WebServlet(name = "ProductDetailServlet", urlPatterns = {"/Product-detail"})
+public class ProductDetailAdmin extends HttpServlet {
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
     }
 
     @Override
-     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             //Reset noti-time on navbar - Vu Anh
             HttpSession session = request.getSession();
             NotificationDAO nDAO = new NotificationDAO();
-            Customer customer = (Customer)session.getAttribute("account");
-            ArrayList<NotificationDTO> n = nDAO.getOther3NewestUnreadNoti(1, customer.getCustomerID());
+            ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
             session.setAttribute("notiList", n);
             //
             String id_raw = request.getParameter("id");
@@ -100,7 +97,7 @@ public class ProductDetailServlet extends HttpServlet {
             request.setAttribute("totalFeedbackCount", feedbackCount);
              request.setAttribute("allReplies", allReplies);
               request.setAttribute("replyies", replies);
-            request.getRequestDispatcher("detail.jsp").forward(request, response);
+            request.getRequestDispatcher("adminDetailProduct.jsp").forward(request, response);
              for (Map.Entry<Integer, Map<Integer, FeedbackReplyDTO>> entry : allReplies.entrySet()) {
             System.out.println("Feedback ID: " + entry.getKey());
             for (Map.Entry<Integer, FeedbackReplyDTO> replyEntry : entry.getValue().entrySet()) {
@@ -115,4 +112,5 @@ public class ProductDetailServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while processing the request");
         }
     }
+
 }

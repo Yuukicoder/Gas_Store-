@@ -1,6 +1,13 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import="DAO.*" %>
 <%@page import="DTO.*" %>
+<%--<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>--%>
+<%@ page import="java.util.List, java.util.Map" %>
+<%
+    List<FeedbackDTO> productFeedback = (List<FeedbackDTO>) request.getAttribute("productFeedback");
+    Map<Integer, Map<Integer, FeedbackReplyDTO>> allReplies = (Map<Integer, Map<Integer, FeedbackReplyDTO>>) request.getAttribute("allReplies");
+%>
 
 
 <!DOCTYPE html>
@@ -26,6 +33,7 @@
         <!-- Libraries Stylesheet -->
         <link href="lib/animate/animate.min.css" rel="stylesheet">
         <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
@@ -64,6 +72,22 @@
 
             .owl-next {
                 margin-right: 30px;
+            }
+            .card {
+                border: none;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .card-title {
+                font-weight: bold;
+            }
+
+            .card-text {
+                font-size: 16px;
+            }
+
+            .text-primary i {
+                font-size: 20px;
             }
         </style>
     </head>
@@ -130,23 +154,14 @@
                         </div>
                         <div class="d-flex mb-3">
                             <i class="fa fa-store"></i>&nbsp;&nbsp;
-                            <strong class="text-dark mr-3">Stock Quantity: <span id="stockQuantity">${pro.stockQuantity}</span></strong>
+                            <strong class="text-dark mr-3">Stock Quantity: ${pro.stockQuantity}</strong>
                         </div>
-
                         <div class="d-flex mb-3">
                             <i class="fa fa-box"></i>&nbsp;&nbsp;
                             <strong class="text-dark mr-3">Units on Order: ${pro.unitOnOrders}</strong>
                         </div>
 
-                          <c:if test="${param.error == 'invalid_quantity'}">
-                            <div class="alert alert-danger">Invalid quantity entered. Please enter a positive number.</div>
-                        </c:if>
-                        <c:if test="${param.error == 'insufficient_stock'}">
-                            <div class="alert alert-danger">Insufficient stock. Please enter a smaller quantity.</div>
-                        </c:if>
-                        <c:if test="${param.error == 'product_not_found'}">
-                            <div class="alert alert-danger">Product not found.</div>
-                        </c:if>
+
                         <form name="f" action="" method="post">
                             <div class="d-flex align-items-center mb-4 pt-2">
                                 <div class="input-group quantity mr-3" style="width: 130px;">
@@ -179,16 +194,126 @@
                 <div class="bg-light p-30">
                     <div class="nav nav-tabs mb-4">
                         <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">Description</a>
+                        <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Feedback</a>
                     </div>
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="tab-pane-1">
                             <h4 class="mb-3">Product Description</h4>
                             <p>${pro.description}</p>
                         </div>
+                        <div class="tab-pane fade" id="tab-pane-2">
+                            <h4 class="mb-3">Customer's Feedback & Voting "${pro.name}"</h4>
+
+                            <!-- Average Rating Display -->
+                            <div class="mb-4 text-center">
+                                <h1 class="text-primary display-4">${averageRating1}/5</h1>
+                                <div class="text-primary mb-2">
+                                    <c:forEach begin="1" end="${averageRating1}">
+                                        <i class="fas fa-star"></i>
+                                    </c:forEach>
+                                    <c:forEach begin="${averageRating1 + 1}" end="5">
+                                        <i class="far fa-star"></i>
+                                    </c:forEach>
+                                </div>
+                                <p class="text-muted">(${totalFeedbackCount} Feedback & Voting)</p>
+                            </div>
+
+                            <!-- Feedback List -->
+                            <div id="feedbackList">
+                                <c:forEach var="feedback" items="${requestScope.productFeedback}" varStatus="loop">
+                                    <div class="card mb-3 feedbackItem" style="<c:if test="${loop.index >= 5}">display:none;</c:if>">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${feedback.getAccountDTO().getFirstName()}</h5>
+                                            <div class="d-flex my-3">
+                                                <div class="text-primary mr-2">
+                                                    <c:forEach begin="1" end="${feedback.start}">
+                                                        <i class="fas fa-star"></i>
+                                                    </c:forEach>
+                                                    <c:forEach begin="${feedback.start + 1}" end="5">
+                                                        <i class="far fa-star"></i>
+                                                    </c:forEach>
+                                                </div>
+                                            </div>
+                                            <h6 class="card-text">${feedback.context}</h6>
+                                            <!-- Phản hồi -->
+                                            <c:forEach var="replyEntry" items="${allReplies[feedback.feedBackID].entrySet()}">
+                                                <div style="margin-left: 20px;">
+                                                    <c:set var="reply" value="${replyEntry.value}" />
+                                                    <div class="card mb-3 feedbackItem">
+                                                        <div class="card-body">
+                                                            <!--<p>Reply ID: $replyEntry.replyID}</p>--><h6><i class="fas fa-reply fa-rotate-180"></i>  ${reply.getAccountDTO().getUserName()}</h6>
+                                                            <!-- Giả sử 'replyID' là thuộc tính của FeedbackReplyDTO -->
+                                                            <p style="margin-left: 30px;">Reply: ${reply.getReply()}</p> 
+                                                            <!-- Giả sử 'reply' là thuộc tính của FeedbackReplyDTO -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+
+
+                                <!-- Load More Button -->
+                                <button id="loadMoreBtn" class="btn btn-warning btn-block" style="width: 30%;">View More</button>
+
+                            </div>
+
+
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <script>
+            function setRating(rating) {
+                const stars = document.querySelectorAll('#rating .fa-star');
+                document.getElementById('rating-input').value = rating;
+                stars.forEach((star, index) => {
+                    if (index < rating) {
+                        star.classList.remove('far');
+                        star.classList.add('fas');
+                    } else {
+                        star.classList.remove('fas');
+                        star.classList.add('far');
+                    }
+                });
+            }
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var feedbackList = document.getElementById('feedbackList');
+                var loadMoreBtn = document.getElementById('loadMoreBtn');
+                var itemsToShow = 1; // Số lượng phản hồi hiển thị ban đầu
+                var itemsPerLoad = 5; // Số lượng phản hồi thêm mỗi lần nhấp vào "Xem thêm"
+
+                // Ẩn các phản hồi vượt quá số lượng ban đầu hiển thị
+                var feedbackItems = feedbackList.getElementsByClassName('feedbackItem');
+                for (var i = itemsToShow; i < feedbackItems.length; i++) {
+                    feedbackItems[i].style.display = 'none';
+                }
+
+                // Bắt sự kiện khi nhấp vào nút "Xem thêm"
+                loadMoreBtn.addEventListener('click', function () {
+                    var hiddenItems = feedbackList.querySelectorAll('.feedbackItem:not(:visible)');
+                    var itemsToShowNext = Math.min(hiddenItems.length, itemsPerLoad);
+
+                    // Hiển thị thêm số lượng phản hồi được chỉ định
+                    for (var i = 0; i < itemsToShowNext; i++) {
+                        hiddenItems[i].style.display = 'block';
+                    }
+
+                    // Cập nhật số lượng phản hồi đã hiển thị
+                    itemsToShow += itemsToShowNext;
+
+                    // Ẩn nút "Xem thêm" nếu không còn phản hồi để hiển thị
+                    if (itemsToShow >= feedbackItems.length) {
+                        loadMoreBtn.style.display = 'none';
+                    }
+                });
+            });
+        </script>
         <!-- Shop Detail End -->
 
         <!-- Products Start -->
@@ -248,32 +373,27 @@
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript">
-                                    function buy(id) {
-                                        var m = document.f.num.value;
-                                        if(isNaN(m) || m <= 0){
-                                            alert("Please enter a positive quantity.");
-                                            return false;
-                                        }
-                                        document.f.action = "buy?id=" + id + "&num=" + m;
-                                        document.f.submit();
-                                        // Hiển thị alert "add thành công" sau khi form được submit
-                                        showSuccessAlert();
-                                    }
-//                                    function showSuccessAlert() {
-//                                        alert("Product added successfully to the cart!");
-//                                    }
+            function buy(id) {
+                var m = document.f.num.value;
+                document.f.action = "buy?id=" + id + "&num=" + m;
+                document.f.submit();
+                // Hiển thị alert "add thành công" sau khi form được submit
+                showSuccessAlert();
+            }
+            function showSuccessAlert() {
+                alert("Product added successfully to the cart!");
+            }
         </script>
 
         <script>
-                        var quantityFromServlet = "${detail.stockQuantity}";
-                        var quantity = parseInt(quantityFromServlet);
-                        if (isNaN(quantity)) {
-                            quantity = 0;
-                        }
+            var quantityFromServlet = "${detail.stockQuantity}";
+            var quantity = parseInt(quantityFromServlet);
+            if (isNaN(quantity)) {
+                quantity = 0;
+            }
         </script>
-
-
 
         <script>
             $(document).ready(function () {
@@ -301,7 +421,28 @@
                 });
             });
         </script>
+        <script>
+            $(document).ready(function () {
+                var itemsToShow = 5;
+                var itemsPerLoad = 5;
+                var $feedbackItems = $('.feedbackItem');
 
+                $feedbackItems.slice(itemsToShow).hide();
+
+                $('#loadMoreBtn').on('click', function () {
+                    var $hiddenItems = $feedbackItems.filter(':hidden');
+                    var itemsToShowNext = Math.min($hiddenItems.length, itemsPerLoad);
+
+                    $hiddenItems.slice(0, itemsToShowNext).fadeIn();
+
+                    itemsToShow += itemsToShowNext;
+
+                    if (itemsToShow >= $feedbackItems.length) {
+                        $('#loadMoreBtn').hide();
+                    }
+                });
+            });
+        </script>
         <style>
             .tick-icon {
                 display: inline-block;

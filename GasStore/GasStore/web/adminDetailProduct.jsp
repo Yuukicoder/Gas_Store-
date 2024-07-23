@@ -93,28 +93,18 @@
     </head>
 
     <body>
-        <%@include file="component/topbar.jsp" %>
-        <%@include file="component/navbar.jsp" %>
+        
         <%@ page pageEncoding="UTF-8" %>
+ <%--<%@include file="component/SideBarAdmin.jsp" %>--%>
 
         <!-- Breadcrumb Start -->
-        <div class="container-fluid">
-            <div class="row px-xl-5">
-                <div class="col-12">
-                    <nav class="breadcrumb bg-light mb-30">
-                        <a class="breadcrumb-item text-dark" href="home">Home</a>
-                        <a class="breadcrumb-item text-dark" href="shop">Shop</a>
-                        <span class="breadcrumb-item active">Shop Detail</span>
-                    </nav>
-                </div>
-            </div>
-        </div>
+        
         <!-- Breadcrumb End -->
 
         <!-- Shop Detail Start -->
         <c:set var="pro" value="${requestScope.detail}" />
         <div class="container-fluid pb-5">
-            <div class="row px-xl-5">
+            <div class="row px-xl-5" style="margin-top:33px;">
                 <div class="col-lg-5 mb-30">
                     <div id="product-carousel" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner bg-light">
@@ -162,28 +152,7 @@
                         </div>
 
 
-                        <form name="f" action="" method="post">
-                            <div class="d-flex align-items-center mb-4 pt-2">
-                                <div class="input-group quantity mr-3" style="width: 130px;">
-                                    <div class="input-group-btn">
-                                        <button type="button" class="btn btn-warning btn-minus" style="background-color: #ffc107; border-color: #ffc107;">
-                                            <i class="fa fa-minus" style="color: #000000;"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control bg-secondary border-0 text-center" name="num" value="1"/> 
-                                    <div class="input-group-btn">
-                                        <button type="button" class="btn btn-warning btn-plus" style="background-color: #ffc107; border-color: #ffc107;">
-                                            <i class="fa fa-plus" style="color: #000000;"></i>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <button class="btn btn-warning px-3" style="background-color: #ffc107; border-color: #ffc107;" onclick="buy('${pro.productID}')">
-                                    <i class="fa fa-shopping-cart mr-1" style="color: #000000;"></i> 
-                                    Add To Cart
-                                </button>
-                            </div>
-                        </form>
+                       
 
                     </div>
                 </div>
@@ -193,15 +162,11 @@
             <div class="col">
                 <div class="bg-light p-30">
                     <div class="nav nav-tabs mb-4">
-                        <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">Description</a>
-                        <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Feedback</a>
+                        <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">Feedback</a>
                     </div>
                     <div class="tab-content">
+                        
                         <div class="tab-pane fade show active" id="tab-pane-1">
-                            <h4 class="mb-3">Product Description</h4>
-                            <p>${pro.description}</p>
-                        </div>
-                        <div class="tab-pane fade" id="tab-pane-2">
                             <h4 class="mb-3">Customer's Feedback & Voting "${pro.name}"</h4>
 
                             <!-- Average Rating Display -->
@@ -219,9 +184,9 @@
                             </div>
 
                             <!-- Feedback List -->
-                            <div id="feedbackList">
+                            <div >
                                 <c:forEach var="feedback" items="${requestScope.productFeedback}" varStatus="loop">
-                                    <div class="card mb-3 feedbackItem" style="<c:if test="${loop.index >= 5}">display:none;</c:if>">
+                                    <div class="card mb-3 " >
                                             <div class="card-body">
                                                 <h5 class="card-title">${feedback.getAccountDTO().getFirstName()}</h5>
                                             <div class="d-flex my-3">
@@ -255,7 +220,7 @@
 
 
                                 <!-- Load More Button -->
-                                <button id="loadMoreBtn" class="btn btn-warning btn-block" style="width: 30%;">View More</button>
+                                <!--<button id="loadMoreBtn" class="btn btn-warning btn-block" style="width: 30%;">View More</button>-->
 
                             </div>
 
@@ -266,6 +231,9 @@
                 </div>
             </div>
         </div>
+                            <div class="m-3 mt-4">
+                        <a href="tableFeedback" class="btn btn-primary">Back </a>
+                    </div>
         <script>
             function setRating(rating) {
                 const stars = document.querySelectorAll('#rating .fa-star');
@@ -281,7 +249,7 @@
                 });
             }
         </script>
-        <script>
+<!--        <script>
             document.addEventListener('DOMContentLoaded', function () {
                 var feedbackList = document.getElementById('feedbackList');
                 var loadMoreBtn = document.getElementById('loadMoreBtn');
@@ -313,47 +281,15 @@
                     }
                 });
             });
-        </script>
+        </script>-->
         <!-- Shop Detail End -->
 
-        <!-- Products Start -->
-        <div class="container-fluid py-5">
-            <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">You May Also Like</span></h2>
-            <div class="col">
-                <div class="owl-carousel related-carousel">
-                    <c:forEach var="pro" items="${requestScope.alsoLike}">
-                        <div class="product-item bg-light">
-                            <div class="product-img position-relative overflow-hidden">
-                                <img class="img-fluid w-100" src="${pro.image}" style="width: 650px; height: 250px" alt="">
-                            </div>
-                            <div class="text-center py-4">
-                                <a class="h6 text-decoration-none text-truncate" href="productDetail?id=${pro.productID}">${pro.name}</a>
-                                <div class="d-flex align-items-center justify-content-center mt-2">
-                                    <h5 style="color: green">${pro.getFormattedPrice()} VND</h5><h6 class="text-muted ml-2"></h6>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-center mb-1">
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                </div>
-                            </div>
-                        </div>
-                    </c:forEach>
-                </div>
-                <div class="custom-nav">
-                    <button class="owl-prev"><i class="fa fa-chevron-left"></i></button>
-                    <button class="owl-next"><i class="fa fa-chevron-right"></i></button>
-                </div>
-            </div>
-
-        </div>
+       
         <!-- Products End -->
 
 
         <!-- Footer Start -->
-        <%@include file="component/footer.jsp" %>
+       
         <!-- Footer End -->
 
 
@@ -421,7 +357,7 @@
                 });
             });
         </script>
-        <script>
+<!--        <script>
             $(document).ready(function () {
                 var itemsToShow = 5;
                 var itemsPerLoad = 5;
@@ -442,7 +378,7 @@
                     }
                 });
             });
-        </script>
+        </script>-->
         <style>
             .tick-icon {
                 display: inline-block;

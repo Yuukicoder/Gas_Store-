@@ -1,4 +1,5 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page import="DAO.*" %>
 <%@page import="DTO.*" %>
@@ -164,6 +165,7 @@
         </style>
 
 
+        
 
 
 
@@ -283,32 +285,33 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
+
                         <div class="modal-body">
                             <table class="table table-light table-borderless table-hover text-center mb-0">
                                 <thead>
-                                    <!-- Table headers -->
+                                    <!-- Table headers (add your table headers here) -->
                                 </thead>
                                 <tbody class="align-middle">
-                                    <c:set var="index" value="0"/>
-                                    <c:forEach var="o" items="${orderDetailsMap[p.orderID]}">
-                                        <c:set var="index" value="${index + 1}"/>
+                                    <c:forEach var="orderDetail" items="${orderDetailsMap[p.orderID]}" varStatus="status">
                                         <tr>
-                                            <td>${index}</td>
-                                            <td class="align-middle"><img style="width: 80px" class="img-fluid" src="${pDAO.getProductByID(o.getProductID()).getImage()}" alt="Image"></td>
-                                            <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getName()}</td>
-                                            <td class="align-middle">${o.getQuantity()}</td>
-                                            <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getUnitPrice()* o.getQuantity() }₫</td>
-                                            <td>
-                                                <c:if test="${!feedbackDAO.hasFeedback(o.getProductID(), p.orderID)}">
-                                                    <a href="feedback?productid=${o.getProductID()}&orderid=${p.orderID}">Feedback</a>
-                                                </c:if>
-                                                <br>
-                                                <c:if test="${feedbackDAO.hasFeedback(o.getProductID(), p.orderID)}">
-                                                    <a href="viewFeedback?productid=${o.getProductID()}&orderid=${p.orderID}">View Feedback</a>
-                                                </c:if>
-                                                    
+                                            <td>${status.index + 1}</td>
+                                            <td class="align-middle">
+                                                <img style="width: 80px" class="img-fluid" src="${pDAO.getProductByID(orderDetail.productID).image}" alt="Image">
                                             </td>
-                                             
+                                            <td class="align-middle">${pDAO.getProductByID(orderDetail.productID).name}</td>
+                                            <td class="align-middle">${orderDetail.quantity}</td>
+                                            <td class="align-middle">${pDAO.getProductByID(orderDetail.productID).getFormattedTotalMoney()}₫</td>
+                                            <td class="align-middle">
+                                                <c:choose>
+                                                    <c:when test="${feedbackMap[p.orderID][orderDetail.productID]}">
+                                                        <a href="view-feedback?productid=${orderDetail.productID}&orderid=${p.orderID}">View Feedback</a>
+
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <a href="feedback?productid=${orderDetail.productID}&orderid=${p.orderID}">Feedback</a>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>

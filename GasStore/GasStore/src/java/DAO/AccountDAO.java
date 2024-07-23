@@ -46,7 +46,7 @@ public class AccountDAO extends DBcontext {
                 account.setRoleID(rs.getInt(6));
                 account.setEmail(rs.getString(7));
                 account.setImg(rs.getString(8));
-                account.setAdminName(rs.getString("adminName"));
+                account.setAdminName(rs.getString("userName"));
 //                    private int adminID;
 //    private String userName;
 //    private String password;

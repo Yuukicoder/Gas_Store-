@@ -78,7 +78,7 @@
                                             <th scope="col">Product Image</th>
                                             <th scope="col">Text</th>
                                             <th scope="col">Star</th>
-                                            <!--<th scope="col">Reply</th>-->
+                                            <th scope="col">Reply</th>
                                             <th>Check</th>
                                             <th>Detail</th>
                                         </tr>
@@ -92,11 +92,11 @@
                                                 <td>${feedback.productDTO.name}</td>
                                                 <td style="max-width: 30ch; overflow-wrap: break-word;">${feedback.context}</td>
                                                 <td>${feedback.start}</td>
-<!--                                                <td>
+                                                <td>
                                                     <button class="btn btn-link btn-detail" onclick="showFeedbackForm(this)" data-feedback-id="${feedback.feedBackID}">
                                                         <i class="fas fa-reply"></i>
                                                     </button>
-                                                </td>-->
+                                                </td>
                                                 <c:if test="${feedback.status == true}">
                                                     <td><i style="font-size: 35px;" class='bx bx-checkbox-checked'></i></td>
                                                     </c:if>
@@ -104,7 +104,7 @@
                                                     <td><i style="font-size: 35px;" class='bx bx-checkbox'></i></td>
                                                     </c:if>
                                                 <td>
-                                                    <a href="productDetail?id=${feedback.productDTO.productID}" target="_blank">
+                                                    <a href="Product-detail?id=${feedback.productDTO.productID}" target="_blank">
                                                         <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                                     </a>
                                                 </td>
@@ -112,7 +112,6 @@
                                         </c:forEach>
                                     </tbody>
                                 </table>
-                                <include>
                                 <div class="feedback-overlay" id="feedbackOverlay">
                                     <div class="feedback-form" id="feedbackForm">
                                         <div class="feedback-content">
@@ -170,7 +169,7 @@
                                 </div>
                                 <div class="col-12 col-sm-6 text-center text-sm-end">
                                     <!--/*** This template is free as long as you keep the footer author?s credit link/attribution link/backlink. If you'd like to use the template without the footer author?s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                                    Designed By <a href="https://gitlab.com/asusrogg14/swp391-laptopshop">SWP391 - GROUP 6</a>
+                                    Designed By <a href="">SWP391 - GROUP 6</a>
                                     <br>Distributed By: <a href="#" >All members</a>
                                 </div>
                             </div>
