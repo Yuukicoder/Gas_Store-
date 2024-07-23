@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -91,7 +92,7 @@
                                 <i class="bx bx-money-withdraw fa-3x text-primary" style="color: white;"></i>
                                 <div class="ms-3">
                                     <p class="mb-2" style="color: white">Revenue Today</p>
-                                    <h6 class="mb-0" style="color: white">$ ${incomeToday}</h6>
+                                    <h6 class="mb-0" style="color: white"><fmt:formatNumber value="${incomeToday}" type="currency" currencySymbol="" maxFractionDigits="0"/> VND</h6>                        
                                 </div>
                             </div>
                         </div>
@@ -127,7 +128,7 @@
                                 <i class="bx bx-money-withdraw fa-3x text-primary" ></i>
                                 <div class="ms-3">
                                     <p class="mb-2" >Total Order Canceled</p>
-                                    <h6 class="mb-0" >${totalOrderDelivered}</h6>
+                                    <h6 class="mb-0" >${totalOrderCanceled}</h6>
                                 </div>
                             </div>
                         </div>
@@ -139,7 +140,7 @@
                     <div class="bg-secondary text-center rounded p-4">
                         <div class="d-flex align-items-center justify-content-between mb-4">
                             <h6 class="mb-0">Recent Salse</h6>
-                            <a href="tableOrder">Show All</a>
+                            <a href="orderTable">Show All</a>
                         </div>
                         <div class="table-responsive">
                             <table class="table text-start align-middle table-bordered table-hover mb-0">
@@ -195,7 +196,7 @@
                                                     <p>This order has been cancel</p>
                                                 </c:if>
                                             </td>
-                                            <td><a class="btn btn-sm btn-primary" href="detailOrder?id=${la.getOrderID()}">Detail</a></td>       
+                                            <td><a class="btn btn-sm btn-primary" href="orderDetail?id=${la.getOrderID()}">Detail</a></td>       
                                         </tr>
                                     </c:forEach>
 

@@ -10,19 +10,19 @@
             /* CSS for footer */
             .container-fluid {
                 /*                background-color: #003049;  Dark blue background for the entire footer */
-                color: #ffffff; /* White text color for better readability */
+/*                color: #ffffff;  White text color for better readability */
             }
 
             .text-secondary {
-                color: #f0f0f0; /* Lighter text color for secondary text */
+                color: #f0f0f0;  /*Lighter text color for secondary text */
             }
 
             .text-primary {
-                color: #780000; /* Red color for primary elements like links and icons */
+                /*color: #780000;  Red color for primary elements like links and icons */
             }
 
             a.text-secondary:hover {
-                color: #cccccc; /* Lighter grey for hover state of links */
+                /*color: #cccccc;  Lighter grey for hover state of links */
             }
 
             .btn-primary {
@@ -67,7 +67,7 @@
 
     </head>
     <body>
-        <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
+        <div class="container-fluid bg-dark text-secondary mt-5 pt-5" style="color: #ffffff;">
             <div class="row px-xl-5 pt-5">
                 <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
                     <h5 class="text-secondary text-uppercase mb-4">VỀ Gas Store & MORE</h5>

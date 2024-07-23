@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -142,7 +143,12 @@
                                                     <td style="text-align: center">${d.getDiscountCode()}</td>
                                                     <td style="text-align: center">${d.getQuantity()}</td>
                                                     <td style="text-align: center">${d.getDiscountType()}</td>
-                                                    <td style="text-align: center">${d.getDiscountAmount()}</td>
+                                                    <c:if test="${d.getDiscountType() == 'PERCENT'}">
+                                                        <td style="text-align: center">${d.getDiscountAmount()}</td>
+                                                    </c:if>
+                                                    <c:if test="${d.getDiscountType() == 'FIXED'}">
+                                                        <td style="text-align: center"><fmt:formatNumber value="${d.getDiscountAmount()}" type="currency" currencySymbol="" maxFractionDigits="0"/> VND</td>  
+                                                    </c:if>
                                                     <td style="text-align: center">${d.getStartDate()}</td>
                                                     <td style="text-align: center">${d.getEndDate()}</td>
                                                     <td style="text-align: center">

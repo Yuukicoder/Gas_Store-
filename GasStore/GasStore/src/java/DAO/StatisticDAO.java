@@ -18,12 +18,13 @@ import java.util.Map;
 public class StatisticDAO extends DBcontext {
 
     public Map<LocalDate, Double> getRevenueOf7Days() {
-        String sql = "SET DATEFIRST 1\n"
-                + "select OrderDate, sum(totalMoney) as TotalMoney\n"
-                + "from [Order] \n"
-                + "where [Order].[Status] = 3 and datepart(week, orderDate) = datepart(week, getdate())\n"
-                + "group by OrderDate\n"
-                + "order by OrderDate;";
+        String sql = """
+                     SET DATEFIRST 1
+                     select OrderDate, sum(totalMoney) as TotalMoney
+                     from [Order] 
+                     where [Order].[Status] = 3 and datepart(week, orderDate) = datepart(week, getdate())
+                     group by OrderDate
+                     order by OrderDate;""";
         Map<LocalDate, Double> totalPrices = new LinkedHashMap<>();
         try {
             PreparedStatement st1 = connection.prepareStatement(sql);
@@ -42,13 +43,14 @@ public class StatisticDAO extends DBcontext {
     }
 
     public Map<LocalDate, Double> getRevenueOf30Days() {
-        String sql = "select OrderDate, sum(totalMoney) as TotalMoney\n"
-                + "from [Order] \n"
-                + "where [Order].[Status] = 3  \n"
-                + "	and datepart(year, orderDate) = datepart(year, getdate())\n"
-                + "    and datepart(month, orderDate) = datepart(month, getdate())\n"
-                + "group by OrderDate\n"
-                + "order by OrderDate";
+        String sql = """
+                     select OrderDate, sum(totalMoney) as TotalMoney
+                     from [Order] 
+                     where [Order].[Status] = 3  
+                     and datepart(year, orderDate) = datepart(year, getdate())
+                     and datepart(month, orderDate) = datepart(month, getdate())
+                     group by OrderDate
+                     order by OrderDate""";
         Map<LocalDate, Double> totalPrices = new LinkedHashMap<>();
         try {
             PreparedStatement st1 = connection.prepareStatement(sql);

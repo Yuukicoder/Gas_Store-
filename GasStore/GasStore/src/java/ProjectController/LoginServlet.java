@@ -26,7 +26,7 @@ import model.Supplier;
  *
  * @author Admin
  */
-@WebServlet(name="LoginServlet", urlPatterns={"/login"})
+@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
 
     /**
@@ -69,7 +69,6 @@ public class LoginServlet extends HttpServlet {
 //
 //		return googlePojo;
 //	}
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -110,65 +109,66 @@ public class LoginServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    String username = request.getParameter("username");
-    String password = MaHoa.toSHA1(request.getParameter("password"));
-    System.out.println("Login: username " + username + " pass " + password);
-    HttpSession session = request.getSession();
-    AccountDAO accountDAO = new AccountDAO();
-    AdminDTO account = accountDAO.checkLogin(username, password);
+            throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = MaHoa.toSHA1(request.getParameter("password"));
+        System.out.println("Login: username " + username + " pass " + password);
+        HttpSession session = request.getSession();
+        AccountDAO accountDAO = new AccountDAO();
+        AdminDTO account = accountDAO.checkLogin(username, password);
 
-    if (account == null) {
-        CustomerDao cus = new CustomerDao();
-        Customer customer = cus.checkuserandPass(username, password);
-        Supplier supplier = new SupplierDao().getByEmailAndPassword(username, password);
+        if (account == null) {
+            CustomerDao cus = new CustomerDao();
+            Customer customer = cus.checkuserandPass(username, password);
+            Supplier supplier = new SupplierDao().getByEmailAndPassword(username, password);
 
-        if (supplier != null) {
-            session.setAttribute("supplier", supplier);
-            System.out.println(supplier);
-            response.sendRedirect("supplier/home");
-            return;
-        } else if (customer != null) {
-            NotificationDAO nDAO = new NotificationDAO();
-            ArrayList<NotificationDTO> n = nDAO.getOther3NewestUnreadNoti(1, customer.getCustomerID());
-            session.removeAttribute("notiList");
-            session.setAttribute("notiList", n);
-            session.setAttribute("account", customer);
-            session.setAttribute("customerID", customer.getCustomerID());
-            
-            response.sendRedirect("home");
-            return;
+            if (supplier != null) {
+                session.setAttribute("supplier", supplier);
+                System.out.println(supplier);
+                response.sendRedirect("supplier/home");
+                return;
+            } else if (customer != null) {
+                NotificationDAO nDAO = new NotificationDAO();
+                ArrayList<NotificationDTO> n = nDAO.getOther3NewestUnreadNoti(1, customer.getCustomerID());
+                session.removeAttribute("notiList");
+                session.setAttribute("notiList", n);
+                System.out.println("LoginServlet: " + customer.getMemberShipTier());
+                session.setAttribute("account", customer);
+                session.setAttribute("customerID", customer.getCustomerID());
+
+                response.sendRedirect("home");
+                return;
+            } else {
+                String msg = "Username or Password is not correct!";
+                request.setAttribute("mess", msg);
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
         } else {
-            String msg = "Username or Password is not correct!";
-            request.setAttribute("mess", msg);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return;
-        }
-    } else {
-        if (isSpecialCharacter(username)) {
-            String msg = "Username don't use special character";
-            request.setAttribute("mess", msg);
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return;
-        } else {
-            session.setAttribute("account", account);
-            if (account.getRoleID() == 1) {
+            if (isSpecialCharacter(username)) {
+                String msg = "Username don't use special character";
+                request.setAttribute("mess", msg);
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            } else {
+                session.setAttribute("account", account);
                 NotificationDAO nDAO = new NotificationDAO();
                 ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
                 session.removeAttribute("notiList");
                 session.setAttribute("notiList", n);
-                response.sendRedirect("adminHome");
-                return;
-            } else if (account.getRoleID() == 2) {
-                response.sendRedirect("adminHome");
-                return;
-            } else {
-                response.sendRedirect("adminHome");
-                return;
+                if (account.getRoleID() == 1) {
+                    response.sendRedirect("adminHome");
+                    return;
+                } else if (account.getRoleID() == 2) {
+                    response.sendRedirect("adminHome");
+                    return;
+                } else {
+                    response.sendRedirect("adminHome");
+                    return;
+                }
             }
         }
     }
-}
 
     private boolean isSpecialCharacter(String username) {
 

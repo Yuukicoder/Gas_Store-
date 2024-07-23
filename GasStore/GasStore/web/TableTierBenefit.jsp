@@ -1,6 +1,6 @@
 <%-- 
-    Document   : NotificationListAdmin
-    Created on : 8 Jul 2024, 22:36:27
+    Document   : TableTierBenefit
+    Created on : 23 Jul 2024, 22:40:40
     Author     : Vu Anh
 --%>
 
@@ -50,22 +50,11 @@
             </div>
             <!-- Spinner End -->
 
-            <c:if test="${sessionScope.account.getRoleID() == 1}">
-                <%@include file="component/SideBarAdmin.jsp" %>
-            </c:if>
-            <c:if test="${sessionScope.account.getRoleID() == 2}">
-                <%@include file="component/SideBarStaff.jsp" %>
-            </c:if>
+            <%@include file="component/SideBarAdmin.jsp" %>
 
             <!-- Content Start -->
             <div class="content">
-                <c:if test="${sessionScope.account.getRoleID() == 1}">
-                    <%@include file="component/navbarAdmin.jsp" %>
-                </c:if>
-                <c:if test="${sessionScope.account.getRoleID() == 2}">
-                    <%@include file="component/narbarStaff.jsp" %>
-                </c:if>
-
+                <%@include file="component/navbarAdmin.jsp" %>
                 <!-- Blank Start -->
 
                 <div class="container-fluid pt-4 px-4">
@@ -75,48 +64,39 @@
                                 <h3 style="color: #E57C23">${msg}</h3>
 
                                 <div class="d-flex align-items-center justify-content-between mb-4">
+                                    <form action="AddTierBenefit" method="get">       
+                                        <button type="submit" class="btn btn-primary">Add Benefit</button>
+                                    </form>
 
-                                    <!--                                    
-                                    
-                                    <!--<form action="manageCate" method="post">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control bg-dark border-0" placeholder="Search category" name="search" value="$ {search}">
-                                                <input type="hidden" value="$ {tag}" name="pageIndex" id="pageIndex">
-                                                <input type="hidden" value="$ {currentPageSize}" name="pageSize" id="pageSize">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text bg-transparent text-primary" style="    border: none;
-                                                          margin-top: 4px;">
-                                                        <button type="submit" class="fa fa-search" style="text-decoration: none; border: none;background: white;"></button>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </form>-->
+
                                 </div>
                                 <div class="table-responsive">
-                                    <table id="Table" class="table text-start align-middle table-bordered table-hover mb-0">
+                                    <table id="categoryTable" class="table text-start align-middle table-bordered table-hover mb-0">
                                         <thead>
                                             <tr class="text-white">
-                                                <th scope="col">Title</th>
-                                                <th scope="col">Send Date</th>
-                                                <th scope="col">Status</th>
-                                                <th></th>
+                                                <th scope="col">Level Name</th>
+                                                <th scope="col">Min Point</th>
+                                                <th scope="col">Max Point</th>
+                                                <th scope="col">Discount Percentage</th>
+                                                <th scope="col">Bonus Point Rate</th>
+                                                <th scope="col"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <c:forEach var="n" items="${list}">
+                                            <c:forEach var="lm" items="${listMembershipLevels}">
                                                 <tr>
-                                                    <td>${n.getTitle()}</td>
-                                                    <td>${n.getDateSend()}</td>
-                                                    <td>
-                                                        <c:if test="${n.getIsRead() == 0}">
-                                                            <p style="color: red">Unread</p>
-                                                        </c:if>
-                                                        <c:if test="${n.getIsRead() == 1}">
-                                                            <p style="color: green">Read</p>
-                                                        </c:if>
-                                                    </td>
-                                                    <td>
-                                                        <a class="btn btn-sm btn-primary" href="AdminNotificationDetailServlet?id=${n.getNotiID()}">Detail</a>
+                                                    <td>${lm.getTierName()}</td>
+                                                    <td>${lm.getMinPoints()}</td>
+                                                    <td>${lm.getMaxPoints()}</td>
+                                                    <td>${lm.getDiscountPercentage()}%</td>
+                                                    <td>${lm.getBonusPointsRate()}</td>
+                                                    <td style=" padding: 0.5rem 0.5rem;
+                                                        text-align: center;
+                                                        font-size: larger;
+                                                        transition: 0.5s;
+                                                        color: var(--color-dark);">
+                                                        <a href="DeleteMemberShipTier?id=${lm.getTierID()}" class="bx bxs-trash"  style="  padding: 1rem 1rem; color:#176B87   " onclick="showMess(${lm.getTierID()})" ></a>
+                                                        <a class="bx bxs-pencil" href="UpdateTierBenefit?id=${lm.getTierID()}" style="  padding: 1rem 1rem; color:#176B87"></a>
                                                     </td>
                                                 </tr>
                                             </c:forEach>
@@ -165,7 +145,6 @@
                 </div>
                 <!-- Content End -->
 
-
                 <!-- Back to Top -->
                 <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
             </div>
@@ -183,30 +162,41 @@
 
             <!-- Template Javascript -->
             <script src="admin/js/main.js"></script>
+            <script>
+                                                            function showMess(id) {
+                                                                var option = confirm('Are you sure to delete?');
+                                                                if (option === true) {
+                                                                    window.location.href = 'DeleteMemberShipTier?id=' + id;
+                                                                    ;
+                                                                } else {
+                                                                    event.preventDefault();
+                                                                }
+                                                            }
+            </script>
 
             <style>
-                #Table {
+                #categoryTable {
                     border-collapse: collapse;
                     width: 100%;
                 }
 
-                #Table td, #Table th {
-                    text-align: center;
+                #categoryTable td, #categoryTable th {
                     border: 1px solid #ddd;
                     padding: 8px;
                 }
 
-                #Table tr:nth-child(even){
+                #categoryTable tr:nth-child(even){
                     background-color: #f2f2f2;
                 }
 
-                #Table tr:hover {
+                #categoryTable tr:hover {
                     background-color: #ddd;
                 }
 
-                #Table th {
+                #categoryTable th {
                     padding-top: 12px;
                     padding-bottom: 12px;
+                    text-align: left;
                     background-color: var(--light);
                     color: white;
                 }

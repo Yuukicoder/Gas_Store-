@@ -1,18 +1,16 @@
 <%-- 
-    Document   : NotificationDetailAdmin
-    Created on : 8 Jul 2024, 23:04:21
+    Document   : AddTierBenefit
+    Created on : 23 Jul 2024, 22:38:36
     Author     : Vu Anh
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
     <head>
         <meta charset="utf-8">
-        <title>Admin</title>
+        <title>DarkPan - Bootstrap 5 Admin Template</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -37,7 +35,7 @@
         <link href="admin/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Template Stylesheet -->
-        <link href="admin/css/style.css" rel="stylesheet">      
+        <link href="admin/css/style.css" rel="stylesheet">
     </head>
 
     <body>
@@ -50,61 +48,55 @@
             </div>
             <!-- Spinner End -->
 
-            <c:if test="${sessionScope.account.getRoleID() == 1}">
-                <%@include file="component/SideBarAdmin.jsp" %>
-            </c:if>
-            <c:if test="${sessionScope.account.getRoleID() == 2}">
-                <%@include file="component/SideBarStaff.jsp" %>
-            </c:if>
+            <%@include file="component/SideBarAdmin.jsp" %>
 
             <!-- Content Start -->
             <div class="content">
-                <c:if test="${sessionScope.account.getRoleID() == 1}">
-                    <%@include file="component/navbarAdmin.jsp" %>
-                </c:if>
-                <c:if test="${sessionScope.account.getRoleID() == 2}">
-                    <%@include file="component/narbarStaff.jsp" %>
-                </c:if>
-
+                <%@include file="component/navbarAdmin.jsp" %>
                 <!-- Blank Start -->
 
                 <div class="container-fluid pt-4 px-4">
                     <div class="container-fluid pt-4 px-4">
                         <div class="row g-4">
-                            <div class="bg-secondary text-center rounded p-4">
-                                <div class="d-flex align-items-center justify-content-between mb-4">
-                                    <a href="AdminAllNotification">Notification List</a>                             
-                                </div>
-                                <div style="text-align: left;">
-                                    <div>
-                                        ${noti.getContent()}                        
+                            <div class="col-sm-12 col-xl-6">
+                                <div class="bg-secondary rounded h-100 p-4">
+                                    <h6 class="mb-4">Add Benefit</h6>
+                                    <form action="AddTierBenefit" method="POST">
+                                        <div class="mb-3">
+                                            <label class="form-label">Name</label>
+                                            <input type="text" class="form-control" name="name" id="name" required>                                         
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Min Point</label>
+                                            <input type="number" class="form-control" name="minPoint" id="minPoint" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Max Point</label>
+                                            <input type="number" class="form-control" name="maxPoint" id="maxPoint">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">	Discount Percentage</label>
+                                            <input type="number" class="form-control" name="discount" id="discount">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Bonus Point Rate</label>
+                                            <input type="number" class="form-control" name="pointRate" id="pointRate">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Add Benefit</button>
+                                    </form>
+                                    <div style="color: red">
+                                        <p>${mess}</p>
                                     </div>
-                                    <div style="margin-top: 20px">
-                                        <form action="AdminNotificationDetailServlet" method="post">
-                                            <input type="hidden" name="id" id="id" value="${noti.getNotiID()}">
-                                            <button type="submit" class="btn btn-sm btn-primary">Mark As Read</button>
-                                        </form>
-                                    </div>
                                 </div>
+                            </div> 
 
-
-                            </div>
                         </div>
                     </div>
-
+                    <!-- Blank End -->
+                    <!--Modal-->
+                    <!-- Footer Start -->
                     <div class="container-fluid pt-4 px-4">
-                        <div class="bg-secondary rounded-top p-4">
-                            <div class="row">
-                                <div class="col-12 col-sm-6 text-center text-sm-start">
-                                    &copy; <a href="#">GAS STORE</a>, All Right Reserved. 
-                                </div>
-                                <div class="col-12 col-sm-6 text-center text-sm-end">
-                                    <!--/*** This template is free as long as you keep the footer author?s credit link/attribution link/backlink. If you'd like to use the template without the footer author?s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                                    Designed By <a href="https://gitlab.com/asusrogg14/swp391-laptopshop">SWP - GROUP 6</a>
-                                    <br>Distributed By: <a href="https://gitlab.com/asusrogg14/swp391-laptopshop" target="_blank">ALL members</a>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                     <!-- Footer End -->
                 </div>
@@ -128,7 +120,5 @@
 
             <!-- Template Javascript -->
             <script src="admin/js/main.js"></script>
-
     </body>
-
 </html>

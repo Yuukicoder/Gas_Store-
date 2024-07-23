@@ -1,6 +1,6 @@
 package ProjectController.Account;
 
-
+import DAO.MembershipTiersDAO;
 import dal.CustomerDao;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
+
 /**
  *
  * @author 1234
@@ -26,18 +27,24 @@ public class UserProfile extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         DTO.Customer customer = (DTO.Customer) session.getAttribute("account");
-        if (customer == null) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
+        try {
+            if (customer == null) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
 
-        CustomerDao cus = new CustomerDao();
-        DTO.Customer c = cus.getAllByID(customer.getCustomerID());
-        DTO.Customer cu = cus.checkuserandPass(c.getUserName(), c.getPassword());
-        session.setAttribute("account", c);
-        request.setAttribute("pass", c.getPassword());
-        request.setAttribute("acc", cu);
-        request.getRequestDispatcher("ProfileUser.jsp").forward(request, response);
+            CustomerDao cus = new CustomerDao();
+            DTO.Customer c = cus.getAllByID(customer.getCustomerID());
+            DTO.Customer cu = cus.checkuserandPass(c.getUserName(), c.getPassword());
+            session.setAttribute("account", c);
+            MembershipTiersDAO m = new MembershipTiersDAO();
+            session.setAttribute("tier", m.getMembershipTierByID(customer.getMemberShipTier()).getTierName());
+            request.setAttribute("pass", c.getPassword());
+            request.setAttribute("acc", cu);
+            request.getRequestDispatcher("ProfileUser.jsp").forward(request, response);
+        } catch (Exception e) {
+            System.out.println("UserProfile-processRequest: " + e.getMessage());
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -73,6 +80,9 @@ public class UserProfile extends HttpServlet {
             response.sendRedirect("login.jsp");
             return;
         }
+        MembershipTiersDAO m = new MembershipTiersDAO();
+        session.setAttribute("tier", m.getMembershipTierByID(customers.getMemberShipTier()).getTierName());
+        
         CustomerDao cus = new CustomerDao();
         String name = request.getParameter("name");
         String user = request.getParameter("user");
@@ -90,7 +100,7 @@ public class UserProfile extends HttpServlet {
         CustomerDao customerDao = new CustomerDao();
         String fileName = p.getSubmittedFileName();
         String pimage = !fileName.isEmpty() && isImageFile(fileName) ? fileName : aimage;
-        if (!fileName.isEmpty() ) {
+        if (!fileName.isEmpty()) {
             String path = getServletContext().getRealPath("");
             p.write(path + File.separator + fileName);
             request.setAttribute("errorrr", "Please select a valid image file (JPEG, PNG, GIF)");

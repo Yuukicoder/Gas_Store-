@@ -5,8 +5,6 @@
 package dal;
 
 import DAO.AccountDAO;
-import DTO.AccountDTO;
-import DTO.AdminDTO;
 import java.sql.Timestamp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Administrator;
 import DTO.Customer;
+import java.time.LocalDate;
 
 /**
  *
@@ -168,6 +167,9 @@ public class CustomerDao extends DBContext {
                         rs.getString("password"), rs.getString("image"), rs.getString("firstName"),
                         rs.getString("lastName"), rs.getString("address"),
                         rs.getString("phone"), rs.getString("email"));
+                em.setTotalPoint(rs.getInt("totalPoint"));
+                em.setMemberShipTier(rs.getInt("memberShipTier"));
+                
                 return em;
             }
         } catch (SQLException e) {
@@ -230,8 +232,8 @@ public class CustomerDao extends DBContext {
 
     public void insertCustomer(Customer customer) {
         try {
-            String sql = "INSERT INTO Customer (userName, password, firstName, lastName, phone, email) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Customer (userName, password, firstName, lastName, phone, email, created) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             Timestamp createdTimestamp = Timestamp.valueOf(LocalDateTime.now());
             // Set values for parameters
@@ -244,6 +246,7 @@ public class CustomerDao extends DBContext {
             preparedStatement.setString(5, customer.getPhone());
 
             preparedStatement.setString(6, customer.getEmail());
+            preparedStatement.setString(7, LocalDate.now().toString());
 
             // Execute the query
             preparedStatement.executeUpdate();
@@ -267,6 +270,7 @@ public class CustomerDao extends DBContext {
                         rs.getString("password"), rs.getString("firstName"),
                         rs.getString("lastName"),
                         rs.getBoolean("isCustomer"), rs.getString("phone"), rs.getString("email"));
+                em.setImage(rs.getString("image"));
                 list.add(em);
             }
         } catch (SQLException e) {
@@ -328,12 +332,13 @@ public class CustomerDao extends DBContext {
     public Customer checkuserandPass(String username, String password) {
         String sql = "SELECT * FROM [Customer] WHERE userName = ? AND password = ?";
         try {
+
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, username);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-               Customer cus = new Customer();
+                Customer cus = new Customer();
                 cus.setCustomerID(rs.getInt("customerID"));
                 cus.setUserName(rs.getString("userName"));
                 cus.setPassword(rs.getString("password"));
@@ -343,6 +348,9 @@ public class CustomerDao extends DBContext {
                 cus.setPhone(rs.getString("phone"));
                 cus.setAddress(rs.getString("address"));
                 cus.setEmail(rs.getString("email"));
+                cus.setTotalPoint(rs.getInt("totalPoint"));
+                cus.setMemberShipTier(rs.getInt("memberShipTier"));
+                System.out.println("Dao: " + rs.getInt("memberShipTier"));
                 return cus;
             }
         } catch (SQLException ex) {
@@ -593,7 +601,8 @@ public class CustomerDao extends DBContext {
 
         return li;
     }
-      public boolean isUsernameAvailable(String username) {
+
+    public boolean isUsernameAvailable(String username) {
         String sql = "SELECT COUNT(*) AS count FROM Customer WHERE userName = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, username);
@@ -685,6 +694,7 @@ public class CustomerDao extends DBContext {
         }
         return false;
     }
+
     public void updatePassword2(int id, String newPassword) {
         String sql = "UPDATE [Customer] SET password = ? WHERE customerID = ?";
         try {

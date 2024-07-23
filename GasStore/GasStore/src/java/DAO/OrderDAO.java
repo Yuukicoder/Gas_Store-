@@ -29,32 +29,32 @@ import java.util.List;
 public class OrderDAO extends DBcontext {
 
     public static void main(String[] args) {
-        OrderDAO ord  = new OrderDAO();
+        OrderDAO ord = new OrderDAO();
         //chua xac dinh cusid
         System.out.println("asss");
 //        List<OrderDTO> li = ord.getAllOrder(2);
         System.out.println(ord.getAllOrder(2));
     }
-    
-    public int addOrder(Customer a, Cart cart, String address, double voucher1 , String notes ) {
+
+    public int addOrder(Customer a, Cart cart, String address, double voucher1, String notes) {
         LocalDate curDate = LocalDate.now();
         String date = curDate.toString();
         try {
             // Thực hiện câu lệnh INSERT INTO ORDERS
             String sql = "insert into [Order] (customerID,totalMoney,orderDate,shipAddress,status,notes ) values (?,?,?,?,?,?)";
             PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-               st.setInt(1, a.getCustomerID());
-               st.setDouble(2, cart.getTotalMoney() - (cart.getTotalMoney() * voucher1) + 10);
-               st.setString(3,date);
-               st.setString(4, address);
-               st.setInt(5, 0);
-               st.setString(6, notes);
+            st.setInt(1, a.getCustomerID());
+            st.setDouble(2, cart.getTotalMoney() - (cart.getTotalMoney() * voucher1) - (cart.getTotalMoney() * (getDiscountFromCustomerLoyalty(a) / 100)) + 10000);
+            st.setString(3, date);
+            st.setString(4, address);
+            st.setInt(5, 0);
+            st.setString(6, notes);
             int affectedRows = st.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Creating order failed, no rows affected.");
             }
 
-            try ( ResultSet generatedKeys = st.getGeneratedKeys()) {
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     return generatedKeys.getInt(1);
                 } else {
@@ -66,7 +66,12 @@ public class OrderDAO extends DBcontext {
         }
         return -1;
     }
-    
+
+    public double getDiscountFromCustomerLoyalty(Customer c) {
+        MembershipTiersDAO mDAO = new MembershipTiersDAO();
+        return mDAO.getMembershipTierByID(c.getMemberShipTier()).getDiscountPercentage();
+    }
+
 //    public void addOrder(Customer a, Cart cart, String address, double voucher1, String notes) {
 //        LocalDate curDate = LocalDate.now();
 //        String date = curDate.toString();
@@ -120,7 +125,6 @@ public class OrderDAO extends DBcontext {
 //        }
 //
 //    }
-    
     public void updateStockQuantity(Cart cart) {
         String sql_3 = "UPDATE Product SET stockQuantity = stockQuantity - ? WHERE productID = ?";
         try {
@@ -133,7 +137,7 @@ public class OrderDAO extends DBcontext {
         } catch (Exception e) {
         }
     }
-    
+
     public Order getOrderByID(int orderID) {
         Order order = null;
 
@@ -156,7 +160,7 @@ public class OrderDAO extends DBcontext {
                 String notes = rs.getString("notes");
 
                 order = new Order(orderID, customerId, trackingNumber, totalMoney, orderDate,
-                                 shipAddress, status, shipVia, payment, notes);
+                        shipAddress, status, shipVia, payment, notes);
             }
 
         } catch (SQLException e) {
@@ -165,16 +169,15 @@ public class OrderDAO extends DBcontext {
 
         return order;
     }
-    
+
     public double getRevenue() {
         double totalRevenue = 0.0;
 
-        String sql = "SELECT SUM(totalMoney) AS totalRevenue " +
-                     "FROM [Order] " +
-                     "WHERE status != 4";
+        String sql = "SELECT SUM(totalMoney) AS totalRevenue "
+                + "FROM [Order] "
+                + "WHERE status != 4";
 
-        try (PreparedStatement ps = connection.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 totalRevenue = rs.getDouble("totalRevenue");
             }
@@ -184,7 +187,7 @@ public class OrderDAO extends DBcontext {
 
         return totalRevenue;
     }
-    
+
     public List<OrderDTO> getAllOrder(int id) {
         String sql = "SELECT o.OrderID, o.totalMoney, o.orderDate, o.shipAddress, o.Status\n"
                 + "FROM [Order] o WHERE o.customerID = ?";
@@ -271,9 +274,11 @@ public class OrderDAO extends DBcontext {
     }
 
     public List<OrderDTO> listOrderInAdminHome(int number) {
-        String sql = "SELECT TOP " + number + " od.OrderID,od.OrderDate, a.Fullname, od.TotalPrice, od.Status ,a.AccountID FROM Orders od\n"
-                + "JOIN Account a \n"
-                + "ON a.AccountID = od.AccountID ORDER BY od.OrderID DESC";
+        String sql = "SELECT TOP " + number +" od.orderID, od.OrderDate, (a.firstName + a.lastName) as Fullname, od.totalMoney, od.Status ,a.customerID \n"
+                + "FROM [Order] od\n"
+                + "JOIN Customer a\n"
+                + "ON a.customerID = od.customerID \n"
+                + "ORDER BY od.OrderID DESC";
         List<OrderDTO> lo = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -286,7 +291,7 @@ public class OrderDAO extends DBcontext {
                 ord.setFullname(rs.getString(3));
                 ord.setTotalPrice(rs.getDouble(4));
                 ord.setStatus(rs.getInt(5));
-                ord.setAccountID(rs.getInt("AccountID"));
+                ord.setAccountID(rs.getInt("customerID"));
                 lo.add(ord);
             }
         } catch (Exception e) {
@@ -494,9 +499,10 @@ public class OrderDAO extends DBcontext {
     }
 
     public float getIncomeToday() {
-        String sql = "SELECT SUM(TotalPrice) AS total_amount\n"
-                + "FROM Orders\n"
-                + "WHERE CAST(OrderDate AS DATE) = CAST(GETDATE() AS DATE);";
+        String sql = """
+                     SELECT SUM(totalMoney) AS total_amount
+                     FROM [Order]
+                     WHERE CAST(orderDate AS DATE) = CAST(GETDATE() AS DATE);""";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -512,9 +518,10 @@ public class OrderDAO extends DBcontext {
     }
 
     public int getOrdersToday() {
-        String sql = "SELECT COUNT(OrderID) AS OrderCount\n"
-                + "FROM Orders\n"
-                + "WHERE CAST(OrderDate AS DATE) = CAST(GETDATE() AS DATE);";
+        String sql = """
+                     SELECT COUNT(orderID) AS OrderCount
+                     FROM [Order]
+                     WHERE CAST(orderDate AS DATE) = CAST(GETDATE() AS DATE);""";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -530,8 +537,10 @@ public class OrderDAO extends DBcontext {
     }
 
     public int getTotalOrdersDelivered() {
-        String sql = "SELECT COUNT(OrderID) AS OrderCount\n"
-                + "                FROM Orders where Orders.Status = 3";
+        String sql = """
+                     SELECT COUNT(OrderID) AS OrderCount
+                     FROM [Order]
+                     where [status] = 3""";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -547,8 +556,10 @@ public class OrderDAO extends DBcontext {
     }
 
     public int getTotalOrdersCancled() {
-        String sql = "SELECT COUNT(OrderID) AS OrderCount\n"
-                + "                FROM Orders where Orders.Status = 4";
+        String sql = """
+                     SELECT COUNT(OrderID) AS OrderCount
+                     FROM [Order]
+                     where [status] = 4""";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -880,7 +891,7 @@ public class OrderDAO extends DBcontext {
         }
         return orderMap;
     }
-    
+
     public Date getDateOrderBySerialId(int serialId) {
         String sql = "Select * from Customer C\n"
                 + "  join [Order] O on C.customerID = O.customerID\n"
@@ -890,7 +901,7 @@ public class OrderDAO extends DBcontext {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, serialId);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {         
+            while (rs.next()) {
                 return rs.getDate("orderDate");
             }
         } catch (Exception e) {

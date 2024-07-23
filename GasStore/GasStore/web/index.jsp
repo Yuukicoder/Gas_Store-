@@ -154,29 +154,29 @@
                             <c:forEach items="${productList}" var="p">
                                 <div class="card-product">           
                                     <div class="product-img">
-                                                <img src="${p.getImage()}" alt="Your Image">
-                                                <div class="overlay-product">
-                                                    <a href="productDetail?id=${p.getProductID()}"><i class="bx bx-search"></i></a>
-                                                </div>
-                                            </div>
-                                            <div    class="product-detail">        
-                                                <div class="intro">
-                                                    <div class="intro-name"><a href="productDetail?id=${p.getProductID()}">${p.getName()}</a></div>                    
-                                                </div>
-                                                <div class="component-product">
-                                                    <p><i class='bx bxs-hdd'></i>  Short Description ${p.getShortDescription()} </p>
-                                                    
-                                                    <p><i class='bx bx-chip' ></i>  Available ${p.getStockQuantity()}</p>
-                                                    <p><i class='bx bx-chip' ></i>  Sold ${p.getUnitOnOrders()}</p>
-                                                </div>             
-                                                <div class="button-product">
-                                                    <div class="price"> $ ${p.getUnitPrice()}</div> 
-                                                        <a class="cart btnn" href = "productDetail?id=${p.getProductID()}">Buy Now</a>
+                                        <img src="${p.getImage()}" alt="Your Image">
+                                        <div class="overlay-product">
+                                            <a href="productDetail?id=${p.getProductID()}"><i class="bx bx-search"></i></a>
+                                        </div>
+                                    </div>
+                                    <div    class="product-detail">        
+                                        <div class="intro">
+                                            <div class="intro-name"><a href="productDetail?id=${p.getProductID()}">${p.getName()}</a></div>                    
+                                        </div>
+                                        <div class="component-product">
+                                            <p><i class='bx bxs-hdd'></i>  Short Description ${p.getShortDescription()} </p>
 
-                                                </div>
-                                            </div>
+                                            <p><i class='bx bx-chip' ></i>  Available ${p.getStockQuantity()}</p>
+                                            <p><i class='bx bx-chip' ></i>  Sold ${p.getUnitOnOrders()}</p>
+                                        </div>             
+                                        <div class="button-product">
+                                            <div class="price"> $ ${p.getUnitPrice()}</div> 
+                                            <a class="cart btnn" href = "productDetail?id=${p.getProductID()}">Buy Now</a>
+
+                                        </div>
+                                    </div>
                                 </div>
-                            </c:forEach>
+                            </c:forEach> 
                         </div>
                     </section>
 
@@ -187,30 +187,30 @@
 
 
         <!-- Offer Start -->
-<!--        <div class="container-fluid pt-5 pb-3">
-            <div class="row px-xl-5">
-                <div class="col-md-6">
-                    <div class="product-offer mb-30" style="height: 300px;">
-                        <img class="img-fluid" src="images/Post/sale3.jpg" alt="">
-                        <div class="offer-text">
-                            <h6 class="text-white text-uppercase">Save 20%</h6>
-                            <h3 class="text-white mb-3">Special Offer</h3>
-                            <a href="shop.jsp" class="btn btn-primary">Shop Now</a>
+        <!--        <div class="container-fluid pt-5 pb-3">
+                    <div class="row px-xl-5">
+                        <div class="col-md-6">
+                            <div class="product-offer mb-30" style="height: 300px;">
+                                <img class="img-fluid" src="images/Post/sale3.jpg" alt="">
+                                <div class="offer-text">
+                                    <h6 class="text-white text-uppercase">Save 20%</h6>
+                                    <h3 class="text-white mb-3">Special Offer</h3>
+                                    <a href="shop.jsp" class="btn btn-primary">Shop Now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="product-offer mb-30" style="height: 300px;">
+                                <img class="img-fluid" src="images/Post/sale2.jpg" alt="">
+                                <div class="offer-text">
+                                    <h6 class="text-white text-uppercase">Save 20%</h6>
+                                    <h3 class="text-white mb-3">Special Offer</h3>
+                                    <a href="shop.jsp" class="btn btn-primary">Shop Now</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="product-offer mb-30" style="height: 300px;">
-                        <img class="img-fluid" src="images/Post/sale2.jpg" alt="">
-                        <div class="offer-text">
-                            <h6 class="text-white text-uppercase">Save 20%</h6>
-                            <h3 class="text-white mb-3">Special Offer</h3>
-                            <a href="shop.jsp" class="btn btn-primary">Shop Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>-->
+                </div>-->
         <!-- Offer End -->
 
         <!-- Vendor End -->
@@ -238,11 +238,11 @@
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
         <script type="text/javascript">
-                                                function buy(id) {
-                                                    var m = document.f.num.value;
-                                                    document.f.action = "buy?id=" + id + "&num=" + m;
-                                                    document.f.submit();
-                                                }
+            function buy(id) {
+                var m = document.f.num.value;
+                document.f.action = "buy?id=" + id + "&num=" + m;
+                document.f.submit();
+            }
         </script>
     </body>
 

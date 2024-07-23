@@ -46,48 +46,48 @@
         </div>
         <!-- Breadcrumb End -->
 
-       <form action="lastcheck" method="POST" onsubmit="return validateForm()">  
+        <form action="lastcheck" method="POST" onsubmit="return validateForm()">  
             <!-- Checkout Start -->
             <div class="container-fluid">
                 <div class="row px-xl-5">
                     <div class="col-lg-8">
                         <form action="lastcheck" method="POST" onsubmit="return validateForm()"></form>
-                            <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing Address</span></h5>
-                            <div class="bg-light p-30 mb-5">
-                                <div class="row">
-                                    <div class="col-md-6 form-group">
-                                        <label style="color:black">Name:</label>
-                                        <span style="color: black">${sessionScope['account'].getUserName()}</span>
-                                        <!--                                    <input class="form-control" id="name" type="text" placeholder="Enter your name..." name="nameacount">-->
-                                        <input type="hidden" name="nameacount" value="${sessionScope['account'].getUserName()}">
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <label style="color:black">E-mail: </label>
-                                        <span style="color: black">${sessionScope['account'].getEmail()}</span>
-                                        <!--<input class="form-control"id="email" type="text" placeholder="example@email.com">-->
-                                        <input type="hidden" name="email" value="${sessionScope['account'].getEmail()}">
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <label style="color:black">Phone number: </label>
-                                        <span style="color: black">${sessionScope['account'].getPhone()}</span>
-                                        <!--<input class="form-control"id="phoneNumber" type="number" placeholder="Enter your phone number.." name="phone">-->
-                                        <input type="hidden" name="phone" value="${sessionScope['account'].getPhone()}">
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <label style="color: black">Address:</label>
-                                        <span style="color: black">${sessionScope['account'].getAddress()}</span>
-                                        <!--<input class="form-control" id="address" type="text" placeholder="Enter your address..." name="address">-->
-                                        <input type="hidden" name="address" value="${sessionScope['account'].getAddress()}">
-                                         <form action="UpdateAddress" method="POST">
-                                    <input class="form-control" id="address" type="text" placeholder="Enter your new address..." name="newAddress">
-                                    <button type="submit" class="btn btn-primary mt-2">Update address</button>
+                        <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing Address</span></h5>
+                        <div class="bg-light p-30 mb-5">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label style="color:black">Name:</label>
+                                    <span style="color: black">${sessionScope['account'].getUserName()}</span>
+                                    <!--                                    <input class="form-control" id="name" type="text" placeholder="Enter your name..." name="nameacount">-->
+                                    <input type="hidden" name="nameacount" value="${sessionScope['account'].getUserName()}">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label style="color:black">E-mail: </label>
+                                    <span style="color: black">${sessionScope['account'].getEmail()}</span>
+                                    <!--<input class="form-control"id="email" type="text" placeholder="example@email.com">-->
+                                    <input type="hidden" name="email" value="${sessionScope['account'].getEmail()}">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label style="color:black">Phone number: </label>
+                                    <span style="color: black">${sessionScope['account'].getPhone()}</span>
+                                    <!--<input class="form-control"id="phoneNumber" type="number" placeholder="Enter your phone number.." name="phone">-->
+                                    <input type="hidden" name="phone" value="${sessionScope['account'].getPhone()}">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label style="color: black">Address:</label>
+                                    <span style="color: black">${sessionScope['account'].getAddress()}</span>
+                                    <!--<input class="form-control" id="address" type="text" placeholder="Enter your address..." name="address">-->
+                                    <input type="hidden" name="address" value="${sessionScope['account'].getAddress()}">
+                                    <form action="UpdateAddress" method="POST">
+                                        <input class="form-control" id="address" type="text" placeholder="Enter your new address..." name="newAddress">
+                                        <button type="submit" class="btn btn-primary mt-2">Update address</button>
 
-                                </form>
-                                        
-                                    </div>
+                                    </form>
 
                                 </div>
+
                             </div>
+                        </div>
                     </div>
                     <div class="col-lg-4">
                         <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order Total</span></h5>
@@ -112,8 +112,18 @@
                                 <div class="d-flex justify-content-between mb-3">
                                     <h6>Voucher</h6>               
                                     <h6>0%</h6>
-
                                 </div>
+
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h6>Membership Discount</h6>               
+                                    <h6>${membershipDiscount}%</h6>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h6>Point Gain</h6>               
+                                    <h6>${pointGain}</h6>
+                                </div>
+
                                 <div class="d-flex justify-content-between mb-3">
                                     <h6>Ship</h6>
                                     <h6><fmt:formatNumber value="10000" type="currency" currencySymbol="VND" /></h6>
@@ -127,12 +137,11 @@
                                     <h5>Total</h5>
                                     <c:if test="${requestScope.vocherid != 0}" >
                                         <c:set value="${((o.totalMoney)*requestScope.vocherid)/100}" var="tongtienvoucher" />
-
-                                        <h5><fmt:formatNumber value="${o.totalMoney-(((o.totalMoney)*requestScope.vocherid)/100)+10000}" type="currency" currencySymbol="VND" /></h5>
+                                        <h5><fmt:formatNumber value="${o.totalMoney - ((o.totalMoney * requestScope.vocherid)/100) - (o.totalMoney * (membershipDiscount/100)) + 10000}" type="currency" currencySymbol="VND" /></h5>
                                     </c:if>
                                     <c:if test="${requestScope.vocherid == 0}" >
 
-                                        <h5><fmt:formatNumber value="${o.totalMoney + 10000}" type="currency" currencySymbol="VND" /></h5>
+                                        <h5><fmt:formatNumber value="${o.totalMoney - (o.totalMoney * (membershipDiscount/100)) + 10000}" type="currency" currencySymbol="VND" /></h5>
                                         <c:set value="0" var="tongtienvoucher" />
                                     </c:if>
                                 </div>
@@ -223,54 +232,54 @@
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
         <script>
-                       function validateForm() {
-                           var name = document.getElementById("name").value;
-                           var email = document.getElementById("email").value;
-                           var phoneNumber = document.getElementById("phoneNumber").value;
-                           var address = document.getElementById("address").value;
+                            function validateForm() {
+                                var name = document.getElementById("name").value;
+                                var email = document.getElementById("email").value;
+                                var phoneNumber = document.getElementById("phoneNumber").value;
+                                var address = document.getElementById("address").value;
 
-                           var errorDiv = document.getElementById("error-messages");
-                           errorDiv.innerHTML = ""; // Xóa các thông báo l?i tr??c ?ó (n?u có)
+                                var errorDiv = document.getElementById("error-messages");
+                                errorDiv.innerHTML = ""; // Xóa các thông báo l?i tr??c ?ó (n?u có)
 
-                           if (name.trim() === "") {
-                               showError("Name is required");
-                               return false;
-                           }
+                                if (name.trim() === "") {
+                                    showError("Name is required");
+                                    return false;
+                                }
 
-                           if (email.trim() === "") {
-                               showError("Email is required");
-                               return false;
-                           }
+                                if (email.trim() === "") {
+                                    showError("Email is required");
+                                    return false;
+                                }
 
-                           // Ki?m tra ??nh d?ng email h?p l?
-                           var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                           if (!email.match(emailRegex)) {
-                               showError("Invalid email format: username@domain");
-                               return false;
-                           }
+                                // Ki?m tra ??nh d?ng email h?p l?
+                                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                if (!email.match(emailRegex)) {
+                                    showError("Invalid email format: username@domain");
+                                    return false;
+                                }
 
-                           if (phoneNumber.trim() === "") {
-                               showError("Phone number is required");
-                               return false;
-                           }
+                                if (phoneNumber.trim() === "") {
+                                    showError("Phone number is required");
+                                    return false;
+                                }
 
-                           if (address.trim() === "") {
-                               showError("Address is required");
-                               return false;
-                           }
+                                if (address.trim() === "") {
+                                    showError("Address is required");
+                                    return false;
+                                }
 
-                           // N?u không có l?i, có th? ti?p t?c x? lý form và g?i yêu c?u POST
-                           showSuccess("Order placed successfully!");
-                           return true;
-                       }
+                                // N?u không có l?i, có th? ti?p t?c x? lý form và g?i yêu c?u POST
+                                showSuccess("Order placed successfully!");
+                                return true;
+                            }
 
-                       function showError(errorMessage) {
-                           window.alert("Error: " + errorMessage);
-                       }
+                            function showError(errorMessage) {
+                                window.alert("Error: " + errorMessage);
+                            }
 
-                       function showSuccess(successMessage) {
-                           window.alert(successMessage);
-                       }
+                            function showSuccess(successMessage) {
+                                window.alert(successMessage);
+                            }
         </script>
     </body>
 

@@ -4,14 +4,7 @@
  */
 package ProjectController.Product;
 
-import DAO.AccountDAO;
-import DAO.FeedbackDAO;
-import DAO.FeedbackReplyDAO;
-import DAO.ProductDAO;
-import DAO.ProductImgDAO;
 import DTO.AccountDTO;
-import DTO.ProductDTO;
-import DTO.ProductImgDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,7 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 /**
  *
@@ -41,7 +33,7 @@ public class DetailProductServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -55,7 +47,6 @@ public class DetailProductServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -67,47 +58,44 @@ public class DetailProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-                String id_raw = request.getParameter("id");
-                int id = Integer.parseInt(id_raw);
-                ProductDAO proDAO = new ProductDAO();
-                ProductDTO pro = proDAO.getProductByID(id);
-                int categoryId = pro.getCategoryID();
-                FeedbackDAO feedbackDAO = new FeedbackDAO();
-                ProductImgDAO pidao = new ProductImgDAO();
-                List<ProductDTO> list = proDAO.getProductByCategory(categoryId);
-                List<ProductImgDTO> pimgs = pidao.getPImgByPid(id);
-                FeedbackReplyDAO feedbackReplyDAO = new FeedbackReplyDAO();
-
-                //phan trang 
-                String indexpage = request.getParameter("index");
-
-                if (indexpage == null) {
-                    indexpage = "1";
-                }
-                int index = Integer.parseInt(indexpage);
-
-                int count = feedbackDAO.getCount(id);
-                int endpage = count / 5;
-                if (count % 3 != 0) {
-                    endpage++;
-                }
-                request.setAttribute("feedback", feedbackDAO.getListorder(id, index));
-                request.setAttribute("feedbackReplyDAO", feedbackReplyDAO);
-                request.setAttribute("endP", endpage);
-
-                request.setAttribute("tag", index);
-
-                request.setAttribute("pimgs", pimgs);
-                request.setAttribute("detail", pro);
-                
-                request.setAttribute("alsolike", list);
-
-                request.setAttribute("getcount", feedbackDAO.getCount(id));
-
-                request.getRequestDispatcher("detail.jsp").forward(request, response);
-            
-
+//                String id_raw = request.getParameter("id");
+//                int id = Integer.parseInt(id_raw);
+//                ProductDAO proDAO = new ProductDAO();
+//                ProductDTO pro = proDAO.getProductByID(id);
+//                int categoryId = pro.getCategoryID();
+//                FeedbackDAO feedbackDAO = new FeedbackDAO();
+//                ProductImgDAO pidao = new ProductImgDAO();
+//                List<ProductDTO> list = proDAO.getProductByCategory(categoryId);
+//                List<ProductImgDTO> pimgs = pidao.getPImgByPid(id);
+//                FeedbackReplyDAO feedbackReplyDAO = new FeedbackReplyDAO();
+//
+//                //phan trang 
+//                String indexpage = request.getParameter("index");
+//
+//                if (indexpage == null) {
+//                    indexpage = "1";
+//                }
+//                int index = Integer.parseInt(indexpage);
+//
+//                int count = feedbackDAO.getCount(id);
+//                int endpage = count / 5;
+//                if (count % 3 != 0) {
+//                    endpage++;
+//                }
+//                request.setAttribute("feedback", feedbackDAO.getListorder(id, index));
+//                request.setAttribute("feedbackReplyDAO", feedbackReplyDAO);
+//                request.setAttribute("endP", endpage);
+//
+//                request.setAttribute("tag", index);
+//
+//                request.setAttribute("pimgs", pimgs);
+//                request.setAttribute("detail", pro);
+//                
+//                request.setAttribute("alsolike", list);
+//
+//                request.setAttribute("getcount", feedbackDAO.getCount(id));
+//
+//                request.getRequestDispatcher("detail.jsp").forward(request, response);           
     }
 
     /**
@@ -121,20 +109,19 @@ public class DetailProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        String id_raw = request.getParameter("id");
-        int id_pro = Integer.parseInt(request.getParameter("id"));
-        AccountDTO account = (AccountDTO) session.getAttribute("account");
-        int id;
-        try {
-
-            id = Integer.parseInt(id_raw);
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        response.sendRedirect("detailProduct?id=" + id_pro);
-
+//        HttpSession session = request.getSession();
+//        String id_raw = request.getParameter("id");
+//        int id_pro = Integer.parseInt(request.getParameter("id"));
+//        AccountDTO account = (AccountDTO) session.getAttribute("account");
+//        int id;
+//        try {
+//
+//            id = Integer.parseInt(id_raw);
+//
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//        response.sendRedirect("detailProduct?id=" + id_pro);
     }
 
     /**
