@@ -41,7 +41,7 @@
                                 <a href="shop" class="nav-item nav-link">Shop</a>
 <!--                                <a href="contact.jsp" class="nav-item nav-link">Contact</a>-->
                                   <a href="PostListController" class="nav-item nav-link">News</a>
-                                                                    <a href="PostListController" class="nav-item nav-link">DisCount</a>
+                                                                    <a href="ViewDiscount" class="nav-item nav-link">DisCount</a>
                                                                                                                                         <a href="Contact" class="nav-item nav-link">Contact</a>
                             </div>
                             

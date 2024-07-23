@@ -114,8 +114,8 @@ public class LastCheckOutServlet extends HttpServlet {
         
         if ("vnpay".equals(paymentMethod)) {
             // Chuyển hướng tới cổng thanh toán VNPay
-            String vnpayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-            response.sendRedirect(vnpayUrl); // URL c
+
+                request.getRequestDispatcher("vnpay_pay.jsp").forward(request, response);
             return;
         }
         String totalvoucher = request.getParameter("totalvoucher");
