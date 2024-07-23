@@ -110,7 +110,7 @@
                                             <div class="product-img">
                                                 <img src="${p.getImage()}" alt="Your Image">
                                                 <div class="overlay-product">
-                                                    <a href="productDetail?id=${p.getProductID()}"><i class="bx bx-search"></i></a>
+                                                    <a href="DetailProduct?id=${p.getProductID()}"><i class="bx bx-search"></i></a>
                                                 </div>
                                             </div>
                                             <div class="product-detail">
@@ -125,7 +125,7 @@
                                                 </div>
                                                 <div class="button-product">
                                                     <div class="price"> $ ${p.getUnitPrice()}</div>
-                                                    <a class="cart btnn" href="productDetail?id=${p.getProductID()}">Buy Now</a>
+                                                    <a class="cart btnn" href="DetailProduct?id=${p.getProductID()}">Buy Now</a>
                                                 </div>
                                             </div>
                                         </div>

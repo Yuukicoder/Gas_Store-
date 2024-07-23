@@ -47,6 +47,29 @@
                 background-color: red;
                 border-radius: 50%;
             }
+            .top-bar {
+                background-color: #f8f9fa; /* Light gray background for the top bar */
+                padding: 10px; /* Add some padding */
+                display: flex;
+                justify-content: flex-end; /* Align items to the right */
+            }
+            .profile-btn {
+                display: flex;
+                align-items: center;
+                border: none;
+                background: none;
+                color: #343a40; /* Dark text color */
+                font-size: 16px; /* Font size */
+                text-decoration: none;
+            }
+            .profile-btn img {
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+            .profile-btn:hover {
+                text-decoration: none;
+                color: #007bff; /* Bootstrap primary color */
+            }
         </style>
     </head>
     <body>
@@ -122,12 +145,14 @@
                         </div>
 
                         <div class="d-inline-flex align-items-center">
-                            <div class="btn-group dropdown">
-                                <button type="button" class="btn btn-sm btn-light dropdown-toggle dropbtn" onclick="toggleDropdown()">
-                                    <img src="${sessionScope.account.getImage()}" width="10%" height="" alt="avatar"/>
+                            <div class="btn-group dropdown top-bar">
+                                
+                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle dropbtn" onclick="toggleDropdown()">
+                                    <img src="${sessionScope.account.getImage()}" width="25px" height="25px" alt="avatar"/>
 
                                     ${sessionScope.account.getFullName()}
                                 </button>
+                               
                                 <div class="dropdown-menu dropdown-menu-right dropdown-content" id="myDropdown">
                                     <a class="dropdown-item" href="mypurchase">My Purchase</a>
                                     <a class="dropdown-item" href="myWarranty">My Warranty</a>

@@ -1,7 +1,8 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+
 package Controller;
 
 import DAO.CategoryDAO;
@@ -11,22 +12,19 @@ import DAO.NotificationDAO;
 import DAO.ProductDAO;
 import DAO.ProductImgDAO;
 import DAO.SupplierDAO;
-<<<<<<< HEAD
+import DTO.Customer;
 import DTO.FeedbackDTO;
 import DTO.FeedbackReplyDTO;
-=======
-import DTO.Customer;
->>>>>>> 624005260203d23b0f52b7daca00e3ed32b3caf8
 import DTO.NotificationDTO;
 import DTO.Product;
 import DTO.ProductImg;
+import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,18 +32,18 @@ import java.util.Map;
 
 /**
  *
- * @author dell456
+ * @author vip2021
  */
-@WebServlet(name = "ProductDetailServlet", urlPatterns = {"/productDetail"})
 public class ProductDetailServlet extends HttpServlet {
-
+   
+   
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             //Reset noti-time on navbar - Vu Anh
             HttpSession session = request.getSession();
@@ -117,5 +115,4 @@ public class ProductDetailServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while processing the request");
         }
     }
-
 }
