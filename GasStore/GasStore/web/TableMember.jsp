@@ -78,9 +78,9 @@
                                         </div>
                                     </form>
                                     <!---->
-                                    <form action="ChangePointGainRate" method="get">       
+<!--                                    <form action="ChangePointGainRate" method="get">       
                                         <button type="submit" class="btn btn-primary">Add Benefit</button>
-                                    </form>
+                                    </form>-->
                                     <!---->
                                     <form action="ManageProgramMember" id="pageSizeSelector" method="POST">
                                         <select class="form-control" name="pageSize" id="pageSize" onchange="document.getElementById('pageSizeSelector').submit();">

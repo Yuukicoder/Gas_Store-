@@ -38,12 +38,14 @@ public class PostDetailDAO extends DBcontext {
 
             }
         } catch (SQLException e) {
-            System.out.println("PostCategoryDAO - getPostDTOByID: " + e.getMessage());
+            System.out.println("PostDetailDAO - getPostDTOByID: " + e.getMessage());
         }
         return postDTO;
     }
 
     public int updatePost(PostDTO pdto) {
+        PostCategoryDAO postCategoryDAO = new PostCategoryDAO();
+        int categoryId = postCategoryDAO.getCategoryIDByName(pdto.getPostCate());
         String sql = "UPDATE [dbo].[Post]\n"
                 + "   SET [Title] = ?     \n"
                 + "      ,[Postbanner] = ?\n"
@@ -55,12 +57,12 @@ public class PostDetailDAO extends DBcontext {
             ps.setString(1, pdto.getTitle());
             ps.setString(2, pdto.getPostbanner());
             ps.setString(3, pdto.getContext());
-            ps.setInt(5, pdto.getPostID()); //học đếm lại thôi 🙂, PostID cái thứ 5 chứ
-            ps.setString(4, pdto.getPostCate()); //Post cate số 4
+            ps.setInt(4, categoryId); 
+            ps.setInt(5, pdto.getPostID());            
             int checkAdd = ps.executeUpdate();
             return checkAdd;
         } catch (SQLException e) {
-            System.out.println("PostCategoryDAO - updatePost: " + e.getMessage());
+            System.out.println("PostDetailDAO - updatePost: " + e.getMessage());
         }
         return 0;
     }

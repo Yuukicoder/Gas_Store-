@@ -65,7 +65,7 @@
 
                                 <div class="d-flex align-items-center justify-content-between mb-4">
                                     <form action="AddTierBenefit" method="get">       
-                                        <button type="submit" class="btn btn-primary">Add Benefit</button>
+                                        <button type="submit" class="btn btn-primary">Add Tier</button>
                                     </form>
 
 
@@ -74,7 +74,7 @@
                                     <table id="categoryTable" class="table text-start align-middle table-bordered table-hover mb-0">
                                         <thead>
                                             <tr class="text-white">
-                                                <th scope="col">Level Name</th>
+                                                <th scope="col">Tier Name</th>
                                                 <th scope="col">Min Point</th>
                                                 <th scope="col">Max Point</th>
                                                 <th scope="col">Discount Percentage</th>
