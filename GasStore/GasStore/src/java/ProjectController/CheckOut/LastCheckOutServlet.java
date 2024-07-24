@@ -6,6 +6,7 @@ package ProjectController.CheckOut;
 
 import DAO.DAOWarranty;
 import DAO.IndividualVoucherDAO;
+import DAO.MembershipTiersDAO;
 import DAO.NotificationDAO;
 import DAO.OrderDAO;
 import DAO.OrderDetailDAO;
@@ -95,6 +96,17 @@ public class LastCheckOutServlet extends HttpServlet {
         request.setAttribute("vochername", vochername);
         request.setAttribute("vocheridname", vocheridname);
         request.setAttribute("vourcherQuantity", vourcherQuantity);
+        
+        HttpSession session = request.getSession();      
+        Customer account = (Customer) session.getAttribute("account");
+        MembershipTiersDAO mDAO = new MembershipTiersDAO();
+        Double membershipDiscount = mDAO.getMembershipTierByID(account.getMemberShipTier()).getDiscountPercentage();
+        request.setAttribute("membershipDiscount", membershipDiscount);
+
+        double membershipDiscountAmount = cart.getTotalMoney() * (mDAO.getMembershipTierByID(account.getMemberShipTier()).getDiscountPercentage() / 100);
+        double totalAmount = cart.getTotalMoney() - (cart.getTotalMoney() * /*totalVoucherDouble*/ 0) - membershipDiscountAmount + 10000;
+        int totalPoint = (int) ((cart.getTotalMoney() / 10000) * mDAO.getMembershipTierByID(account.getMemberShipTier()).getBonusPointsRate());
+        request.setAttribute("pointGain", totalPoint);
 
         request.getRequestDispatcher("checkout.jsp").forward(request, response);
     }

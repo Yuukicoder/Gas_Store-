@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -98,7 +99,7 @@
                                                         </select>
                                                         <input type="hidden" name="indexPage" value="${tag}" />
                                                         <input type="hidden" name="action" value="${action}" />
-                                                        
+
                                                     </form>
                                                 </th>
 
@@ -122,7 +123,7 @@
                                                             ${c.getKey().getStockQuantity()}
                                                         </c:if>                                         
                                                     </td>
-                                                    <td>${c.getKey().getUnitPrice()}</td>
+                                                    <td><fmt:formatNumber value="${c.getKey().getUnitPrice()}" type="currency" currencySymbol="" maxFractionDigits="0"/> VND</td>
                                                     
                                                     <td style=" padding: 0.5rem 0.5rem;
                                                         text-align: center;

@@ -26,6 +26,8 @@ public class Customer {
     private double totalMoney;
     private String email;
     private boolean isCustomer;
+    private int totalPoint;
+    private int memberShipTier;
     
     public Customer() {
     }
@@ -263,6 +265,24 @@ public Customer(int customerID, String userName, String address, String email) {
     public void setIsCustomer(boolean isCustomer) {
         this.isCustomer = isCustomer;
     }
+
+    public int getTotalPoint() {
+        return totalPoint;
+    }
+
+    public void setTotalPoint(int totalPoint) {
+        this.totalPoint = totalPoint;
+    }
+
+    public int getMemberShipTier() {
+        return memberShipTier;
+    }
+
+    public void setMemberShipTier(int memberShipTier) {
+        this.memberShipTier = memberShipTier;
+    }
+    
+    
 
     @Override
     public String toString() {

@@ -4,7 +4,6 @@
  */
 package ProjectController;
 
-
 import Controller.MaHoa;
 import DTO.Customer;
 import dal.CustomerDao;
@@ -36,7 +35,7 @@ public class SignupServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -50,7 +49,6 @@ public class SignupServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -76,8 +74,8 @@ public class SignupServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       String firstname_raw = request.getParameter("firstname");
-       String lastname_raw = request.getParameter("lastname");
+        String firstname_raw = request.getParameter("firstname");
+        String lastname_raw = request.getParameter("lastname");
         String user_raw = request.getParameter("user");
         String gamil_raw = request.getParameter("email");
         String password_raw = MaHoa.toSHA1(request.getParameter("pass"));
@@ -97,14 +95,14 @@ public class SignupServlet extends HttpServlet {
         String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z]).{6,}$";
         Pattern pattern1 = Pattern.compile(PASSWORD_REGEX);
         Matcher matcher1 = pattern1.matcher(password_raw2);
-        
+
         //check sdt 
-         String regex = "^0\\d{9}$";
-         Pattern number = Pattern.compile(regex);
+        String regex = "^0\\d{9}$";
+        Pattern number = Pattern.compile(regex);
         Matcher matcher2 = number.matcher(phone_raw);
         //check 
-        
-        if(!password_raw.equals(repass_raw)){
+
+        if (!password_raw.equals(repass_raw)) {
             request.setAttribute("err", "you must enter the same password");
             request.setAttribute("user", user_raw);
             request.setAttribute("gmail", gamil_raw);
@@ -114,7 +112,7 @@ public class SignupServlet extends HttpServlet {
             request.setAttribute("lastname", lastname_raw);
             request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         }
-        
+
         if (user_raw.isEmpty() || gamil_raw.isEmpty() || password_raw.isEmpty()) {
             request.setAttribute("err", "you must enter email or password or user");
             request.setAttribute("user", user_raw);
@@ -159,8 +157,7 @@ public class SignupServlet extends HttpServlet {
             request.setAttribute("firstname", firstname_raw);
             request.setAttribute("lastname", lastname_raw);
             request.getRequestDispatcher("SignUp.jsp").forward(request, response);
-        } 
-        else if(!matcher2.matches()){ 
+        } else if (!matcher2.matches()) {
             request.setAttribute("err", "Phone number must be 10 digits");
             request.setAttribute("user", user_raw);
             request.setAttribute("gmail", gamil_raw);
@@ -169,8 +166,7 @@ public class SignupServlet extends HttpServlet {
             request.setAttribute("firstname", firstname_raw);
             request.setAttribute("lastname", lastname_raw);
             request.getRequestDispatcher("SignUp.jsp").forward(request, response);
-        }
-        else {
+        } else {
             Customer cus = new Customer(user_raw, password_raw, firstname_raw, lastname_raw, true, phone_raw, gamil_raw);
             dao.insertCustomer(cus);
             request.getRequestDispatcher("login.jsp").forward(request, response);

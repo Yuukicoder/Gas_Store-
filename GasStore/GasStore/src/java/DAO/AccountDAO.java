@@ -46,7 +46,7 @@ public class AccountDAO extends DBcontext {
                 account.setRoleID(rs.getInt(6));
                 account.setEmail(rs.getString(7));
                 account.setImg(rs.getString(8));
-                account.setAdminName(rs.getString("userName"));
+                account.setAdminName(rs.getString("adminName"));
 //                    private int adminID;
 //    private String userName;
 //    private String password;
@@ -107,9 +107,10 @@ public class AccountDAO extends DBcontext {
     }
 
     public int getTotalNewAccount() {
-        String sql = "SELECT COUNT(AccountID) AS Count\n"
-                + "FROM Account\n"
-                + "WHERE CAST(DateCreate AS DATE) = CAST(GETDATE() AS DATE) and Role = 0;";
+        String sql = """
+                     SELECT COUNT(customerID) AS Count
+                     FROM Customer
+                     WHERE CAST(created AS DATE) = CAST(GETDATE() AS DATE)""";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -125,7 +126,7 @@ public class AccountDAO extends DBcontext {
     }
 
     public int getTotalAccount() {
-        String sql = "SELECT COUNT(AccountID) AS Count from Account";
+        String sql = "SELECT COUNT(customerID) AS Count from Customer";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -348,13 +349,14 @@ public class AccountDAO extends DBcontext {
                      WHERE administratorID = ?""";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
-            System.out.println("Object: " + accountDTO.getUserName());
+            System.out.println("Object: " + accountDTO.getAdminName());
             ps.setString(1, accountDTO.getUserName());
             ps.setString(2, accountDTO.getAdminName());
             ps.setString(3, accountDTO.getEmail());
             ps.setString(4, accountDTO.getImg());
             ps.setInt(5, accountDTO.getAdminID());
             int checkUpdate = ps.executeUpdate();
+            System.out.println("checkUpdate: " + checkUpdate);
             return checkUpdate;
 
         } catch (SQLException e) {

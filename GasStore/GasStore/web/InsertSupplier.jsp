@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -149,7 +150,8 @@
                                                             ${c.getKey().getStockQuantity()}
                                                         </c:if>                                         
                                                     </td>
-                                                    <td>${c.getKey().getUnitPrice()}</td>
+                                                    <td><fmt:formatNumber value="${c.getKey().getUnitPrice()}" type="currency" currencySymbol="" maxFractionDigits="0"/> VND</td>
+                                                    
                                                     
 <!--                                                    <td style=" padding: 0.5rem 0.5rem;
                                                         text-align: center;

@@ -101,7 +101,11 @@
                                                 <c:forEach items="${requestScope.lidata}" var="o" varStatus="status">
                                                     <tr>
                                                         <td>${status.index+1}</td>
-                                                        <td><img src="${o.getImage()}" alt="alt"/></td>
+                                                        <td>
+                                                            <div class="image-container">
+                                                                <img src="images/User/${o.getImage()}" alt="alt"/>
+                                                            </div>
+                                                        </td>
                                                         <td>${o.getUserName()}</td>
                                                         <td>${o.getFullName()}</td>
                                                         <td>${o.getPhone()}</td>
@@ -228,6 +232,21 @@
 
             #productTable tr:hover td {
                 color: #000;
+            }
+            
+            .image-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .image-container img {
+                width: 100%;
+                max-width: 3rem; /* Maximum width as specified */
+                height: auto; /* Maintain aspect ratio */
+                border: 1px solid #ddd; /* Optional border for better visuals */
+                border-radius: 0.25rem; /* Slightly rounded corners */
+                box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Optional shadow */
             }
         </style>
 

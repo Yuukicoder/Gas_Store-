@@ -141,24 +141,24 @@
                         <input type="text" name="aimg" value="${acc.getImage()}" hidden>
 
                         <div class="d-flex flex-column align-items-center text-center p-3 py-5 position-relative">
-    <!-- Hiển thị ảnh hiện tại -->
-    <img id="profileImage" class="mt-5 rounded-circle" width="50%;" src="${sessionScope.account.getImage()}" alt="This is profile">
+                            <!-- Hiển thị ảnh hiện tại -->
+                            <img id="profileImage" class="mt-5 rounded-circle" width="50%;" src="${sessionScope.account.getImage()}" alt="This is profile">
 
-    <!-- Overlay để cho phép chọn ảnh -->
-    <div id="imageOverlay" class="image-overlay">
-        <span class="edit-icon">&#9998;</span> <!-- Unicode for a pen icon -->
-    </div>
+                            <!-- Overlay để cho phép chọn ảnh -->
+                            <div id="imageOverlay" class="image-overlay">
+                                <span class="edit-icon">&#9998;</span> <!-- Unicode for a pen icon -->
+                            </div>
 
-    <!-- Input để chọn file ảnh -->
-    <input type="file" name="pimg" id="imageUpload" class="d-none" accept="image/*" onchange="validateImage(this)">
-    
-    <!-- Thông báo lỗi -->
-    <!--<p id="imageError" style="color: red; display: none;">Please select a valid image file (JPEG, PNG, GIF)</p>-->
+                            <!-- Input để chọn file ảnh -->
+                            <input type="file" name="pimg" id="imageUpload" class="d-none" accept="image/*" onchange="validateImage(this)">
 
-    <span class="font-weight-bold">${sessionScope.account.getUserName()}</span>
-    <span class="text-black-50">${sessionScope.account.getFullName()}</span>
-    <p id="imageError" style="color: red; display: none;">Please select a valid image file (JPEG, PNG, GIF)</p>
-</div>
+                            <!-- Thông báo lỗi -->
+                            <!--<p id="imageError" style="color: red; display: none;">Please select a valid image file (JPEG, PNG, GIF)</p>-->
+
+                            <span class="font-weight-bold">${sessionScope.account.getUserName()}</span>
+                            <span class="text-black-50">${sessionScope.account.getFullName()}</span>
+                            <p id="imageError" style="color: red; display: none;">Please select a valid image file (JPEG, PNG, GIF)</p>
+                        </div>
 
                         <p style="color: red;">${errorrr}</p>
                         <div class="col-md-12">
@@ -209,6 +209,17 @@
                                     <label class="labels mt-2">Address</label>
                                     <input type="text" class="form-control" value="${sessionScope.account.getAddress()}" name="address" id="uaddress">
                                 </div>
+                                
+                                <div class="col-md-12">
+                                    <label class="labels mt-2">Tier</label>
+                                    <input type="text" class="form-control" value="${tier}" name="tier" id="tier" readonly>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label class="labels mt-2">Total Point</label>
+                                    <input type="text" class="form-control" value="${sessionScope.account.getTotalPoint()}" name="point" id="point" readonly>
+                                </div>
+                                
                             </div>
                             <div class="mt-5 text-center">
                                 <button class="btn btn-warning  profile-button" type="submit"  name="update" value="profile">Save Profile</button>
@@ -405,68 +416,68 @@
             });
 
             document.getElementById('imageUpload').addEventListener('change', function (event) {
-        const file = event.target.files[0];
-        if (file) {
-            // Check file type
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            if (!allowedTypes.includes(file.type)) {
-                alert('Please select a valid image file (JPEG, PNG, GIF)');
-                // Reset input field to clear the invalid file
-                event.target.value = '';
-                return;
-            }
+                const file = event.target.files[0];
+                if (file) {
+                    // Check file type
+                    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                    if (!allowedTypes.includes(file.type)) {
+                        alert('Please select a valid image file (JPEG, PNG, GIF)');
+                        // Reset input field to clear the invalid file
+                        event.target.value = '';
+                        return;
+                    }
 
-            // Check file size (5MB limit)
-            const maxSize = 5 * 1024 * 1024;
-            if (file.size > maxSize) {
-                alert('File size exceeds 5MB limit');
-                // Reset input field to clear the invalid file
-                event.target.value = '';
-                return;
-            }
+                    // Check file size (5MB limit)
+                    const maxSize = 5 * 1024 * 1024;
+                    if (file.size > maxSize) {
+                        alert('File size exceeds 5MB limit');
+                        // Reset input field to clear the invalid file
+                        event.target.value = '';
+                        return;
+                    }
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                document.getElementById('profileImage').src = e.target.result;
-                document.getElementById('profileImage').classList.remove('blur');
-                document.getElementById('imageOverlay').style.display = 'none';
-            }
-            reader.readAsDataURL(file);
-        }
-    });
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('profileImage').src = e.target.result;
+                        document.getElementById('profileImage').classList.remove('blur');
+                        document.getElementById('imageOverlay').style.display = 'none';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
         </script>
         <script>
-    function validateImage(input) {
-        const file = input.files[0];
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        const maxSize = 5 * 1024 * 1024; // 5MB
+            function validateImage(input) {
+                const file = input.files[0];
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                const maxSize = 5 * 1024 * 1024; // 5MB
 
-        // Kiểm tra loại file
-        if (!allowedTypes.includes(file.type)) {
-            document.getElementById('imageError').style.display = 'block';
-            input.value = ''; // Đặt lại giá trị của input để xóa file không hợp lệ
-            return;
-        }
+                // Kiểm tra loại file
+                if (!allowedTypes.includes(file.type)) {
+                    document.getElementById('imageError').style.display = 'block';
+                    input.value = ''; // Đặt lại giá trị của input để xóa file không hợp lệ
+                    return;
+                }
 
-        // Kiểm tra kích thước file
-        if (file.size > maxSize) {
-            alert('File size exceeds 5MB limit');
-            document.getElementById('imageError').style.display = 'block';
-            input.value = ''; // Đặt lại giá trị của input để xóa file không hợp lệ
-            return;
-        }
+                // Kiểm tra kích thước file
+                if (file.size > maxSize) {
+                    alert('File size exceeds 5MB limit');
+                    document.getElementById('imageError').style.display = 'block';
+                    input.value = ''; // Đặt lại giá trị của input để xóa file không hợp lệ
+                    return;
+                }
 
-        // Nếu hợp lệ, hiển thị ảnh mới
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            document.getElementById('profileImage').src = e.target.result;
-            document.getElementById('profileImage').classList.remove('blur');
-            document.getElementById('imageOverlay').style.display = 'none';
-            document.getElementById('imageError').style.display = 'none'; // Ẩn thông báo lỗi
-        };
-        reader.readAsDataURL(file);
-    }
-</script>
+                // Nếu hợp lệ, hiển thị ảnh mới
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profileImage').src = e.target.result;
+                    document.getElementById('profileImage').classList.remove('blur');
+                    document.getElementById('imageOverlay').style.display = 'none';
+                    document.getElementById('imageError').style.display = 'none'; // Ẩn thông báo lỗi
+                };
+                reader.readAsDataURL(file);
+            }
+        </script>
 
         <script>
             function confirmChangePhone() {
