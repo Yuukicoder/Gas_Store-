@@ -16,7 +16,7 @@ a{
 }
 
 .product {
-  display: flex;
+    display: flex;
     justify-content: left;
     align-items: center;
     margin: 20px 50px;
@@ -52,7 +52,11 @@ div.intro-name {
     width: 60%;
     margin-bottom: 1rem;
     transition: 0.5s;
-
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Show ellipsis (...) */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 .intro-name:hover a{
     color: #539165;
@@ -102,6 +106,29 @@ div.intro-rating {
     grid-template-columns: 1fr 1fr;
 }
 
+.component-product p {
+    font-size: 0.8rem;
+    color: #5f5f6b;
+    width: 132px;
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Show ellipsis (...) */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+.component-product p:first-child {
+    height: 38.4px;
+    -webkit-line-clamp: 2; /* Show at most 2 lines */
+    line-height: 19.2px; /* Adjust line height to match the height for consistency */
+}
+
+.component-product p:nth-child(2),
+.component-product p:nth-child(3) {
+    height: 19.2px;
+    -webkit-line-clamp: 1; /* Show at most 1 line */
+    line-height: 19.2px; /* Ensure single line fits within height */
+}
+
 .rating {
     font-size: 0.7rem;
     color: black;
@@ -115,11 +142,16 @@ div.intro-rating {
 }
 
 .button-product {
+    /*    height: 65px;
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;*/
     height: 65px;
-    margin-top: 15px;
+    margin-top: 5px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
 }
 
 .price {

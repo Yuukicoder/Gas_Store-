@@ -161,7 +161,7 @@
                                             <td>${la.getOrderDate()}</td>
                                             <td>${la.getOrderID()}</td>
                                             <td>${la.getFullname()}</td>
-                                            <td>${la.getTotalPrice()}</td>
+                                            <td><fmt:formatNumber value="${la.getTotalPrice()}" type="currency" currencySymbol="" maxFractionDigits="0"/>VND</td>
 
                                             <td class="col-md-3">
                                                 <c:if test="${la.getStatus() != 4 && la.getStatus() != 3}">

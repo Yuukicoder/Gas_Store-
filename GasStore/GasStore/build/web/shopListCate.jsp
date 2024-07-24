@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -129,7 +130,7 @@
                                                         <p><i class='bx bx-chip'></i> Sold ${p.getUnitOnOrders()}</p>
                                                     </div>
                                                     <div class="button-product">
-                                                        <div class="price"> $ ${p.getUnitPrice()}</div>
+                                                        <div class="price"><fmt:formatNumber value="${p.getUnitPrice()}" type="currency" currencySymbol="" maxFractionDigits="0"/>VND</div>
                                                         <a class="cart btnn" href="productDetail?id=${p.getProductID()}">Buy Now</a>
                                                     </div>
                                                 </div>

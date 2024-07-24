@@ -1,32 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>web/component/navbarAdmin.jsp</url>
+            <bookmark id="1">
+                <name/>
+                <line>88</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DAO/DiscountDAO.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DTO/IndividualVoucherDTO.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/PostList.jsp</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DAO/CustomerDAO.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Voucher/VoucherServlet.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DAO/DBcontext.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/component/topbar.jsp</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/cart.jsp</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/component/navbar.jsp</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DTO/PostDTO.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Voucher/listVoucherCart.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Voucher/VoucherDetailServlet.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/HomeServlet.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Cart/CartServlet.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/checkout.jsp</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/index.jsp</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/dal/DBContext.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/shop.jsp</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/CheckOut/LastCheckOutServlet.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/Controller/UpdateAddress.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/Controller/DiscountDetailServlet.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/DTO/Discount.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/dal/CustomerDao.java</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/contact.jsp</file>
+            <file>file:/D:/FPT/2024/Summer2024/SPW391/Project%20Final/Gas_Store-/GasStore/GasStore/web/index.jsp</file>
+            <file>file:/D:/FPT/2024/Summer2024/SPW391/Project%20Final/Gas_Store-/GasStore/GasStore/web/shop.jsp</file>
+            <file>file:/D:/FPT/2024/Summer2024/SPW391/Project%20Final/Gas_Store-/GasStore/GasStore/web/adminHome.jsp</file>
+            <file>file:/D:/FPT/2024/Summer2024/SPW391/Project%20Final/Gas_Store-/GasStore/GasStore/web/shopListCate.jsp</file>
         </group>
     </open-files>
 </project-private>
