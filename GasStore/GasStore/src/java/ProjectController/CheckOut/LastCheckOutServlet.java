@@ -4,6 +4,7 @@
  */
 package ProjectController.CheckOut;
 
+import DAO.CustomerDAO;
 import DAO.DAOWarranty;
 import DAO.IndividualVoucherDAO;
 import DAO.MembershipTiersDAO;
@@ -15,6 +16,7 @@ import DAO.VoucherDAO;
 //import DTO.AccountDTO;
 import DTO.Cart;
 import DTO.Customer;
+import DTO.MembershipTiersDTO;
 import DTO.NotificationDTO;
 import DTO.Product;
 import jakarta.servlet.ServletException;
@@ -28,6 +30,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -97,17 +100,15 @@ public class LastCheckOutServlet extends HttpServlet {
         request.setAttribute("vocheridname", vocheridname);
         request.setAttribute("vourcherQuantity", vourcherQuantity);
         
-        HttpSession session = request.getSession();      
+        HttpSession session = request.getSession();
         Customer account = (Customer) session.getAttribute("account");
         MembershipTiersDAO mDAO = new MembershipTiersDAO();
         Double membershipDiscount = mDAO.getMembershipTierByID(account.getMemberShipTier()).getDiscountPercentage();
         request.setAttribute("membershipDiscount", membershipDiscount);
 
-        double membershipDiscountAmount = cart.getTotalMoney() * (mDAO.getMembershipTierByID(account.getMemberShipTier()).getDiscountPercentage() / 100);
-        double totalAmount = cart.getTotalMoney() - (cart.getTotalMoney() * /*totalVoucherDouble*/ 0) - membershipDiscountAmount + 10000;
         int totalPoint = (int) ((cart.getTotalMoney() / 10000) * mDAO.getMembershipTierByID(account.getMemberShipTier()).getBonusPointsRate());
         request.setAttribute("pointGain", totalPoint);
-
+        
         request.getRequestDispatcher("checkout.jsp").forward(request, response);
     }
 
@@ -197,6 +198,24 @@ public class LastCheckOutServlet extends HttpServlet {
             VoucherDAO voucherDAO = new VoucherDAO();
             voucherDAO.UpdateQuantityVoucher(vochername, vourcherQuantity);
 
+            //Point
+            MembershipTiersDAO mDAO = new MembershipTiersDAO();
+            int pointGain = (int) ((cart.getTotalMoney() / 10000) * mDAO.getMembershipTierByID(account.getMemberShipTier()).getBonusPointsRate());
+            account.setTotalPoint(account.getTotalPoint() + pointGain);
+
+            CustomerDAO cDAO = new CustomerDAO();
+            cDAO.updateCustomerTotalPoint(account.getCustomerID(), account.getTotalPoint());
+
+            ArrayList<MembershipTiersDTO> tierList = mDAO.getAll();
+            for (MembershipTiersDTO tier : tierList) {
+                if (tier.getMinPoints() <= account.getTotalPoint() && tier.getMaxPoints() >= account.getTotalPoint()) {
+                    account.setMemberShipTier(tier.getTierID());
+                    cDAO.updateCustomerTier(account.getCustomerID(), account.getMemberShipTier());
+                    break;
+                }
+            }
+            //
+            
             request.setAttribute("mess", "Order Successfully!!!");
             if ("vnpay".equals(paymentMethod)) {
             // Chuyển hướng tới cổng thanh toán VNPay
