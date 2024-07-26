@@ -93,7 +93,7 @@ public class BuyServlet extends HttpServlet {
         if (product != null) {
             int currentStock = product.getStockQuantity();
             if (requestedQuantity <= 0){
-                response.sendRedirect("productDetail?id="+id+"error=invalid_quantity");
+                response.sendRedirect("DetailProduct?id="+id+"error=invalid_quantity");
             }
             if (requestedQuantity <= currentStock) {
                 // Cập nhật số lượng tồn kho mới
@@ -112,10 +112,10 @@ public class BuyServlet extends HttpServlet {
                 response.addCookie(c);
 
                 // Chuyển hướng về trang chi tiết sản phẩm
-                response.sendRedirect("productDetail?id=" + id);
+                response.sendRedirect("DetailProduct?id=" + id);
             } else {
                 // Xử lý khi số lượng yêu cầu vượt quá số lượng tồn kho
-                response.sendRedirect("productDetail?id=" + id + "&error=insufficient_stock");
+                response.sendRedirect("DetailProduct?id=" + id + "&error=insufficient_stock");
             }
         } else {
             // Xử lý khi không tìm thấy sản phẩm

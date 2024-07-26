@@ -157,12 +157,12 @@
                                     <div class="product-img">
                                         <img src="${p.getImage()}" alt="Your Image">
                                         <div class="overlay-product">
-                                            <a href="productDetail?id=${p.getProductID()}"><i class="bx bx-search"></i></a>
+                                            <a href="DetailProduct?id=${p.getProductID()}"><i class="bx bx-search"></i></a>
                                         </div>
                                     </div>
                                     <div    class="product-detail">        
                                         <div class="intro">
-                                            <div class="intro-name"><a href="productDetail?id=${p.getProductID()}">${p.getName()}</a></div>                    
+                                            <div class="intro-name"><a href="DetailProduct?id=${p.getProductID()}">${p.getName()}</a></div>                    
                                         </div>
                                         <div class="component-product">
                                             <p><i class='bx bxs-hdd'></i>  Short Description ${p.getShortDescription()} </p>
@@ -173,7 +173,7 @@
                                         <div class="button-product">
                                             <div class="price"><fmt:formatNumber value="${p.getUnitPrice()}" type="currency" currencySymbol="" maxFractionDigits="0"/>VND</div> 
                                             
-                                            <a class="cart btnn" href = "productDetail?id=${p.getProductID()}">Buy Now</a>
+                                            <a class="cart btnn" href = "DetailProduct?id=${p.getProductID()}">Buy Now</a>
 
                                         </div>
                                     </div>
@@ -246,6 +246,7 @@
                 document.f.submit();
             }
         </script>
+          <script src="https://uhchat.net/code.php?f=1e9c23"></script>
     </body>
 
 </html>
