@@ -110,7 +110,8 @@ public class SignupServlet extends HttpServlet {
             request.setAttribute("phone", phone_raw);
             request.setAttribute("firstname", firstname_raw);
             request.setAttribute("lastname", lastname_raw);
-            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
+            request.setAttribute("wrongSignUpInfo", true);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
 
         if (user_raw.isEmpty() || gamil_raw.isEmpty() || password_raw.isEmpty()) {
@@ -121,7 +122,8 @@ public class SignupServlet extends HttpServlet {
             request.setAttribute("phone", phone_raw);
             request.setAttribute("firstname", firstname_raw);
             request.setAttribute("lastname", lastname_raw);
-            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
+            request.setAttribute("wrongSignUpInfo", true);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else if (checkuser != null) {
             request.setAttribute("err", "Username already exists ");
             request.setAttribute("user", user_raw);
@@ -130,7 +132,8 @@ public class SignupServlet extends HttpServlet {
             request.setAttribute("phone", phone_raw);
             request.setAttribute("firstname", firstname_raw);
             request.setAttribute("lastname", lastname_raw);
-            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
+            request.setAttribute("wrongSignUpInfo", true);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else if (!matcher.matches()) {
             request.setAttribute("user", user_raw);
             request.setAttribute("gmail", gamil_raw);
@@ -138,7 +141,8 @@ public class SignupServlet extends HttpServlet {
             request.setAttribute("phone", phone_raw);
             request.setAttribute("firstname", firstname_raw);
             request.setAttribute("lastname", lastname_raw);
-            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
+            request.setAttribute("wrongSignUpInfo", true);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else if (!matcher1.matches()) {
             request.setAttribute("err", "Password must have uppercase and lowercase letters and be longer than 6 characters");
             request.setAttribute("user", user_raw);
@@ -147,7 +151,8 @@ public class SignupServlet extends HttpServlet {
             request.setAttribute("phone", phone_raw);
             request.setAttribute("firstname", firstname_raw);
             request.setAttribute("lastname", lastname_raw);
-            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
+            request.setAttribute("wrongSignUpInfo", true);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else if (accountDTO != null) {
             request.setAttribute("err", "Email already exists ");
             request.setAttribute("user", user_raw);
@@ -156,7 +161,8 @@ public class SignupServlet extends HttpServlet {
             request.setAttribute("phone", phone_raw);
             request.setAttribute("firstname", firstname_raw);
             request.setAttribute("lastname", lastname_raw);
-            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
+            request.setAttribute("wrongSignUpInfo", true);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else if (!matcher2.matches()) {
             request.setAttribute("err", "Phone number must be 10 digits");
             request.setAttribute("user", user_raw);
@@ -165,7 +171,9 @@ public class SignupServlet extends HttpServlet {
             request.setAttribute("phone", phone_raw);
             request.setAttribute("firstname", firstname_raw);
             request.setAttribute("lastname", lastname_raw);
-            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
+            request.setAttribute("wrongSignUpInfo", true);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            //request.getRequestDispatcher("SignUp.jsp").forward(request, response);
         } else {
             Customer cus = new Customer(user_raw, password_raw, firstname_raw, lastname_raw, true, phone_raw, gamil_raw);
             dao.insertCustomer(cus);
