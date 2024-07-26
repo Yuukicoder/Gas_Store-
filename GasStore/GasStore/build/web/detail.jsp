@@ -327,7 +327,7 @@
                                 <img class="img-fluid w-100" src="${pro.image}" style="width: 650px; height: 250px" alt="">
                             </div>
                             <div class="text-center py-4">
-                                <a class="h6 text-decoration-none text-truncate" href="productDetail?id=${pro.productID}">${pro.name}</a>
+                                <a class="h6 text-decoration-none text-truncate" href="DetailProduct?id=${pro.productID}">${pro.name}</a>
                                 <div class="d-flex align-items-center justify-content-center mt-2">
                                     <h5 style="color: green">${pro.getFormattedPrice()} VND</h5><h6 class="text-muted ml-2"></h6>
                                 </div>

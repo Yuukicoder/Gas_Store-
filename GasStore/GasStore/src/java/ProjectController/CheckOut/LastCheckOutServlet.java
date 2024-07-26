@@ -124,12 +124,7 @@ public class LastCheckOutServlet extends HttpServlet {
             throws ServletException, IOException {
         String paymentMethod = request.getParameter("payment");
         
-        if ("vnpay".equals(paymentMethod)) {
-            // Chuyển hướng tới cổng thanh toán VNPay
-
-                request.getRequestDispatcher("vnpay_pay.jsp").forward(request, response);
-            return;
-        }
+        
         String totalvoucher = request.getParameter("totalvoucher");
         Double totalVoucherDouble = Double.parseDouble(totalvoucher);
         OrderDAO ord = new OrderDAO();
@@ -203,7 +198,12 @@ public class LastCheckOutServlet extends HttpServlet {
             voucherDAO.UpdateQuantityVoucher(vochername, vourcherQuantity);
 
             request.setAttribute("mess", "Order Successfully!!!");
+            if ("vnpay".equals(paymentMethod)) {
+            // Chuyển hướng tới cổng thanh toán VNPay
 
+                request.getRequestDispatcher("vnpay_pay.jsp").forward(request, response);
+            return;
+        }
             response.sendRedirect("shop");
         }
     }
