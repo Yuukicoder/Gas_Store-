@@ -41,7 +41,7 @@
             .carousel-inner img {
                 width: 100%;
                 height: 500px;
-                object-fit: cover;
+                object-fit: fill;
             }
 
             .container-fluid i{
@@ -119,11 +119,11 @@
                     <div id="product-carousel" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner bg-light">
                             <div class="carousel-item active">
-                                <img  src="${pro.image}" alt="Image">
+                                <img  src="images/Product_Images/${pro.image}" alt="Image">
                             </div>
                             <c:forEach items="${requestScope.pimgs}" var="c">
                                 <div class="carousel-item">
-                                    <img  src="${c.getPath()}" alt="Image">
+                                    <img  src="images/Product_Carousel_Images/${c.getPath()}" alt="Image">
                                 </div>
                             </c:forEach>
                         </div>
