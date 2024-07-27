@@ -187,7 +187,7 @@
                                 <input name="vourcherID" type="hidden" value="${vourcherIDValue != null ? vourcherIDValue : 0}" />                                
                                 <input name="vourcherQuantity" type="hidden" value="${vourcherQuantity - 1 }" />                                
 
-                                <button class="btn btn-block btn-primary font-weight-bold my-3 py-3"  >Proceed To Checkout</button>
+                                <button class="btn btn-block btn-primary font-weight-bold my-3 py-3" <c:if test="${o.totalMoney == 0}">disabled</c:if> >Proceed To Checkout</button>
                             </form>
 
 
