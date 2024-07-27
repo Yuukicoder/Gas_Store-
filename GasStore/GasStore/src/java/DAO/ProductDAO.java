@@ -628,7 +628,7 @@ public class ProductDAO extends DBcontext {
 
     public List<Product> filterProductsBySupplierPriceCategory(Integer supplierID, Integer priceRange, Integer cateId) {
         List<Product> filteredProducts = new ArrayList<>();
-        String sql = "SELECT * FROM Product WHERE 1=1";
+        String sql = "SELECT * FROM Product WHERE isActive=1";
 
         if (supplierID != null) {
             sql += " AND SupplierID = " + supplierID;
@@ -708,7 +708,7 @@ public class ProductDAO extends DBcontext {
                 + "from OrderDetails as o \n"
                 + "inner join Product as p \n"
                 + "on o.ProductID = p.ProductId\n"
-                + "where p.categoryID = ?\n"
+                + "where p.categoryID = ? and p.isActive = 1\n"
                 + "group by p.productID\n"
                 + "order by totalSell desc";
 
