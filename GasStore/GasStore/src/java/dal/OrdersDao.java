@@ -237,7 +237,7 @@ public class OrdersDao extends DBContext{
 
         list = new ArrayList<>();
         try {
-            String strSelect = "Select * from  [Order] where customerID = ? order by orderDate DESC";
+            String strSelect = "Select * from  [Order] where customerID = ? order by orderID desc";
             stm = connection.prepareStatement(strSelect);
             stm.setInt(1, id);
             rs = stm.executeQuery();
@@ -257,7 +257,9 @@ public class OrdersDao extends DBContext{
 
         list = new ArrayList<>();
         try {
-            String strSelect = "Select * from  [Order] where customerID = ? and status = ?";
+            String strSelect = """
+                               Select * from  [Order] where customerID = ? and status = ?
+                               order by orderID desc""";
             stm = connection.prepareStatement(strSelect);
             stm.setInt(1, id);
             stm.setInt(2, status);

@@ -189,8 +189,9 @@ public class OrderDAO extends DBcontext {
     }
 
     public List<OrderDTO> getAllOrder(int id) {
-        String sql = "SELECT o.OrderID, o.totalMoney, o.orderDate, o.shipAddress, o.Status\n"
-                + "FROM [Order] o WHERE o.customerID = ?";
+        String sql = """
+                     SELECT o.OrderID, o.totalMoney, o.orderDate, o.shipAddress, o.Status
+                     FROM [Order] o WHERE o.customerID = ? and status = 3""";
         List<OrderDTO> lo = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
