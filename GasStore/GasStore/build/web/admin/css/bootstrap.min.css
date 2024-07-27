@@ -3181,9 +3181,19 @@ textarea.form-control-lg{
     background-color:transparent;
     border-color:transparent
 }
+.nav-tabs1 .nav-link.disabled{
+    color:#6c757d;
+    background-color:transparent;
+    border-color:transparent
+}
 .nav-tabs .nav-link.active,.nav-tabs .nav-item.show .nav-link{
     color:#495057;
     background-color:#000;
+    border-color:#000
+}
+.nav-tabs1 .nav-link.active,.nav-tabs .nav-item.show .nav-link{
+    color:#495057;
+    /*background-color:#000;*/
     border-color:#000
 }
 .nav-tabs .dropdown-menu{

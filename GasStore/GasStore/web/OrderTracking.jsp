@@ -197,7 +197,7 @@
                                     <td class="align-middle">x ${k.getQuantity()}</td>
                                     <td class="align-middle">${pDAO.getProductByID(k.productID).getFormattedTotalMoney()}₫</td> 
                                 </tr>
-                                <c:set var="totalAmount" value="${totalAmount + (pDAO.getProductByID(k.productID).getFormattedTotalMoney() * k.quantity)}" />
+                                <%--<c:set var="totalAmount" value="${totalAmount + (pDAO.getProductByID(k.productID).getFormattedTotalMoney() * k.quantity)}" />--%>
                             </c:forEach>
                         </tbody>
                     </table>
@@ -208,12 +208,9 @@
                                     <td class="align-right" colspan="100"> Total Order Amount </td>
                                     <td class="small-text align-right" colspan="1">${ordao.getFormattedTotalMoney()} ₫</td>
                                 </tr>
+                                
                                 <tr>
-                                    <td class="align-right" colspan="100">Shipping Fee</td>
-                                    <td class="small-text align-right" colspan="1">Free</td>
-                                </tr>
-                                <tr>
-                                    <td class="align-right" colspan="100">Shopee Voucher Applied</td>
+                                    <td class="align-right" colspan="100">Voucher Applied</td>
                                     <td class="small-text align-right" colspan="1">
                                         0 ₫
 

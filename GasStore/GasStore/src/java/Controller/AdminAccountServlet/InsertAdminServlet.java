@@ -191,7 +191,7 @@ public class InsertAdminServlet extends HttpServlet {
                         amail, !fileName.isEmpty() && isImageFile(fileName) ? fileName : "anno.jpg",
                         Boolean.parseBoolean(ac)
                 );
-                cus.updateStaff(newAdmin);
+                cus.updateStaff1(newAdmin);
             } else {
 
                 if (cus.isAdminAvailable(aname) && cus.isEmailAdmin(amail)) {
@@ -225,7 +225,7 @@ public class InsertAdminServlet extends HttpServlet {
                             !fileName.isEmpty() && isImageFile(fileName) ? fileName : "anno.jpg",
                             Boolean.parseBoolean(ac)
                     );
-                    cus.insertStaff(newAdmin);
+                    cus.insertStaff1(newAdmin);
                     request.setAttribute("alertMessage", "Admin account created successfully. Username: " + aname + ", Password: " + apass);
                     request.getRequestDispatcher("InsertAdmin.jsp").forward(request, response);
                     return;

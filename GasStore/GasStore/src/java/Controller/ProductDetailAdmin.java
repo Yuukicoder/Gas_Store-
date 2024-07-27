@@ -32,7 +32,7 @@ import java.util.Map;
  *
  * @author dell456
  */
-@WebServlet(name = "ProductDetailServlet", urlPatterns = {"/Product-detail"})
+@WebServlet(name = "ProductDetailServlet", urlPatterns = {"/feedbackRep-detail"})
 public class ProductDetailAdmin extends HttpServlet {
 
     @Override

@@ -177,6 +177,9 @@
                         </form>
                         <hr>
                     </div>
+                         <div class=" m-3 mt-3 col-lg-3">
+                    <a href="adminHome" class="btn btn-warning">Back</a>
+                </div>   
                 </div>
             </div>
         </div>
