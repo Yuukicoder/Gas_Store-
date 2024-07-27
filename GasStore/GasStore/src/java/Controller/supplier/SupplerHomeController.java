@@ -36,25 +36,17 @@ public class SupplerHomeController extends HttpServlet {
         if (account != null) {
 
             //get income
-            float incomeToday = odao.getIncomeToday();
-            int orderToday = odao.getOrdersToday();
-            int orderDelivered = odao.getTotalOrdersDelivered();
-            int orderCanceled = odao.getTotalOrdersCancled();
-            int newProduct = pdao.getTotalNewProduct();
-            int totalProductA = pdao.getTotalProduct();
-            int newAccount = adao.getTotalNewAccount();
+            int orderDelivered = odao.getTotalSupplierOrdersDelivered(account.getSupplierId());
+            int orderCanceled = odao.getTotalSupplierOrdersCancled(account.getSupplierId());
+            int totalProductA = pdao.getTotalSupplierProduct(account.getSupplierId());
             int totalAccount = adao.getTotalAccount();
            
             request.setAttribute("listUser", account);
-            request.setAttribute("incomeToday", incomeToday);
-            request.setAttribute("orderToday", orderToday);
             request.setAttribute("totalOrderDelivered", orderDelivered);
             request.setAttribute("totalOrderCanceled", orderCanceled);
-            request.setAttribute("newProduct", newProduct);
             request.setAttribute("totalProduct", totalProductA);
-            request.setAttribute("newAccount", newAccount);
             request.setAttribute("totalCustomer", totalAccount);
-            request.setAttribute("ListOrder", odao.listOrderInAdminHome(8));
+            
             request.getRequestDispatcher("SupplierHome.jsp").forward(request, response);
         } else {
             response.sendRedirect("../login.jsp");

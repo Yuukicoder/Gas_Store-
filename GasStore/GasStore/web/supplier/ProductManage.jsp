@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page pageEncoding="UTF-8" %>
 <style>
@@ -89,7 +90,7 @@
                                     <tbody>
                                         <c:forEach items="${requestScope.products}" var="c">
                                             <tr>
-                                                <td><img style="width: 80px" src="${pageContext.request.contextPath}/${c.getImage()}" alt="alt"/></td>
+                                                <td><img style="width: 80px" src="${pageContext.request.contextPath}/images/Product_Images/${c.getImage()}" alt="alt"/></td>
                                                 <td><a class="name" href="productUpdate?pid=${c.getProductID()}">${c.getName()}</a></td>
                                                 <td>
                                                     <c:if test="${c.getStockQuantity() != 0}">
@@ -101,7 +102,8 @@
                                                         ${c.getStockQuantity()}
                                                     </c:if>
                                                 </td>
-                                                <td>${c.getUnitPrice()}</td>
+                                                <td><fmt:formatNumber value="${c.getUnitPrice()}" type="currency" currencySymbol="" maxFractionDigits="0"/>&nbsp;VND</td>
+                                                
                                                 <c:if test="${c.isActive }">
                                                     <td style=" display: flex ; padding: 0.5rem 0.5rem; text-align: center; font-size: larger; transition: 0.5s; color: var(--color-dark);">
                                                         <form action="${pageContext.request.contextPath}/supplier/product-manager" method="POST">

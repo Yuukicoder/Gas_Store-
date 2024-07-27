@@ -223,7 +223,7 @@ public class VoucherDAO extends DBcontext {
     }
 
     public void UpdateQuantityVoucher(String name, String quantity) {
-        String sql = "UPDATE [dbo].[Voucher] SET [Quantity] = ? WHERE [VoucherCode] = ?";
+        String sql = "UPDATE Discount SET quantity = ? WHERE discountCode = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, quantity);

@@ -108,7 +108,7 @@
                                         <tbody>
                                             <c:forEach items="${requestScope.productCmap}" var="c">
                                                 <tr>
-                                                    <td><img style="width: 80px" src="${c.getKey().getImage()}" alt="alt"/></td>
+                                                    <td><img style="width: 80px" src="images/Product_Images/${c.getKey().getImage()}" alt="alt"/></td>
                                                     <td >
                                                         <a class="name"  href="productUpdate?pid=${c.getKey().getProductID()}">${c.getKey().getName()}</a>
                                                     </td>  

@@ -36,7 +36,7 @@ public class OrderDAO extends DBcontext {
         System.out.println(ord.getAllOrder(2));
     }
 
-    public int addOrder(Customer a, Cart cart, String address, double voucher1, String notes) {
+    public int addOrder(Customer a, Cart cart, String address, double tongtienvoucher, String notes) {
         LocalDate curDate = LocalDate.now();
         String date = curDate.toString();
         try {
@@ -44,7 +44,7 @@ public class OrderDAO extends DBcontext {
             String sql = "insert into [Order] (customerID,totalMoney,orderDate,shipAddress,status,notes ) values (?,?,?,?,?,?)";
             PreparedStatement st = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, a.getCustomerID());
-            st.setDouble(2, cart.getTotalMoney() - (cart.getTotalMoney() * voucher1) - (cart.getTotalMoney() * (getDiscountFromCustomerLoyalty(a) / 100)) + 10000);
+            st.setDouble(2, cart.getTotalMoney() - tongtienvoucher - (cart.getTotalMoney() * (getDiscountFromCustomerLoyalty(a) / 100)));
             st.setString(3, date);
             st.setString(4, address);
             st.setInt(5, 0);
@@ -554,6 +554,30 @@ public class OrderDAO extends DBcontext {
         }
         return 0;
     }
+    
+    public int getTotalSupplierOrdersDelivered(int sId) {
+        String sql = """
+                     select COUNT(o.OrderID) AS OrderCount
+                     from [Order] o
+                     inner join OrderDetails od
+                     on o.orderID = od.orderID
+                     inner join Product p 
+                     on p.productID = od.productID 
+                     where o.status = 3 and p.supplierId = ?""";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, sId);
+            ResultSet rs = ps.executeQuery();
+            int orders = 0;
+            if (rs.next()) {
+                orders = rs.getInt("OrderCount");
+            }
+            return orders;
+        } catch (SQLException e) {
+            System.out.println("OrderDAO - getTotalOrdersDelivered: " + e.getMessage());
+        }
+        return 0;
+    }
 
     public int getTotalOrdersCancled() {
         String sql = """
@@ -562,6 +586,30 @@ public class OrderDAO extends DBcontext {
                      where [status] = 4""";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            int orders = 0;
+            if (rs.next()) {
+                orders = rs.getInt("OrderCount");
+            }
+            return orders;
+        } catch (SQLException e) {
+            System.out.println("OrderDAO - getTotalOrdersCancled: " + e.getMessage());
+        }
+        return 0;
+    }
+    
+    public int getTotalSupplierOrdersCancled(int sId) {
+        String sql = """
+                     select COUNT(o.OrderID) AS OrderCount
+                     from [Order] o
+                     inner join OrderDetails od
+                     on o.orderID = od.orderID
+                     inner join Product p 
+                     on p.productID = od.productID 
+                     where o.status = 4 and p.supplierId = ?""";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, sId);
             ResultSet rs = ps.executeQuery();
             int orders = 0;
             if (rs.next()) {

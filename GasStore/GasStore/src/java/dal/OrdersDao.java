@@ -131,24 +131,16 @@ public class OrdersDao extends DBContext{
         try {
             StringBuilder query = new StringBuilder();
             query.append("""
-                         SELECT DISTINCT 
-                             o.orderID,
-                             o.customerID,
-                             o.trackingNumber,
-                             o.totalMoney,
-                             o.orderDate,
-                             CAST(o.shipAddress AS nvarchar(max)) AS shipAddress,
-                             o.status,
-                             o.shipVia,
-                             o.payment,
-                             CAST(o.notes AS nvarchar(max)) AS notes
-                         FROM 
-                             [Gas_Management].[dbo].[Order] o 
-                         JOIN 
-                             [Gas_Management].[dbo].[OrderDetails] od 
-                             ON o.orderID = od.orderID""");
+                         select o.*
+                             from [Order] o
+                             inner join OrderDetails od
+                             on o.orderID = od.orderID
+                             inner join Product p 
+                             on p.productID = od.productID
+                             where p.supplierId = ?""");
 
             PreparedStatement preparedStatement = connection.prepareStatement(query.toString());
+            preparedStatement.setInt(1, sid);
             mapParams(preparedStatement, list);
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {

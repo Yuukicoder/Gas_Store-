@@ -27,6 +27,8 @@ public class Customer {
     private int totalMoney;
     private boolean isCustomer;
     private String email;
+    private int totalPoint;
+    private int memberShipTier;
 
     public Customer() {
     }
@@ -237,6 +239,22 @@ public class Customer {
 
     public void setIsCustomer(boolean isCustomer) {
         this.isCustomer = isCustomer;
+    }
+
+    public int getTotalPoint() {
+        return totalPoint;
+    }
+
+    public void setTotalPoint(int totalPoint) {
+        this.totalPoint = totalPoint;
+    }
+
+    public int getMemberShipTier() {
+        return memberShipTier;
+    }
+
+    public void setMemberShipTier(int memberShipTier) {
+        this.memberShipTier = memberShipTier;
     }
 
    

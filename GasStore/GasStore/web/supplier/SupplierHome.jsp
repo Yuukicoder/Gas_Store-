@@ -52,7 +52,7 @@
                             <i class="bx bx-money-withdraw fa-3x text-primary" ></i>
                             <div class="ms-3">
                                 <p class="mb-2" >Total Order Canceled</p>
-                                <h6 class="mb-0" >${totalOrderDelivered}</h6>
+                                <h6 class="mb-0" >${totalOrderCanceled}</h6>
                             </div>
                         </div>
                     </div>

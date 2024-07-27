@@ -67,7 +67,7 @@
                                 <div class="right-side">
                                     <label class="form-label" style="color: #E57C23">Banner</label>
                                     <input type="file" value="" class="form-control col-3" name="banner" style="width: 80%; margin-bottom: .5rem; margin-top: .5rem">
-                                    <img style="width: 12rem; margin: 0.2rem" src="images/Post/${pdto.getPostbanner()}" alt="alt" id="img"/>
+                                    <img style="width: 12rem; margin: 0.2rem" src="images/Banner/${pdto.getPostbanner()}" alt="alt" id="img"/>
                                 </div>
                             </div>
                         </div>

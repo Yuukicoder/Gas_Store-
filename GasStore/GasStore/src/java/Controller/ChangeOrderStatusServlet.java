@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
+import DTO.Customer;
 
 /**
  *
@@ -32,14 +33,42 @@ public class ChangeOrderStatusServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        AdminDTO account = (AdminDTO) session.getAttribute("account");
+        AdminDTO account = null;
+        Customer cus = null;
+        try {
+            account = (AdminDTO) session.getAttribute("account");
+        } catch (Exception e) {
+            cus = (Customer) session.getAttribute("account");
+            System.out.println("ChangeOrderStatusServlet: Not admin");
+            System.out.println("cus: " + cus.toString());
+        }
+
         if (account != null) {
             //Reset noti-time on navbar - Vu Anh
             NotificationDAO nDAO = new NotificationDAO();
             ArrayList<NotificationDTO> n = nDAO.getAdmin3NewestUnreadNoti();
             session.setAttribute("notiList", n);
             //
-            
+
+            String idRaw = request.getParameter("id");
+            String statusRaw = request.getParameter("status");
+            String backToStaffHome = request.getParameter("backToStaffHome");
+            String backToAdminHome = request.getParameter("backToAdminHome");
+            try {
+                int id = Integer.parseInt(idRaw);
+                int status = Integer.parseInt(statusRaw);
+                OrderDAO oDAO = new OrderDAO();
+                oDAO.changeStatusOrder(id, status);
+                if(backToStaffHome != null && backToStaffHome.equals("1")){
+                    response.sendRedirect("adminHome");
+                }else if(backToAdminHome != null && backToAdminHome.equals("1")){
+                    response.sendRedirect("adminHome");
+                }
+                response.sendRedirect("orderTable");
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } else if (cus != null && Integer.parseInt(request.getParameter("status")) == 4) {
             String idRaw = request.getParameter("id");
             String statusRaw = request.getParameter("status");
             try {
@@ -47,7 +76,7 @@ public class ChangeOrderStatusServlet extends HttpServlet {
                 int status = Integer.parseInt(statusRaw);
                 OrderDAO oDAO = new OrderDAO();
                 oDAO.changeStatusOrder(id, status);
-                response.sendRedirect("orderTable");
+                response.sendRedirect("mypurchase");
             } catch (Exception e) {
                 System.out.println(e);
             }

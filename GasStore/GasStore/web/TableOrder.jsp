@@ -148,7 +148,7 @@
                                     </table>
                                 </div>
                                 <div style="display: flex; justify-content: center; align-item: center; margin-top: 20px">
-                                    <h6 class="mb-0" style="font-size: 18px; font-weight: bold;">Total Revenue: <span style="color: #3AA6B9; font-size: 18px; font-weight: bold;"><fmt:formatNumber value="${totalRevenue}" type="currency" currencySymbol="VND" /></span></h6>
+                                    <h6 class="mb-0" style="font-size: 18px; font-weight: bold;">Total Revenue: <span style="color: #3AA6B9; font-size: 18px; font-weight: bold;"><fmt:formatNumber value="${totalRevenue}" type="currency" currencySymbol="" maxFractionDigits="0"/>&nbsp;VND</span></h6>
                                 </div>
                                 <div id="pagination">
                                     <nav style="float: right;margin-top: 25px; color: black" aria-label="Page navigation example">

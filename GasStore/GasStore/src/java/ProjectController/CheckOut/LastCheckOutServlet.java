@@ -74,7 +74,8 @@ public class LastCheckOutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String vocherid = request.getParameter("vocherid");
+        String vocherid = request.getParameter("discountValue");
+        String voucherType = request.getParameter("voucherType");
         String vochername = request.getParameter("vochername");
         String vocheridname = request.getParameter("vourcherID");
         String vourcherQuantity = request.getParameter("vourcherQuantity");
@@ -93,20 +94,27 @@ public class LastCheckOutServlet extends HttpServlet {
         Cart cart = new Cart(txt, list);
         request.setAttribute("cart", cart);
         request.setAttribute("vocherid", vocherid);
+        request.setAttribute("voucherType", voucherType); 
         request.setAttribute("vochername", vochername);
         request.setAttribute("vocheridname", vocheridname);
         request.setAttribute("vourcherQuantity", vourcherQuantity);
-        
-        HttpSession session = request.getSession();      
-        Customer account = (Customer) session.getAttribute("account");
-        MembershipTiersDAO mDAO = new MembershipTiersDAO();
-        Double membershipDiscount = mDAO.getMembershipTierByID(account.getMemberShipTier()).getDiscountPercentage();
-        request.setAttribute("membershipDiscount", membershipDiscount);
 
-        double membershipDiscountAmount = cart.getTotalMoney() * (mDAO.getMembershipTierByID(account.getMemberShipTier()).getDiscountPercentage() / 100);
-        double totalAmount = cart.getTotalMoney() - (cart.getTotalMoney() * /*totalVoucherDouble*/ 0) - membershipDiscountAmount + 10000;
-        int totalPoint = (int) ((cart.getTotalMoney() / 10000) * mDAO.getMembershipTierByID(account.getMemberShipTier()).getBonusPointsRate());
-        request.setAttribute("pointGain", totalPoint);
+        HttpSession session = request.getSession();
+        Customer account = (Customer) session.getAttribute("account");
+        if (account != null) {
+            MembershipTiersDAO mDAO = new MembershipTiersDAO();
+            Double membershipDiscount = mDAO.getMembershipTierByID(account.getMemberShipTier()).getDiscountPercentage();
+            request.setAttribute("membershipDiscount", membershipDiscount);
+
+            double membershipDiscountAmount = cart.getTotalMoney() * (mDAO.getMembershipTierByID(account.getMemberShipTier()).getDiscountPercentage() / 100);
+            double totalAmount = cart.getTotalMoney() - (cart.getTotalMoney() * /*totalVoucherDouble*/ 0) - membershipDiscountAmount + 10000;
+            int totalPoint = (int) ((cart.getTotalMoney() / 10000) * mDAO.getMembershipTierByID(account.getMemberShipTier()).getBonusPointsRate());
+            request.setAttribute("pointGain", totalPoint);
+        } else {
+            int totalPoint = (int) ((cart.getTotalMoney() / 10000));
+            request.setAttribute("pointGain", totalPoint);
+            request.setAttribute("membershipDiscount", 0);
+        }
 
         request.getRequestDispatcher("checkout.jsp").forward(request, response);
     }
@@ -123,10 +131,10 @@ public class LastCheckOutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String paymentMethod = request.getParameter("payment");
+
+//        String totalvoucher = request.getParameter("totalvoucher");
+//        Double totalVoucherDouble = Double.parseDouble(totalvoucher);
         
-        
-        String totalvoucher = request.getParameter("totalvoucher");
-        Double totalVoucherDouble = Double.parseDouble(totalvoucher);
         OrderDAO ord = new OrderDAO();
         OrderDetailDAO oid = new OrderDetailDAO();
         //add voucher
@@ -179,12 +187,12 @@ public class LastCheckOutServlet extends HttpServlet {
             nDAO.addNoti(noti);
             //
 
-            int orderIdReturn = ord.addOrder(account, cart, address, totalVoucherDouble, nameacount);
-            
+            int orderIdReturn = ord.addOrder(account, cart, address, tongtienvoucher, nameacount);
+
             DAOWarranty daoWar = new DAOWarranty();
-    
+
             oid.insertOrderDetail(cart, orderIdReturn);
-            
+
             ord.updateStockQuantity(cart);
             request.setAttribute("cart", cart);
             Cookie c = new Cookie("cart", "");
@@ -199,11 +207,11 @@ public class LastCheckOutServlet extends HttpServlet {
 
             request.setAttribute("mess", "Order Successfully!!!");
             if ("vnpay".equals(paymentMethod)) {
-            // Chuyển hướng tới cổng thanh toán VNPay
+                // Chuyển hướng tới cổng thanh toán VNPay
 
                 request.getRequestDispatcher("vnpay_pay.jsp").forward(request, response);
-            return;
-        }
+                return;
+            }
             response.sendRedirect("shop");
         }
     }

@@ -61,7 +61,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Name</th>
-<!--                                <th>Image</th>-->
+                                <!--                                <th>Image</th>-->
                                 <th>Price</th>
                                 <th>Quantity</th>
                                 <th>Total</th>
@@ -78,8 +78,8 @@
                                     <td class="align-middle">${i.product.name}</td>
                                     <!--<td class="align-middle"><img class="img-fluid" src="images/Product/${i.product.image}" alt="Image"></td>--> 
                                     <td class="align-middle">
-    <fmt:formatNumber value="${i.product.unitPrice}" type="currency" currencySymbol="VND" />
-</td>
+                                        <fmt:formatNumber value="${i.product.unitPrice}" type="currency" currencySymbol="" maxFractionDigits="0"/>VND
+                                    </td>
 
 
                                     <td class="align-middle">
@@ -97,8 +97,8 @@
                                     </td>
 
                                     <td class="align-middle">
-    <fmt:formatNumber value="${i.product.unitPrice * i.quantity}" type="currency" currencySymbol="VND" />
-</td>
+                                        <fmt:formatNumber value="${i.product.unitPrice * i.quantity}" type="currency" currencySymbol="" maxFractionDigits="0"/>VND
+                                    </td>
 
 
                                     <td class="align-middle">
@@ -138,49 +138,56 @@
                         <div class="border-bottom pb-2">
                             <div class="d-flex justify-content-between mb-3">
                                 <h6>Subtotal</h6>
-                                <h6><fmt:formatNumber value="${o.totalMoney}" type="currency" currencySymbol="VND" /></h6>
+                                <h6><fmt:formatNumber value="${o.totalMoney}" type="currency" currencySymbol="" maxFractionDigits="0"/>VND</h6>
 
                             </div>
                             <div class="d-flex justify-content-between mb-3">
                                 <h6>Voucher</h6>
-
                                 <c:forEach var="c" items="${requestScope.used1}">
-                                    <c:set var="discountValue" value="${c.discount}" />
-                                    <c:set var="nameValue" value="${c.voucherCode}" />
-                                    <c:set var="vourcherIDValue" value="${c.vourcherID}" />
-                                    <c:set var="vourcherQuantity" value="${c.quantity}" />
-
+                                    <c:set var="discountValue" value="${c.discountAmount}" />
+                                    <c:set var="voucherType" value="${c.discountType}" />
+                                    <c:set var="nameValue" value="${c.discountCode}" />
+                                    <c:set var="vourcherIDValue" value="${c.discountID}" />
+                                    <c:set var="vourcherQuantity" value="${c.quantity}" />   
                                 </c:forEach>
-                                <h6>${discountValue != null ? discountValue : 0}%</h6>
-
+                                <c:if test="${voucherType eq 'PERCENT'}">
+                                    <h6>${discountValue != null ? discountValue : 0}%</h6>
+                                </c:if>
+                                <c:if test="${voucherType eq 'FIXED'}">
+                                    <h6><fmt:formatNumber value="${discountValue}" type="currency" currencySymbol="" maxFractionDigits="0"/>VND</h6>
+                                </c:if>
                             </div>
-                           <div class="d-flex justify-content-between mb-3">
-                                <h6>Ship</h6>
-                                <h6><fmt:formatNumber value="10000" type="currency" currencySymbol="VND" /></h6>
-
-                            </div>
+                            <!--                            <div class="d-flex justify-content-between mb-3">
+                                                            <h6>Ship</h6>
+                                                            <h6><fmt :formatNumber value="10000" type="currency" currencySymbol="VND" /></h6>
+                                                        </div>-->
                         </div>
                         <div class="pt-2">
 
                             <div class="d-flex justify-content-between mt-2">
                                 <h5>Total</h5>
-                               <c:if test="${discountValue != null}">
-                                    <h5><fmt:formatNumber value="${(o.totalMoney - ((o.totalMoney * discountValue) / 100) + 10)}" type="currency" currencySymbol="VND" /></h5>
+                                <c:if test="${discountValue != null}">
+                                    <c:if test="${voucherType eq 'PERCENT'}">
+                                        <h5><fmt:formatNumber value="${(o.totalMoney - ((o.totalMoney * discountValue) / 100))}" type="currency" currencySymbol="" maxFractionDigits="0"/>VND</h5>
+                                    </c:if>
+                                    <c:if test="${voucherType eq 'FIXED'}">
+                                        <h5><fmt:formatNumber value="${(o.totalMoney -  discountValue)}" type="currency" currencySymbol="" maxFractionDigits="0"/>VND</h5>
+                                    </c:if>
                                 </c:if>
                                 <c:if test="${discountValue == null}">
-                                    <h5><fmt:formatNumber value="${(o.totalMoney + 10000)}" type="currency" currencySymbol="VND" /></h5>
+                                    <h5><fmt:formatNumber value="${(o.totalMoney)}" type="currency" currencySymbol="" maxFractionDigits="0"/>VND</h5>
                                 </c:if>
 
                             </div>
 
                             <form action="lastcheck">
-                                <input name="vocherid" type="hidden" value="${discountValue != null ? discountValue : 0}" />                                
+                                <input name="discountValue" type="hidden" value="${discountValue != null ? discountValue : 0}" /> 
+                                <input name="voucherType" type="hidden" value="${voucherType != null ? voucherType : ''}" /> 
                                 <input name="vochername" type="hidden" value="${nameValue != null ? nameValue : 0}" />                                
                                 <input name="vourcherID" type="hidden" value="${vourcherIDValue != null ? vourcherIDValue : 0}" />                                
                                 <input name="vourcherQuantity" type="hidden" value="${vourcherQuantity - 1 }" />                                
 
-
-                                <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</button>
+                                <button class="btn btn-block btn-primary font-weight-bold my-3 py-3"  >Proceed To Checkout</button>
                             </form>
 
 

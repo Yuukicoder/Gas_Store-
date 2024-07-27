@@ -555,6 +555,21 @@ public class ProductDAO extends DBcontext {
         }
         return 0;
     }
+    
+    public int getTotalSupplierProduct(int sId) {
+        String sql = "SELECT COUNT(productID) AS Count FROM Product where supplierId = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, sId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("Count");
+            }
+        } catch (SQLException e) {
+            System.out.println("ProductDAO - getTotalProduct: " + e.getMessage());
+        }
+        return 0;
+    }
 
     public List<Product> getAllProductHide() {
         String sql = "SELECT * FROM Product where isActive = 0";

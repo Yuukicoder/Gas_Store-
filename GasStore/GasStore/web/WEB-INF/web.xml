@@ -121,10 +121,6 @@
         <servlet-class>Controller.Contact</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ProductDetailServlet</servlet-name>
-        <servlet-class>Controller.ProductDetailServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ajaxServlet</servlet-name>
         <servlet-class>com.vnpay.common.ajaxServlet</servlet-class>
     </servlet>
@@ -139,6 +135,10 @@
     <servlet>
         <servlet-name>ViewDiscount</servlet-name>
         <servlet-class>Controller.ViewDiscount</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProductDetailServlet</servlet-name>
+        <servlet-class>Controller.ProductDetailServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>SignupServlet</servlet-name>
@@ -265,10 +265,6 @@
         <url-pattern>/Contact</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ProductDetailServlet</servlet-name>
-        <url-pattern>/DetailProduct</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>ajaxServlet</servlet-name>
         <url-pattern>/ajaxServlet</url-pattern>
     </servlet-mapping>
@@ -283,6 +279,10 @@
     <servlet-mapping>
         <servlet-name>ViewDiscount</servlet-name>
         <url-pattern>/ViewDiscount</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductDetailServlet</servlet-name>
+        <url-pattern>/DetailProduct</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

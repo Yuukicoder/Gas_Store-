@@ -93,55 +93,87 @@
                         <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order Total</span></h5>
                         <div class="bg-light p-30 mb-5">
                             <div class="border-bottom">
-                                <h6 class="mb-3">Products</h6>
-                                <c:set var="o" value="${requestScope.cart}"/>
-                                <c:forEach items="${o.items}" var="i">
-                                    <div class="d-flex justify-content-between" style="color: gray">
-                                        <p >${i.product.name}</p>
-                                        <p>${i.quantity}</p>
-                                        <p><fmt:formatNumber value="${(i.product.unitPrice)*(i.quantity)}" type="currency" currencySymbol="VND" /></p>
-                                    </div>
-                                </c:forEach>
-
+                                <!--<h6 class="mb-3">Products</h6>-->
+                                <table>
+                                    <thead>
+                                    <th style="text-align: left;">Products</th>
+                                    <th style="text-align: center;">Quantity</th>
+                                    <th style="text-align: right;">Price</th>
+                                    </thead>
+                                    <tbody>
+                                        <c:set var="o" value="${requestScope.cart}"/>
+                                        <c:forEach items="${o.items}" var="i">
+                                            <!--<div class="d-flex justify-content-between" style="color: gray">-->
+                                            <tr>
+                                                <td style="text-align: left;">
+                                                    <p >${i.product.name}</p>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <p style="min-width: 1.5rem">${i.quantity}</p>
+                                                </td>
+                                                <td style="text-align: right;">
+                                                    <p><fmt:formatNumber value="${(i.product.unitPrice)*(i.quantity)}" type="currency" currencySymbol="" maxFractionDigits="0"/>VND</p>
+                                                </td>
+                                            </tr>
+                                            <!--</div>-->
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="border-bottom pt-3 pb-2">
                                 <div class="d-flex justify-content-between mb-3">
                                     <h6>Subtotal</h6>
-                                    <h6><fmt:formatNumber value="${o.totalMoney}" type="currency" currencySymbol="VND" /></h6>
+                                    <h6><fmt:formatNumber value="${o.totalMoney}" type="currency" currencySymbol="" maxFractionDigits="0"/>VND</h6>
                                 </div>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <h6>Voucher</h6>               
-                                    <h6>0%</h6>
-                                </div>
+
+
+                                <c:if test="${voucherType eq 'PERCENT'}">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <h6>Voucher</h6>               
+                                        <h6>${vocherid != null ? vocherid : 0}%</h6>
+                                    </div>
+                                </c:if>
+                                <c:if test="${voucherType eq 'FIXED'}">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <h6>Voucher</h6>               
+                                        <h6><fmt:formatNumber value="${vocherid}" type="currency" currencySymbol="" maxFractionDigits="0"/>VND</h6>
+                                    </div>
+                                </c:if>
 
                                 <div class="d-flex justify-content-between mb-3">
                                     <h6>Membership Discount</h6>               
                                     <h6>${membershipDiscount}%</h6>
                                 </div>
 
+
                                 <div class="d-flex justify-content-between mb-3">
                                     <h6>Point Gain</h6>               
                                     <h6>${pointGain}</h6>
                                 </div>
 
-                                <div class="d-flex justify-content-between mb-3">
-                                    <h6>Ship</h6>
-                                    <h6><fmt:formatNumber value="10000" type="currency" currencySymbol="VND" /></h6>
-
-                                </div>    
+                                <!--                                <div class="d-flex justify-content-between mb-3">
+                                                                    <h6>Ship</h6>
+                                                                    <h6><fmt :formatNumber value="10000" type="currency" currencySymbol="VND" maxFractionDigits="0"/></h6>
+                                                                </div>    -->
 
 
                             </div>
                             <div class="pt-2">
                                 <div class="d-flex justify-content-between mt-2">
                                     <h5>Total</h5>
-                                    <c:if test="${requestScope.vocherid != 0}" >
-                                        <c:set value="${((o.totalMoney)*requestScope.vocherid)/100}" var="tongtienvoucher" />
-                                        <h5><fmt:formatNumber value="${o.totalMoney - ((o.totalMoney * requestScope.vocherid)/100) - (o.totalMoney * (membershipDiscount/100)) + 10000}" type="currency" currencySymbol="VND" /></h5>
+                                    <c:if test="${requestScope.vocherid != 0}">
+                                        <c:if test="${voucherType eq 'PERCENT'}">
+                                            <h5><fmt:formatNumber value="${(o.totalMoney - ((o.totalMoney * requestScope.vocherid) / 100) - (o.totalMoney * (membershipDiscount/100)))}" type="currency" currencySymbol="" maxFractionDigits="0"/>VND</h5>
+                                            <c:set value="${(o.totalMoney * requestScope.vocherid) / 100}" var="tongtienvoucher" />
+                                        </c:if>
+                                        <c:if test="${voucherType eq 'FIXED'}">
+                                            <h5><fmt:formatNumber value="${(o.totalMoney -  requestScope.vocherid - (o.totalMoney * (membershipDiscount/100)))}" type="currency" currencySymbol="" maxFractionDigits="0"/>VND</h5>
+                                            <c:set value="${requestScope.vocherid}" var="tongtienvoucher" />
+                                        </c:if>
                                     </c:if>
                                     <c:if test="${requestScope.vocherid == 0}" >
 
-                                        <h5><fmt:formatNumber value="${o.totalMoney - (o.totalMoney * (membershipDiscount/100)) + 10000}" type="currency" currencySymbol="VND" /></h5>
+                                        <h5><fmt:formatNumber value="${o.totalMoney - (o.totalMoney * (membershipDiscount/100))}" type="currency" currencySymbol="" maxFractionDigits="0"/>VND</h5>
                                         <c:set value="0" var="tongtienvoucher" />
                                     </c:if>
                                 </div>
@@ -181,27 +213,27 @@
                                 <input name="vourcherQuantity" type="hidden" value="${requestScope.vourcherQuantity}" />                                
                                 <input name="tongtienvoucher" type="hidden" value="${tongtienvoucher}" />                                
 
-                                <c:if test="${requestScope.vocherid != 0}" >
+                                <%--<c:if test="${requestScope.vocherid != 0}" >--%>
 
-                                    <input name="totalvoucher" type="hidden" value="${requestScope.vocherid / 100}" />                                
+                                    <!--<input name="totalvoucher" type="hidden" value="$ {requestScope.vocherid / 100}" />-->                                
 
-                                </c:if>
-                                <c:if test="${requestScope.vocherid == 0}" >
+                                <%--</c:if>--%>
+                                <%--<c:if test="${requestScope.vocherid == 0}" >--%>
 
-                                    <input name="totalvoucher" type="hidden" value="0" />                                
+                                    <!--<input name="totalvoucher" type="hidden" value="0" />-->                                
 
-                                </c:if>
+                                <%--</c:if>--%>
 
-                                <c:if test="${requestScope.vocherid != 0}" >
+                                <%--<c:if test="${requestScope.vocherid != 0}" >--%>
 
-                                    <input name="totalvoucher" type="hidden" value="${requestScope.vocherid / 100}" />                                
+                                    <!--<input name="totalvoucher" type="hidden" value="$ {requestScope.vocherid / 100}" />-->                                
 
-                                </c:if>
-                                <c:if test="${requestScope.vocherid == 0}" >
+                                <%--</c:if>--%>
+                                <%--<c:if test="${requestScope.vocherid == 0}" >--%>
 
-                                    <input name="totalvoucher" type="hidden" value="0" />                                
+                                    <!--<input name="totalvoucher" type="hidden" value="0" />-->                                
 
-                                </c:if>
+                                <%--</c:if>--%>
 
 
                                 <div style="margin-top: 15px;color: red" id="error-messages"></div>

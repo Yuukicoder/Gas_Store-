@@ -75,6 +75,7 @@ public class FeedbackAdmin extends HttpServlet {
         String fid = request.getParameter("feedbackID");
         String date = request.getParameter("date");
         String text = request.getParameter("text");
+        System.out.println("text: " + text);
         String aid = request.getParameter("accountID");
         String page = request.getParameter("page");
 

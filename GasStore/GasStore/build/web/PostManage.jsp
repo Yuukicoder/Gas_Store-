@@ -154,7 +154,7 @@
                                                         <a class="name"  href="EditPost?pcid=${c.getPostID()}">${c.getTitle()}</a>
                                                     </td>  
                                                     <td>${c.getPostCate()}</td>
-                                                    <td><img style="width: 80px" src="images/Post/${c.getPostbanner()}" alt="alt"/></td>
+                                                    <td><img style="width: 80px" src="images/Banner/${c.getPostbanner()}" alt="alt"/></td>
                                                     <td>${c.getDateCreated()}</td>                                                                                                      
                                                     <td style=" padding: 0.5rem 0.5rem;
                                                         text-align: center;
