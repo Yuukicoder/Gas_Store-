@@ -47,9 +47,11 @@ public class ProductDetailServlet extends HttpServlet {
             HttpSession session = request.getSession();
             NotificationDAO nDAO = new NotificationDAO();
             Customer customer = (Customer) session.getAttribute("account");
+            if(customer !=null){
             ArrayList<NotificationDTO> n = nDAO.getOther3NewestUnreadNoti(1, customer.getCustomerID());
             session.setAttribute("notiList", n);
             //
+            }
             String id_raw = request.getParameter("id");
             int id = Integer.parseInt(id_raw);
             CategoryDAO categoryDAO = new CategoryDAO();
@@ -106,6 +108,7 @@ public class ProductDetailServlet extends HttpServlet {
                     System.out.println("Reply Content: " + replyEntry.getValue().getReply());
                 }
             }
+            
         } catch (Exception e) {
             // Log the exception
             e.printStackTrace();

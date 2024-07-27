@@ -25,7 +25,7 @@ public class FeedbackReplyDAO extends DBcontext {
     public ArrayList<FeedbackReplyDTO> getLisfeedbackreply() {
         String sql = "SELECT  A.userName,FE.reply,FE.replydate FROM Feedback F                                   \n"
                 + "LEFT JOIN FeedbackReply FE ON FE.FeedbackID = F.FeedbackID\n"
-                + "JOIN Administrator A ON FE.adminid = A.administratorID\n"
+                + "JOIN Administrator A ON FE.account_id = A.administratorID\n"
                 + " ORDER BY FE.feedbackReplyID DESC\n";
         ArrayList<FeedbackReplyDTO> al = new ArrayList<>();
         try (PreparedStatement pt = connection.prepareStatement(sql)) {
@@ -51,7 +51,7 @@ public class FeedbackReplyDAO extends DBcontext {
     public ArrayList<FeedbackReplyDTO> getLisfeedbackreplyByID(int id) {
         String sql = "SELECT  A.userName,FE.reply,FE.replydate,FE.feedbackID FROM Feedback F                                   \n"
                 + "                    LEFT JOIN FeedbackReply FE ON FE.FeedbackID = F.FeedbackID\n"
-                + "                    JOIN Administrator A ON FE.adminid = A.administratorID\n"
+                + "                    JOIN Administrator A ON FE.account_id = A.administratorID\n"
                 + "                     where FE.feedbackID = ?  ORDER BY FE.feedbackReplyID DESC";
         ArrayList<FeedbackReplyDTO> al = new ArrayList<>();
         try (PreparedStatement pt = connection.prepareStatement(sql)) {
@@ -79,7 +79,7 @@ public class FeedbackReplyDAO extends DBcontext {
     public void insertfeedbackreply(String feedbackid, String accountid, String text, String date) {
         String sql = "INSERT INTO [dbo].[FeedbackReply]\n"
                 + "                         (FeedbackID\n"
-                + "                          ,adminid\n"
+                + "                          ,account_id\n"
                 + "                          ,reply\n"
                 + "                           ,replydate)\n"
                 + "                     VALUES\n"
@@ -103,7 +103,7 @@ public class FeedbackReplyDAO extends DBcontext {
     public ArrayList<FeedbackReplyDTO> getLisfeedbackreply1() {
         String sql = "SELECT  A.userName,FE.reply,FE.replydate FROM Feedback F                                   \n"
                 + "LEFT JOIN FeedbackReply FE ON FE.FeedbackID = F.FeedbackID\n"
-                + "JOIN Administrator A ON FE.adminid = A.administratorID\n"
+                + "JOIN Administrator A ON FE.account_id = A.administratorID\n"
                 + " ORDER BY FE.feedbackReplyID DESC\n";
         ArrayList<FeedbackReplyDTO> al = new ArrayList<>();
         try (PreparedStatement pt = connection.prepareStatement(sql)) {
@@ -127,23 +127,23 @@ public class FeedbackReplyDAO extends DBcontext {
     }
 
     public Map<Integer, FeedbackReplyDTO> getLisfeedbackreplyByID1(int id) {
-        String sql = "SELECT  A.userName,FE.reply,FE.replydate,FE.feedbackID FROM Feedback F                                   \n"
-                + "                    LEFT JOIN FeedbackReply FE ON FE.FeedbackID = F.FeedbackID\n"
-                + "                    JOIN Administrator A ON FE.adminid = A.administratorID\n"
-                + "                     where FE.feedbackID = ?  ORDER BY FE.feedbackReplyID";
+        String sql = "SELECT  A.userName,FE.reply,FE.date,FE.feedback_id FROM Feedback F                                  \n" +
+"                                   LEFT JOIN FeedbackReply FE ON FE.feedback_id = F.FeedbackID\n" +
+"                                   JOIN Administrator A ON FE.account_id = A.administratorID\n" +
+"                                    where FE.feedback_id = ?  ORDER BY FE.feedback_id";
         Map<Integer, FeedbackReplyDTO> al = new HashMap<>();
         try (PreparedStatement pt = connection.prepareStatement(sql)) {
             pt.setInt(1, id);
             ResultSet rs = pt.executeQuery();
             while (rs.next()) {
                 FeedbackDTO ft = new FeedbackDTO();
-                ft.setFeedBackID(rs.getInt("feedbackID"));
+                ft.setFeedBackID(rs.getInt("feedback_id"));
                 AdminDTO aO = new AdminDTO();
                 aO.setUserName(rs.getString("userName"));
 //                aO.setRole(rs.getInt("Role"));
                 FeedbackReplyDTO dTO = new FeedbackReplyDTO();
                 dTO.setReply(rs.getString("reply"));
-                dTO.setDate(rs.getDate("replydate"));
+                dTO.setDate(rs.getDate("date"));
                 dTO.setdTO(ft);
                 dTO.setAccountDTO(aO);
                 al.put(id, dTO);
@@ -158,8 +158,8 @@ public class FeedbackReplyDAO extends DBcontext {
         Map<Integer, Map<Integer, FeedbackReplyDTO>> allReplies = new HashMap<>();
         FeedbackDAO fd = new FeedbackDAO();
 
-        List<FeedbackDTO> productFeedback = fd.getFeedbackByProductId(3);
-
+        List<FeedbackDTO> productFeedback = fd.getFeedbackByProductId(9);
+        System.out.println(productFeedback);
         FeedbackReplyDAO frDAO = new FeedbackReplyDAO();
         for (FeedbackDTO feedback : productFeedback) {
 //                List<FeedbackReplyDTO> replies = frDAO.getLisfeedbackreplyByID(feedback.getFeedBackID());
@@ -168,7 +168,7 @@ public class FeedbackReplyDAO extends DBcontext {
             allReplies.put(feedback.getFeedBackID(), replies);
 //                request.setAttribute("feedbackReplies_" + feedback.getFeedBackID(), replies);
         }
-        System.out.println(allReplies.get(15).get(15).getReply());
+        System.out.println(allReplies.get(2).get(2).getReply());
     }
 
 }

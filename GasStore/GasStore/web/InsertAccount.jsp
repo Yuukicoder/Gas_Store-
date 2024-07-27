@@ -140,7 +140,7 @@
                     <div class="row px-xl-5 mt-3">
                         <div class="col">
                             <div class="p-30" style="background-color: white;">
-                                <div class="nav nav-tabs mb-4">
+                                <div class="nav nav-tabs1 mb-4">
                                     <a class="nav-item nav-link text-dark active" data-bs-toggle="tab" href="#tab-pane-1">User's Orders</a>
                                     <a class="nav-item nav-link text-dark" data-bs-toggle="tab" href="#tab-pane-2">Customer Feedback</a>
                                 </div>
