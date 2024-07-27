@@ -12,8 +12,19 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/web/OrderTracking.jsp</file>
-            <file>file:/C:/Users/Admin/Desktop/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Order/OrderTracking.java</file>
+            <file>file:/C:/Users/Vu%20Anh/Desktop/New%20folder%20(6)/Gas_Store-/GasStore/GasStore/web/MyPurchase.jsp</file>
+            <file>file:/C:/Users/Vu%20Anh/Desktop/New%20folder%20(6)/Gas_Store-/GasStore/GasStore/web/ProfileUser.jsp</file>
+            <file>file:/C:/Users/Vu%20Anh/Desktop/New%20folder%20(6)/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Order/MyPurschaseServlet.java</file>
+            <file>file:/C:/Users/Vu%20Anh/Desktop/New%20folder%20(6)/Gas_Store-/GasStore/GasStore/web/component/topbar.jsp</file>
+            <file>file:/C:/Users/Vu%20Anh/Desktop/New%20folder%20(6)/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Warranty/AddWarranty.java</file>
+            <file>file:/C:/Users/Vu%20Anh/Desktop/New%20folder%20(6)/Gas_Store-/GasStore/GasStore/src/java/DAO/OrderDetailDAO.java</file>
+            <file>file:/C:/Users/Vu%20Anh/Desktop/New%20folder%20(6)/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Warranty/ManageWarranty.java</file>
+            <file>file:/C:/Users/Vu%20Anh/Desktop/New%20folder%20(6)/Gas_Store-/GasStore/GasStore/src/java/DAO/OrderDAO.java</file>
+            <file>file:/C:/Users/Vu%20Anh/Desktop/New%20folder%20(6)/Gas_Store-/GasStore/GasStore/src/java/dal/OrdersDao.java</file>
+            <file>file:/C:/Users/Vu%20Anh/Desktop/New%20folder%20(6)/Gas_Store-/GasStore/GasStore/web/AddMoreWarranty.jsp</file>
+            <file>file:/C:/Users/Vu%20Anh/Desktop/New%20folder%20(6)/Gas_Store-/GasStore/GasStore/web/component/navbar.jsp</file>
+            <file>file:/C:/Users/Vu%20Anh/Desktop/New%20folder%20(6)/Gas_Store-/GasStore/GasStore/src/java/ProjectController/Warranty/MyWarrantyList.java</file>
+            <file>file:/C:/Users/Vu%20Anh/Desktop/New%20folder%20(6)/Gas_Store-/GasStore/GasStore/web/MyWarranty.jsp</file>
         </group>
     </open-files>
 </project-private>

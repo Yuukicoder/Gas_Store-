@@ -79,7 +79,6 @@ public class HomeServlet extends HttpServlet {
         PostCategoryDAO postCate = new PostCategoryDAO();
         
         postDTOs = pldao.getAllPostByGroupID(postCate.getCategoryIDByName("Banner"));
-        System.out.println("Banner Id: " + postCate.getCategoryIDByName("Banner"));
         
         //get top selling product of each category
         LinkedHashMap<String, List<Product>> topSelling = new LinkedHashMap<>();

@@ -44,14 +44,14 @@ public class PostDetailDAO extends DBcontext {
     }
 
     public int updatePost(PostDTO pdto) {
-        PostCategoryDAO postCategoryDAO = new PostCategoryDAO();
-        int categoryId = postCategoryDAO.getCategoryIDByName(pdto.getPostCate());
-        String sql = "UPDATE [dbo].[Post]\n"
-                + "   SET [Title] = ?     \n"
-                + "      ,[Postbanner] = ?\n"
-                + "      ,[Context] = ?\n"
-                + "      ,[PostCategoryID] = ?\n"
-                + " WHERE PostID = ?";
+        int categoryId = Integer.parseInt(pdto.getPostCate());    
+        String sql = """
+                     UPDATE [dbo].[Post]
+                        SET [Title] = ?     
+                           ,[Postbanner] = ?
+                           ,[Context] = ?
+                           ,[PostCategoryID] = ?
+                      WHERE PostID = ?""";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, pdto.getTitle());

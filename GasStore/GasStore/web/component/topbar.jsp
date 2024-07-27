@@ -148,7 +148,7 @@
                             <div class="btn-group dropdown top-bar">
 
                                 <button type="button" class="btn btn-sm btn-light dropdown-toggle dropbtn" onclick="toggleDropdown()">
-                                    <img src="${sessionScope.account.getImage()}" width="25px" height="25px" alt="avatar"/>
+                                    <img src="images/User/${sessionScope.account.getImage()}" width="25px" height="25px" alt="avatar"/>
 
                                     ${sessionScope.account.getFullName()}
                                 </button>

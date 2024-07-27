@@ -39,9 +39,11 @@ public class PostListDAO extends DBcontext {
     }
     
     public ArrayList<PostDTO> getAllPostByGroupID(int id) {
-        String sql = "select *\n"
-                + "from Post\n"
-                + "where PostCategoryID = ?";
+        String sql = """
+                     select *
+                     from Post
+                     where PostCategoryID = ?
+                     order by PostID desc""";
         ArrayList<PostDTO> postDTOs = new ArrayList<>();
         try {
             PreparedStatement st = connection.prepareStatement(sql);

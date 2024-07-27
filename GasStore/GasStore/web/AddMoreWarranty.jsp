@@ -41,7 +41,7 @@
                     <label class="form-label" for="form3Example3">Product Name</label>
                     <input type="text" name="productName" value="${pro.getName()}" id="form3Example3" class="form-control" />
                 </div>
-                    <img src="${pro.getImage()}" style="with: 100px; height: 100px" alt="alt"/>
+                    <img src="images/Product_Images/${pro.getImage()}" style="with: 100px; height: 100px" alt="alt"/>
                 <div class="col">
                     <div data-mdb-input-init class="form-outline mt-4">
                         <label class="form-label" for="form3Example2">Customer name</label>

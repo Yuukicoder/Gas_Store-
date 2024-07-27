@@ -261,7 +261,7 @@ public class DiscountDAO extends DBcontext {
     }
 
     public ArrayList<Discount> getAllDiscount() {
-        String sql = "  select discountID,discountCode,name,discountAmount from [Discount]";
+        String sql = "  select * from [Discount]";
         ArrayList<Discount> Discounts = new ArrayList<>();
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -276,10 +276,20 @@ public class DiscountDAO extends DBcontext {
 //                postDTO.setDescription(rs.getString("Description"));
 //                postDTO.setContext(rs.getString("Context"));
 //                postDTO.setPostCate(rs.getString("Name"));
+//                dis.setDiscountID(rs.getInt("discountID"));
+//                dis.setDiscountCode(rs.getString("discountCode"));
+//                dis.setName(rs.getString("name"));
+//                dis.setDiscountAmount(rs.getInt("discountAmount"));
+                
                 dis.setDiscountID(rs.getInt("discountID"));
-                dis.setDiscountCode(rs.getString("discountCode"));
-                dis.setName(rs.getString("name"));
                 dis.setDiscountAmount(rs.getInt("discountAmount"));
+                dis.setDiscountType(rs.getString("discountType"));
+                dis.setStartDate(rs.getString("startDate"));
+                dis.setEndDate(rs.getString("endDate"));
+                dis.setName(rs.getString("name"));
+                dis.setQuantity(rs.getInt("quantity"));
+                dis.setDiscountCode(rs.getString("discountCode"));
+                
                 Discounts.add(dis);
             }
         } catch (Exception e) {
