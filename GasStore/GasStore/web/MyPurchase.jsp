@@ -241,7 +241,7 @@
                                     <c:set var="index" value="${index + 1}"/>
                                     <tr>
                                         <td>${index}</td>
-                                        <td class="align-middle"><img style="width: 80px" class="img-fluid" src="${pDAO.getProductByID(o.getProductID()).getImage()}" alt="Image"></td>
+                                        <td class="align-middle"><img style="width: 80px" class="img-fluid" src="images/Product_Images/${pDAO.getProductByID(o.getProductID()).getImage()}" alt="Image"></td>
                                         <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getName()}</td>
                                         <td class="align-middle">${o.getQuantity()}</td>
 

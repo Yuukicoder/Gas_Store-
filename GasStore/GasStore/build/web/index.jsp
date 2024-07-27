@@ -155,7 +155,7 @@
                             <c:forEach items="${productList}" var="p">
                                 <div class="card-product">           
                                     <div class="product-img">
-                                        <img src="${p.getImage()}" alt="Your Image">
+                                        <img src="images/Product_Images/${p.getImage()}" alt="Your Image">
                                         <div class="overlay-product">
                                             <a href="DetailProduct?id=${p.getProductID()}"><i class="bx bx-search"></i></a>
                                         </div>

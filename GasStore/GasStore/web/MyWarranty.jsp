@@ -143,7 +143,7 @@
                                         <c:if test="${k.getOrderID() == oi.getOrderID()}">
                                         <tr>
                                             <td>
-                                                <img src="${oi.getProduct().getImage()}" alt="alt" style="width: 20%;"/>
+                                                <img src="images/Product_Images/${oi.getProduct().getImage()}" alt="alt" style="width: 20%;"/>
                                             </td>
                                             <td>
                                                 ${oi.getProduct().getName()}

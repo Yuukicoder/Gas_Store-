@@ -41,7 +41,7 @@
             .carousel-inner img {
                 width: 100%;
                 height: 500px;
-                object-fit: cover;
+                object-fit: fill;
             }
 
             .container-fluid i{
@@ -119,11 +119,11 @@
                     <div id="product-carousel" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner bg-light">
                             <div class="carousel-item active">
-                                <img  src="${pro.image}" alt="Image">
+                                <img  src="images/Product_Images/${pro.image}" alt="Image">
                             </div>
                             <c:forEach items="${requestScope.pimgs}" var="c">
                                 <div class="carousel-item">
-                                    <img  src="${c.getPath()}" alt="Image">
+                                    <img  src="images/Product_Carousel_Images/${c.getPath()}" alt="Image">
                                 </div>
                             </c:forEach>
                         </div>
@@ -324,7 +324,7 @@
                     <c:forEach var="pro" items="${requestScope.alsoLike}">
                         <div class="product-item bg-light">
                             <div class="product-img position-relative overflow-hidden">
-                                <img class="img-fluid w-100" src="${pro.image}" style="width: 650px; height: 250px" alt="">
+                                <img class="img-fluid w-100" src="images/Product_Images/${pro.image}" style="width: 650px; height: 250px" alt="">
                             </div>
                             <div class="text-center py-4">
                                 <a class="h6 text-decoration-none text-truncate" href="DetailProduct?id=${pro.productID}">${pro.name}</a>

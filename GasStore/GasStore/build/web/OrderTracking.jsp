@@ -191,7 +191,7 @@
                             <c:forEach var="k" items="${odDAO}">
                                 <tr>
                                     <td class="align-middle">
-                                        <img style="width: 80px" class="img-fluid" src="${pDAO.getProductByID(k.productID).getImage()}" alt="Image"></td>
+                                        <img style="width: 80px" class="img-fluid" src="images/Product_Images/${pDAO.getProductByID(k.productID).getImage()}" alt="Image"></td>
 
                                     <td class="align-middle">${pDAO.getProductByID(k.productID).name}</td>
                                     <td class="align-middle">x ${k.getQuantity()}</td>
