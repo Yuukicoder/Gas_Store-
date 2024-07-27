@@ -195,7 +195,7 @@
                                                     <p>This order has been cancel</p>
                                                 </c:if>
                                             </td>
-                                            <td><a class="btn btn-sm btn-primary" href="detailOrder?id=${la.getOrderID()}">Detail</a></td>       
+                                            <td><a class="btn btn-sm btn-primary" href="orderDetail?id=${la.getOrderID()}">Detail</a></td>       
                                         </tr>
                                     </c:forEach>
 
@@ -208,7 +208,7 @@
                 <!-- Recent Sales End -->
 
 
-             
+
                 <!-- Footer End -->
             </div>
             <!-- Content End -->
@@ -231,6 +231,24 @@
 
         <!-- Template Javascript -->
         <script src="admin/js/main.js"></script>
+
+        <script>
+                                                        function handleOptionChange(selectElement) {
+                                                            var selectedOption = selectElement.value;
+                                                            var name = selectElement.options[selectElement.selectedIndex].getAttribute('name');
+                                                            if (selectedOption === "0") {
+                                                                window.location.href = "changeStatus?id=" + name + "&status=0&backToStaffHome=1";
+                                                            } else if (selectedOption === "1") {
+                                                                window.location.href = "changeStatus?id=" + name + "&status=1&backToStaffHome=1";
+                                                            } else if (selectedOption === "2") {
+                                                                window.location.href = "changeStatus?id=" + name + "&status=2&backToStaffHome=1";
+                                                            } else if (selectedOption === "3") {
+                                                                window.location.href = "changeStatus?id=" + name + "&status=3&backToStaffHome=1";
+                                                            } else if (selectedOption === "4") {
+                                                                window.location.href = "changeStatus?id=" + name + "&status=4&backToStaffHome=1";
+                                                            }
+                                                        }
+        </script>
     </body>
 
 </html>

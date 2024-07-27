@@ -80,7 +80,8 @@ public class DiscountDAO extends DBcontext {
     }
 
     public List<Discount> getidDiscount(String id) {
-        String sql = "select discountID, name, discountCode, startDate, endDate, quantity from Discount\n"
+        String sql = "select discountID, name, discountCode, startDate, endDate, quantity, discountAmount,discountType "
+                + "from Discount "
                 + "where discountCode = ?";
         List<Discount> lv = new ArrayList<>();
         try {
@@ -96,15 +97,18 @@ public class DiscountDAO extends DBcontext {
 //                v.setEnd(rs.getString(5));
 //                v.setQuantity(rs.getInt(6));
 //                v.setDiscount(rs.getInt(7));
-                v.setDiscountID(rs.getInt(1));
-                v.setName(rs.getString(2));
-                v.setDiscountCode(rs.getString(3));
-                v.setStartDate(rs.getString(4));
-                v.setEndDate(rs.getString(5));
-                v.setQuantity(rs.getInt(6));
+                v.setDiscountID(rs.getInt("discountID"));
+                v.setDiscountCode(rs.getString("discountCode"));
+                v.setName(rs.getString("name"));
+                v.setDiscountAmount(rs.getInt("discountAmount"));
+                v.setDiscountType(rs.getString("discountType"));
+                v.setStartDate(rs.getDate("startDate").toLocalDate().toString());
+                v.setEndDate(rs.getDate("endDate").toLocalDate().toString());
+                v.setQuantity(rs.getInt("quantity"));
                 lv.add(v);
             }
         } catch (Exception e) {
+            System.out.println("DiscountDAO - getidDiscount: " + e.getMessage());
         }
         return lv;
     }
@@ -314,9 +318,10 @@ public class DiscountDAO extends DBcontext {
     public static void main(String[] args) {
         DiscountDAO discountDAO = new DiscountDAO();
 //        System.out.println(discountDAO.isNameExists("hhhh"));
-        System.out.println(
-                discountDAO.getAllDiscount()
-        );
+        List<Discount> l = discountDAO.getidDiscount("DBPXUEOCVD");
+        for (Discount discount : l) {
+            System.out.println(discount.toString());
+        }
     }
 
     public List<Customer> findCustomersBySpending(double minSpending) {

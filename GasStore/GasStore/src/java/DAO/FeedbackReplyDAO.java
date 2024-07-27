@@ -23,10 +23,13 @@ import java.util.Map;
 public class FeedbackReplyDAO extends DBcontext {
 
     public ArrayList<FeedbackReplyDTO> getLisfeedbackreply() {
-        String sql = "SELECT  A.userName,FE.reply,FE.replydate FROM Feedback F                                   \n"
-                + "LEFT JOIN FeedbackReply FE ON FE.FeedbackID = F.FeedbackID\n"
-                + "JOIN Administrator A ON FE.account_id = A.administratorID\n"
-                + " ORDER BY FE.feedbackReplyID DESC\n";
+        String sql = """
+                     SELECT  A.userName,FE.reply,FE.date 
+                      FROM Feedback F                                   
+                      LEFT JOIN FeedbackReply FE ON FE.feedback_id = F.FeedbackID
+                      JOIN Administrator A ON FE.account_id = A.administratorID
+                      ORDER BY FE.id DESC
+                     """;
         ArrayList<FeedbackReplyDTO> al = new ArrayList<>();
         try (PreparedStatement pt = connection.prepareStatement(sql)) {
 //            pt.setInt(1, id);
@@ -43,7 +46,7 @@ public class FeedbackReplyDAO extends DBcontext {
                 al.add(dTO);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("FeedbackReplyDAO - getLisfeedbackreply: " + e.getMessage());
         }
         return al;
     }
@@ -71,31 +74,22 @@ public class FeedbackReplyDAO extends DBcontext {
                 al.add(dTO);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("FeedbackReplyDAO - getLisfeedbackreplyByID: " + e.getMessage());
         }
         return al;
     }
 
     public void insertfeedbackreply(String feedbackid, String accountid, String text, String date) {
-        String sql = "INSERT INTO [dbo].[FeedbackReply]\n"
-                + "                         (FeedbackID\n"
-                + "                          ,account_id\n"
-                + "                          ,reply\n"
-                + "                           ,replydate)\n"
-                + "                     VALUES\n"
-                + "                           (?\n"
-                + "                          ,?\n"
-                + "                          ,?\n"
-                + "                          ,?)  ";
+        String sql = "INSERT INTO [dbo].[FeedbackReply] (reply,[date],account_id,feedback_id) VALUES (?,?,?,?)";
         try (PreparedStatement pt = connection.prepareStatement(sql)) {
-            pt.setString(1, feedbackid);
-            pt.setString(2, accountid);
-            pt.setString(3, text);
-            pt.setString(4, date);
+            pt.setString(1, text);
+            pt.setString(2, date);
+            pt.setString(3, accountid);
+            pt.setString(4, feedbackid);
             int inster = pt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("FeedbackReplyDAO - insertfeedbackreply: " + e.getMessage());
         }
 
     }
@@ -121,16 +115,16 @@ public class FeedbackReplyDAO extends DBcontext {
                 al.add(dTO);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("FeedbackReplyDAO - getLisfeedbackreply1: " + e.getMessage());
         }
         return al;
     }
 
     public Map<Integer, FeedbackReplyDTO> getLisfeedbackreplyByID1(int id) {
-        String sql = "SELECT  A.userName,FE.reply,FE.date,FE.feedback_id FROM Feedback F                                  \n" +
-"                                   LEFT JOIN FeedbackReply FE ON FE.feedback_id = F.FeedbackID\n" +
-"                                   JOIN Administrator A ON FE.account_id = A.administratorID\n" +
-"                                    where FE.feedback_id = ?  ORDER BY FE.feedback_id";
+        String sql = "SELECT  A.userName,FE.reply,FE.date,FE.feedback_id FROM Feedback F                                  \n"
+                + "                                   LEFT JOIN FeedbackReply FE ON FE.feedback_id = F.FeedbackID\n"
+                + "                                   JOIN Administrator A ON FE.account_id = A.administratorID\n"
+                + "                                    where FE.feedback_id = ?  ORDER BY FE.feedback_id";
         Map<Integer, FeedbackReplyDTO> al = new HashMap<>();
         try (PreparedStatement pt = connection.prepareStatement(sql)) {
             pt.setInt(1, id);

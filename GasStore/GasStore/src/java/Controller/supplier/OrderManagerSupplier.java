@@ -59,7 +59,7 @@ public class OrderManagerSupplier extends HttpServlet {
             OrdersDao orderDAO = new OrdersDao();
             List<Orders> allOrders = orderDAO.getAllOrderForSupplier(currentSupplier.getSupplierId());
             
-            System.out.println(allOrders);
+//            System.out.println(allOrders);
             // Filtering
             List<Orders> filteredOrders = orderDAO.filterOrders(allOrders, date, minAmount, maxAmount, status);
 

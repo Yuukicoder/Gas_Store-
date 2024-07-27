@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page pageEncoding="UTF-8" %>
 <style>
@@ -158,15 +159,15 @@
                                                 <td>${status.index + 1}</td>
                                                 <td>
                                                     <c:forEach items="${c.orderDetails}" var="od">
-                                                        ${od.product.name}
+                                                        ${od.product.name}<br>
                                                     </c:forEach>
                                                 </td>
                                                 <td>
                                                     <c:forEach items="${c.orderDetails}" var="od">
-                                                        <img src="${pageContext.request.contextPath}/${od.product.image}" width="50" alt="alt"/> <br>
+                                                        <img src="${pageContext.request.contextPath}/images/Product_Images/${od.product.image}" width="50" alt="alt"/> <br>
                                                     </c:forEach>
                                                 </td>
-                                                <td>${c.customer.userName}</td>
+                                                <td>${c.customer.getFullName()}</td>
                                                 <td>
                                                     <c:choose>
                                                         <c:when test="${c.status == 1}">
@@ -178,13 +179,16 @@
                                                         <c:when test="${c.status == 3}">
                                                             <span style="color: #009981;">Giao hàng thành công</span>
                                                         </c:when>
+                                                        <c:when test="${c.status == 4}">
+                                                            <span style="color: red;">Hủy</span>
+                                                        </c:when>
                                                         <c:otherwise>
                                                             Unknown Status
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>
                                                 <td>${c.orderDate}</td>
-                                                <td>${c.totalMoney}</td>
+                                                <td><fmt:formatNumber value="${c.totalMoney}" type="currency" currencySymbol="" maxFractionDigits="0"/>&nbsp;VND</td>
                                                 <c:set var="totalAmount" value="${totalAmount + c.totalMoney}" />
                                                 <fmt:formatNumber value="${totalAmount}" type="number" maxFractionDigits="2" minFractionDigits="2" var="formattedTotalAmount" />
                                             </tr>
@@ -192,7 +196,7 @@
                                     </tbody>
                                 </table>
                                 <div class="text-end mt-3">
-                                    <h5 style="color: red">Total Amount: ${totalAmount}</h5>
+                                    <h5 style="color: red">Total Amount: <fmt:formatNumber value="${totalAmount}" type="currency" currencySymbol="" maxFractionDigits="0"/>&nbsp;VND</h5>
                                 </div>
                             </div>
                             <nav style="text-align: center; margin-top: 25px; color: black" aria-label="Page navigation example">

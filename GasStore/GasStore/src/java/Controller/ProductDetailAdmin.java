@@ -32,7 +32,7 @@ import java.util.Map;
  *
  * @author dell456
  */
-@WebServlet(name = "ProductDetailServlet", urlPatterns = {"/feedbackRep-detail"})
+@WebServlet(name = "ProductDetailAdmin", urlPatterns = {"/feedbackRepDetail"})
 public class ProductDetailAdmin extends HttpServlet {
 
     @Override
@@ -82,29 +82,30 @@ public class ProductDetailAdmin extends HttpServlet {
             float roundedAverage = Math.round(average * 10) / 10.0f;
             float roundedAverage1 = Math.round(average * 10.0f) / 10.0f;
             request.setAttribute("averageRating", roundedAverage);
-             Map<Integer, Map<Integer, FeedbackReplyDTO>> allReplies = new HashMap<>();
-             Map<Integer, FeedbackReplyDTO> replies = new HashMap<>();
+            Map<Integer, Map<Integer, FeedbackReplyDTO>> allReplies = new HashMap<>();
+            Map<Integer, FeedbackReplyDTO> replies = new HashMap<>();
             FeedbackReplyDAO frDAO = new FeedbackReplyDAO();
             for (FeedbackDTO feedback : productFeedback) {
 //                List<FeedbackReplyDTO> replies = frDAO.getLisfeedbackreplyByID(feedback.getFeedBackID());
 //                request.setAttribute("feedbackReplies_" + feedback.getFeedBackID(), replies);
-                 replies = frDAO.getLisfeedbackreplyByID1(feedback.getFeedBackID());
-                 allReplies.put(feedback.getFeedBackID(), replies);
+                replies = frDAO.getLisfeedbackreplyByID1(feedback.getFeedBackID());
+                allReplies.put(feedback.getFeedBackID(), replies);
 //                request.setAttribute("feedbackReplies_" + feedback.getFeedBackID(), replies);
             }
 
             request.setAttribute("averageRating1", roundedAverage1);
             request.setAttribute("totalFeedbackCount", feedbackCount);
-             request.setAttribute("allReplies", allReplies);
-              request.setAttribute("replyies", replies);
-            request.getRequestDispatcher("adminDetailProduct.jsp").forward(request, response);
-             for (Map.Entry<Integer, Map<Integer, FeedbackReplyDTO>> entry : allReplies.entrySet()) {
-            System.out.println("Feedback ID: " + entry.getKey());
-            for (Map.Entry<Integer, FeedbackReplyDTO> replyEntry : entry.getValue().entrySet()) {
-                System.out.println("Reply ID: " + replyEntry.getKey());
-                System.out.println("Reply Content: " + replyEntry.getValue().getReply());
+            request.setAttribute("allReplies", allReplies);
+            request.setAttribute("replyies", replies);
+            
+            for (Map.Entry<Integer, Map<Integer, FeedbackReplyDTO>> entry : allReplies.entrySet()) {
+                System.out.println("Feedback ID: " + entry.getKey());
+                for (Map.Entry<Integer, FeedbackReplyDTO> replyEntry : entry.getValue().entrySet()) {
+                    System.out.println("Reply ID: " + replyEntry.getKey());
+                    System.out.println("Reply Content: " + replyEntry.getValue().getReply());
+                }
             }
-        }
+            request.getRequestDispatcher("adminDetailProduct.jsp").forward(request, response);
         } catch (Exception e) {
             // Log the exception
             e.printStackTrace();

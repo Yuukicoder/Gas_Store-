@@ -4,6 +4,7 @@
 <%@page import="DTO.*" %>
 <%--<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>--%>
 <%@ page import="java.util.List, java.util.Map" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     List<FeedbackDTO> productFeedback = (List<FeedbackDTO>) request.getAttribute("productFeedback");
     Map<Integer, Map<Integer, FeedbackReplyDTO>> allReplies = (Map<Integer, Map<Integer, FeedbackReplyDTO>>) request.getAttribute("allReplies");
@@ -13,7 +14,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
+        <meta>
 
         <title>GasStore</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -94,7 +95,6 @@
 
     <body>
         
-        <%@ page pageEncoding="UTF-8" %>
  <%--<%@include file="component/SideBarAdmin.jsp" %>--%>
 
         <!-- Breadcrumb Start -->
@@ -109,11 +109,11 @@
                     <div id="product-carousel" class="carousel slide" data-ride="carousel">
                         <div class="carousel-inner bg-light">
                             <div class="carousel-item active">
-                                <img  src="${pro.image}" alt="Image">
+                                <img  src="images/Product_Images/${pro.image}" alt="Image">
                             </div>
                             <c:forEach items="${requestScope.pimgs}" var="c">
                                 <div class="carousel-item">
-                                    <img  src="${c.getPath()}" alt="Image">
+                                    <img  src="images/Product_Carousel_Images/${c.getPath()}" alt="Image">
                                 </div>
                             </c:forEach>
                         </div>

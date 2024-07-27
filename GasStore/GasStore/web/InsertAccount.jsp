@@ -81,7 +81,7 @@
 
 
                                             <!--<div class="d-flex flex-column align-items-center text-center p-3 py-5 position-relative">-->
-                                            <img id="profileImage"  width="50%;" src="${detailaccount.image}">
+                                            <img id="profileImage"  width="50%;" src="images/User/${detailaccount.image}">
                                             <!--</div>-->
 
                                         </div>
@@ -174,7 +174,7 @@
                                                             <tr style="display: ${innerLoop.index < 5 ? 'table-row' : 'none'};">
                                                                 <td>${index}</td>
                                                                 <td class="align-middle">
-                                                                    <img style="width: 80px" class="img-fluid" src="${pDAO.getProductByID(o.getProductID()).getImage()}" alt="Image">
+                                                                    <img style="width: 80px" class="img-fluid" src="images/Product_Images/${pDAO.getProductByID(o.getProductID()).getImage()}" alt="Image">
                                                                 </td>
                                                                 <td class="align-middle">${pDAO.getProductByID(o.getProductID()).getName()}</td>
                                                                 <td class="align-middle">${o.getQuantity()}</td>

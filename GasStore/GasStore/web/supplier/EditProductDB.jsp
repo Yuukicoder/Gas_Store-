@@ -45,7 +45,7 @@
                                                 <div class="col-md-6">
                                                     <label class="form-label">Product Image</label>
                                                     <input type="file" value="" class="form-control" name="ipro" data-index="0" id="ipro" >
-                                                    <img style="width: 20rem" src="${pageContext.request.contextPath}/${pdto.getImage()}" alt="alt"/>
+                                                    <img style="width: 20rem" src="${pageContext.request.contextPath}/images/Product_Images/${pdto.getImage()}" alt="alt"/>
 
                                                 </div>
                                                 <div class="col-md-6">
@@ -111,7 +111,7 @@
                                                     <c:forEach items="${requestScope.pimgs}" var="c" varStatus="loop">
 
                                                         <input type="checkbox" name="deleteImg" value="${c.getImgID()}">
-                                                        <img style="width: 12rem; margin: 0.2rem" src="${pageContext.request.contextPath}/${c.getPath()}" alt="alt"/> 
+                                                        <img style="width: 12rem; margin: 0.2rem" src="${pageContext.request.contextPath}/images/Product_Carousel_Images/${c.getPath()}" alt="alt"/> 
                                                         <input type="hidden"name="imgID-${loop.index}" value="${c.getImgID()}">
                                                     </c:forEach>
                                                 </h3>

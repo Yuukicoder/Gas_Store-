@@ -58,7 +58,7 @@
                         </ol>
                         <div class="carousel-inner">
                             <div class="carousel-item position-relative active" style="height: 430px;">
-                                <img class="position-absolute w-100 h-100" src="images/news/Banner/${pdto.getPostbanner()}"
+                                <img class="position-absolute w-100 h-100" src="images/Banner/${pdto.getPostbanner()}"
                                      style="object-fit: cover;">
                                 <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                     <div class="p-3" style="max-width: 700px;">
@@ -68,7 +68,7 @@
                                            -webkit-line-clamp: 3;
                                            -webkit-box-orient: vertical;
                                            overflow: hidden;
-                                           text-overflow: ellipsis;">${pdto.getDescription()}</p>
+                                           text-overflow: ellipsis;"></p>
                                         <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp"
                                            href="postDetail?postID=${pdto.getPostID()}">Read More</a>
                                     </div>
@@ -77,7 +77,7 @@
                             <c:forEach items="${requestScope.post}" var="c" varStatus="status">
                                 <c:if test="${status.index > 0}">
                                     <div class="carousel-item position-relative" style="height: 430px;">
-                                        <img class="position-absolute w-100 h-100" src="images/news/Banner/${c.getPostbanner()}"
+                                        <img class="position-absolute w-100 h-100" src="images/Banner/${c.getPostbanner()}"
                                              style="object-fit: cover;">
                                         <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                             <div class="p-3" style="max-width: 700px;">
@@ -87,7 +87,7 @@
                                                    -webkit-line-clamp: 3;
                                                    -webkit-box-orient: vertical;
                                                    overflow: hidden;
-                                                   text-overflow: ellipsis;">${c.getDescription()}</p>
+                                                   text-overflow: ellipsis;"></p>
                                                 <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp"
                                                    href="postDetail?postID=${c.getPostID()}">Read More</a>
                                             </div>

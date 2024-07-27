@@ -40,7 +40,7 @@ public class listVoucherCart extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -84,27 +84,27 @@ public class listVoucherCart extends HttpServlet {
         String vouchercode = request.getParameter("vouchercode");
         String date = request.getParameter("date");
 
-                DiscountDAO aO = new DiscountDAO();
+        DiscountDAO aO = new DiscountDAO();
 
-
-         List<Discount> vouchers = aO.getidDiscount(vouchercode);
+        List<Discount> vouchers = aO.getidDiscount(vouchercode);
         List<Discount> voucherQuantity = aO.getQuantityDiscount(vouchercode);
-        List<Discount> voucherDate = aO.getDateDiscount(vouchercode,date);
-        List<Discount> voucherStartDate = aO.getDateStartDiscounts(vouchercode,date);
+        List<Discount> voucherDate = aO.getDateDiscount(vouchercode, date);
+        List<Discount> voucherStartDate = aO.getDateStartDiscounts(vouchercode, date);
         System.out.println(vouchers);
         if (vouchers == null || vouchers.isEmpty()) {
             request.setAttribute("used", "Voucher does not exist");
         } else if (voucherStartDate.isEmpty()) {
             request.setAttribute("used", "Voucher has expired ");
-        }else if (voucherDate.isEmpty()) {
+        } else if (voucherDate.isEmpty()) {
             request.setAttribute("used", "Voucher has expired ");
         } else if (!voucherQuantity.isEmpty()) {
             request.setAttribute("used", "Voucher has expired ");
-        }  else {
+        } else {
             request.setAttribute("used1", aO.getidDiscount(vouchercode));
         }
+        
         System.out.println(voucherStartDate);
-         System.out.println(voucherDate);
+        System.out.println(voucherDate);
         request.getRequestDispatcher("cart.jsp").forward(request, response);
     }
 

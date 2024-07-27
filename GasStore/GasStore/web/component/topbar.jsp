@@ -146,13 +146,13 @@
 
                         <div class="d-inline-flex align-items-center">
                             <div class="btn-group dropdown top-bar">
-                                
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle dropbtn" onclick="toggleDropdown()">
+
+                                <button type="button" class="btn btn-sm btn-light dropdown-toggle dropbtn" onclick="toggleDropdown()">
                                     <img src="${sessionScope.account.getImage()}" width="25px" height="25px" alt="avatar"/>
 
                                     ${sessionScope.account.getFullName()}
                                 </button>
-                               
+
                                 <div class="dropdown-menu dropdown-menu-right dropdown-content" id="myDropdown">
                                     <a class="dropdown-item" href="mypurchase">My Purchase</a>
                                     <a class="dropdown-item" href="myWarranty">My Warranty</a>
@@ -178,8 +178,12 @@
             <!-- logo trang chu -->
             <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
                 <div class="col-lg-4">
+                    <!--                    <a href="home" class="text-decoration-none">
+                                            <a href="home"><img src="img/Gas_Store.png" alt="logo" width="100px"></a>
+                                        </a>-->
                     <a href="home" class="text-decoration-none">
-                        <a href="home"><img src="img/Gas_Store.png" alt="logo" width="100px"></a>
+                        <span class="h1 text-uppercase text-primary bg-dark px-2">Gas</span>
+                        <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Store</span>
                     </a>
                 </div>
 

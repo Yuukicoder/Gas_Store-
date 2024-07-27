@@ -111,8 +111,8 @@ public class HomeServlet extends HttpServlet {
             request.setAttribute("pdto", null); // or you could set some default value
         }
         
-        VoucherDAO vDAO = new VoucherDAO();
-        List<Voucher> voucherList = vDAO.listVoucher();
+//        VoucherDAO vDAO = new VoucherDAO();
+//        List<Voucher> voucherList = vDAO.listVoucher();
 
         request.setAttribute("post", postDTOs);
         //session.setAttribute("product", productDAO.getAllProduct());

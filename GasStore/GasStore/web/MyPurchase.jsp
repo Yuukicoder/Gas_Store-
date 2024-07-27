@@ -367,7 +367,7 @@
             function cancelOrder(orderId) {
                 var option = confirm('Are you sure to cancel this order?');
                 if (option === true) {
-                    window.location.href = 'changestatus1?pid=' + orderId + '&sstatus=4';
+                    window.location.href = 'changeStatus?id=' + orderId + '&status=4';
                 }
             }
         </script>

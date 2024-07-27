@@ -4,14 +4,14 @@
 <%@ page import="java.io.*,java.util.*, javax.servlet.*" %>
 <%@page import="DAO.*" %>
 <%@page import="DTO.*" %>
-
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <meta content="" name="keywords">
-        <meta content="" name="description">
+        <meta content="Free HTML Templates" name="keywords">
+        <meta content="Free HTML Templates" name="description">
 
         <!-- Favicon -->
         <link href="img/favicon.ico" rel="icon">
@@ -88,7 +88,7 @@
                                             <tr>
                                                 <td>${feedback.feedBackID}</td>
                                                 <td><a href="insert-account?type=0&id=${feedback.accountDTO.getCustomerID()}">${feedback.accountDTO.getFirstName()}</a></td>
-                                                <td><a href="productUpdate?pid=${feedback.productDTO.productID}"><img src="${feedback.productDTO.image}" alt="alt" style="width: 50px;"/></a></td>
+                                                <td><a href="productUpdate?pid=${feedback.productDTO.productID}"><img src="images/Product_Images/${feedback.productDTO.image}" alt="alt" style="width: 50px;"/></a></td>
                                                 <td>${feedback.productDTO.name}</td>
                                                 <td style="max-width: 30ch; overflow-wrap: break-word;">${feedback.context}</td>
                                                 <td>${feedback.start}</td>
@@ -104,7 +104,7 @@
                                                     <td><i style="font-size: 35px;" class='bx bx-checkbox'></i></td>
                                                     </c:if>
                                                 <td>
-                                                    <a href="Product-detail?id=${feedback.productDTO.productID}" target="_blank">
+                                                    <a href="feedbackRepDetail?id=${feedback.productDTO.productID}" >
                                                         <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                                     </a>
                                                 </td>
@@ -112,6 +112,7 @@
                                         </c:forEach>
                                     </tbody>
                                 </table>
+                                
                                 <div class="feedback-overlay" id="feedbackOverlay">
                                     <div class="feedback-form" id="feedbackForm">
                                         <div class="feedback-content">
@@ -200,8 +201,8 @@
                                     function showFeedbackForm(button) {
                                         var feedbackOverlay = document.getElementById("feedbackOverlay");
                                         var feedbackForm = document.getElementById("feedbackForm");
-                                        var feedbackID = button.getAttribute("data-feedback-id"); // L?y gi· tr? c?a data-feedback-id t? button
-                                        // ??t gi· tr? feedbackID v‡o set
+                                        var feedbackID = button.getAttribute("data-feedback-id"); // L?y gi√° tr? c?a data-feedback-id t? button
+                                        // ??t gi√° tr? feedbackID v√†o set
                                         var setElement = document.getElementById("feedbackIDSet");
                                         setElement.setAttribute("value", feedbackID);
 
@@ -222,14 +223,14 @@
                                         var selectedOption = selectElement.value;
                                         var name = selectElement.options[selectElement.selectedIndex].getAttribute('name');
                                         if (selectedOption == 0) {
-                                            // Ch? chuy?n h??ng n?u ?„ ch?n m?t t˘y ch?n kh·c t˘y ch?n "All"
+                                            // Ch? chuy?n h??ng n?u ?√£ ch?n m?t t√πy ch?n kh√°c t√πy ch?n "All"
                                             window.location.href = "tableFeedback?statusFilter12=" + name;
                                         } else if (selectedOption == 1) {
-                                            // Ch? chuy?n h??ng n?u ?„ ch?n m?t t˘y ch?n kh·c t˘y ch?n "All"
+                                            // Ch? chuy?n h??ng n?u ?√£ ch?n m?t t√πy ch?n kh√°c t√πy ch?n "All"
                                             window.location.href = "tableFeedback?statusFilter12=" + name;
                                         }
                                         if (selectedOption == 2) {
-                                            // Ch? chuy?n h??ng n?u ?„ ch?n m?t t˘y ch?n kh·c t˘y ch?n "All"
+                                            // Ch? chuy?n h??ng n?u ?√£ ch?n m?t t√πy ch?n kh√°c t√πy ch?n "All"
                                             window.location.href = "tableFeedback?statusFilter12=" + name;
                                         }
 
@@ -240,16 +241,16 @@
                                     });
 
                                     document.addEventListener("DOMContentLoaded", function () {
-                                        var statusFilter12Value = "${statusFilter12}"; // Gi· tr? statusFilter12 t? bi?u? th?c hi?n GET
+                                        var statusFilter12Value = "${statusFilter12}"; // Gi√° tr? statusFilter12 t? bi?u? th?c hi?n GET
                                         var filterStatus = document.getElementById("filterStatus");
 
-                                        // Thi?t l?p t˘y ch?n ???c ch?n d?a trÍn gi· tr? statusFilter12
+                                        // Thi?t l?p t√πy ch?n ???c ch?n d?a tr√™n gi√° tr? statusFilter12
                                         if (statusFilter12Value === "0") {
                                             filterStatus.value = "0";
                                         } else if (statusFilter12Value === "1") {
                                             filterStatus.value = "1";
                                         } else {
-                                            filterStatus.value = "2"; // N?u khÙng cÛ gi· tr? ho?c gi· tr? khÙng h?p l?
+                                            filterStatus.value = "2"; // N?u kh√¥ng c√≥ gi√° tr? ho?c gi√° tr? kh√¥ng h?p l?
                                         }
                                     });
             </script>
@@ -258,13 +259,13 @@
                 function validateFeedbackInput() {
                     var feedbackInput = document.getElementById("feedbackInput").value;
 
-                    // Ki?m tra xem textarea cÛ b? r?ng khÙng
+                    // Ki·ªÉm tra xem textarea c√≥ b? r?ng kh√¥ng
                     if (feedbackInput.trim() === "") {
                         document.getElementById("characterMessage").textContent = "Please enter review text!";
                         return false;
                     }
 
-                    // N?u tr??ng textarea khÙng r?ng, cho phÈp submit form
+                    // N?u tr??ng textarea kh√¥ng r?ng, cho ph√©p submit form
                     return true;
                 }
             </script>

@@ -57,8 +57,8 @@
         <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
             <div class="col-lg-4">
                 <a href="home" class="text-decoration-none">
-                    <span class="h1 text-uppercase text-primary bg-dark px-2">Laptop</span>
-                    <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Shop</span>
+                    <span class="h1 text-uppercase text-primary bg-dark px-2">Gas</span>
+                    <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Store</span>
                 </a>
             </div>
             <div class="col-lg-4 col-6 text-left">
@@ -73,10 +73,10 @@
                     </div>
                 </form>
             </div>
-            <div class="col-lg-4 col-6 text-right">
+<!--            <div class="col-lg-4 col-6 text-right">
                 <p class="m-0">Hotline</p>
                 <h5 class="m-0">+012 345 6789</h5>
-            </div>
+            </div>-->
         </div>
     </div>
     <%@include file="component/navbar.jsp" %>
@@ -105,12 +105,12 @@
                     <c:forEach items="${requestScope.paginatedPosts}" var="c">
                         <div class="blog-box">
                             <div class="blog-img">
-                                <img src="images/Post/${c.getPostbanner()}" alt="">
+                                <img src="images/Banner/${c.getPostbanner()}" alt="">
                             </div>
                             <div class="blog-text">
                                 <span>${c.getDateCreated()}</span>
                                 <a href="postDetail?postID=${c.getPostID()}" class="blog-title">${c.getTitle()}</a>
-                                <p>${c.getDescription()}</p>
+                                <p></p>
                                 <a href="postDetail?postID=${c.getPostID()}">Read More</a>
                             </div>
                         </div>
